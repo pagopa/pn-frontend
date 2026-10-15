@@ -7,6 +7,7 @@ import {
   AbstractPaper,
   ApiError,
   InformalNotificationStatus,
+  NotificationCommunicationType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -58,7 +59,11 @@ const InformalNotificationDetail: React.FC = () => {
     f24Only: [],
   });
 
-  const documentsAvailable = informalNotification?.documentsAvailable ?? false;
+  // For ComBo documents aren't required so we can have:
+  // - documentsAvailable = true -> the ComBo has documents
+  // - documentsAvailable = false -> the ComBo has documents, but they aren't in the platform anymore
+  // - documentsAvailable = null OR documentsAvailable = undefined -> the ComBo doesn't have documents
+  const documentsAvailable = informalNotification?.documentsAvailable ?? null;
 
   const getDownloadFilesMessage = (): { key: string; ns: string } => ({
     key: documentsAvailable
@@ -192,7 +197,7 @@ const InformalNotificationDetail: React.FC = () => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
       PGEventStrategyFactory.triggerEvent(
         PGEventsType.SEND_PG_START_PAYMENT,
-        { notificationType: 'INFORMAL' },
+        { notificationType: NotificationCommunicationType.INFORMAL },
         { sendImmediately: true }
       );
       dispatch(
@@ -316,14 +321,14 @@ const InformalNotificationDetail: React.FC = () => {
             isLegal={false}
             abstract={primaryMessage?.longBody ?? ''}
             recipientDenomination={currentRecipient?.denomination}
-            hasAttachments={documentsAvailable}
+            hasAttachments={documentsAvailable !== null}
             hasPayment={hasPayments}
             selfcareCdnUrl={SELFCARE_CDN_URL}
           />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
             <Stack spacing={2} sx={{ width: { xs: '100%', md: '58%' } }}>
-              {documentsAvailable && (
+              {documentsAvailable !== null && (
                 <MIPaper padding={24}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

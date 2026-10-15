@@ -28,6 +28,7 @@ export interface PfConfiguration {
   FEEDBACK_SURVEY_URL: string;
   NOTIFICATION_CANCELLED_HELP_LINK: string;
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
+  NOTIFICATION_PERFECTION_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
   IS_ONBOARDING_ENABLED: boolean;
   FACSIMILE_EN: string;
@@ -36,6 +37,7 @@ export interface PfConfiguration {
   FACSIMILE_SL: string;
   SELFCARE_CDN_URL: string;
   IS_NEW_TIMELINE_ENABLED: boolean;
+  IS_NEW_TIMELINE_COPY_ENABLED: boolean;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -75,6 +77,10 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
       .isString()
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('NOTIFICATION_PERFECTION_LINK')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.htmlPageUrl);
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
     this.ruleFor('IS_ONBOARDING_ENABLED').isBoolean();
     this.ruleFor('FACSIMILE_EN').isString().isRequired().matches(dataRegex.htmlPageUrl);
@@ -83,6 +89,7 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('FACSIMILE_SL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('SELFCARE_CDN_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_NEW_TIMELINE_ENABLED').isBoolean();
+    this.ruleFor('IS_NEW_TIMELINE_COPY_ENABLED').isBoolean();
   }
 }
 

@@ -52,7 +52,7 @@ describe('getTimelineItems', () => {
 
     const items = getTimelineItems(statusHistory, legacyStatusHistory, [recipients[0]]);
 
-    expect(items[0].allEvents).toBe(legacyStatusHistory[0].steps);
+    expect(items[0].legacyStatus.steps).toBe(legacyStatusHistory[0].steps);
   });
 
   it('computes recipientPerStep only when there are multiple recipients on the sender timeline', () => {

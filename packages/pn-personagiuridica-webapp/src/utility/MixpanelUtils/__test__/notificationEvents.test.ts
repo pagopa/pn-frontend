@@ -5,6 +5,7 @@ import {
   EventDowntimeType,
   EventPropertyType,
   InformalNotificationStatus,
+  NotificationCommunicationType,
   NotificationDocumentType,
   PaymentAttachmentSName,
 } from '@pagopa-pn/pn-commons';
@@ -186,7 +187,7 @@ describe('notificationTrackingConfigs', () => {
 
   it('should build SEND_PG_START_PAYMENT event - legal', () => {
     const result = notificationTrackingConfigs[PGEventsType.SEND_PG_START_PAYMENT]({
-      notificationType: 'LEGAL',
+      notificationType: NotificationCommunicationType.LEGAL,
     });
 
     expect(result).toStrictEqual({
@@ -201,7 +202,7 @@ describe('notificationTrackingConfigs', () => {
 
   it('should build SEND_PG_START_PAYMENT event - informal', () => {
     const result = notificationTrackingConfigs[PGEventsType.SEND_PG_START_PAYMENT]({
-      notificationType: 'INFORMAL',
+      notificationType: NotificationCommunicationType.INFORMAL,
     });
 
     expect(result).toStrictEqual({

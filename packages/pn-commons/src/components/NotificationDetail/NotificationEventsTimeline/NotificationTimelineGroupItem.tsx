@@ -22,6 +22,9 @@ type Props = {
   disableDownloads: boolean;
   language: string;
   hasMultipleAttempts?: boolean;
+  isNewTimelineCopyEnabled?: boolean;
+  perfectionLink?: string;
+  delegatorName?: string;
 };
 
 const NotificationTimelineGroupItem = ({
@@ -32,6 +35,9 @@ const NotificationTimelineGroupItem = ({
   disableDownloads,
   language,
   hasMultipleAttempts = false,
+  isNewTimelineCopyEnabled = false,
+  perfectionLink,
+  delegatorName,
 }: Props) => {
   const generatedId = useId();
   const [expanded, setExpanded] = useState(false);
@@ -119,7 +125,10 @@ const NotificationTimelineGroupItem = ({
               clickHandler={clickHandler}
               disableDownloads={disableDownloads}
               language={language}
-              asBullet
+              insideAGroup
+              isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+              perfectionLink={perfectionLink}
+              delegatorName={delegatorName}
             />
           ))}
         </Box>

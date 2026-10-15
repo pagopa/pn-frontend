@@ -166,6 +166,8 @@ const NotificationDetailTimelineStep = ({
     return 'neutral';
   };
 
+  const hasLegalFact = legalFactsIds && legalFactsIds.length > 0;
+
   const macroStep = (
     <TimelineStepCmp
       oppositeContent={
@@ -202,8 +204,7 @@ const NotificationDetailTimelineStep = ({
             <Typography color="text.primary" variant="caption">
               {notificationStatusInfos.description}
             </Typography>
-            {legalFactsIds &&
-              legalFactsIds.length > 0 &&
+            {hasLegalFact &&
               legalFactsIds.map((lf) => (
                 <ButtonNaked
                   key={lf.file.key}

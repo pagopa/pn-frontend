@@ -93,4 +93,24 @@ describe('SendDigitalDomicileStep', () => {
       )}`,
     });
   });
+
+  it('test getTimelineStepInfo with digitalAddress data - SERCQ SEND and new copy', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_DOMICILE, {
+      digitalAddress: {
+        address: SERCQ_SEND_VALUE,
+        type: DigitalDomicileType.SERCQ,
+      },
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationDTO.recipients[0],
+      isMultiRecipient: false,
+      isNewTimelineCopyEnabled: true,
+    };
+    const sendDigitalDomicileStep = new SendDigitalDomicileStep();
+    expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-domicile-SERCQ-SEND`,
+      description: '',
+    });
+  });
 });

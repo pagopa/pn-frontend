@@ -46,7 +46,11 @@ const NotificationTimeline: React.FC = () => {
    * Carlos Lombardi, 2023.02.03
    */
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
-  const { NOTIFICATION_CANCELLED_HELP_LINK, IS_NEW_TIMELINE_ENABLED } = getConfiguration();
+  const {
+    NOTIFICATION_CANCELLED_HELP_LINK,
+    IS_NEW_TIMELINE_ENABLED,
+    IS_NEW_TIMELINE_COPY_ENABLED,
+  } = getConfiguration();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
   const navigate = useNavigate();
@@ -215,6 +219,7 @@ const NotificationTimeline: React.FC = () => {
                 statusHistory={notificationTimeline.notificationStatusHistory}
                 clickHandler={legalFactDownloadHandler}
                 disableDownloads={isCancelled.cancellationInTimeline}
+                isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
               />
             ) : (
               <MIPaper sx={{ mt: 3 }}>

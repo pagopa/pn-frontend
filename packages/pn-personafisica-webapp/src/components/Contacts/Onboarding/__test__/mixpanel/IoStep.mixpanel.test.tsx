@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   PFTriggerEventSpy,
@@ -32,6 +33,7 @@ describe('IoStep - Mixpanel events', () => {
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');
+    window.matchMedia = createMatchMedia(2000);
   });
 
   afterEach(() => {
@@ -85,6 +87,8 @@ describe('IoStep - Mixpanel events', () => {
   });
 
   it('fires SEND_ONBOARDING_IO_DOWNLOAD_SELECTED when the download CTA is clicked', async () => {
+    window.matchMedia = createMatchMedia(400);
+
     const props = createProps(undefined);
     const { getByTestId } = render(<IoStep {...props} />);
 

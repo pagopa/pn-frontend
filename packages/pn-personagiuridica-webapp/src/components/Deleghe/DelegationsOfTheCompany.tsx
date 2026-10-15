@@ -310,7 +310,7 @@ const DelegationsOfTheCompany = () => {
 
   return (
     <Box data-testid="delegationsOfTheCompany">
-      <Typography variant="h6" mb={4}>
+      <Typography component="h2" variant="h6" mb={4}>
         {t('deleghe.delegatorsTitle')}
       </Typography>
       <ApiErrorWrapper

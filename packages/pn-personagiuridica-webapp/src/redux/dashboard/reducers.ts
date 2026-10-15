@@ -8,29 +8,40 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { getReceivedNotifications } from './actions';
 
+const initialState = {
+  loading: false,
+  notifications: [] as Array<RecipientNotification>,
+  filters: {
+    startDate: undefined,
+    endDate: undefined,
+    communicationType: '',
+    iunMatch: '',
+  } as GetNotificationsParams,
+  isDelegatedPage: false,
+  pagination: {
+    nextPagesKey: [] as Array<string>,
+    size: 10,
+    page: 0,
+    moreResult: false,
+  },
+  sort: {
+    orderBy: '',
+    order: 'asc',
+  } as Sort<NotificationColumnData<RecipientNotification>>,
+};
+
+type DashboardState = typeof initialState;
+
 /* eslint-disable functional/immutable-data */
+const resetPaginationState = (state: DashboardState) => {
+  state.pagination.page = 0;
+  state.pagination.nextPagesKey = [];
+  state.pagination.moreResult = false;
+};
+
 const dashboardSlice = createSlice({
   name: 'dashboardSlice',
-  initialState: {
-    loading: false,
-    notifications: [] as Array<RecipientNotification>,
-    filters: {
-      startDate: undefined,
-      endDate: undefined,
-      communicationType: '',
-      iunMatch: '',
-    } as GetNotificationsParams,
-    pagination: {
-      nextPagesKey: [] as Array<string>,
-      size: 10,
-      page: 0,
-      moreResult: false,
-    },
-    sort: {
-      orderBy: '',
-      order: 'asc',
-    } as Sort<NotificationColumnData<RecipientNotification>>,
-  },
+  initialState,
   reducers: {
     setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
       if (state.pagination.size !== action.payload.size) {
@@ -41,6 +52,19 @@ const dashboardSlice = createSlice({
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
     },
+    setIsDelegatedPage: (state, action: PayloadAction<boolean>) => {
+      if (state.isDelegatedPage !== action.payload) {
+        state.isDelegatedPage = action.payload;
+        state.notifications = [];
+        state.filters = {
+          startDate: undefined,
+          endDate: undefined,
+          communicationType: '',
+          iunMatch: '',
+        };
+        resetPaginationState(state);
+      }
+    },
     setSorting: (
       state,
       action: PayloadAction<Sort<NotificationColumnData<RecipientNotification>>>
@@ -49,10 +73,7 @@ const dashboardSlice = createSlice({
     },
     setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {
       state.filters = action.payload;
-      // reset pagination
-      state.pagination.page = 0;
-      state.pagination.nextPagesKey = [];
-      state.pagination.moreResult = false;
+      resetPaginationState(state);
     },
   },
   extraReducers: (builder) => {
@@ -71,6 +92,7 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const { setPagination, setSorting, setNotificationFilters } = dashboardSlice.actions;
+export const { setPagination, setIsDelegatedPage, setSorting, setNotificationFilters } =
+  dashboardSlice.actions;
 
 export default dashboardSlice;

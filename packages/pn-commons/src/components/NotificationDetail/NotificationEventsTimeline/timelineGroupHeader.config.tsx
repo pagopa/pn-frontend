@@ -30,7 +30,7 @@ const CHANNEL_PRESENTATION: Record<TimelineEventsChannel, ChannelPresentation> =
     icon: MailOutlineRounded,
   },
   SIMPLE_REGISTERED_LETTER: {
-    labelKey: 'detail.timeline.send-simple-registered-letter',
+    labelKey: 'detail.timeline.send-simple-registered-letter-group-label',
     icon: MailOutlineRounded,
   },
   PEC: {

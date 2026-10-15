@@ -4,6 +4,7 @@ import {
   NotificationDetailRecipient,
   PhysicalCommunicationType,
   RecipientType,
+  ResponseStatus,
   ReworkedStatus,
   TimelineCategory,
 } from '../models/NotificationDetail';
@@ -117,6 +118,25 @@ export const notificationTimelineDTO: NotificationTimelineResponse = {
             attempt: 1,
             hasReworkedEvents: true,
             events: [
+              {
+                elementId:
+                  'SEND_DIGITAL_FEEDBACK.IUN_EPXW-VTMZ-DUJH-202608-U-1.RECINDEX_0.SOURCE_PLATFORM.REPEAT_false.ATTEMPT_0',
+                timestamp: '2026-08-06T09:13:58.508308Z',
+                category: TimelineCategory.SEND_DIGITAL_FEEDBACK,
+                details: {
+                  recIndex: 0,
+                  digitalAddress: { type: DigitalDomicileType.PEC, address: 'test@pec.it' },
+                  responseStatus: ResponseStatus.KO,
+                },
+                legalFactsIds: [
+                  {
+                    key: 'safestorage://PN_LEGAL_FACTS-729c83d92e1d4ee98672c1afbd92ac3e.pdf',
+                    category: LegalFactType.PEC_RECEIPT,
+                  },
+                ],
+                isHidden: false,
+                reworkedStatus: ReworkedStatus.NOT_VALID,
+              },
               {
                 elementId:
                   'SEND_DIGITAL_DOMICILE.IUN_EPXW-VTMZ-DUJH-202608-U-1.RECINDEX_0.SOURCE_PLATFORM.REPEAT_false.ATTEMPT_0',

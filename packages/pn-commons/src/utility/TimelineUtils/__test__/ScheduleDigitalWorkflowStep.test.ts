@@ -1,5 +1,5 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { TimelineCategory } from '../../../models/NotificationDetail';
+import { DigitalDomicileType, TimelineCategory } from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
 import { ScheduleDigitalWorkflowStep } from '../ScheduleDigitalWorkflowStep';
 
@@ -30,6 +30,29 @@ describe('ScheduleDigitalWorkflowStep', () => {
     ).toStrictEqual({
       label: `notifiche - detail.timeline.schedule-digital-workflow`,
       description: `notifiche - detail.timeline.schedule-digital-workflow-description-multirecipient - ${JSON.stringify(
+        scheduleDigitalWorkflowStep.nameAndTaxId(payload)
+      )}`,
+    });
+  });
+
+  it('test getTimelineStepInfo - does not pass the PEC address', () => {
+    const scheduleDigitalWorkflowStep = new ScheduleDigitalWorkflowStep();
+    const payloadWithAddress = {
+      ...payload,
+      step: getTimelineElem(TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW, {
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'destinatario@pec.it' },
+      }),
+    };
+
+    expect(scheduleDigitalWorkflowStep.getTimelineStepInfo(payloadWithAddress)).toStrictEqual({
+      label: `notifiche - detail.timeline.schedule-digital-workflow`,
+      description: `notifiche - detail.timeline.schedule-digital-workflow-description - ${JSON.stringify(
+        scheduleDigitalWorkflowStep.nameAndTaxId(payloadWithAddress)
+      )}`,
+    });
+    expect(scheduleDigitalWorkflowStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.schedule-digital-workflow`,
+      description: `notifiche - detail.timeline.schedule-digital-workflow-description - ${JSON.stringify(
         scheduleDigitalWorkflowStep.nameAndTaxId(payload)
       )}`,
     });

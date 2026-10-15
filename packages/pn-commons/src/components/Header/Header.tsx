@@ -40,6 +40,8 @@ type HeaderProps = {
   enableAssistanceButton?: boolean;
   /** Label of the chip displayed next to product switch */
   chipLabel?: string;
+  /** Current language */
+  currentLanguage?: string;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -56,6 +58,7 @@ const Header: React.FC<HeaderProps> = ({
   isLogged,
   enableAssistanceButton,
   chipLabel,
+  currentLanguage,
 }) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
@@ -117,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({
       />
       {enableHeaderProduct && (
         <HeaderProduct
-          key={partyId}
+          key={`${partyId}-${currentLanguage}`}
           productId={productId}
           partyId={partyId}
           productsList={productsList}

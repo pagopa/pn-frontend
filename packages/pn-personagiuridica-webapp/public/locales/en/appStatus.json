@@ -1,23 +1,23 @@
 {
   "appStatus": {
-    "title": "Platform status",
-    "subtitle": "Check the operation of SEND, view service disruption history and download the attestations (binding on third parties). Each attestation certifies a service disruption. This may be useful if the disruption affected a notification intended for you.",
+    "lastCheckLegend": "Last updated – {{ lastCheckTimestamp }} ",
     "statusDescription": {
-      "ok": "All SEND services are operational.",
-      "not-ok": "Service disrupted at this time. For more details, see the table below."
+      "not-ok": "Service disrupted at this time. For more details, see the table below.",
+      "ok": "All SEND services are operational."
     },
-    "lastCheckLegend": "Last updated – {{ lastCheckTimestamp }} "
+    "subtitle": "Check the operation of SEND, view service disruption history and download the attestations (binding on third parties). Each attestation certifies a service disruption. This may be useful if the disruption affected a notification intended for you.",
+    "title": "Platform status"
   },
   "downtimeList": {
-    "title": "Disruption history",
     "columnHeader": {
-      "startDate": "Start date",
       "endDate": "End date",
       "functionality": "Service affected",
       "legalFactId": "Attestations of service disruption",
+      "startDate": "Start date",
       "status": "Status"
     },
-    "emptyMessage": "No disruptions have been recorded"
+    "emptyMessage": "No disruptions have been recorded",
+    "title": "Disruption history"
   },
   "legends": {
     "knownFunctionality": {
@@ -25,15 +25,15 @@
       "NOTIFICATION_VISUALIZATION": "View notifications and download attachments",
       "NOTIFICATION_WORKFLOW": "Notification status change"
     },
-    "unknownFunctionality": "Unknown service ({{functionality}})",
-    "status": {
-      "OK": "Resolved",
-      "KO": "Ongoing"
-    },
+    "legalFactDownload": "Download attestation",
     "noFileAvailableByStatus": {
-      "OK": "The attestation will be available shortly",
-      "KO": "The attestation will be available at the end of the disruption"
+      "KO": "The attestation will be available at the end of the disruption",
+      "OK": "The attestation will be available shortly"
     },
-    "legalFactDownload": "Download attestation"
+    "status": {
+      "KO": "Ongoing",
+      "OK": "Resolved"
+    },
+    "unknownFunctionality": "Unknown service ({{functionality}})"
   }
 }

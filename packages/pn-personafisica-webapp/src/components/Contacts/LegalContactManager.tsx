@@ -108,6 +108,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
         <Paper sx={{ p: { xs: 2, lg: 3 } }}>
           {IS_DOD_ENABLED && (
             <Typography
+              component="h2"
               variant="h6"
               fontSize={{ xs: '22px', lg: '24px' }}
               fontWeight={700}

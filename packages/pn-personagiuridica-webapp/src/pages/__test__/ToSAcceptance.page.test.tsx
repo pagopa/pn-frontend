@@ -114,6 +114,28 @@ describe('test Terms of Service page', () => {
     });
   });
 
+  it('does not toggle the acceptance switch when clicking ToS and Privacy links', () => {
+    const { getByRole, getByTestId } = render(
+      <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
+    );
+    const switchElement = getByRole('checkbox');
+    const privacyLink = getByTestId('privacy-link');
+    const tosLink = getByTestId('terms-and-conditions');
+
+    fireEvent.click(privacyLink);
+    expect(switchElement).not.toBeChecked();
+    fireEvent.click(tosLink);
+    expect(switchElement).not.toBeChecked();
+
+    fireEvent.click(switchElement);
+    expect(switchElement).toBeChecked();
+
+    fireEvent.click(privacyLink);
+    expect(switchElement).toBeChecked();
+    fireEvent.click(tosLink);
+    expect(switchElement).toBeChecked();
+  });
+
   it('navigate to dashboard if tos and privacy are accepted', async () => {
     const { router } = render(
       <ToSAcceptance

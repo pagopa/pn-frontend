@@ -23,7 +23,7 @@ import userEvent from '@testing-library/user-event';
 
 import { AppStateState, appStateSlice } from './redux/slices/appStateSlice';
 import { formatDate } from './utility/date.utility';
-import { initLocalization } from './utility/localization.utility';
+import { initLocalization, initLocalizationExists } from './utility/localization.utility';
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   preloadedState?: any;
@@ -368,6 +368,7 @@ function initLocalizationForTest() {
     data?: { [key: string]: any }
   ) => (data ? `${namespace} - ${path} - ${JSON.stringify(data)}` : `${namespace} - ${path}`);
   initLocalization(mockedTranslationFn);
+  initLocalizationExists(() => false);
 }
 /**
  * Get element by id
@@ -404,18 +405,18 @@ const getById: (container: HTMLElement, id: Matcher, options?: MatcherOptions) =
 
 export * from '@testing-library/react';
 export {
-  customRender as render,
-  testSelect,
   createMatchMedia,
+  createTestStore,
+  disableConsoleLogging,
+  getById,
+  initLocalizationForTest,
+  queryById,
+  customRender as render,
   testAutocomplete,
+  testCalendar,
   testFormElements,
   testInput,
   testRadio,
-  testCalendar,
-  initLocalizationForTest,
-  getById,
-  queryById,
-  createTestStore,
-  disableConsoleLogging,
+  testSelect,
 };
 export type { CustomRenderResult as RenderResult };

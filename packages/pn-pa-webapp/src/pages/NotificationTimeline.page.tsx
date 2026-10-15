@@ -41,7 +41,7 @@ const NotificationTimeline: React.FC = () => {
   const notificationTimeline = useAppSelector(
     (state: RootState) => state.notificationState.notificationTimeline
   );
-  const { IS_NEW_TIMELINE_ENABLED } = getConfiguration();
+  const { IS_NEW_TIMELINE_ENABLED, IS_NEW_TIMELINE_COPY_ENABLED } = getConfiguration();
   const [pageReady, setPageReady] = useState(false);
   const navigate = useNavigate();
 
@@ -170,6 +170,7 @@ const NotificationTimeline: React.FC = () => {
                 statusHistory={notificationTimeline.notificationStatusHistory}
                 clickHandler={legalFactDownloadHandler}
                 isSenderTimeline
+                isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
               />
             ) : (
               <MIPaper sx={{ mt: 3 }}>

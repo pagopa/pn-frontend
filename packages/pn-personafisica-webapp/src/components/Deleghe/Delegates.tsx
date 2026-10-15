@@ -125,7 +125,9 @@ const Delegates = () => {
       />
       <Box mb={8} data-testid="delegates-wrapper">
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Typography variant="h5">{t('deleghe.delegatesTitle')}</Typography>
+          <Typography component="h2" variant="h5">
+            {t('deleghe.delegatesTitle')}
+          </Typography>
           <Box>
             <MIButton
               id="add-delegation-button"

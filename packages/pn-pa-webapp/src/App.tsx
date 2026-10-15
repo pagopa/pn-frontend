@@ -2,15 +2,17 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import EmailRounded from '@mui/icons-material/EmailRounded';
-import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
-import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
-import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
+import OperationalStatusIcon from '@mui/icons-material/CheckCircleRounded';
+import NonOperationalStatusIcon from '@mui/icons-material/ErrorRounded';
+import UnknownStatusIcon from '@mui/icons-material/HelpOutlineRounded';
+import CommunicationsIcon from '@mui/icons-material/MailOutline';
+import NotificationsIcon from '@mui/icons-material/MarkEmailReadOutlined';
+import ApiKeyIcon from '@mui/icons-material/VpnKeyOutlined';
 import { Box, DialogTitle } from '@mui/material';
 import {
   A11yMessageAnnouncer,
   APP_VERSION,
+  AppCurrentStatus,
   AppMessage,
   AppResponse,
   AppResponseError,
@@ -27,6 +29,7 @@ import {
   appStateActions,
   errorFactoryManager,
   initLocalization,
+  initLocalizationExists,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
@@ -52,13 +55,26 @@ import PAEventStrategyFactory from './utility/MixpanelUtils/PAEventStrategyFacto
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
 
+// ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
+const getStatusIconCallback = (currentStatus: AppCurrentStatus | undefined) => () => {
+  if (!currentStatus) {
+    return <UnknownStatusIcon />;
+  }
+
+  return currentStatus.appIsFullyOperative ? (
+    <OperationalStatusIcon sx={{ color: 'success.main' }} />
+  ) : (
+    <NonOperationalStatusIcon sx={{ color: 'error.main' }} />
+  );
+};
+
 // Cfr. PN-6096
 // --------------------
 // The i18n initialization must execute before the *first* time anything is actually rendered.
 // Cfr. comment in packages/pn-personafisica-webapp/src/App.tsx
 // --------------------
 const App = () => {
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -66,6 +82,7 @@ const App = () => {
       setIsInitialized(true);
       // init localization
       initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      initLocalizationExists((namespace, path) => i18n.exists(path, { ns: namespace }));
       // eslint-disable-next-line functional/immutable-data
       errorFactoryManager.factory = new PAAppErrorFactory((path, ns, params) =>
         t(path, { ns, ...params })
@@ -171,6 +188,13 @@ const ActualApp = () => {
       },
     ];
 
+    const communicationMenuItems: Array<SideMenuItem> = [
+      {
+        label: t('menu.campaigns'),
+        route: routes.CAMPAIGNS,
+      },
+    ];
+
     if (IS_STATISTICS_ENABLED) {
       // eslint-disable-next-line functional/immutable-data
       notificationMenuItems.push({
@@ -181,10 +205,17 @@ const ActualApp = () => {
     const basicMenuItems: Array<SideMenuItem> = [
       {
         label: t('menu.notifications-send'),
-        icon: EmailRounded,
+        icon: NotificationsIcon,
         route: routes.DASHBOARD,
         children: notificationMenuItems,
         notSelectable: notificationMenuItems.length > 0,
+      },
+      {
+        label: t('menu.communications'),
+        icon: CommunicationsIcon,
+        route: routes.CAMPAIGNS,
+        children: communicationMenuItems,
+        notSelectable: communicationMenuItems.length > 0,
       },
       /**
        * Refers to PN-1741
@@ -194,20 +225,10 @@ const ActualApp = () => {
        * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
        * - BasicMenuItems in packages/pn-pa-webapp/src/utility/__TEST__/role.utilitytest.ts
        */
-      { label: t('menu.api-key'), icon: VpnKeyRoundedIcon, route: routes.API_KEYS },
+      { label: t('menu.api-key'), icon: ApiKeyIcon, route: routes.API_KEYS },
       {
         label: t('menu.app-status'),
-        // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
-        icon: () =>
-          currentStatus ? (
-            currentStatus.appIsFullyOperative ? (
-              <CheckCircleRoundedIcon sx={{ color: 'success.main' }} />
-            ) : (
-              <ErrorRoundedIcon sx={{ color: 'error.main' }} />
-            )
-          ) : (
-            <HelpRoundedIcon />
-          ),
+        icon: getStatusIconCallback(currentStatus),
         route: routes.APP_STATUS,
       },
     ];

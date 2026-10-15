@@ -4,6 +4,7 @@ import type { LegalFactId } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
   InformalNotificationStatus,
+  NotificationCommunicationType,
   NotificationDocumentType,
   NotificationStatus,
   PaymentAttachmentSName,
@@ -70,7 +71,7 @@ describe('notificationPayloadMappers', () => {
       notifications: [
         {
           ...notificationsDTO.resultsPage[0],
-          communicationType: 'INFORMAL',
+          communicationType: NotificationCommunicationType.INFORMAL,
           notificationStatus: InformalNotificationStatus.COMPLETED_REACHED,
           communicationOutcomes: {
             viewed: true,
@@ -80,7 +81,7 @@ describe('notificationPayloadMappers', () => {
         },
         {
           ...notificationsDTO.resultsPage[0],
-          communicationType: 'INFORMAL',
+          communicationType: NotificationCommunicationType.INFORMAL,
           notificationStatus: InformalNotificationStatus.COMPLETED_UNREACHED,
           communicationOutcomes: {
             viewed: false,
@@ -90,7 +91,7 @@ describe('notificationPayloadMappers', () => {
         },
         {
           ...notificationsDTO.resultsPage[0],
-          communicationType: 'LEGAL',
+          communicationType: NotificationCommunicationType.LEGAL,
           notificationStatus: NotificationStatus.VIEWED,
           isNewNotification: false,
         },
@@ -292,7 +293,7 @@ describe('notificationPayloadMappers', () => {
   it('should map legal notification start payment to event payload', () => {
     expect(
       mapStartPaymentToEventPayload({
-        notificationType: 'LEGAL',
+        notificationType: NotificationCommunicationType.LEGAL,
       })
     ).toStrictEqual({
       notification_type: MIXPANEL_NOTIFICATION_TYPE_MAP.LEGAL,
@@ -303,7 +304,7 @@ describe('notificationPayloadMappers', () => {
   it('should map informal notification start payment to event payload', () => {
     expect(
       mapStartPaymentToEventPayload({
-        notificationType: 'INFORMAL',
+        notificationType: NotificationCommunicationType.INFORMAL,
       })
     ).toStrictEqual({
       notification_type: MIXPANEL_NOTIFICATION_TYPE_MAP.INFORMAL,

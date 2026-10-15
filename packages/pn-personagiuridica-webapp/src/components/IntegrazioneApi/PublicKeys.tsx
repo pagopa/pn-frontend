@@ -118,7 +118,7 @@ const PublicKeys: React.FC = () => {
         }}
         data-testid="publicKeys"
       >
-        <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
+        <Typography component="h2" variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('publicKeys.title')}
         </Typography>
         {!hasOneActiveKey && (

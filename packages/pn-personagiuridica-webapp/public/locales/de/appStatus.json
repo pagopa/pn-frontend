@@ -1,23 +1,23 @@
 {
   "appStatus": {
-    "title": "Plattformstatus",
-    "subtitle": "Überprüft die Funktionsweise von SEND, zeigt die Historie der Fehlfunktionen an und lädt die entsprechenden Bescheide herunter, die gegenüber Dritten angefochten werden können. Jeder Beleg bescheinigt eine Fehlfunktion: Von Nutzen, wenn er einen an dich gerichteten Bescheid betrifft.",
+    "lastCheckLegend": "Zuletzt aktualisiert - {{ lastCheckTimestamp }} ",
     "statusDescription": {
-      "ok": "Alle SEND-Dienste sind betriebsbereit.",
-      "not-ok": "Es ist eine Störung aufgetreten. Weitere Details in der Tabelle unten."
+      "not-ok": "Es ist eine Störung aufgetreten. Weitere Details in der Tabelle unten.",
+      "ok": "Alle SEND-Dienste sind betriebsbereit."
     },
-    "lastCheckLegend": "Zuletzt aktualisiert - {{ lastCheckTimestamp }} "
+    "subtitle": "Überprüft die Funktionsweise von SEND, zeigt die Historie der Fehlfunktionen an und lädt die entsprechenden Bescheide herunter, die gegenüber Dritten angefochten werden können. Jeder Beleg bescheinigt eine Fehlfunktion: Von Nutzen, wenn er einen an dich gerichteten Bescheid betrifft.",
+    "title": "Plattformstatus"
   },
   "downtimeList": {
-    "title": "Fehlerhistorie",
     "columnHeader": {
-      "startDate": "Datum Anfang",
       "endDate": "Datum Ende",
       "functionality": "Betroffener Dienst",
       "legalFactId": "Bescheinigungen können Dritten gegenüber angefochten werden",
+      "startDate": "Datum Anfang",
       "status": "Staat"
     },
-    "emptyMessage": "Es wurden keine Fehlfunktionen aufgezeichnet"
+    "emptyMessage": "Es wurden keine Fehlfunktionen aufgezeichnet",
+    "title": "Fehlerhistorie"
   },
   "legends": {
     "knownFunctionality": {
@@ -25,15 +25,15 @@
       "NOTIFICATION_VISUALIZATION": "Anzeige von Bescheiden und Herunterladen von Anhängen",
       "NOTIFICATION_WORKFLOW": "Änderung des Status der Bescheide"
     },
-    "unknownFunctionality": "Unbekannter Dienst ({{functionality}})",
-    "status": {
-      "OK": "Gelöst",
-      "KO": "Läuft"
-    },
+    "legalFactDownload": "Bescheinigung herunterladen",
     "noFileAvailableByStatus": {
-      "OK": "Die Bescheinigung wird in Kürze verfügbar sein",
-      "KO": "Die Bescheinigung wird nach Behebung der Störung zur Verfügung stehen"
+      "KO": "Die Bescheinigung wird nach Behebung der Störung zur Verfügung stehen",
+      "OK": "Die Bescheinigung wird in Kürze verfügbar sein"
     },
-    "legalFactDownload": "Bescheinigung herunterladen"
+    "status": {
+      "KO": "Läuft",
+      "OK": "Gelöst"
+    },
+    "unknownFunctionality": "Unbekannter Dienst ({{functionality}})"
   }
 }

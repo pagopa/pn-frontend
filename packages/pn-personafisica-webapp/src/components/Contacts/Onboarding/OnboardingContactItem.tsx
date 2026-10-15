@@ -20,6 +20,7 @@ type EntryModeProps = {
   value: string;
   buttonLabel: string;
   buttonVariant?: MIButtonProps['variant'];
+  buttonPlacement?: 'inline' | 'below';
   error?: string;
   touched?: boolean;
   onChange: (value: string) => void | Promise<void>;
@@ -58,6 +59,7 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
   value,
   buttonLabel,
   buttonVariant = 'contained',
+  buttonPlacement = 'inline',
   error,
   touched,
   onChange,
@@ -70,10 +72,12 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
 }) => {
   const isMobile = useIsMobile();
 
+  const inlineButton = !isMobile && buttonPlacement === 'inline';
+
   const submitButton = (
     <MIButton
       fullWidth={isMobile}
-      sx={isMobile ? { mt: 2 } : { height: '43px', flexShrink: 0 }}
+      sx={inlineButton ? { height: '43px', flexShrink: 0 } : { mt: 2 }}
       variant={buttonVariant}
       onClick={() => void onSubmit()}
     >
@@ -111,12 +115,12 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
           error={touched && Boolean(error)}
           helperText={touched && error}
         />
-        {!isMobile && submitButton}
+        {inlineButton && submitButton}
       </Stack>
 
       {footer ?? null}
 
-      {isMobile && submitButton}
+      {!inlineButton && submitButton}
 
       {collapse && (
         <MIButton

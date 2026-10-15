@@ -146,7 +146,7 @@ const VirtualKeys: React.FC = () => {
         }}
         data-testid="virtualKeys"
       >
-        <Typography variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
+        <Typography component="h2" variant="h6" sx={{ mb: { xs: 3, lg: 0 } }}>
           {t('virtualKeys.title')}
         </Typography>
         {isCreationEnabled && (

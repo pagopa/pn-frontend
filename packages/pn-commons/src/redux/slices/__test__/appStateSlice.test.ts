@@ -37,6 +37,7 @@ describe('App state slice tests', () => {
           errors: [],
           success: [],
           info: [],
+          warning: [],
         },
         responseEvent: null,
         isInitialized: false,
@@ -246,6 +247,42 @@ describe('App state slice tests', () => {
       expect(action.payload).toStrictEqual(id);
       const state = store.getState().appState;
       expect(state.messages.info).toEqual([]);
+    });
+
+    it('addWarning', () => {
+      const payload = { title: 'mocked-title', message: 'mocked-message' };
+      const action = store.dispatch(appStateActions.addWarning(payload));
+      expect(action.type).toBe('appState/addWarning');
+      expect(action.payload).toStrictEqual(payload);
+      const state = store.getState().appState;
+      const id = state.messages.warning[0].id;
+      expect(state.messages.warning).toEqual([
+        {
+          id,
+          title: 'mocked-title',
+          message: 'mocked-message',
+          blocking: false,
+          toNotify: true,
+          status: undefined,
+          alreadyShown: false,
+          action: undefined,
+          showTechnicalData: false,
+          traceId: undefined,
+          errorCode: undefined,
+        },
+      ]);
+    });
+
+    it('removeWarning', () => {
+      const payload = { title: 'mocked-title', message: 'mocked-message' };
+      store.dispatch(appStateActions.addWarning(payload));
+      const id = store.getState().appState.messages.warning[0].id;
+
+      const action = store.dispatch(appStateActions.removeWarning(id));
+      expect(action.type).toBe('appState/removeWarning');
+      expect(action.payload).toStrictEqual(id);
+      const state = store.getState().appState;
+      expect(state.messages.warning).toEqual([]);
     });
 
     it('finishInitialization', () => {

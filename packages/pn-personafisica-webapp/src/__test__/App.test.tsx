@@ -201,6 +201,29 @@ describe('App', () => {
     expect(menuItems[0]).toHaveTextContent('header.logout');
   });
 
+  it('opens the support page clicking the assistance button - user has not accepted the TOS and PRIVACY', async () => {
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, false));
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
+
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    expect(result.queryByTestId('tos-acceptance-page')).toBeInTheDocument();
+
+    const header = document.querySelector('header');
+    const assistanceButton = header?.querySelector('[aria-label="Assistenza"]');
+    fireEvent.click(assistanceButton!);
+
+    // the support page is lazy loaded, so we have to wait for it
+    await waitFor(() => {
+      expect(screen.queryByTestId('supportForm')).toBeInTheDocument();
+    });
+    expect(result.queryByTestId('tos-acceptance-page')).not.toBeInTheDocument();
+    // on the support page the assistance button is hidden
+    expect(header?.querySelector('[aria-label="Assistenza"]')).not.toBeInTheDocument();
+  });
+
   it('sidemenu items if there are delegators', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
