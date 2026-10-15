@@ -128,7 +128,7 @@
     },
     "title": "Personal key",
     "understood-button": "OK, got it",
-    "view-subtitle": "You can use it to authenticate on the platform and integrate SEND. You can copy your personal key at any time in the “API Integration” section.",
+    "view-subtitle": "You can use it to authenticate on the platform and integrate SEND. You can copy your personal key at any time in the \"API Integration\" section.",
     "view-title": "Your personal key"
   }
 }
