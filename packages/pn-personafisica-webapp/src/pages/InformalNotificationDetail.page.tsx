@@ -33,6 +33,7 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -81,6 +82,10 @@ const InformalNotificationDetail: React.FC = () => {
 
   useEffect(() => {
     fetchReceivedInformalNotification();
+
+    return () => {
+      dispatch(resetState());
+    };
   }, []);
 
   const currentRecipient = informalNotification?.recipients?.[0];
