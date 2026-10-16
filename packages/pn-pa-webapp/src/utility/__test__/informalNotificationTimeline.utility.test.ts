@@ -12,7 +12,7 @@ import {
 } from '../../generated-client/informal-notifications';
 import {
   getInformalTimelineEvents,
-  getInformalTimelineSteps,
+  getInformalTimelineStatusHistory,
 } from '../informalNotificationTimeline.utility';
 
 const processingStatus = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusHistory.find(
@@ -53,25 +53,43 @@ describe('informalNotificationTimeline utility', () => {
   });
 
   it('adds the SEND group only in the processing status, starting it with the filed row', () => {
-    const steps = getInformalTimelineSteps(processingStatus.steps, status);
-    const sendStep = steps.find((step) => step.channel === BffNotificationChannelType.Send)!;
+    const { notificationStatusHistory } = INFORMAL_NOTIFICATION_TIMELINE_MOCK;
+    const [completedStatus, , acceptedStatus] = notificationStatusHistory;
+    const sendStep = { channel: BffNotificationChannelType.Send, events: [] };
 
-    expect(steps.map((step) => step.channel)).toEqual([
-      BffNotificationChannelType.Pec,
-      BffNotificationChannelType.Send,
+    const statusHistory = getInformalTimelineStatusHistory(notificationStatusHistory);
+    expect(statusHistory).toEqual([
+      completedStatus,
+      { ...processingStatus, steps: [pecStep, sendStep] },
+      acceptedStatus,
     ]);
     expect(getInformalTimelineEvents(sendStep, status, '2026-09-21T13:59:18Z')).toEqual([
       { id: 'filed', date: '2026-09-21T13:59:18Z', key: 'filed.send' },
     ]);
     // an already present SEND group is left untouched
-    expect(getInformalTimelineSteps(steps, status)).toBe(steps);
+    expect(getInformalTimelineStatusHistory(statusHistory)[1]).toBe(statusHistory[1]);
 
-    // the other statuses get neither the SEND group nor the filed row
+    // the other statuses don't get the filed row
     const completed = InformalNotificationStatusV1.CompletedReached;
-    expect(getInformalTimelineSteps(processingStatus.steps, completed)).toBe(
-      processingStatus.steps
-    );
     expect(getInformalTimelineEvents(sendStep, completed, '2026-09-21T13:59:18Z')).toEqual([]);
+  });
+
+  it('adds the processing status with the SEND group right after the accepted one when it is missing', () => {
+    const { notificationStatusHistory } = INFORMAL_NOTIFICATION_TIMELINE_MOCK;
+    const [completedStatus, , acceptedStatus] = notificationStatusHistory;
+
+    expect(getInformalTimelineStatusHistory([completedStatus, acceptedStatus])).toEqual([
+      completedStatus,
+      {
+        status,
+        activeFrom: acceptedStatus.activeFrom,
+        steps: [{ channel: BffNotificationChannelType.Send, events: [] }],
+      },
+      acceptedStatus,
+    ]);
+
+    const inValidation = [{ ...acceptedStatus, status: InformalNotificationStatusV1.InValidation }];
+    expect(getInformalTimelineStatusHistory(inValidation)).toBe(inValidation);
   });
 
   it('uses the registered letter code for analog events and tags the delivery on every channel', () => {

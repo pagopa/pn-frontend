@@ -16,7 +16,7 @@ import {
   CommunicationOutcomes,
   InformalNotificationStatusV1,
 } from '../../generated-client/informal-notifications';
-import { getInformalTimelineSteps } from '../../utility/informalNotificationTimeline.utility';
+import { getInformalTimelineStatusHistory } from '../../utility/informalNotificationTimeline.utility';
 import InformalNotificationTimelineChannelStep from './InformalNotificationTimelineChannelStep';
 
 type Props = {
@@ -108,9 +108,8 @@ const InformalNotificationSenderTimeline = ({ statusHistory, communicationOutcom
         </MITimelineItem>
       )}
 
-      {statusHistory.map((item) => {
+      {getInformalTimelineStatusHistory(statusHistory).map((item) => {
         const presentation = TIMELINE_ITEM_PRESENTATION[item.status];
-        const steps = getInformalTimelineSteps(item.steps, item.status);
 
         return (
           <MITimelineItem
@@ -132,9 +131,9 @@ const InformalNotificationSenderTimeline = ({ statusHistory, communicationOutcom
               />
             )}
 
-            {!!steps.length && (
+            {!!item.steps.length && (
               <Stack spacing={1.5} divider={<Divider flexItem />} sx={{ mt: 1.5 }}>
-                {steps.map((step, stepIndex) => (
+                {item.steps.map((step, stepIndex) => (
                   <InformalNotificationTimelineChannelStep
                     key={`step-${step.channel}-${stepIndex}`}
                     step={step}

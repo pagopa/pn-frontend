@@ -16,6 +16,7 @@ import {
   BffChannelStatusV1,
   BffInformalNotificationTimelineGroup,
   BffInformalNotificationTimelineItem,
+  BffInformalNotificationTimelineStatusHistoryV1,
   BffNotificationChannelType,
   DeliveredDetails,
   InformalNotificationStatusV1,
@@ -65,24 +66,46 @@ export const EVENT_TAG_ICON: Record<InformalTimelineEventTag, ComponentType<SvgI
 export const getChannelLabelKey = (channel: BffNotificationChannelType) =>
   `informal.detail.send-by-channel.channel.${channel.toLowerCase()}`;
 
+const withSendStep = (
+  item: BffInformalNotificationTimelineStatusHistoryV1
+): BffInformalNotificationTimelineStatusHistoryV1 =>
+  item.steps.some((step) => step.channel === BffNotificationChannelType.Send)
+    ? item
+    : { ...item, steps: [...item.steps, { channel: BffNotificationChannelType.Send, events: [] }] };
+
 /**
- * In the PROCESSING status the SEND group is always shown, since every notification is filed on SEND:
- * if the backend doesn't return it, it is created.
- * @param steps - Timeline steps
- * @param status - Status the steps belong to
+ * Once the notification is accepted, the PROCESSING status with the SEND group is always shown,
+ * since every notification is filed on SEND: if the backend doesn't return the status, it is created
+ * right after the ACCEPTED one, and if it doesn't return the SEND group, it is added to the status.
+ * The history goes from the most recent status to the oldest one.
+ * @param statusHistory - Status history of the notification
  */
-export const getInformalTimelineSteps = (
-  steps: Array<BffInformalNotificationTimelineGroup>,
-  status: InformalNotificationStatusV1
-): Array<BffInformalNotificationTimelineGroup> => {
-  if (
-    status === InformalNotificationStatusV1.Processing &&
-    !steps.some((step) => step.channel === BffNotificationChannelType.Send)
-  ) {
-    return [...steps, { channel: BffNotificationChannelType.Send, events: [] }];
+export const getInformalTimelineStatusHistory = (
+  statusHistory: Array<BffInformalNotificationTimelineStatusHistoryV1>
+): Array<BffInformalNotificationTimelineStatusHistoryV1> => {
+  if (statusHistory.some((item) => item.status === InformalNotificationStatusV1.Processing)) {
+    return statusHistory.map((item) =>
+      item.status === InformalNotificationStatusV1.Processing ? withSendStep(item) : item
+    );
   }
 
-  return steps;
+  const acceptedIndex = statusHistory.findIndex(
+    (item) => item.status === InformalNotificationStatusV1.Accepted
+  );
+
+  if (acceptedIndex === -1) {
+    return statusHistory;
+  }
+
+  return [
+    ...statusHistory.slice(0, acceptedIndex),
+    withSendStep({
+      status: InformalNotificationStatusV1.Processing,
+      activeFrom: statusHistory[acceptedIndex].activeFrom,
+      steps: [],
+    }),
+    ...statusHistory.slice(acceptedIndex),
+  ];
 };
 
 /**

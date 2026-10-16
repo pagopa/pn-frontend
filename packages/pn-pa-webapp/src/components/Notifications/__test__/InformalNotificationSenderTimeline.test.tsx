@@ -1,5 +1,6 @@
 import { INFORMAL_NOTIFICATION_TIMELINE_MOCK } from '../../../__mocks__/InformalNotificationTimeline.mock';
 import { render } from '../../../__test__/test-utils';
+import { InformalNotificationStatusV1 } from '../../../generated-client/informal-notifications';
 import InformalNotificationSenderTimeline from '../InformalNotificationSenderTimeline';
 
 const { notificationStatusHistory, communicationOutcomes } = INFORMAL_NOTIFICATION_TIMELINE_MOCK;
@@ -31,6 +32,21 @@ describe('InformalNotificationSenderTimeline Component', () => {
     );
 
     expect(getByText('informal.detail.send-by-channel.channel.pec')).toBeInTheDocument();
+    expect(getByText('informal.detail.send-by-channel.channel.send')).toBeInTheDocument();
+    expect(getByText('informal.timeline.event.filed.send')).toBeInTheDocument();
+  });
+
+  it('shows the processing status with the SEND group when the BFF does not return it', () => {
+    const { getByText } = render(
+      <InformalNotificationSenderTimeline
+        statusHistory={notificationStatusHistory.filter(
+          (item) => item.status !== InformalNotificationStatusV1.Processing
+        )}
+        communicationOutcomes={communicationOutcomes}
+      />
+    );
+
+    expect(getByText('informal.status.processing.label')).toBeInTheDocument();
     expect(getByText('informal.detail.send-by-channel.channel.send')).toBeInTheDocument();
     expect(getByText('informal.timeline.event.filed.send')).toBeInTheDocument();
   });
