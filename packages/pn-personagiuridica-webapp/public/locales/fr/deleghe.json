@@ -86,6 +86,10 @@
       "message": "Vous ne pouvez pas vous mandater vous-même",
       "title": "Erreur saisie procuration"
     },
+    "fiscal_code": {
+      "message": "Le code fiscal saisi n'est pas valide.",
+      "title": "Code fiscal non valide"
+    },
     "invalid_verification_code": {
       "message": "Vérifiez-le et saisissez-le à nouveau",
       "title": "Le code est incorrect"
@@ -109,6 +113,7 @@
       "businessName": "Raison sociale",
       "date-duration": "Période de validité de la procuration",
       "endDate": "Terminer la procuration",
+      "endDate-input-aria-label": "Saisis la date de fin de la délégation.",
       "firstName": "Prénom",
       "fiscalCode": "Code fiscal",
       "lastName": "Nom de famille",
@@ -118,11 +123,13 @@
       "onlySelected": "Uniquement les organismes sélectionnés",
       "party-not-found": "Aucun organisme trouvé",
       "personType": "Entité juridique:",
+      "personType-content-subtitle": "Sélectionne le type d'entité juridique",
       "selectEntities": "Sélectionner organismes*",
       "submit": "Envoyez votre demande",
       "verificationCode": "Code de vérification",
       "verificationCodeDescr": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration.",
-      "viewFrom": "Vous pourrez visualiser les notifications de :"
+      "viewFrom": "Vous pourrez visualiser les notifications de :",
+      "viewFrom-content-subtitle": "Sélectionne une option"
     },
     "subtitle": "Saisis les données de la personne physique ou morale à qui tu veux déléguer la lecture des notifications de {{organizationName}}.",
     "title": "Ajouter une procuration",
@@ -139,7 +146,8 @@
       },
       "fiscalCode": {
         "required": "Le code fiscal est obligatoire",
-        "wrong": "Le code fiscal saisi est incorrect."
+        "wrong": "Le code fiscal saisi est incorrect.",
+        "wrong-pg": "Saisis uniquement des chiffres. Si le code fiscal de la personne que tu souhaites déléguer contient également des lettres, sélectionne « Personne physique »."
       },
       "name": {
         "required": "Le prénom est obligatoire"
