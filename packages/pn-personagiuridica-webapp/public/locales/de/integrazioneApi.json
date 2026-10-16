@@ -128,7 +128,7 @@
     },
     "title": "Persönlicher Schlüssel",
     "understood-button": "OK, verstanden",
-    "view-subtitle": "Du kannst sie verwenden, um dich auf der Plattform zu authentifizieren und SEND zu integrieren. Du kannst deinen persönlichen Schlüssel jederzeit im Bereich „API-Integration“ kopieren.",
+    "view-subtitle": "Du kannst ihn verwenden, um dich auf der Plattform zu authentifizieren und SEND zu integrieren. Du kannst deinen persönlichen Schlüssel jederzeit im Bereich „API-Integration“ kopieren.",
     "view-title": "Dein persönlicher Schlüssel"
   }
 }
