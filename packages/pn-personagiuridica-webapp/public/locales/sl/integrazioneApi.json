@@ -128,7 +128,7 @@
     },
     "title": "Osebni ključ",
     "understood-button": "V redu, razumem",
-    "view-subtitle": "Lahko jo uporabiš za avtentikacijo na platformi in integracijo SEND. Svoj osebni ključ lahko kadar koli kopiraš v razdelku »Integracija API«.",
+    "view-subtitle": "Lahko ga uporabiš za avtentikacijo na platformi in integracijo SEND. Svoj osebni ključ lahko kadar koli kopiraš v razdelku »Integracija API«.",
     "view-title": "Tvoj osebni ključ"
   }
 }
