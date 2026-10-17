@@ -115,7 +115,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
           then: emailValidationSchema(t),
         })
         .when([], {
-          is: () => channelType === ChannelType.SMS,
+          is: () => channelType === ChannelType.SMS || channelType === ChannelType.WHATSAPP,
           then: phoneValidationSchema(t),
         }),
     });
