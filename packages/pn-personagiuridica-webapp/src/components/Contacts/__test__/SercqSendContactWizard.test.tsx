@@ -36,7 +36,7 @@ describe('SercqSendContactWizard', () => {
     const initialAddresses = digitalAddresses.filter(
       (addr) => addr.addressType === AddressType.COURTESY
     );
-    const { container, getByText, getByTestId } = render(
+    const { container, getByText, getByTestId, getAllByRole } = render(
       <SercqSendContactWizard goToStep={goToStep} />,
       {
         preloadedState: {
@@ -67,6 +67,14 @@ describe('SercqSendContactWizard', () => {
     const smsIcon = icons[1];
     expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
     expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
+
+    const verifiedIcons = getAllByRole('img', {
+      name: 'digital-contact.verified-aria-label',
+    });
+
+    expect(verifiedIcons).toEqual([emailIcon, smsIcon]);
+    expect(emailIcon).not.toHaveAttribute('aria-hidden', 'true');
+    expect(smsIcon).not.toHaveAttribute('aria-hidden', 'true');
 
     expect(getByText(`${labelPrefix}.disclaimer-enable`)).toBeInTheDocument();
 
@@ -111,6 +119,8 @@ describe('SercqSendContactWizard', () => {
     expect(emailIcon).toHaveAttribute('data-testid', 'ErrorRoundedIcon');
     expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
 
+    expect(emailIcon).toHaveAttribute('aria-hidden', 'true');
+
     fireEvent.click(emailLink);
 
     expect(goToStep).toHaveBeenCalledTimes(1);
@@ -152,6 +162,8 @@ describe('SercqSendContactWizard', () => {
     const smsIcon = icons[1];
     expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
     expect(smsIcon).toHaveAttribute('data-testid', 'ErrorRoundedIcon');
+
+    expect(smsIcon).toHaveAttribute('aria-hidden', 'true');
 
     fireEvent.click(smsLink);
 

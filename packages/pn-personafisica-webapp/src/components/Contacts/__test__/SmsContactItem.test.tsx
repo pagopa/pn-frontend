@@ -81,7 +81,9 @@ describe('test SmsContactItem', () => {
     const form = container.querySelector('form');
     const phoneValue = getById(form!, 'default_sms-typography');
     expect(phoneValue).toHaveTextContent(defaultAddress?.value!);
-    const editButton = getByRole('button', { name: 'button.modifica' });
+    const editButton = getByRole('button', {
+      name: 'digital-contact.edit-sms-aria-label',
+    });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_sms"]`);
     const saveButton = getByRole('button', { name: 'button.conferma' });
@@ -207,7 +209,9 @@ describe('test SmsContactItem', () => {
     const form = result.container.querySelector('form');
     let smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toHaveTextContent(defaultAddress!.value);
-    let editButton = result.getByRole('button', { name: 'button.modifica' });
+    let editButton = result.getByRole('button', {
+      name: 'digital-contact.edit-sms-aria-label',
+    });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_sms"]`);
     const saveButton = result.getByRole('button', { name: 'button.conferma' });

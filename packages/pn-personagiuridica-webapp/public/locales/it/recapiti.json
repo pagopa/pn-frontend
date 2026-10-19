@@ -271,5 +271,11 @@
     "pec-validation": "Validazione PEC in corso"
   },
   "subtitle": "Gestisci i recapiti digitali su cui ricevere le comunicazioni a valore legale di SEND e/o i relativi messaggi di cortesia per la <0>tua impresa</0>.",
-  "title": "Recapiti"
+  "title": "Recapiti",
+  "digital-contact": {
+    "edit-email-aria-label": "Modifica email",
+    "edit-pec-aria-label": "Modifica PEC",
+    "edit-sms-aria-label": "Modifica numero di cellulare",
+    "verified-aria-label": "Dato verificato"
+  }
 }

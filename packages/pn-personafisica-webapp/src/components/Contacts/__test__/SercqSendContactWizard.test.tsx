@@ -36,7 +36,7 @@ describe('SercqSendContactWizard', () => {
     const initialAddresses = digitalAddresses.filter(
       (addr) => addr.addressType === AddressType.COURTESY
     );
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, getAllByRole } = render(
       <SercqSendContactWizard goToStep={goToStep} showIOStep />,
       {
         preloadedState: {
@@ -74,6 +74,16 @@ describe('SercqSendContactWizard', () => {
     expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
     expect(ioIcon).toHaveAttribute('data-testid', 'ErrorRoundedIcon');
     expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
+
+    const verifiedIcons = getAllByRole('img', {
+      name: 'digital-contact.verified-aria-label',
+    });
+
+    expect(verifiedIcons).toEqual([emailIcon, smsIcon]);
+    expect(emailIcon).not.toHaveAttribute('aria-hidden', 'true');
+    expect(smsIcon).not.toHaveAttribute('aria-hidden', 'true');
+
+    expect(ioIcon).toHaveAttribute('aria-hidden', 'true');
 
     expect(getByText(`${labelPrefix}.disclaimer-enable`)).toBeInTheDocument();
 
@@ -184,6 +194,8 @@ describe('SercqSendContactWizard', () => {
     expect(ioIcon).toHaveAttribute('data-testid', 'ErrorRoundedIcon');
     expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
 
+    expect(emailIcon).toHaveAttribute('aria-hidden', 'true');
+
     fireEvent.click(emailLink);
     fireEvent.click(ioLink);
 
@@ -208,13 +220,16 @@ describe('SercqSendContactWizard', () => {
     ];
 
     // render component
-    const { container, getByText } = render(<SercqSendContactWizard goToStep={goToStep} />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: initialAddresses,
+    const { container, getByText, getAllByRole } = render(
+      <SercqSendContactWizard goToStep={goToStep} />,
+      {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: initialAddresses,
+          },
         },
-      },
-    });
+      }
+    );
 
     expect(getByText(`${labelPrefix}.contacts-list.email.title`)).toBeInTheDocument();
     expect(getByText(initialAddresses[0].value));
@@ -235,6 +250,20 @@ describe('SercqSendContactWizard', () => {
     expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
     expect(ioIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
     expect(smsIcon).toHaveAttribute('data-testid', 'ErrorRoundedIcon');
+
+    expect(smsIcon).toHaveAttribute('aria-hidden', 'true');
+
+    expect(getByText(`${labelPrefix}.contacts-list.io.textEnabled`)).toBeInTheDocument();
+
+    expect(ioIcon).toHaveAttribute('aria-hidden', 'true');
+    expect(ioIcon).not.toHaveAttribute('role', 'img');
+    expect(ioIcon.querySelector('title')).toBeNull();
+
+    expect(
+      getAllByRole('img', {
+        name: 'digital-contact.verified-aria-label',
+      })
+    ).toEqual([emailIcon]);
 
     fireEvent.click(smsLink);
 
