@@ -115,18 +115,18 @@ function hasViewedLegalFact(statusObject?: NotificationStatusHistory): boolean {
   );
 }
 
-/*
- * Returns the mapping between current notification delivered status, label and descriptive message for PA
- * @param  {NotificationStatus} status
- * @returns object
+/**
+ * Returns the localization keys for the DELIVERED status for PA.
+ * @param statusObject The DELIVERED status history entry.
+ * @param statusHistory The notification status history.
+ * @returns The localization keys, or undefined when statusObject is unavailable.
  */
 function getNotificationDeliveredInfosForPA(
-  statusInfos: StatusInfo,
   statusObject: NotificationStatusHistory | undefined,
   statusHistory: Array<NotificationStatusHistory>
-): StatusInfo {
+): { labelKey: string; descriptionKey?: string } | undefined {
   if (!statusObject) {
-    return statusInfos;
+    return undefined;
   }
   // the timeline event that tells us if there is a stock and its status can be in the DELIVERED status and also in the DELIVERING one.
   // we have to get the DELIVERING STATUS and get only those events that are cronologically before the DELIVERED status
@@ -177,37 +177,24 @@ function getNotificationDeliveredInfosForPA(
   // case giacenza
   if (isExpiredStock) {
     // case expired stock
-    statusInfos.label = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-expired-stock'
-    );
-    statusInfos.description = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-expired-stock-description'
-    );
+    return {
+      labelKey: 'status.delivered-expired-stock',
+      descriptionKey: 'status.delivered-expired-stock-description',
+    };
   } else if (isWithdrawnStock) {
     // case withdraw stock
-    statusInfos.label = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-withdrawn-stock'
-    );
-    statusInfos.description = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-withdrawn-stock-description'
-    );
+    return {
+      labelKey: 'status.delivered-withdrawn-stock',
+      descriptionKey: 'status.delivered-withdrawn-stock-description',
+    };
   } else if (isStock) {
-    statusInfos.label = getLocalizedOrDefaultLabel('notifications', 'status.delivered-stock');
-    statusInfos.description = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-stock-description'
-    );
+    return {
+      labelKey: 'status.delivered-stock',
+      descriptionKey: 'status.delivered-stock-description',
+    };
   } else {
-    statusInfos.label = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-monorecipient'
-    );
+    return { labelKey: 'status.delivered-monorecipient' };
   }
-  return statusInfos;
 }
 
 /**
@@ -232,54 +219,66 @@ function deliveredStatusVariant(
     delegatorName?: string;
   }
 ): StatusInfo {
-  const statusInfos = localizeStatus(NotificationStatus.DELIVERED, undefined, { isMultiRecipient });
   const deliveryMode = statusObject?.deliveryMode;
   const delegatorName = options?.delegatorName;
 
-  const description = resolveStatusLocalization(NotificationStatus.DELIVERED, 'description', {
+  const context: StatusLocalizationContext = {
     isMultiRecipient,
     deliveryMode,
     isDelegate: !!(deliveryMode && delegatorName),
-  });
-  if (description.variant.deliveryMode || description.variant.isDelegate) {
-    statusInfos.description = getLocalizedOrDefaultLabel(
-      'notifications',
-      description.key,
-      undefined,
-      description.variant.isDelegate ? { recipient: delegatorName } : undefined
+  };
+
+  const description = resolveStatusLocalization(
+    NotificationStatus.DELIVERED,
+    'description',
+    context
+  );
+
+  // eslint-disable-next-line functional/no-let
+  let descriptionData: StatusLocalizationData | undefined;
+  // eslint-disable-next-line functional/no-let
+  let descriptionSelection = description;
+  // eslint-disable-next-line functional/no-let
+  let labelKey: string | undefined;
+
+  if (description.variant.deliveryMode || description.variant.isDelegate || isMultiRecipient) {
+    descriptionData = description.variant.isDelegate ? { recipient: delegatorName } : undefined;
+  } else if (options?.isParty) {
+    // if it is a PA, change the title and the description
+    // ... only for single-recipient notifications!
+    const paSelection = getNotificationDeliveredInfosForPA(
+      statusObject,
+      options.statusHistory || []
     );
-    return statusInfos;
-  }
 
-  if (isMultiRecipient) {
-    return statusInfos;
-  }
+    labelKey = paSelection?.labelKey;
 
-  // if it is a PA, change the title and the description
-  // ... only for single-recipient notifications!
-  if (options?.isParty) {
-    getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
-    return statusInfos;
-  }
-
-  // if the deliveryMode is defined, then change the description for a more specific one ...
-  // ... only for single-recipient notifications!
-  if (deliveryMode) {
+    if (paSelection?.descriptionKey) {
+      descriptionSelection = { ...description, key: paSelection.descriptionKey };
+    }
+  } else if (deliveryMode) {
+    // if the deliveryMode is defined, then change the description for a more specific one ...
+    // ... only for single-recipient notifications!
     const deliveryModeDescription = getLocalizedOrDefaultLabel(
       'notifications',
       `status.deliveryMode.${deliveryMode}`
     );
-    statusInfos.description = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-description-with-delivery-mode',
-      undefined,
-      { deliveryMode: deliveryModeDescription }
-    );
 
-    return statusInfos;
+    descriptionData = { deliveryMode: deliveryModeDescription };
+    descriptionSelection = {
+      ...description,
+      key: 'status.delivered-description-with-delivery-mode',
+    };
   }
 
-  return statusInfos;
+  return localizeStatus(
+    NotificationStatus.DELIVERED,
+    undefined,
+    context,
+    descriptionData,
+    descriptionSelection,
+    labelKey
+  );
 }
 
 const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
@@ -406,11 +405,14 @@ function localizeStatus(
   status: NotificationStatus,
   data?: StatusLocalizationData,
   context: StatusLocalizationContext = {},
-  descriptionData?: StatusLocalizationData
+  descriptionData?: StatusLocalizationData,
+  descriptionSelection?: StatusLocalizationSelection,
+  labelKey?: string
 ): StatusInfo {
   const interpolationData = data && Object.keys(data).length ? data : undefined;
   const baseContext = { isMultiRecipient: context.isMultiRecipient };
-  const description = resolveStatusLocalization(status, 'description', context);
+  const description =
+    descriptionSelection ?? resolveStatusLocalization(status, 'description', context);
 
   const resolvedDescriptionData = (() => {
     if (description.variant.viewer || description.variant.isDelegate) {
@@ -421,13 +423,18 @@ function localizeStatus(
       return undefined;
     }
 
+    // An explicitly selected description can use its own interpolation data.
+    if (descriptionSelection) {
+      return descriptionData ?? interpolationData;
+    }
+
     return interpolationData;
   })();
 
   return {
     label: getLocalizedOrDefaultLabel(
       'notifications',
-      resolveStatusLocalization(status, 'label', baseContext).key
+      labelKey ?? resolveStatusLocalization(status, 'label', baseContext).key
     ),
     tooltip: getLocalizedOrDefaultLabel(
       'notifications',
@@ -445,9 +452,10 @@ function localizeStatus(
 }
 
 /**
- * Returns the mapping between current notification status and its color, label and descriptive message.
- * @param  {NotificationStatus} status
- * @returns object
+ * Returns localized information for a notification status.
+ * @param status The notification status or its history entry.
+ * @param options Notification context, including recipients, status history and delegation.
+ * @returns The localized label, tooltip, description and status color.
  */
 export function getNotificationStatusInfos(
   status: NotificationStatus | NotificationStatusHistory,
