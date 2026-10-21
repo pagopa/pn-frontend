@@ -10,9 +10,9 @@ import {
 import InformalNotificationTimelineChannelStep from '../InformalNotificationTimelineChannelStep';
 
 const status = InformalNotificationStatusV1.Processing;
-const pecStep = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusHistory.find(
-  (item) => item.status === status
-)!.steps[0];
+const pecStep = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusHistory
+  .find((item) => item.status === status)!
+  .steps.find((step) => step.channel === BffNotificationChannelType.Pec)!;
 
 const viewedDetails: InformalNotificationViewedDetails = {
   recIndex: 0,

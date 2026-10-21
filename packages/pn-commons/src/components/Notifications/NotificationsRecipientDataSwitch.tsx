@@ -89,7 +89,7 @@ const NotificationsRecipientDataSwitch: React.FC<{
         >
           {data.subject}
         </DataValue>
-        {data.communicationType === 'LEGAL' && (
+        {data.communicationType === NotificationCommunicationType.LEGAL && (
           <Tag
             variant="default"
             icon={VerifiedRoundedIcon}

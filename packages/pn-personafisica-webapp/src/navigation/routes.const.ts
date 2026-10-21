@@ -18,7 +18,7 @@ export const DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE = `${NOTIFICHE_DELEGATO}/:id${
 export const NUOVA_DELEGA = `${DELEGHE}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${DETTAGLIO}`;
 export const GET_DETTAGLIO_COMUNICAZIONE_PATH = (id: string) =>
-  `${COMUNICAZIONE}/${id}/${DETTAGLIO}`;
+  `${COMUNICAZIONE}/${id}${DETTAGLIO}`;
 export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) =>
   `${NOTIFICHE}/${mandateId}/${id}${DETTAGLIO}`;
 export const RECAPITI = '/recapiti';
