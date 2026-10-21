@@ -20,6 +20,7 @@ import {
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
+import FilterNotifications from '../components/Notifications/FilterNotifications';
 import GroupSelector from '../components/Notifications/GroupSelector';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import { PGEventsType } from '../models/PGEventsType';
@@ -27,7 +28,12 @@ import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
-import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
+import {
+  setIsDelegatedPage,
+  setNotificationFilters,
+  setPagination,
+  setSorting,
+} from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
@@ -38,15 +44,29 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
+const shouldShowFilters = (notificationsLength: number, filtersApplied: boolean) =>
+  notificationsLength > 0 || filtersApplied;
+
 const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const [pageReady, setPageReady] = useState(false);
   const domicileBannerTypeRef = useRef('');
+  const filterNotificationsRef = useRef<{
+    filtersApplied: boolean;
+    cleanFilters: () => void;
+  }>({
+    filtersApplied: false,
+    cleanFilters: () => void 0,
+  });
 
-  const { notifications, filters, sort, pagination } = useAppSelector(
-    (state: RootState) => state.dashboardState
-  );
+  const {
+    notifications,
+    filters,
+    sort,
+    pagination,
+    isDelegatedPage: storedIsDelegatedPage,
+  } = useAppSelector((state: RootState) => state.dashboardState);
   const { defaultEMAILAddress, defaultSMSAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -65,6 +85,10 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const group = isDelegatedPage ? delegationGroup : undefined;
 
   const isMobile = useIsMobile();
+
+  const filtersApplied = filterNotificationsRef.current.filtersApplied;
+  const showFilters = shouldShowFilters(notifications.length, filtersApplied);
+
   const pageTitle = !isDelegatedPage
     ? t('title', { organization: organization.name })
     : t('title-delegated-notifications');
@@ -196,13 +220,17 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   }, []);
 
   useEffect(() => {
+    if (storedIsDelegatedPage !== isDelegatedPage) {
+      dispatch(setIsDelegatedPage(isDelegatedPage));
+      return;
+    }
     if (isDelegatedPage && filters.communicationType) {
       dispatch(setNotificationFilters({ ...filters, communicationType: '' }));
       return;
     }
 
     fetchNotifications();
-  }, [fetchNotifications, isDelegatedPage, filters, dispatch]);
+  }, [fetchNotifications, isDelegatedPage, filters, dispatch, storedIsDelegatedPage]);
 
   // Announce every time loading goes from true -> false
   useEffect(() => {
@@ -252,6 +280,11 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
             my={3}
           />
         )}
+        <FilterNotifications
+          ref={filterNotificationsRef}
+          showFilters={showFilters}
+          isDelegatedPage={isDelegatedPage}
+        />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
           reloadAction={fetchNotifications}
@@ -262,6 +295,8 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
               sort={sort}
               onChangeSorting={handleChangeSorting}
               isDelegatedPage={isDelegatedPage}
+              filtersApplied={filtersApplied}
+              onCleanFilters={filterNotificationsRef.current.cleanFilters}
             />
           ) : (
             <DesktopNotifications
@@ -269,6 +304,8 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
               sort={sort}
               onChangeSorting={handleChangeSorting}
               isDelegatedPage={isDelegatedPage}
+              filtersApplied={filtersApplied}
+              onCleanFilters={filterNotificationsRef.current.cleanFilters}
             />
           )}
           {notifications.length > 0 && (

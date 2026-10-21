@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   filtersApplied: boolean;
@@ -25,7 +26,6 @@ const FilterNotificationsFormActions = ({
       data-testid="filterButton"
       variant="outlined"
       type="submit"
-      size="small"
       sx={{
         height: '43px !important',
         marginRight: '8px !important',
@@ -37,18 +37,18 @@ const FilterNotificationsFormActions = ({
   );
 
   const cancelAction = (
-    <Button
+    <MIButton
       data-testid="cancelButton"
+      onClick={cleanFilters}
+      variant="text"
       sx={{
         height: '43px !important',
         padding: '0 16px !important',
         minWidth: '130px !important',
       }}
-      size="small"
-      onClick={cleanFilters}
     >
       {t('button.annulla filtro')}
-    </Button>
+    </MIButton>
   );
 
   return (

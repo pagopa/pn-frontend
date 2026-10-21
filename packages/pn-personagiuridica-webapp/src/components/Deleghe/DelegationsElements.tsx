@@ -1,16 +1,8 @@
 import React, { Dispatch, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import {
-  Box,
-  Button,
-  DialogContentText,
-  IconButton,
-  Menu as MUIMenu,
-  MenuItem,
-  Typography,
-} from '@mui/material';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
+import { Box, DialogContentText, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import {
   AppResponse,
@@ -21,7 +13,7 @@ import {
   Row,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
-import { Tag } from '@pagopa/mui-italia';
+import { MIButton, MIIconButton, Tag } from '@pagopa/mui-italia';
 import { AnyAction } from '@reduxjs/toolkit';
 
 import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
@@ -255,8 +247,8 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         open={showConfirmationModal}
         title={titleModal}
         slots={{
-          confirmButton: Button,
-          closeButton: Button,
+          confirmButton: MIButton,
+          closeButton: MIButton,
         }}
         slotsProps={{
           closeButton: {
@@ -297,14 +289,13 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         />
       )}
 
-      <IconButton
-        id={`delegation-menu-icon-${id}`}
+      <MIIconButton
         onClick={handleClick}
         data-testid="delegationMenuIcon"
         aria-label={t('deleghe.table.menu-aria-label')}
       >
-        <MoreVertIcon fontSize={'small'} />
-      </IconButton>
+        <MoreVertRounded fontSize="small" />
+      </MIIconButton>
       <MUIMenu
         id={`delegation-menu-${id}`}
         anchorEl={anchorEl}
@@ -413,16 +404,14 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
         handleCloseAcceptModal={handleCloseAcceptModal}
         handleConfirm={handleConfirm}
       />
-      <Button
+      <MIButton
         id="accept-button"
         onClick={handleAcceptClick}
-        variant={'contained'}
-        color={'primary'}
+        variant="contained"
         data-testid="acceptButton"
-        size="small"
       >
         {t('deleghe.accept')}
-      </Button>
+      </MIButton>
     </>
   );
 };

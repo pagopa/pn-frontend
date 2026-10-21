@@ -13,7 +13,7 @@ const ReworkedStatusTag = ({ reworkedStatus }: { reworkedStatus?: ReworkedStatus
       return (
         <Tag
           value={getLocalizedOrDefaultLabel('notifications', 'status.reworked-status-valid')}
-          variant="warning"
+          variant="success"
         />
       );
     case ReworkedStatus.NOT_VALID:

@@ -1,18 +1,12 @@
 import { useFormik } from 'formik';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
-import {
-  PnBreadcrumb,
-  Prompt,
-  SectionHeading,
-  TitleBox,
-  dataRegex,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
-import { Autocomplete } from '@pagopa/mui-italia';
+import { Prompt, SectionHeading, TitleBox, dataRegex, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Autocomplete, MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import SyncFeedbackApiKey from '../components/NewApiKey/SyncFeedbackApiKey';
 import { PAEventsType } from '../models/PAEventsType';
@@ -31,6 +25,7 @@ const NewApiKey = () => {
   const { t } = useTranslation(['apikeys', 'common']);
   const tkp = (key: string) => t(`new-api-key.${key}`);
   const [apiKeySent, setApiKeySent] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const initialValues = () => ({
     name: '',
@@ -93,12 +88,17 @@ const NewApiKey = () => {
           <Box p={3}>
             <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>
               <Grid item xs={12} lg={8}>
-                <PnBreadcrumb
-                  linkRoute={routes.API_KEYS}
-                  linkLabel={t('title')}
-                  currentLocationLabel={tkp('page-title')}
-                  goBackLabel={t('button.indietro', { ns: 'common' })}
-                />
+                <MIBreadcrumbs
+                  backButtonLabel={t('button.indietro', { ns: 'common' })}
+                  backButtonAction={() => navigate(routes.API_KEYS)}
+                >
+                  <MIBreadcrumbItem
+                    label={t('title')}
+                    onClick={() => navigate(routes.API_KEYS)}
+                    data-testid="breadcrumb-root-button"
+                  />
+                  <MIBreadcrumbItem label={tkp('page-title')} current />
+                </MIBreadcrumbs>
                 <TitleBox
                   variantTitle="h4"
                   title={tkp('page-title')}

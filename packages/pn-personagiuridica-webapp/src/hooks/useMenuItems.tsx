@@ -2,13 +2,13 @@
 import { useTranslation } from 'react-i18next';
 
 import { People, SupervisedUserCircle } from '@mui/icons-material';
-import AltRouteIcon from '@mui/icons-material/AltRoute';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-import HelpIcon from '@mui/icons-material/Help';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
-import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
+import AltRouteRoundedIcon from '@mui/icons-material/AltRouteRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
+import MarkunreadMailboxRoundedIcon from '@mui/icons-material/MarkunreadMailboxRounded';
+import SettingsEthernetRounded from '@mui/icons-material/SettingsEthernetRounded';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import { PGEventsType } from '../models/PGEventsType';
@@ -49,7 +49,7 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
   const menuItems: Array<SideMenuItem> = [
     {
       label: !loggedUser.hasGroup ? t('menu.notifiche') : t('menu.notifiche-delegato'),
-      icon: MailOutlineIcon,
+      icon: MailOutlineRoundedIcon,
       route: !loggedUser.hasGroup ? routes.NOTIFICHE : routes.NOTIFICHE_DELEGATO,
       additionalRoutes: [routes.COMUNICAZIONE],
       children: notificationMenuItems,
@@ -60,12 +60,12 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
       icon: () =>
         currentStatus ? (
           currentStatus.appIsFullyOperative ? (
-            <CheckCircleIcon sx={{ color: 'success.main' }} />
+            <CheckCircleRoundedIcon sx={{ color: 'success.main' }} />
           ) : (
-            <ErrorIcon sx={{ color: 'error.main' }} />
+            <ErrorRoundedIcon sx={{ color: 'error.main' }} />
           )
         ) : (
-          <HelpIcon />
+          <HelpRoundedIcon />
         ),
       route: routes.APP_STATUS,
     },
@@ -74,7 +74,7 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
   if (userHasAdminPermissions) {
     menuItems.splice(1, 0, {
       label: t('menu.deleghe'),
-      icon: () => <AltRouteIcon />,
+      icon: () => <AltRouteRoundedIcon />,
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     });
@@ -83,7 +83,7 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
   if (userHasAdminPermissions && !loggedUser.hasGroup) {
     menuItems.splice(2, 0, {
       label: t('menu.contacts'),
-      icon: MarkunreadMailboxIcon,
+      icon: MarkunreadMailboxRoundedIcon,
       route: routes.RECAPITI,
     });
   }
@@ -91,7 +91,7 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
   if (IS_B2B_ENABLED) {
     menuItems.splice(3, 0, {
       label: t('menu.integrazione-api'),
-      icon: SettingsEthernet,
+      icon: SettingsEthernetRounded,
       route: routes.INTEGRAZIONE_API,
     });
   }

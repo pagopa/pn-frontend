@@ -9,12 +9,14 @@ describe('Mixpanel - Payment Detail Error Strategy', () => {
     const paymentDetailErrorEvent = strategy.performComputations({
       detail: PaymentInfoDetail.PAYMENT_EXPIRED,
       errorCode: '500',
+      notification_type: 'notifica',
     });
     expect(paymentDetailErrorEvent).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.KO,
         detail: PaymentInfoDetail.PAYMENT_EXPIRED,
         errorCode: '500',
+        notification_type: 'notifica',
       },
     });
   });

@@ -25,30 +25,15 @@ export type {
   EventMandateNotificationsListType,
   EventNotificationDetailType,
   EventNotificationSource,
+  EventNotificationType,
   EventPaymentStatusType,
   EventsType,
   TrackedEvent,
 } from './MixpanelEvents';
 export type {
-  GetNotificationsParams,
-  GetNotificationsResponse,
-  Notification,
-  NotificationColumnData,
-  RecipientNotification,
-  NotificationCommunicationType,
-} from './Notifications';
-export type { PaginationData } from './Pagination';
-export type { PaymentCache } from './PaymentCache';
-export type { CardElement, CardSort } from './PnCard';
-export type { Column, Row, Sort } from './PnTable';
-export type { Product } from './Products';
-export type { SideMenuItem } from './SideMenuItem';
-export type { SmartTableData } from './SmartTable';
-export type { BasicUser, BasicUserClaims, ConsentUser } from './User';
-export type { WithRequired } from './UtilityTypes';
-export type {
   AnalogDetails,
   AnalogWorkflowDetails,
+  DelegateInfo,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
@@ -63,31 +48,50 @@ export type {
   NotificationDetailTimelineDetails,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
+  NotificationPayment,
   NotificationStatusHistory,
+  NotificationViewedDetails,
   PagoPAPaymentFullDetails,
   PaidDetails,
   PaymentAttachment,
   PaymentDetails,
   PaymentNotice,
   PaymentsData,
+  PaymentTpp,
   PhysicalAddress,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
-  PaymentTpp,
 } from './NotificationDetail';
+export type {
+  GetNotificationsParams,
+  GetNotificationsResponse,
+  Notification,
+  NotificationColumnData,
+  RecipientNotification,
+} from './Notifications';
+export type { PaginationData } from './Pagination';
+export type { PaymentCache } from './PaymentCache';
+export type { CardElement, CardSort } from './PnCard';
+export type { Column, Row, Sort } from './PnTable';
+export type { Product } from './Products';
+export type { SideMenuItem } from './SideMenuItem';
+export type { SmartTableData } from './SmartTable';
+export type { BasicUser, BasicUserClaims, ConsentUser } from './User';
+export type { WithRequired } from './UtilityTypes';
 
 export type { DatePickerTypes } from '../components/CustomDatePicker';
 
+export { default as PrivateRoute } from '../navigation/PrivateRoute';
+export { DowntimeStatus, isKnownFunctionality, KnownFunctionality } from './AppStatus';
+export { ConsentActionType, ConsentType } from './Consents';
 export { SERCQ_SEND_VALUE } from './Contacts';
 export { KnownSentiment } from './EmptyState';
-export { default as PrivateRoute } from '../navigation/PrivateRoute';
-export { DowntimeStatus, KnownFunctionality, isKnownFunctionality } from './AppStatus';
-export { ConsentActionType, ConsentType } from './Consents';
 export {
   EventAction,
   EventCategory,
   EventDowntimeType,
+  EventNotificationTypes,
   EventPageType,
   EventPaymentRecipientType,
   EventPropertyType,
@@ -95,8 +99,8 @@ export {
 export {
   DigitalDomicileType,
   LegalFactType,
-  NotificationDeliveryMode,
   NotificationCostDetailsStatus,
+  NotificationDeliveryMode,
   NotificationDocumentType,
   NotificationFeePolicy,
   PagoPaIntegrationMode,
@@ -109,6 +113,12 @@ export {
   ResponseStatus,
   TimelineCategory,
 } from './NotificationDetail';
-export { NotificationStatus, InformalNotificationStatus } from './NotificationStatus';
+export { NotificationCommunicationType } from './Notifications';
+export { InformalNotificationStatus, NotificationStatus } from './NotificationStatus';
 export type { UnifiedNotificationStatus } from './NotificationStatus';
+export type {
+  NotificationTimelineResponse,
+  NotificationTimelineStatusHistory,
+  NotificationPaymentTimeline,
+} from './NotificationTimeline';
 export { basicNoLoggedUserData } from './User';

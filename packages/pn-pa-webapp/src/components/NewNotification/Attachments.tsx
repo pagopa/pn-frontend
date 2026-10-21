@@ -3,11 +3,11 @@ import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } f
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { Box, FormControl, SxProps, TextField, Typography, useFormControl } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { NewNotificationDocument } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
@@ -79,14 +79,15 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
       <Box display="flex" alignItems="center" sx={sx}>
         <FormBoxTitle text={title} />
         {canBeDeleted && (
-          <ButtonNaked
+          <MIButton
+            variant="text"
             onClick={onDelete}
             data-testid="deletebutton"
             aria-label={t('new-notification.steps.attachments.remove-document')}
             sx={{ ml: 2 }}
           >
-            <DeleteIcon color="error" />
-          </ButtonNaked>
+            <DeleteRoundedIcon color="error" />
+          </MIButton>
         )}
       </Box>
       {maxAttachmentsLabel && (
@@ -379,15 +380,15 @@ const Attachments: React.FC<Props> = ({
             />
           ))}
           {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
-            <ButtonNaked
+            <MIButton
+              variant="text"
               onClick={addDocumentHandler}
-              color="primary"
-              startIcon={<AddIcon />}
+              startIcon={<AddRoundedIcon />}
               sx={{ mt: 4 }}
               data-testid="add-doc"
             >
               {t('add-doc')}
-            </ButtonNaked>
+            </MIButton>
           )}
         </FormBox>
       </NewNotificationCard>

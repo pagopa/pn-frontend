@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { Button } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { fireEvent, render } from '../../test-utils';
 import ConfirmationModal from '../ConfirmationModal';
@@ -14,7 +14,7 @@ describe('ConfirmationModal Component', () => {
       <ConfirmationModal
         open
         title={'Test title'}
-        slots={{ confirmButton: Button, closeButton: Button }}
+        slots={{ confirmButton: MIButton, closeButton: MIButton }}
         slotsProps={{
           closeButton: { onClick: mockCloseFunction, children: 'Close' },
           confirmButton: { onClick: mockConfirmFunction, children: 'Confirm' },
@@ -36,7 +36,7 @@ describe('ConfirmationModal Component', () => {
       <ConfirmationModal
         open
         title={'Test title'}
-        slots={{ confirmButton: Button, closeButton: Button }}
+        slots={{ confirmButton: MIButton, closeButton: MIButton }}
         slotsProps={{
           closeButton: { onClick: mockCloseFunction, children: 'Close' },
           confirmButton: { onClick: mockConfirmFunction, children: 'Confirm' },
@@ -57,7 +57,7 @@ describe('ConfirmationModal Component', () => {
       <ConfirmationModal
         open
         title={'Test title'}
-        slots={{ confirmButton: Button }}
+        slots={{ confirmButton: MIButton }}
         slotsProps={{
           confirmButton: { onClick: mockConfirmFunction, children: 'Confirm' },
         }}

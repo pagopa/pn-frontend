@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, Chip, Divider, Stack, Typography } from '@mui/material';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton, MIChip } from '@pagopa/mui-italia';
 
 import OnboardingImage from './OnboardingImage';
 
@@ -37,7 +37,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
             {t('onboarding.digital-domicile.choice.pec-activating.description')}
           </Typography>
 
-          <Chip
+          <MIChip
             label={t('onboarding.digital-domicile.choice.pec-activating.badge')}
             color="warning"
             sx={{ width: 'fit-content', '& .MuiChip-label': { fontSize: '12px' } }}
@@ -67,14 +67,14 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
         <Typography variant="body2" color="text.secondary" mb={2}>
           {t('onboarding.digital-domicile.choice.description')}
         </Typography>
-        <Button
+        <MIButton
           fullWidth={isMobile}
           variant="contained"
           onClick={onSelectSend}
           data-testid="select-send-button"
         >
           {t('onboarding.digital-domicile.choice.cta')}
-        </Button>
+        </MIButton>
 
         <Divider sx={{ my: 2 }} />
 
@@ -83,15 +83,9 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
             {t('onboarding.digital-domicile.choice.pec.description')}
           </Typography>
 
-          <ButtonNaked
-            color="primary"
-            size="medium"
-            onClick={onSelectPec}
-            data-testid="select-pec-button"
-            sx={{ fontWeight: 700 }}
-          >
+          <MIButton variant="text" onClick={onSelectPec} data-testid="select-pec-button">
             {t('onboarding.digital-domicile.choice.pec.cta')}
-          </ButtonNaked>
+          </MIButton>
         </Box>
       </Box>
       <OnboardingImage

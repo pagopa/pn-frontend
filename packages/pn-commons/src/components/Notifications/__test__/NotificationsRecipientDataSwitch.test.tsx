@@ -1,10 +1,10 @@
 import { vi } from 'vitest';
 
-import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
-
 import { NotificationStatus } from '../../../models/NotificationStatus';
-import { RecipientNotification } from '../../../models/Notifications';
+import {
+  NotificationCommunicationType,
+  RecipientNotification,
+} from '../../../models/Notifications';
 import { Row } from '../../../models/PnTable';
 import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { formatDate } from '../../../utility/date.utility';
@@ -21,7 +21,7 @@ const data: Row<RecipientNotification> = {
   notificationStatus: NotificationStatus.ACCEPTED,
   recipients: ['CLMCST42R12D969Z', 'DRCGNN12A46A326K', 'TSTUTN00A07A001G'],
   group: '6467344676f10c7617353c90',
-  communicationType: 'LEGAL',
+  communicationType: NotificationCommunicationType.LEGAL,
   isNewNotification: true,
 };
 
@@ -101,11 +101,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
   });
 
   it('renders component - subject - legal communication', () => {
-    const { container } = render(
-      <ThemeProvider theme={theme}>
-        <NotificationsRecipientDataSwitch data={data} type="subject" />
-      </ThemeProvider>
-    );
+    const { container } = render(<NotificationsRecipientDataSwitch data={data} type="subject" />);
     expect(container).toHaveTextContent(data.subject);
     const legalLabel = getLocalizedOrDefaultLabel('notifications', 'table.legal-value');
     expect(container).toHaveTextContent(legalLabel);
@@ -113,12 +109,10 @@ describe('NotificationsRecipientDataSwitch Component', () => {
 
   it('renders component - subject - informal communication (no legal tag)', () => {
     const { container } = render(
-      <ThemeProvider theme={theme}>
-        <NotificationsRecipientDataSwitch
-          data={{ ...data, communicationType: 'INFORMAL' }}
-          type="subject"
-        />
-      </ThemeProvider>
+      <NotificationsRecipientDataSwitch
+        data={{ ...data, communicationType: NotificationCommunicationType.INFORMAL }}
+        type="subject"
+      />
     );
     expect(container).toHaveTextContent(data.subject);
     const legalLabel = getLocalizedOrDefaultLabel('notifications', 'table.legal-value');

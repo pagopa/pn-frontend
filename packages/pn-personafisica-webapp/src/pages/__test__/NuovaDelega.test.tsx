@@ -90,14 +90,6 @@ describe('NuovaDelega page', () => {
     expect(createButton).toBeEnabled();
   });
 
-  // Cfr the comment in NuovaDelega.page.tsx, when using PnBreadcrumb,
-  // about the inability of vi.mock to affect imports inside files in pn-commons
-  // (in other terms, pn-commons seems to be outside the scope of vi.mock)
-  //
-  // Done analogously in pn-personagiuridica-webapp
-  // --------------------------------------
-  // Carlos Lombardi, 2023-11-14
-  // --------------------------------------
   it('navigates to Deleghe page', async () => {
     let result: RenderResult | undefined;
 
@@ -116,15 +108,15 @@ describe('NuovaDelega page', () => {
       );
     });
 
-    // before pressing "back" button - mocked page not present
+    // before pressing root button - mocked page not present
     const mockedPageBefore = result?.queryByTestId('mocked-page');
     expect(mockedPageBefore).not.toBeInTheDocument();
 
-    // simulate press of "back" button
-    const backButton = result?.getByTestId('breadcrumb-indietro-button');
-    fireEvent.click(backButton!);
+    // simulate press of root button
+    const rootButton = result?.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton!);
 
-    // after pressing "back" button - mocked page present
+    // after pressing root button - mocked page present
     await waitFor(() => {
       const mockedPageAfter = result?.queryByTestId('mocked-page');
       expect(mockedPageAfter).toBeInTheDocument();

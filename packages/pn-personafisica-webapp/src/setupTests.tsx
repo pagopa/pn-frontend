@@ -55,6 +55,7 @@ beforeAll(() => {
     NOTIFICATION_CANCELLED_HELP_LINK: 'https://fake.notification-cancelled-help.pagopa.it',
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK:
       'https://fake.notification-cost-details-assistance.pagopa.it',
+    NOTIFICATION_PERFECTION_LINK: 'https://fake.notification-perfection.pagopa.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
     IS_ONBOARDING_ENABLED: true,
     FACSIMILE_EN: 'https://fake.facsimile-en.pagopa.it',
@@ -62,6 +63,8 @@ beforeAll(() => {
     FACSIMILE_DE: 'https://fake.facsimile-de.pagopa.it',
     FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
     SELFCARE_CDN_URL: 'https://fake.sender-logo.pagopa.it',
+    IS_NEW_TIMELINE_ENABLED: true,
+    IS_NEW_TIMELINE_COPY_ENABLED: false,
   });
   initStore(false);
   initAxiosClients();

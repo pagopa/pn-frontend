@@ -1,7 +1,7 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { Box, Menu, MenuItem } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -48,7 +48,7 @@ const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
         aria-controls={open ? 'group-selector' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
-        endIcon={<ArrowDropDownIcon />}
+        endIcon={<ArrowDropDownRoundedIcon />}
       >
         {currentGroup && groups.find((group) => group.id === currentGroup)?.name}
       </MIButton>

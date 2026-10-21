@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { Box, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import { AppResponsePublisher, Prompt, TitleBox, appStateActions } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import PublicKeyDataInsert from '../components/IntegrazioneApi/NewPublicKey/PublicKeyDataInsert';
 import ShowPublicKeyParams from '../components/IntegrazioneApi/NewPublicKey/ShowPublicKeyParams';
@@ -45,15 +45,14 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
   return (
     <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
       <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
-        <ButtonNaked
-          size="medium"
-          color="primary"
-          startIcon={<ArrowBackIcon />}
+        <MIButton
+          variant="text"
+          startIcon={<ArrowBackRoundedIcon />}
           onClick={() => navigate(routes.INTEGRAZIONE_API)}
           data-testid="exitBtn"
         >
           {t('button.exit', { ns: 'common' })}
-        </ButtonNaked>
+        </MIButton>
 
         <TitleBox
           variantTitle="h4"

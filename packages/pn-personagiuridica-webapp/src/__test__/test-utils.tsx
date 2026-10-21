@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import { InitialEntry } from '@remix-run/router';
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
@@ -70,13 +70,14 @@ const customRender = (
   // test view
   const Wrapper = ({ children }: { children: ReactNode }) => (
     <Provider store={testStore}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={themeNext}>
         <UiContext.Provider value={children as ReactElement}>
           <RouterProvider router={router} />
         </UiContext.Provider>
       </ThemeProvider>
     </Provider>
   );
+
   const view = render(ui, {
     wrapper: Wrapper,
     ...renderOptions,
@@ -96,5 +97,5 @@ const createTestStore = (preloadedState = {}) =>
   });
 
 export * from '@testing-library/react';
-export { customRender as render, createTestStore };
+export { customRender as render, createTestStore, themeNext as theme };
 export type { CustomRenderResult as RenderResult };

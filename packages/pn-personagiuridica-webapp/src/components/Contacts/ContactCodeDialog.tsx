@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Typography } from '@mui/material';
 import { AppResponse, AppResponsePublisher, CodeModal, ErrorMessage } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType } from '../../models/contacts';
 
@@ -73,11 +73,10 @@ const ContactCodeDialog: React.FC<Props> = ({
             i18nKey={`${labelRoot}.${contactType}-new-code`}
             ns="recapiti"
             components={[
-              <ButtonNaked
+              <MIButton
+                variant="text"
                 key="newCodeBtn"
-                size="medium"
                 onClick={() => onConfirm()}
-                color="primary"
                 sx={{
                   textDecoration: 'underline',
                   display: 'inline',
@@ -85,7 +84,6 @@ const ContactCodeDialog: React.FC<Props> = ({
                   verticalAlign: 'baseline',
                 }}
                 data-testid="newCodeBtn"
-                component={Typography}
               />,
             ]}
           />

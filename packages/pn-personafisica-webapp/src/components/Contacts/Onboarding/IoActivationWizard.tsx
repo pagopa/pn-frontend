@@ -78,9 +78,9 @@ const IoActivationWizard: React.FC = () => {
         exitButton: {
           onClick: exit,
           sx: {
-            color: '#0E0F13',
+            color: 'text.primary',
             '&:hover': {
-              color: '#0E0F13',
+              color: 'text.primary',
             },
           },
         },

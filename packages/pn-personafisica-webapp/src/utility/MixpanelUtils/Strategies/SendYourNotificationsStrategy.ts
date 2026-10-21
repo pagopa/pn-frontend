@@ -3,6 +3,7 @@ import {
   EventCategory,
   EventPropertyType,
   EventStrategy,
+  InformalNotificationStatus,
   NotificationStatus,
   RecipientNotification,
   TrackedEvent,
@@ -43,6 +44,12 @@ type EventNotificationsListType = {
   onboarding: OnboardingStatus;
   onboarding_selected_flow?: OnboardingAvailableFlows;
   flow?: TrackingFlow;
+
+  unread_combo_count: number;
+  total_combo_count: number;
+  delivered_combo_count: number;
+  opened_combo_count: number;
+  not_found_combo_count: number;
 };
 
 export class SendYourNotificationsStrategy implements EventStrategy {
@@ -52,6 +59,14 @@ export class SendYourNotificationsStrategy implements EventStrategy {
     pagination,
     domicileBannerType,
   }: SendYourNotifications): TrackedEvent<EventNotificationsListType> {
+    const legalNotifications = notifications.filter(
+      (notification) => notification.communicationType === 'LEGAL'
+    );
+
+    const comboNotifications = notifications.filter(
+      (notification) => notification.communicationType === 'INFORMAL'
+    );
+
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
@@ -59,25 +74,41 @@ export class SendYourNotificationsStrategy implements EventStrategy {
         ...(domicileBannerType && { banner: domicileBannerType }),
         delegate: delegators.length > 0,
         page_number: pagination.page,
-        total_count: notifications.length,
-        unread_count: notifications.filter((n) => n.isNewNotification).length,
-        delivered_count: notifications.filter(
+        total_count: legalNotifications.length,
+        unread_count: legalNotifications.filter((n) => n.isNewNotification).length,
+        delivered_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.DELIVERED
         ).length,
-        opened_count: notifications.filter(
+        opened_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.VIEWED
         ).length,
-        expired_count: notifications.filter(
+        expired_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
         ).length,
-        not_found_count: notifications.filter(
+        not_found_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
         ).length,
-        cancelled_count: notifications.filter(
+        cancelled_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.CANCELLED
         ).length,
-        effective_date_count: notifications.filter(
+        effective_date_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+        ).length,
+
+        unread_combo_count: comboNotifications.filter(
+          (notification) => notification.isNewNotification
+        ).length,
+        total_combo_count: comboNotifications.length,
+        delivered_combo_count: comboNotifications.filter(
+          (notification) => notification.communicationOutcomes?.delivered
+        ).length,
+        opened_combo_count: comboNotifications.filter(
+          (notification) => notification.communicationOutcomes?.viewed
+        ).length,
+
+        not_found_combo_count: comboNotifications.filter(
+          (notification) =>
+            notification.notificationStatus === InformalNotificationStatus.COMPLETED_UNREACHED
         ).length,
         ...getOnboardingNotificationsPayload(),
       },

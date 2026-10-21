@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
+import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
 import { InputAdornment, InputLabel, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
@@ -34,7 +34,7 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
     >
       <Box border="1px solid" borderColor="divider" borderRadius={0.5} p={3} mb={3}>
         <InputAdornment position="start" sx={{ mt: 2, mb: 3 }}>
-          <VpnKeyIcon sx={{ color: 'text.primary', width: '24px', height: '24px' }} />
+          <VpnKeyRoundedIcon sx={{ color: 'text.primary', width: '24px', height: '24px' }} />
           <InputLabel sx={{ ml: 1, color: 'text.primary', fontSize: '16px' }} htmlFor="kid">
             {t('new-public-key.steps.get-returned-parameters.kid')}
           </InputLabel>
@@ -60,7 +60,7 @@ const ShowPublicKeyParams: React.FC<Props> = ({ params }) => {
       </Box>
       <Box border="1px solid" borderColor="divider" borderRadius={0.5} p={3}>
         <InputAdornment position="start" sx={{ mt: 2, mb: 3 }}>
-          <AssignmentIndIcon sx={{ color: 'text.primary', width: '24px', height: '24px' }} />
+          <AssignmentIndRoundedIcon sx={{ color: 'text.primary', width: '24px', height: '24px' }} />
           <InputLabel sx={{ ml: 1, color: 'text.primary', fontSize: '16px' }} htmlFor="issuer">
             {t('new-public-key.steps.get-returned-parameters.issuer')}
           </InputLabel>

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
+import CallRoundedIcon from '@mui/icons-material/CallRounded';
 import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import {
   Divider,
@@ -17,12 +17,15 @@ import {
 import { CopyToClipboard, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIPaper } from '@pagopa/mui-italia';
 
+import { EventNotificationTypes, EventPaymentRecipientType } from '../../models';
+
 type SenderContactsProps = {
   phone?: string;
   site?: string;
+  handleTrackEventFn?: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
-const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
+const PnSenderContacts = ({ phone, site, handleTrackEventFn }: SenderContactsProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const theme = useTheme();
@@ -31,6 +34,19 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
     return null;
   }
   const websiteUrl = site && /^https?:\/\//i.test(site) ? site : `https://${site}`;
+
+  const trackWebsiteClick = () => {
+    handleTrackEventFn?.(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
+      link: websiteUrl,
+      notification_type: EventNotificationTypes.INFORMAL,
+    });
+  };
+  const trackPhoneClick = () => {
+    handleTrackEventFn?.(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
+      link: `tel:${phone}`,
+      notification_type: EventNotificationTypes.INFORMAL,
+    });
+  };
 
   return (
     <MIPaper sx={{ width: { xs: '100%', md: '42%' } }} padding={24}>
@@ -45,7 +61,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
               <ListItem disableGutters>
                 <ListItemAvatar>
                   <ListItemIcon sx={{ minWidth: 40 }}>
-                    <CallOutlinedIcon sx={{ color: theme.palette.grey[400] }} />
+                    <CallRoundedIcon sx={{ color: theme.palette.grey[400] }} />
                   </ListItemIcon>
                 </ListItemAvatar>
 
@@ -61,7 +77,12 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                   </Typography>
 
                   {isMobile ? (
-                    <Link href={`tel:${phone}`} underline="always" color="primary">
+                    <Link
+                      onClick={trackPhoneClick}
+                      href={`tel:${phone}`}
+                      underline="always"
+                      color="primary"
+                    >
                       {phone}
                     </Link>
                   ) : (
@@ -71,7 +92,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                       justifyContent="space-between"
                       sx={{ width: '100%' }}
                     >
-                      <Typography variant="body2" color="text.primary" fontWeight={500}>
+                      <Typography variant="body2" color="text.primary" fontWeight={600}>
                         {phone}
                       </Typography>
 
@@ -109,6 +130,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
 
                 <Link
                   href={websiteUrl}
+                  onClick={trackWebsiteClick}
                   target="_blank"
                   rel="noopener noreferrer"
                   underline="always"

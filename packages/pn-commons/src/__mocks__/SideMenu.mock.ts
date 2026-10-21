@@ -1,44 +1,44 @@
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 
 import { SideMenuItem } from '../models/SideMenuItem';
 
 export const sideMenuItems: Array<SideMenuItem> = [
   {
     label: 'Item 1',
-    icon: QuestionMarkIcon,
+    icon: QuestionMarkRoundedIcon,
     route: '/mocked-route',
   },
   {
     label: 'Item 2',
-    icon: QuestionMarkIcon,
+    icon: QuestionMarkRoundedIcon,
     route: '/mocked-route-2',
     children: [
       {
         label: 'Item 2-1',
-        icon: QuestionMarkIcon,
+        icon: QuestionMarkRoundedIcon,
         route: '/mocked-route-2/mocked-route-2-1',
       },
       {
         label: 'Item 2-2',
-        icon: QuestionMarkIcon,
+        icon: QuestionMarkRoundedIcon,
         route: '',
       },
     ],
   },
   {
     label: 'Item 3',
-    icon: QuestionMarkIcon,
+    icon: QuestionMarkRoundedIcon,
     route: '/mocked-route-3',
     notSelectable: true,
     children: [
       {
         label: 'Item 3-1',
-        icon: QuestionMarkIcon,
+        icon: QuestionMarkRoundedIcon,
         route: '/mocked-route-3/mocked-route-3-1',
       },
       {
         label: 'Item 3-2',
-        icon: QuestionMarkIcon,
+        icon: QuestionMarkRoundedIcon,
         route: '/mocked-route-3/mocked-route-3-2',
         notSelectable: true,
       },
@@ -46,7 +46,7 @@ export const sideMenuItems: Array<SideMenuItem> = [
   },
   {
     label: 'Item 4',
-    icon: QuestionMarkIcon,
+    icon: QuestionMarkRoundedIcon,
     route: '',
     action: () => {},
   },
@@ -55,12 +55,12 @@ export const sideMenuItems: Array<SideMenuItem> = [
 export const selfcareMenuItems: Array<SideMenuItem> = [
   {
     label: 'SelfcareItem 1',
-    icon: QuestionMarkIcon,
+    icon: QuestionMarkRoundedIcon,
     route: 'mocked-route',
   },
   {
     label: 'SelfcareItem 2',
-    icon: QuestionMarkIcon,
+    icon: QuestionMarkRoundedIcon,
     route: 'mocked-route-2',
   },
 ];

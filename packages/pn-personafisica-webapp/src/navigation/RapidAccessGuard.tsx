@@ -7,9 +7,9 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
-  IllusQuestion,
   LoadingPage,
 } from '@pagopa-pn/pn-commons';
+import { IllusMIQuestion } from '@pagopa/mui-italia';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
@@ -105,7 +105,7 @@ const RapidAccessGuard = () => {
   if (fetchError) {
     return (
       <AccessDenied
-        icon={<IllusQuestion />}
+        icon={<IllusMIQuestion />}
         message={t('from-qrcode.not-found')}
         subtitle={t('from-qrcode.not-found-subtitle')}
         isLogged={true}

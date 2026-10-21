@@ -14,7 +14,8 @@ export class SendSimpleRegisteredLetterStep extends TimelineStep {
         {
           ...this.nameAndTaxId(payload),
           ...this.completePhysicalAddressFromStep(payload.step),
-        }
+        },
+        payload.delegatorName
       ),
     };
   }

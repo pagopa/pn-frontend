@@ -1,13 +1,13 @@
 import { useReducer, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
 import * as yup from 'yup';
 
-import { Box, Button, Paper, Stack, TextField, Typography } from '@mui/material';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import { Box, Button, Link, Paper, Stack, TextField, Typography } from '@mui/material';
 import { Prompt, TitleBox } from '@pagopa-pn/pn-commons';
 import { ValidationError } from '@pagopa-pn/pn-validator';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import ZendeskForm from '../components/Support/ZendeskForm';
 import { SupportForm, ZendeskAuthorizationDTO } from '../models/Support';
@@ -59,18 +59,12 @@ const reducer = (state: FormState, action: { type: string; payload: string }) =>
   }
 };
 
-const SupportPPButton: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+const SupportPPLink: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { PAGOPA_HELP_PP } = getConfiguration();
-  const handleClick = () => {
-    window.location.assign(PAGOPA_HELP_PP);
-  };
-
   return (
-    <ButtonNaked sx={{ verticalAlign: 'top' }} onClick={handleClick}>
-      <Typography variant="body2" color="primary" display="inline">
-        {children}
-      </Typography>
-    </ButtonNaked>
+    <Link href={PAGOPA_HELP_PP} target="_blank" rel="noopener noreferrer">
+      {children}
+    </Link>
   );
 };
 
@@ -78,7 +72,7 @@ const SupportPage: React.FC = () => {
   const { t } = useTranslation(['support', 'common']);
   const [params] = useSearchParams();
   const rawData = params.get('data');
-  
+
   const dataSchema = yup.object({
     traceId: yup.string().required(),
     errorCode: yup.string().required(),
@@ -86,13 +80,13 @@ const SupportPage: React.FC = () => {
   // eslint-disable-next-line functional/no-let
   let data: { traceId: string; errorCode: string } | null = null;
   if (rawData !== null) {
-    try{
+    try {
       const parsed = JSON.parse(decodeURIComponent(rawData));
       data = dataSchema.validateSync(parsed);
-    } catch(e){
+    } catch (e) {
       console.error('Param "data" is not properly formatted:', e);
       data = null;
-    };
+    }
   }
   const [formData, formDispatch] = useReducer(reducer, {
     email: {
@@ -150,7 +144,10 @@ const SupportPage: React.FC = () => {
             subTitle={t('sub-title')}
             variantSubTitle="body1"
           />
-          <Paper sx={{ p: 3, mt: 4 }}>
+          <MIAlert severity="info" data-testid="pecDisclaimer" role="status" sx={{ my: 3 }}>
+            {t('pec-disclaimer')}
+          </MIAlert>
+          <Paper sx={{ p: 2 }}>
             <form data-testid="supportForm">
               <TextField
                 id="mail"
@@ -175,7 +172,7 @@ const SupportPage: React.FC = () => {
                 size="small"
                 type="mail"
                 fullWidth
-                sx={{ mt: 4 }}
+                sx={{ mt: 3 }}
                 onChange={(e) => handleChange('UPDATE_CONFIRM_EMAIL', e)}
                 value={formData.confirmEmail.value}
                 error={formData.confirmEmail.touched && !!formData.errors?.confirmEmail}
@@ -187,11 +184,11 @@ const SupportPage: React.FC = () => {
               />
             </form>
           </Paper>
-          <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
+          <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary', fontSize: '14px' }}>
             <Trans
               ns={'support'}
               i18nKey={'disclaimer'}
-              components={[<SupportPPButton key="support-pp-button" />]}
+              components={[<SupportPPLink key="support-pp-link" />]}
               variant="body2"
             />
           </Typography>
@@ -203,24 +200,23 @@ const SupportPage: React.FC = () => {
             alignItems="center"
           >
             <Button
-              variant="contained"
-              size="small"
-              sx={{ width: { xs: 1, sm: 'auto' } }}
               disabled={!!formData.errors}
+              variant="contained"
+              sx={{ width: { xs: 1, sm: 'auto' } }}
               onClick={handleConfirm}
               data-testid="continueButton"
             >
               {t('button.go-on', { ns: 'common' })}
             </Button>
-            <Button
+            <MIButton
               variant="outlined"
-              size="small"
               sx={{ mt: { xs: 2, sm: 0 }, width: { xs: 1, sm: 'auto' } }}
               onClick={handleCancel}
               data-testid="backButton"
+              startIcon={<ArrowBackRoundedIcon />}
             >
               {t('button.indietro', { ns: 'common' })}
-            </Button>
+            </MIButton>
           </Box>
         </Box>
         <ZendeskForm data={zendeskAuthData} />

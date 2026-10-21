@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { Box, Button, DialogTitle } from '@mui/material';
+import { Box, DialogTitle } from '@mui/material';
 import {
   A11yMessageAnnouncer,
   APP_VERSION,
@@ -19,14 +19,14 @@ import {
   appStateActions,
   errorFactoryManager,
   initLocalization,
+  initLocalizationExists,
   useHasPermissions,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import { MIButton, PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { useMenuItems } from './hooks/useMenuItems';
-import i18n from './i18n';
 import { PGEventsType } from './models/PGEventsType';
 import { PNRole } from './models/User';
 import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
@@ -54,7 +54,7 @@ import './utility/onetrust';
 // Cfr. comment in packages/pn-personafisica-webapp/src/App.tsx
 // --------------------
 const App = () => {
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -62,6 +62,7 @@ const App = () => {
       setIsInitialized(true);
       // init localization
       initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      initLocalizationExists((namespace, path) => i18n.exists(path, { ns: namespace }));
       // eslint-disable-next-line functional/immutable-data
       errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
     }
@@ -289,12 +290,12 @@ const ActualApp = () => {
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
           <PnDialogActions>
-            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+            <MIButton id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
-            </Button>
-            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
+            </MIButton>
+            <MIButton data-testid="confirm-button" variant="contained" onClick={performLogout}>
               {t('header.logout')}
-            </Button>
+            </MIButton>
           </PnDialogActions>
         </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}

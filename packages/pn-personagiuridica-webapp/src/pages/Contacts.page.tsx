@@ -48,8 +48,6 @@ const Contacts = () => {
       components={[
         <Link
           key="profilePageLink"
-          color="primary"
-          fontWeight="bold"
           onClick={handleRedirectToProfilePage}
           sx={{ verticalAlign: 'inherit' }}
           component="button"

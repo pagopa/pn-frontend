@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 
-import { Button, DialogTitle, Typography } from '@mui/material';
+import { DialogTitle, Typography } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 export type ApiKeyModalProps = {
   title: string;
@@ -49,23 +50,23 @@ const ApiKeyModal = ({
       )}
     </PnDialogContent>
     <PnDialogActions>
-      <Button
+      <MIButton
         id="close-modal-button"
         data-testid="close-modal-button"
         variant="outlined"
         onClick={closeModalHandler}
       >
         {closeButtonLabel}
-      </Button>
+      </MIButton>
       {actionButtonLabel && (
-        <Button
+        <MIButton
           id="action-modal-button"
           data-testid="action-modal-button"
           variant="contained"
           onClick={actionHandler}
         >
           {actionButtonLabel}
-        </Button>
+        </MIButton>
       )}
     </PnDialogActions>
   </PnDialog>

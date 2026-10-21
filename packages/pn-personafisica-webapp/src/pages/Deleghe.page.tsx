@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
@@ -12,6 +12,7 @@ import {
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import Delegates from '../components/Deleghe/Delegates';
 import Delegators from '../components/Deleghe/Delegators';
@@ -170,8 +171,8 @@ const Deleghe = () => {
               : t('deleghe.rejection_question')
           }
           slots={{
-            confirmButton: Button,
-            closeButton: Button,
+            confirmButton: MIButton,
+            closeButton: MIButton,
           }}
           slotsProps={{
             closeButton: {

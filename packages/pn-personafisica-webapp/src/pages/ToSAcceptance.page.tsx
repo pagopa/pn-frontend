@@ -1,4 +1,5 @@
-import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { ChangeEvent, MouseEventHandler, ReactNode } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,13 +41,19 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   Andrea Cimini, 2024.03.13
   ----------------------
   */
-  const redirectPrivacyLink = () => window.open(`${PRIVACY_LINK_RELATIVE_PATH}`, '_blank');
-  const redirectToSLink = () => window.open(`${TOS_LINK_RELATIVE_PATH}`, '_blank');
+  const redirectPrivacyLink: MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault();
+    window.open(PRIVACY_LINK_RELATIVE_PATH, '_blank');
+  };
+  const redirectToSLink: MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault();
+    window.open(TOS_LINK_RELATIVE_PATH, '_blank');
+  };
 
   const PrivacyLink = ({ children }: { children?: ReactNode }) => (
     <Link
       key="privacy-link"
-      sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+      sx={{ cursor: 'pointer' }}
       onClick={redirectPrivacyLink}
       data-testid="privacy-link"
     >
@@ -58,7 +65,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
     <Link
       key="tos-link"
       data-testid="terms-and-conditions"
-      sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+      sx={{ cursor: 'pointer' }}
       onClick={redirectToSLink}
     >
       {children}

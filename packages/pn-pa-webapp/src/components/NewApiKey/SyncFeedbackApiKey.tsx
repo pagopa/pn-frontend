@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, InputAdornment, TextField, Typography } from '@mui/material';
+import { Box, InputAdornment, TextField, Typography } from '@mui/material';
 import { CopyToClipboard, useIsMobile } from '@pagopa-pn/pn-commons';
-import { IllusCompleted } from '@pagopa/mui-italia';
+import { IllusMICompleted, MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -29,7 +29,7 @@ const SyncFeedbackApiKey = ({ newApiKey = '' }) => {
           marginTop: isMobile ? '0' : 'auto',
         }}
       >
-        <IllusCompleted />
+        <IllusMICompleted />
         <Typography
           id="api-key-succesfully-generated"
           variant="h4"
@@ -52,7 +52,7 @@ const SyncFeedbackApiKey = ({ newApiKey = '' }) => {
               maxWidth: '450px',
               input: {
                 textAlign: 'center',
-                color: '#0073E6',
+                color: 'primary.main',
               },
             }}
             InputProps={{
@@ -72,14 +72,14 @@ const SyncFeedbackApiKey = ({ newApiKey = '' }) => {
             }}
           />
         </Box>
-        <Button
+        <MIButton
           id="go-to-api-keys"
           variant="contained"
           sx={{ marginBottom: '30px' }}
           onClick={() => navigate(routes.API_KEYS)}
         >
           {t('go-to-api-keys')}
-        </Button>
+        </MIButton>
       </Box>
     </Box>
   );

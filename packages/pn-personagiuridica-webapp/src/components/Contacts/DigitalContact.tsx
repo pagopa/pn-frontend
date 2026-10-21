@@ -10,14 +10,12 @@ import {
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import CheckIcon from '@mui/icons-material/Check';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CloseIcon from '@mui/icons-material/Close';
-import CreateIcon from '@mui/icons-material/Create';
-import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import {
-  Button,
-  ButtonProps,
   InputAdornment,
   Stack,
   TextField,
@@ -26,7 +24,7 @@ import {
   TypographyProps,
 } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import { ChannelType } from '../../models/contacts';
 import {
@@ -42,12 +40,12 @@ type Props = {
   channelType: ChannelType;
   slots?: {
     label?: JSXElementConstructor<TypographyProps>;
-    editButton?: JSXElementConstructor<ButtonProps>;
+    editButton?: JSXElementConstructor<MIButtonProps>;
   };
   slotsProps?: {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
-    button?: Partial<ButtonProps>;
+    button?: Partial<Omit<MIButtonProps, 'href'>>;
   };
   showLabelOnEdit?: boolean;
   senderId?: string;
@@ -85,7 +83,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     const contactType = channelType.toLowerCase();
 
     const Label = slots?.label || Typography;
-    const EditButton = slots?.editButton || ButtonNaked;
+    const EditButton = slots?.editButton || MIButton;
 
     // value contains the prefix
     const contactValue = inputProps.prefix ? value.replace(inputProps.prefix, '') : value;
@@ -193,27 +191,21 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {...slotsProps?.textField}
               {...semanticTextFieldProps}
             />
-            <Button
+            <MIButton
+              {...slotsProps?.button}
               id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth={isMobile}
               type="submit"
               data-testid={`${senderId}_${contactType}-button`}
-              sx={{ height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '16.67%' } }}
-              size="small"
-              {...slotsProps?.button}
+              sx={{ height: '43px', flexBasis: { xs: 'unset', lg: '16.67%' } }}
             >
               {insertButtonLabel}
-            </Button>
+            </MIButton>
             {onCancelInsert && (
-              <ButtonNaked
-                color="error"
-                onClick={onCancelInsert}
-                sx={{ fontWeight: 700, color: 'error.dark' }}
-                size="medium"
-              >
+              <MIButton color="error" onClick={onCancelInsert} variant="text">
                 {t('button.annulla')}
-              </ButtonNaked>
+              </MIButton>
             )}
           </Stack>
         </form>
@@ -267,30 +259,27 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {...semanticTextFieldProps}
             />
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
-              <ButtonNaked
+              <MIButton
                 key="saveButton"
-                color="primary"
                 type="submit"
-                sx={{ fontWeight: 700, justifyContent: 'left' }}
+                sx={{ justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
-                size="medium"
-                startIcon={<CheckIcon />}
+                startIcon={<CheckRoundedIcon />}
+                variant="text"
               >
                 {t('button.conferma')}
-              </ButtonNaked>
-              <ButtonNaked
+              </MIButton>
+              <MIButton
                 color="error"
                 onClick={onCancelEdit}
                 sx={{
-                  fontWeight: 700,
-                  color: 'error.dark',
                   justifyContent: 'left',
                 }}
-                size="medium"
-                startIcon={<CloseIcon />}
+                startIcon={<CloseRoundedIcon />}
+                variant="text"
               >
                 {t('button.annulla')}
-              </ButtonNaked>
+              </MIButton>
             </Stack>
           </>
         )}
@@ -318,7 +307,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 {value}
               </Typography>
               {showVerifiedIcon && (
-                <CheckCircleIcon sx={{ ml: 1 }} fontSize="small" color="success" />
+                <CheckCircleRoundedIcon sx={{ ml: 1 }} fontSize="small" color="success" />
               )}
             </Stack>
             <Stack
@@ -330,26 +319,25 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               <EditButton
                 key="editButton"
-                color="primary"
                 onClick={toggleEdit}
-                startIcon={<CreateIcon />}
-                sx={{ fontWeight: 700, justifyContent: 'left' }}
+                startIcon={<CreateRoundedIcon />}
+                sx={{ justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}
-                size="medium"
+                variant="text"
               >
                 {t('button.modifica')}
               </EditButton>
               {onDelete && (
-                <ButtonNaked
+                <MIButton
                   id={`cancelContact-${senderId}_${contactType}`}
                   color="error"
                   onClick={onDelete}
-                  startIcon={<DeleteIcon />}
-                  sx={{ fontWeight: 700, justifyContent: 'left', color: 'error.dark' }}
-                  size="medium"
+                  startIcon={<DeleteRoundedIcon />}
+                  sx={{ justifyContent: 'left' }}
+                  variant="text"
                 >
                   {t('button.elimina')}
-                </ButtonNaked>
+                </MIButton>
               )}
             </Stack>
           </Stack>

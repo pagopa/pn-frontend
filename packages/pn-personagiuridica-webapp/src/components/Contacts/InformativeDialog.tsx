@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
+import { DialogContentText, DialogTitle, Typography } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type DialogProps = {
   open: boolean;
@@ -45,18 +46,18 @@ const InformativeDialog: React.FC<DialogProps> = ({
       </PnDialogContent>
       <PnDialogActions>
         {onDiscard && (
-          <Button key="cancel" onClick={onDiscard} variant="outlined" data-testid="discardButton">
+          <MIButton key="cancel" onClick={onDiscard} variant="outlined" data-testid="discardButton">
             {t('button.annulla')}
-          </Button>
+          </MIButton>
         )}
-        <Button
+        <MIButton
           key="confirm"
           onClick={onConfirm}
           variant="contained"
           data-testid="understandButton"
         >
           {t('button.understand')}
-        </Button>
+        </MIButton>
       </PnDialogActions>
     </PnDialog>
   );

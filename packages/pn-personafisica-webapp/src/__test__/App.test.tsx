@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
@@ -19,13 +19,15 @@ vi.mock('../pages/Profile.page', () => ({ default: () => <div>Profile Page</div>
 
 const unmockedFetch = globalThis.fetch;
 
-const Component = () => (
-  <ThemeProvider theme={theme}>
-    <Suspense fallback="loading...">
-      <App />
-    </Suspense>
-  </ThemeProvider>
-);
+const Component = () => {
+  return (
+    <ThemeProvider theme={themeNext}>
+      <Suspense fallback="loading...">
+        <App />
+      </Suspense>
+    </ThemeProvider>
+  );
+};
 
 const reduxInitialState = {
   userState: {
@@ -197,6 +199,29 @@ describe('App', () => {
     const menuItems = within(menu).getAllByRole('menuitem');
     expect(menuItems).toHaveLength(1);
     expect(menuItems[0]).toHaveTextContent('header.logout');
+  });
+
+  it('opens the support page clicking the assistance button - user has not accepted the TOS and PRIVACY', async () => {
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, false));
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
+
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    expect(result.queryByTestId('tos-acceptance-page')).toBeInTheDocument();
+
+    const header = document.querySelector('header');
+    const assistanceButton = header?.querySelector('[aria-label="Assistenza"]');
+    fireEvent.click(assistanceButton!);
+
+    // the support page is lazy loaded, so we have to wait for it
+    await waitFor(() => {
+      expect(screen.queryByTestId('supportForm')).toBeInTheDocument();
+    });
+    expect(result.queryByTestId('tos-acceptance-page')).not.toBeInTheDocument();
+    // on the support page the assistance button is hidden
+    expect(header?.querySelector('[aria-label="Assistenza"]')).not.toBeInTheDocument();
   });
 
   it('sidemenu items if there are delegators', async () => {

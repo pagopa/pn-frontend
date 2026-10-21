@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   showModal: boolean;
@@ -65,9 +66,9 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
         )}
       </PnDialogContent>
       <PnDialogActions>
-        <Button onClick={onClose} variant="outlined" data-testid="modalCloseBtnId">
+        <MIButton onClick={onClose} variant="outlined" data-testid="modalCloseBtnId">
           {t('button.indietro', { ns: 'common' })}
-        </Button>
+        </MIButton>
         <Button
           onClick={onConfirm}
           disabled={payment ? !checked : false}

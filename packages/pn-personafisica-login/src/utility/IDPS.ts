@@ -1,3 +1,16 @@
+import arubaidLogo from '../assets/IDPS/arubaid.png';
+import posteidLogo from '../assets/IDPS/posteid.png';
+import infocertidLogo from '../assets/IDPS/infocertid.png';
+import spiditaliaLogo from '../assets/IDPS/spiditalia.png';
+import sielteidLogo from '../assets/IDPS/sielteid.png';
+import namirialidLogo from '../assets/IDPS/namirialid.png';
+import timidLogo from '../assets/IDPS/timid.png';
+import lepidaidLogo from '../assets/IDPS/lepidaid.png';
+import teamsystemidLogo from '../assets/IDPS/teamsystemid.png';
+import ehtidLogo from '../assets/IDPS/ehtid.png';
+import infocamereidLogo from '../assets/IDPS/infocamereid.png';
+import intesiidLogo from '../assets/IDPS/intesiid.png';
+
 export type IdentityProvider = {
   identifier: string;
   entityId: string;
@@ -28,73 +41,73 @@ export const getIDPS = (
       identifier: 'Aruba',
       entityId: 'arubaid',
       name: 'Aruba.it ID',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-arubaid.png',
+      imageUrl: arubaidLogo,
     },
     {
       identifier: 'Poste',
       entityId: 'posteid',
       name: 'Poste ID',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-posteid.png',
+      imageUrl: posteidLogo,
     },
     {
       identifier: 'Infocert',
       entityId: 'infocertid',
       name: 'Infocert ID',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-infocertid.png',
+      imageUrl: infocertidLogo,
     },
     {
       identifier: 'Register',
       entityId: 'spiditalia',
       name: 'SpidItalia',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-spiditalia.png',
+      imageUrl: spiditaliaLogo,
     },
     {
       identifier: 'Sielte',
       entityId: 'sielteid',
       name: 'Sielte id',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-sielteid.png',
+      imageUrl: sielteidLogo,
     },
     {
       identifier: 'Namirial',
       entityId: 'namirialid',
       name: 'Namirial ID',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-namirialid.png',
+      imageUrl: namirialidLogo,
     },
     {
       identifier: 'Tim',
       entityId: 'timid',
       name: 'TIM id',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-timid.png',
+      imageUrl: timidLogo,
     },
     {
       identifier: 'Lepida',
       entityId: 'lepidaid',
       name: 'Lepida id',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-lepidaid.png',
+      imageUrl: lepidaidLogo,
     },
     {
       identifier: 'TeamSystem',
       entityId: 'teamsystemid',
       name: 'TeamSystem',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-teamsystemid.png',
+      imageUrl: teamsystemidLogo,
     },
     {
       identifier: 'EtnaHitech',
       entityId: 'ehtid',
       name: 'Etna Hitech S.C.p.A.',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-etnaid.png',
+      imageUrl: ehtidLogo,
     },
     {
       identifier: 'InfoCamere',
       entityId: 'infocamereid',
       name: 'InfoCamere S.C.p.A.',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-infocamereid.png',
+      imageUrl: infocamereidLogo,
     },
     {
       identifier: 'Intesi Group SPID',
       entityId: 'intesiid',
       name: 'Intesi Group S.p.A',
-      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-intesigroupspid.png',
+      imageUrl: intesiidLogo,
     },
     ...(testEnabled ? [testProvider] : []),
     ...(validatorEnabled ? [validatorProvider] : []),

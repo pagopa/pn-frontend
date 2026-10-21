@@ -47,7 +47,11 @@ describe('getReceivedNotificationPaymentInfo - Mixpanel events', () => {
 
   it('fires SEND_PAYMENT_OUTCOME when returning from payment page', async () => {
     const mockedStore = createMockedStore({
-      notificationState: { notification: notificationToFe, paymentsData },
+      notificationState: {
+        notification: notificationToFe,
+        paymentsData,
+        notification_type: 'notifica',
+      },
     });
 
     setPaymentCache(
@@ -73,6 +77,7 @@ describe('getReceivedNotificationPaymentInfo - Mixpanel events', () => {
 
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_PAYMENT_OUTCOME, {
       outcome: PaymentStatus.FAILED,
+      notification_type: 'notifica',
     });
     expect(triggerEventSpy).not.toHaveBeenCalledWith(PFEventsType.SEND_PAYMENTS_COUNT);
   });
@@ -81,6 +86,7 @@ describe('getReceivedNotificationPaymentInfo - Mixpanel events', () => {
     const currentSucceededPayment = {
       creditorTaxId: succeededPayment.creditorTaxId,
       noticeCode: succeededPayment.noticeCode,
+      notification_type: 'notifica',
     };
 
     const mockedStore = createMockedStore({
@@ -110,6 +116,7 @@ describe('getReceivedNotificationPaymentInfo - Mixpanel events', () => {
 
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_PAYMENT_OUTCOME, {
       outcome: PaymentStatus.SUCCEEDED,
+      notification_type: 'notifica',
     });
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_PAYMENTS_COUNT);
   });

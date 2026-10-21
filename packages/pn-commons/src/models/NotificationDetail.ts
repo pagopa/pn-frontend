@@ -75,6 +75,7 @@ export type NotificationDetailTimelineDetails =
   | SendDigitalDetails
   | SendPaperDetails
   | PaidDetails
+  | NotificationViewedDetails
   // PN-1647
   | NotHandledDetails;
 
@@ -98,6 +99,7 @@ export interface INotificationDetailTimeline {
   hidden?: boolean;
   index?: number;
   reworkedStatus?: ReworkedStatus;
+  eventTimestamp?: string;
 }
 
 export enum ResponseStatus {
@@ -151,6 +153,22 @@ export interface SendDigitalDetails extends BaseDetails {
   digitalAddress?: DigitalAddress;
   responseStatus?: ResponseStatus;
   deliveryDetailCode?: string;
+}
+
+export interface DelegateInfo {
+  internalId?: string;
+  taxId?: string;
+  operatorUuid?: string;
+  mandateId?: string;
+  denomination?: string;
+  delegateType?: RecipientType;
+}
+
+export interface NotificationViewedDetails extends BaseDetails {
+  notificationCost?: number;
+  raddType?: string;
+  raddTransactionId?: string;
+  delegateInfo?: DelegateInfo;
 }
 
 export interface PaidDetails extends BaseDetails {
@@ -228,6 +246,15 @@ export interface NotificationDetailPayment {
   f24?: F24PaymentDetails;
 }
 
+export type NotificationPayment = {
+  pagoPa?: {
+    creditorTaxId: string;
+    noticeCode: string;
+    attachment?: Attachment;
+  };
+  f24?: F24PaymentDetails;
+};
+
 export interface PaymentNotice {
   noticeNumber: string;
   fiscalCode: string;
@@ -298,6 +325,10 @@ export enum TimelineCategory {
   NOTIFICATION_RADD_RETRIEVED = 'NOTIFICATION_RADD_RETRIEVED',
   // PN-16970
   NOTIFICATION_TIMELINE_REWORKED = 'NOTIFICATION_TIMELINE_REWORKED',
+  // Informal notification viewed
+  INFORMAL_NOTIFICATION_VIEWED = 'INFORMAL_NOTIFICATION_VIEWED',
+  // Informal notification delivered
+  DELIVERED = 'DELIVERED',
 }
 
 interface DigitalAddress {

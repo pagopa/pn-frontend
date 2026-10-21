@@ -4,7 +4,7 @@ import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } f
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import EuroIcon from '@mui/icons-material/Euro';
+import EuroRoundedIcon from '@mui/icons-material/EuroRounded';
 import {
   FormControlLabel,
   InputAdornment,
@@ -482,7 +482,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end" sx={{ width: '21px' }}>
-                          <EuroIcon />
+                          <EuroRoundedIcon />
                         </InputAdornment>
                       ),
                     }}

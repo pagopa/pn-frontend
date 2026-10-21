@@ -10,7 +10,7 @@ export const fillCodeDialog = async (result: RenderResult, code: string = '01234
   textbox.focus();
   await userEvent.keyboard(code);
   // confirm the addition
-  const dialogButtons = dialog.querySelectorAll('button');
-  await userEvent.click(dialogButtons[1]);
+  const confirmButton = within(dialog).getByTestId('codeConfirmButton');
+  await userEvent.click(confirmButton);
   return dialog;
 };

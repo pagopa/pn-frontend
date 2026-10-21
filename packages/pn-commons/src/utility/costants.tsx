@@ -56,7 +56,7 @@ export const companyLegalInfo = () => (
     {getLocalizedOrDefaultLabel(
       'common',
       'footer.legal-part-1',
-      'società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370'
+      'società per azioni - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370'
     )}
     ,{'\n'}
     {getLocalizedOrDefaultLabel(
@@ -192,7 +192,7 @@ export const preLoginLinks = ({
         {
           icon: 'youtube',
           title: 'Youtube',
-          href: 'https://www.youtube.com/channel/@pagopaspa',
+          href: 'https://www.youtube.com/@pagopaspa',
           ariaLabel: getLocalizedOrDefaultLabel(
             'common',
             'footer.social',

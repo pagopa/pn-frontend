@@ -3,6 +3,123 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0](https://github.com/pagopa/pn-frontend/compare/v2.26.2...v2.27.0) (2026-10-14)
+
+### Bug Fixes
+
+* align share capital formatting in footer ([73e0b31](https://github.com/pagopa/pn-frontend/commit/73e0b310f4c2da910e7ebac9b4f4377428686e6c))
+
+## [2.26.2](https://github.com/pagopa/pn-frontend/compare/v2.26.2-RC.0...v2.26.2) (2026-10-13)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+## [2.26.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.1...v2.26.2-RC.0) (2026-10-06)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.27.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.2...v2.27.0-RC.3) (2026-10-07)
+
+### Bug Fixes
+
+* **PN-21757:** serve IdP logos from local assets instead of IO CDN ([#2112](https://github.com/pagopa/pn-frontend/issues/2112)) ([3e4f6d9](https://github.com/pagopa/pn-frontend/commit/3e4f6d997b80370a8c2c089e579e2a5faeac1d6b))
+
+
+# [2.27.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.0...v2.27.0-RC.1) (2026-10-02)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.27.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.1...v2.27.0-RC.0) (2026-09-29)
+
+### Features
+
+* **PN-19280:** add legalfact inline with the description of the timeline event ([#2056](https://github.com/pagopa/pn-frontend/issues/2056)) ([aee42b4](https://github.com/pagopa/pn-frontend/commit/aee42b496a196200fb6492ff9650e6433de71313))
+* **PN-20236:** add campaigns list to PA ([#2049](https://github.com/pagopa/pn-frontend/issues/2049)) ([7d67bd0](https://github.com/pagopa/pn-frontend/commit/7d67bd04c87f3b8f4d96d285ffbb8a259a551576))
+* **PN-21259:** added disclaimer to support form ([#2073](https://github.com/pagopa/pn-frontend/issues/2073)) ([28708f6](https://github.com/pagopa/pn-frontend/commit/28708f682a4ea1c264059f3fe2afc024a54850e0))
+
+
+## [2.26.1](https://github.com/pagopa/pn-frontend/compare/v2.26.1-RC.0...v2.26.1) (2026-09-21)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+## [2.26.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.0...v2.26.1-RC.0) (2026-09-18)
+
+### Bug Fixes
+
+* **PN-21556:** removed blue background from spid selection buttons ([#2060](https://github.com/pagopa/pn-frontend/issues/2060)) ([8b0ccd6](https://github.com/pagopa/pn-frontend/commit/8b0ccd6f70e1fbf0c086f8a5a285b5a50f26c658))
+
+
+## [2.25.1](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.1-RC.0...v2.25.1) (2026-09-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+## [2.25.1-RC.0](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.0...v2.25.1-RC.0) (2026-09-15)
+
+### Bug Fixes
+
+* **PN-21519:** pass error code in SEND_LOGIN_FAILURE if access_denied ([#2052](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2052)) ([819b077](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/819b07746b8435da74fea7ea900c45c5d6f2d424))
+
+
+# [2.26.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.5...v2.26.0-RC.6) (2026-09-14)
+
+### Bug Fixes
+
+* **PN-21493:** adjusted timeline layout ([#2048](https://github.com/pagopa/pn-frontend/issues/2048)) ([c1aa0cf](https://github.com/pagopa/pn-frontend/commit/c1aa0cf60ccf91a360b815abfb4d439a80c20df9))
+
+
+# [2.26.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.26.0-RC.4...v2.26.0-RC.5) (2026-09-11)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.26.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.2...v2.26.0-RC.3) (2026-09-09)
+
+### Bug Fixes
+
+* **PN-21428:** fix padding in app io smart app banner ([#2036](https://github.com/pagopa/pn-frontend/issues/2036)) ([1425056](https://github.com/pagopa/pn-frontend/commit/1425056dfa1719eba787f0943a8a0c21d392430a))
+
+### Features
+
+* **PN-20767:** fix colors and add alerts ([#2032](https://github.com/pagopa/pn-frontend/issues/2032)) ([1d7f570](https://github.com/pagopa/pn-frontend/commit/1d7f570438ddcae07272a56a88dfc0f86a55e3ad))
+
+
+# [2.26.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.0...v2.26.0-RC.1) (2026-09-04)
+
+### Features
+
+* **PN-20767:** add new illustrations ([#2029](https://github.com/pagopa/pn-frontend/issues/2029)) ([41cda9c](https://github.com/pagopa/pn-frontend/commit/41cda9cb7eb01142445da6103e1d4a0caf242c05))
+* **PN-21141:** add MIBreadcrumbs on portals ([#2015](https://github.com/pagopa/pn-frontend/issues/2015)) ([0dc70c7](https://github.com/pagopa/pn-frontend/commit/0dc70c7297e063cdf302ff970d5314b060dc9918))
+
+
+# [2.26.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.25.0...v2.26.0-RC.0) (2026-09-01)
+
+### Features
+
+* **PN-20865:** dismiss io.italia.it CDN for App IO download links ([43e2e17](https://github.com/pagopa/pn-frontend/commit/43e2e177b25a120673b36372e5980221b32a868a))
+
+
 # [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
 
 

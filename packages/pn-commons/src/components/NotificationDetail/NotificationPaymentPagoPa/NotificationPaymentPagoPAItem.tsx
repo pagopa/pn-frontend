@@ -1,4 +1,8 @@
-import { EventPaymentRecipientType } from '../../../models/MixpanelEvents';
+import {
+  EventNotificationType,
+  EventNotificationTypes,
+  EventPaymentRecipientType,
+} from '../../../models/MixpanelEvents';
 import {
   PagoPAPaymentFullDetails,
   PaymentInfoDetail,
@@ -18,6 +22,7 @@ type Props = {
   isSinglePayment?: boolean;
   isCancelled: boolean;
   handleTrackEventDetailPaymentError?: (event: EventPaymentRecipientType, param?: object) => void;
+  notificationType?: EventNotificationType;
 };
 
 const NotificationPaymentPagoPAItem: React.FC<Props> = ({
@@ -29,6 +34,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   isSinglePayment,
   isCancelled,
   handleTrackEventDetailPaymentError,
+  notificationType = EventNotificationTypes.NOTIFICATION,
 }) => {
   // the PagoPa payment has 4 different state:
   // 1 - the loading state in which we show a skeleton
@@ -53,6 +59,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
       handleTrackEventDetailPaymentError(EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR, {
         detail: pagoPAItem.detail,
         errorCode: pagoPAItem.errorCode,
+        notification_type: notificationType,
       });
     }
 

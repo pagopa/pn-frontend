@@ -6,3 +6,8 @@ export interface GetReceivedNotificationParams {
   delegatorsFromStore: Array<Delegator>;
   mandateId?: string;
 }
+
+export interface GetReceivedNotificationTimelineParams {
+  iun: string;
+  mandateId?: string;
+}

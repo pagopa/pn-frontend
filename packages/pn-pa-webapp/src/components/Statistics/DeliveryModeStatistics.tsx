@@ -2,13 +2,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, SxProps, Typography } from '@mui/material';
+import { Paper, SxProps, Typography, useTheme } from '@mui/material';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import {
-  GraphColors,
   IDeliveryModeStatistics,
   StatisticsDeliveryMode,
+  getGraphColors,
 } from '../../models/Statistics';
 import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateAndTrendStatistics';
 
@@ -49,8 +49,11 @@ const DeliveryModeStatistics: React.FC<Props> = ({
     },
   ];
 
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
+
   const options: PnEChartsProps['option'] = {
-    color: [GraphColors.blue, GraphColors.turquoise],
+    color: [graphColors.blue, graphColors.turquoise],
   };
 
   return (

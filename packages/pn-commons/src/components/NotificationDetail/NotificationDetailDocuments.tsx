@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Trans } from 'react-i18next';
 
-import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
-import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import DoNotDisturbRoundedIcon from '@mui/icons-material/DoNotDisturbRounded';
+import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
 import { Box, Stack, Typography, TypographyProps, useTheme } from '@mui/material';
 import {
   IllusMISingleFile,
@@ -114,7 +114,7 @@ const Documents: React.FC<DocumentsProps> = ({
           <Box
             component={MIButton}
             variant="text"
-            endIcon={<OpenInBrowserIcon />}
+            endIcon={<OpenInBrowserRoundedIcon />}
             onClick={() => clickHandler(document.downloadHandler)}
             data-testid="documentButton"
             size="medium"
@@ -140,7 +140,7 @@ const Documents: React.FC<DocumentsProps> = ({
               <MIBoxedModuleTitle>{document.name}</MIBoxedModuleTitle>
             </Box>
             <Tag
-              icon={DoNotDisturbIcon}
+              icon={DoNotDisturbRoundedIcon}
               variant="default"
               value={getLocalizedOrDefaultLabel('common', 'not-available')}
               slotProps={{ icon: { color: theme.palette.grey[300] } }}

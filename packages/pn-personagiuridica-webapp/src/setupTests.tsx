@@ -63,6 +63,8 @@ beforeAll(async () => {
     FACSIMILE_FR: 'https://fake.facsimile-fr.pagopa.it',
     FACSIMILE_DE: 'https://fake.facsimile-de.pagopa.it',
     FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
+    IS_NEW_TIMELINE_ENABLED: true,
+    IS_NEW_TIMELINE_COPY_ENABLED: false,
   });
   initStore(false);
   initAxiosClients();

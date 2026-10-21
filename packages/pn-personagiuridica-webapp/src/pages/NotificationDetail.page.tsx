@@ -13,6 +13,9 @@ import {
   EventDeliveryModeType,
   EventNotificationSource,
   GetDowntimeHistoryParams,
+  LegalFactId,
+  LegalFactType,
+  NotificationCommunicationType,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -26,7 +29,6 @@ import {
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
-  PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
   downloadDocument,
@@ -35,7 +37,7 @@ import {
   useHasPermissions,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -94,6 +96,7 @@ const NotificationDetail = () => {
     FACSIMILE_DE,
     FACSIMILE_SL,
     SELFCARE_CDN_URL,
+    IS_NEW_TIMELINE_COPY_ENABLED,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -269,7 +272,7 @@ const NotificationDetail = () => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
       PGEventStrategyFactory.triggerEvent(
         PGEventsType.SEND_PG_START_PAYMENT,
-        { notificationType: 'LEGAL' },
+        { notificationType: NotificationCommunicationType.LEGAL },
         { sendImmediately: true }
       );
 
@@ -438,13 +441,20 @@ const NotificationDetail = () => {
       : t('menu.notifiche-impresa', { organization: organization?.name });
 
     return (
-      <PnBreadcrumb
-        showBackAction={!fromQrCode}
-        linkRoute={backRoute}
-        linkLabel={breadcrumbLabel}
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(backRoute)}
+      >
+        <MIBreadcrumbItem
+          label={breadcrumbLabel}
+          onClick={() => navigate(backRoute)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={notification.subject || t('menu.fallback-notification', { ns: 'common' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
   }, [fromQrCode, i18n.language, notification.subject, mandateId, organization?.name]);
 
@@ -493,6 +503,32 @@ const NotificationDetail = () => {
     return mandateId
       ? navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(id, mandateId))
       : navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
+  };
+
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
+      return;
+    }
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_DOWNLOAD, { legalFact });
+
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(
+      getReceivedNotificationDocument({
+        iun: notification.iun,
+        documentType,
+        documentId,
+        mandateId,
+      })
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
   };
 
   return (
@@ -616,6 +652,8 @@ const NotificationDetail = () => {
                   recipients={notification.recipients}
                   isParty={false}
                   onTimelineClick={handleGoToTimeline}
+                  clickHandler={legalFactDownloadHandler}
+                  isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                 />
               )}
               <NotificationDetailSection

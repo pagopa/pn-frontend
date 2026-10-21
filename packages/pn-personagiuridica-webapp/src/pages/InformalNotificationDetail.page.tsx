@@ -7,6 +7,7 @@ import {
   AbstractPaper,
   ApiError,
   InformalNotificationStatus,
+  NotificationCommunicationType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -14,13 +15,12 @@ import {
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
-  PnBreadcrumb,
   PnSenderContacts,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
@@ -46,6 +46,7 @@ const InformalNotificationDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
   const navigate = useNavigate();
+
   const { SELFCARE_CDN_URL } = getConfiguration();
 
   const [informalNotification, setInformalNotification] =
@@ -58,7 +59,11 @@ const InformalNotificationDetail: React.FC = () => {
     f24Only: [],
   });
 
-  const documentsAvailable = informalNotification?.documentsAvailable ?? false;
+  // For ComBo documents aren't required so we can have:
+  // - documentsAvailable = true -> the ComBo has documents
+  // - documentsAvailable = false -> the ComBo has documents, but they aren't in the platform anymore
+  // - documentsAvailable = null OR documentsAvailable = undefined -> the ComBo doesn't have documents
+  const documentsAvailable = informalNotification?.documentsAvailable ?? null;
 
   const getDownloadFilesMessage = (): { key: string; ns: string } => ({
     key: documentsAvailable
@@ -157,19 +162,28 @@ const InformalNotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(
     () => (
-      <PnBreadcrumb
-        showBackAction
-        linkRoute={routes.NOTIFICHE}
-        linkLabel={
-          currentRecipient?.denomination
-            ? t('menu.notifiche-impresa', {
-                organization: currentOrganizationName ?? '',
-              })
-            : t('menu.notifiche')
-        }
-        currentLocationLabel={primaryMessage?.subject ?? ''}
-        goBackAction={() => navigate(routes.NOTIFICHE)}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.NOTIFICHE)}
+      >
+        <MIBreadcrumbItem
+          label={
+            currentRecipient?.denomination
+              ? t('menu.notifiche-impresa', {
+                  organization: currentOrganizationName ?? '',
+                })
+              : t('menu.notifiche')
+          }
+          onClick={() => {
+            navigate(routes.NOTIFICHE);
+          }}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={primaryMessage?.subject ?? t('menu.fallback-communication')}
+          current
+        />
+      </MIBreadcrumbs>
     ),
     [
       i18n.language,
@@ -183,7 +197,7 @@ const InformalNotificationDetail: React.FC = () => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
       PGEventStrategyFactory.triggerEvent(
         PGEventsType.SEND_PG_START_PAYMENT,
-        { notificationType: 'INFORMAL' },
+        { notificationType: NotificationCommunicationType.INFORMAL },
         { sendImmediately: true }
       );
       dispatch(
@@ -307,14 +321,14 @@ const InformalNotificationDetail: React.FC = () => {
             isLegal={false}
             abstract={primaryMessage?.longBody ?? ''}
             recipientDenomination={currentRecipient?.denomination}
-            hasAttachments={documentsAvailable}
+            hasAttachments={documentsAvailable !== null}
             hasPayment={hasPayments}
             selfcareCdnUrl={SELFCARE_CDN_URL}
           />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
             <Stack spacing={2} sx={{ width: { xs: '100%', md: '58%' } }}>
-              {documentsAvailable && (
+              {documentsAvailable !== null && (
                 <MIPaper padding={24}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

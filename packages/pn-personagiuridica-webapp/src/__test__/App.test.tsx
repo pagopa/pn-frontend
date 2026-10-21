@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
@@ -20,11 +20,13 @@ vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</di
 
 const unmockedFetch = global.fetch;
 
-const Component = () => (
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>
-);
+const Component = () => {
+  return (
+    <ThemeProvider theme={themeNext}>
+      <App />
+    </ThemeProvider>
+  );
+};
 
 const reduxInitialState = {
   userState: {

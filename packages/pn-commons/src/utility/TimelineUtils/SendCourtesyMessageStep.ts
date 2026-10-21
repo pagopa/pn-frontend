@@ -27,7 +27,8 @@ export class SendCourtesyMessageStep extends TimelineStep {
         payload.isMultiRecipient,
         'Invio del messaggio di cortesia',
         `È in corso l'invio del messaggio di cortesia a ${payload.recipient?.denomination} tramite ${type}`,
-        { ...this.nameAndTaxId(payload), type }
+        { ...this.nameAndTaxId(payload), type },
+        payload.delegatorName
       ),
     };
   }

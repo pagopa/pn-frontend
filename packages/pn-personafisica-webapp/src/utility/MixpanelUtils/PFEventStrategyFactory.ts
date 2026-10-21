@@ -29,6 +29,7 @@ import { SendLanguageStrategy } from './Strategies/SendLanguageStrategy';
 import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationExpensesDetailStrategy } from './Strategies/SendNotificationExpensesDetailStrategy';
+import { SendNotificationSearchStrategy } from './Strategies/SendNotificationSearchStrategy';
 import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
 import { SendOnboardingEmailActivationStrategy } from './Strategies/SendOnboardingEmailActivationStrategy';
 import { SendOnboardingFlowStrategy } from './Strategies/SendOnboardingFlowStrategy';
@@ -76,7 +77,6 @@ const uxActionStrategy = [
   PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE,
   PFEventsType.SEND_PAYMENT_DETAIL_REFRESH,
   PFEventsType.SEND_ADD_MANDATE_START,
-  PFEventsType.SEND_ADD_MANDATE_BACK,
   PFEventsType.SEND_SHOW_MANDATE_CODE,
   PFEventsType.SEND_MANDATE_REVOKED,
   PFEventsType.SEND_MANDATE_REJECTED,
@@ -441,6 +441,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_LOGIN_METHOD]: new SendOneIdentityLoginMethodStrategy(),
   [PFEventsType.SEND_RAPID_ACCESS]: new TechRapidAccessStrategy(),
   [PFEventsType.SEND_LANGUAGE]: new SendLanguageStrategy(),
+  [PFEventsType.SEND_NOTIFICATION_SEARCH]: new SendNotificationSearchStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {

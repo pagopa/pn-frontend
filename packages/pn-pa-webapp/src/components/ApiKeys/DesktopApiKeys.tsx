@@ -90,7 +90,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
         <PnTable
           testId="tableApiKeys"
           ariaTitle={t('table.title')}
-          slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+          slotProps={{ table: { sx: { tableLayout: 'fixed', mt: 2 } } }}
         >
           <PnTableHeader>
             {columns.map((column) => (

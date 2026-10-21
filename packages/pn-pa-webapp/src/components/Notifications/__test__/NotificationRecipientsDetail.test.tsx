@@ -35,7 +35,7 @@ describe('NotificationRecipientsDetail Component', () => {
     expect(recipientsElem).toHaveLength(recipients.length);
     recipientsElem.forEach((recipientElem, index) => {
       expect(recipientElem).toHaveTextContent(
-        recipients[index].denomination + ' - ' + recipients[index].taxId
+        `${recipients[index].denomination} (${recipients[index].taxId})`
       );
     });
     const remainingRecipients = queryByTestId('remaining-recipients');
@@ -61,7 +61,7 @@ describe('NotificationRecipientsDetail Component', () => {
         return false;
       }
       return expect(recipientElem).toHaveTextContent(
-        recipients[index].denomination + ' - ' + recipients[index].taxId
+        `${recipients[index].denomination} (${recipients[index].taxId})`
       );
     });
     const remainingRecipients = queryByTestId('remaining-recipients');
@@ -89,7 +89,7 @@ describe('NotificationRecipientsDetail Component', () => {
 
     recipientsElem.forEach((recipientElem, index) => {
       expect(recipientElem).toHaveTextContent(
-        recipients[index].denomination + ' - ' + recipients[index].taxId
+        `${recipients[index].denomination} (${recipients[index].taxId})`
       );
     });
 

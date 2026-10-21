@@ -1,4 +1,4 @@
-import { formatIun } from '../iun.utility';
+import { INFORMAL_IUN_regex, IUN_regex, LEGAL_IUN_regex, formatIun } from '../iun.utility';
 
 describe('Iun utility', () => {
   
@@ -54,5 +54,23 @@ describe('Iun utility', () => {
     const unformattedIun = 'DDDD-DDDD-DDDD-DDDDDD----';
     const formattedIun = formatIun(unformattedIun);
     expect(formattedIun).toBe('DDDD-DDDD-DDDD-DDDDDD');
+  });
+
+  it('IUN_regex matches both legal and informal iun', () => {
+    expect(IUN_regex.test('ABCD-EFGH-IJKL-123456-M-1')).toBe(true);
+    expect(IUN_regex.test('ABCD-EFGH-IJKL-123456-M-A')).toBe(true);
+    expect(IUN_regex.test('ABCD-EFGH-IJKL-123456-M')).toBe(false);
+  });
+
+  it('LEGAL_IUN_regex matches only legal iun', () => {
+    expect(LEGAL_IUN_regex.test('ABCD-EFGH-IJKL-123456-M-1')).toBe(true);
+    expect(LEGAL_IUN_regex.test('ABCD-EFGH-IJKL-123456-M-A')).toBe(false);
+    expect(LEGAL_IUN_regex.test('ABCD-EFGH-IJKL-123456-M')).toBe(false);
+  });
+
+  it('INFORMAL_IUN_regex matches only informal iun', () => {
+    expect(INFORMAL_IUN_regex.test('ABCD-EFGH-IJKL-123456-M-A')).toBe(true);
+    expect(INFORMAL_IUN_regex.test('ABCD-EFGH-IJKL-123456-M-1')).toBe(false);
+    expect(INFORMAL_IUN_regex.test('ABCD-EFGH-IJKL-123456-M')).toBe(false);
   });
 });

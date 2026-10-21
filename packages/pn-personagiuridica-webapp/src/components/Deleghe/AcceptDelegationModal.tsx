@@ -20,7 +20,7 @@ import {
   PnDialogActions,
   PnDialogContent,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete } from '@pagopa/mui-italia';
+import { Autocomplete, MIButton } from '@pagopa/mui-italia';
 
 import { GroupStatus } from '../../models/groups';
 import { useAppSelector } from '../../redux/hooks';
@@ -255,7 +255,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         )}
       </PnDialogContent>
       <PnDialogActions>
-        <Button
+        <MIButton
           variant="outlined"
           onClick={isEditMode ? handleClose : handleBack}
           data-testid="groupCancelButton"
@@ -263,7 +263,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
           {isEditMode
             ? t('button.annulla', { ns: 'common' })
             : t('button.indietro', { ns: 'common' })}
-        </Button>
+        </MIButton>
         <Button
           id="group-confirm-button"
           variant="contained"

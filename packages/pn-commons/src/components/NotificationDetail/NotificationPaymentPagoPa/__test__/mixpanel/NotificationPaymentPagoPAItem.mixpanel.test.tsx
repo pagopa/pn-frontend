@@ -48,6 +48,7 @@ describe('NotificationPaymentPagoPAItem - Mixpanel events', () => {
       {
         detail: failedItem.detail,
         errorCode: failedItem.errorCode,
+        notification_type: 'notifica',
       }
     );
   });

@@ -1,9 +1,14 @@
+import { NotificationTimelineResponse } from '../models';
 import { NotificationDetail, TimelineCategory } from '../models/NotificationDetail';
 import { NotificationStatus } from '../models/NotificationStatus';
 
 type Props = {
-  notification: NotificationDetail;
+  notification: NotificationDetail | NotificationTimelineResponse;
 };
+
+const isNotificationDetail = (
+  notification: NotificationDetail | NotificationTimelineResponse
+): notification is NotificationDetail => 'timeline' in notification;
 
 /**
  * Checks if notification is cancelled.
@@ -14,15 +19,21 @@ type Props = {
  * @param notification Notification to check
  */
 export const useIsCancelled = ({ notification }: Props) => {
-  const timelineCancelled = !!notification.timeline.find(
-    (el) =>
-      el.category === TimelineCategory.NOTIFICATION_CANCELLED ||
-      el.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
-  );
+  const timelineCancelled = isNotificationDetail(notification)
+    ? !!notification.timeline.find(
+        (el) =>
+          el.category === TimelineCategory.NOTIFICATION_CANCELLED ||
+          el.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
+      )
+    : notification.isCancelled;
+
   return {
-    cancelled: notification.notificationStatus === NotificationStatus.CANCELLED,
-    cancellationInProgress:
-      notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS,
+    cancelled: !!notification.notificationStatusHistory.find(
+      (item) => item.status === NotificationStatus.CANCELLED
+    ),
+    cancellationInProgress: !!notification.notificationStatusHistory.find(
+      (item) => item.status === NotificationStatus.CANCELLATION_IN_PROGRESS
+    ),
     cancellationInTimeline: timelineCancelled,
   };
 };

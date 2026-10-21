@@ -7,7 +7,6 @@ import * as yup from 'yup';
 import {
   Box,
   Checkbox,
-  Chip,
   Grid,
   Link,
   ListItemText,
@@ -32,7 +31,7 @@ import {
   dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete } from '@pagopa/mui-italia';
+import { Autocomplete, MIChip } from '@pagopa/mui-italia';
 
 import {
   DelegationColumnData,
@@ -311,7 +310,7 @@ const DelegationsOfTheCompany = () => {
 
   return (
     <Box data-testid="delegationsOfTheCompany">
-      <Typography variant="h6" mb={4}>
+      <Typography component="h2" variant="h6" mb={4}>
         {t('deleghe.delegatorsTitle')}
       </Typography>
       <ApiErrorWrapper
@@ -420,7 +419,7 @@ const DelegationsOfTheCompany = () => {
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                         {selected.map((value: any) => {
                           const label = statuses.find((s) => s.id === value)?.label;
-                          return <Chip key={value} label={label} />;
+                          return <MIChip key={value} label={label} />;
                         })}
                       </Box>
                     ),

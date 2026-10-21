@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Stack } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   senderId: string;
@@ -15,16 +15,15 @@ const PecValidationItem: React.FC<Props> = ({ senderId, onCancelValidation }) =>
 
   return (
     <Stack direction="row" spacing={1} alignItems="center" data-testid={`${senderId}_pecContact`}>
-      <ButtonNaked
+      <MIButton
         color="error"
         onClick={() => onCancelValidation(senderId)}
         data-testid="cancelValidation"
-        size="medium"
-        sx={{ color: 'error.dark', fontWeight: 700 }}
-        startIcon={<CloseIcon sx={{ width: '18px', height: '18px' }} />}
+        startIcon={<CloseRoundedIcon sx={{ width: '18px', height: '18px' }} />}
+        variant="text"
       >
         {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
-      </ButtonNaked>
+      </MIButton>
     </Stack>
   );
 };
