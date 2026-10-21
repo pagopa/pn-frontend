@@ -26,8 +26,7 @@ type CustomRenderResult = RenderResult & {
 };
 
 export type PFTriggerEventSpy = MockInstance<
-  [eventType: PFEventsType, data?: unknown, trackOptions?: RequestOptions | Callback],
-  void
+  (eventType: PFEventsType, data?: unknown, trackOptions?: RequestOptions | Callback) => void
 >;
 
 // UiContext and RouterBridge are needed to use wrapper and rerender method
