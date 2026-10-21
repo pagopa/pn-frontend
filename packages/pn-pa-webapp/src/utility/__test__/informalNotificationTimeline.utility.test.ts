@@ -18,7 +18,6 @@ import {
 const processingStatus = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusHistory.find(
   (item) => item.status === InformalNotificationStatusV1.Processing
 )!;
-const { status } = processingStatus;
 const pecStep = processingStatus.steps[0];
 const [deliveredEvent, feedbackEvent] = pecStep.events;
 
@@ -37,7 +36,7 @@ const viewedEvent: BffInformalNotificationTimelineItem = {
 
 describe('informalNotificationTimeline utility', () => {
   it('maps the events of a channel group to their copy keys, keeping the backend order', () => {
-    expect(getInformalTimelineEvents(pecStep, status)).toEqual([
+    expect(getInformalTimelineEvents(pecStep)).toEqual([
       {
         id: deliveredEvent.elementId,
         date: deliveredEvent.eventTimestamp,
@@ -52,7 +51,7 @@ describe('informalNotificationTimeline utility', () => {
     ]);
   });
 
-  it('adds the SEND group only in the processing status, starting it with the filed row', () => {
+  it('adds the SEND group to the status next to the accepted one', () => {
     const { notificationStatusHistory } = INFORMAL_NOTIFICATION_TIMELINE_MOCK;
     const [completedStatus, , acceptedStatus] = notificationStatusHistory;
     const sendStep = { channel: BffNotificationChannelType.Send, events: [] };
@@ -63,33 +62,30 @@ describe('informalNotificationTimeline utility', () => {
       { ...processingStatus, steps: [pecStep, sendStep] },
       acceptedStatus,
     ]);
-    expect(getInformalTimelineEvents(sendStep, status, '2026-09-21T13:59:18Z')).toEqual([
-      { id: 'filed', date: '2026-09-21T13:59:18Z', key: 'filed.send' },
-    ]);
     // an already present SEND group is left untouched
-    expect(getInformalTimelineStatusHistory(statusHistory)[1]).toBe(statusHistory[1]);
+    expect(getInformalTimelineStatusHistory(statusHistory)).toBe(statusHistory);
 
-    // the other statuses don't get the filed row
-    const completed = InformalNotificationStatusV1.CompletedReached;
-    expect(getInformalTimelineEvents(sendStep, completed, '2026-09-21T13:59:18Z')).toEqual([]);
-  });
-
-  it('adds the processing status with the SEND group right after the accepted one when it is missing', () => {
-    const { notificationStatusHistory } = INFORMAL_NOTIFICATION_TIMELINE_MOCK;
-    const [completedStatus, , acceptedStatus] = notificationStatusHistory;
-
+    // the processing status isn't created when it is missing
     expect(getInformalTimelineStatusHistory([completedStatus, acceptedStatus])).toEqual([
-      completedStatus,
-      {
-        status,
-        activeFrom: acceptedStatus.activeFrom,
-        steps: [{ channel: BffNotificationChannelType.Send, events: [] }],
-      },
+      { ...completedStatus, steps: [sendStep] },
       acceptedStatus,
     ]);
 
+    // nothing is added when there is no status next to the accepted one
+    expect(getInformalTimelineStatusHistory([acceptedStatus])).toEqual([acceptedStatus]);
     const inValidation = [{ ...acceptedStatus, status: InformalNotificationStatusV1.InValidation }];
     expect(getInformalTimelineStatusHistory(inValidation)).toBe(inValidation);
+  });
+
+  it('starts the SEND group with the filed row only when the filed date is given', () => {
+    const sendStep = { channel: BffNotificationChannelType.Send, events: [] };
+
+    expect(getInformalTimelineEvents(sendStep, '2026-09-21T13:59:18Z')).toEqual([
+      { id: 'filed', date: '2026-09-21T13:59:18Z', key: 'filed.send' },
+    ]);
+    expect(getInformalTimelineEvents(sendStep)).toEqual([]);
+    // the other channels never get the filed row
+    expect(getInformalTimelineEvents(pecStep, '2026-09-21T13:59:18Z')).toHaveLength(2);
   });
 
   it('uses the registered letter code for analog events and tags the delivery on every channel', () => {
@@ -111,7 +107,7 @@ describe('informalNotificationTimeline utility', () => {
     };
 
     expect(
-      getInformalTimelineEvents(analogStep, status).map(({ key, values, tag }) => ({
+      getInformalTimelineEvents(analogStep).map(({ key, values, tag }) => ({
         key,
         values,
         tag,
@@ -125,20 +121,17 @@ describe('informalNotificationTimeline utility', () => {
       },
     ]);
 
-    const [ioDelivered, ioFeedback] = getInformalTimelineEvents(
-      { ...pecStep, channel: BffNotificationChannelType.Io },
-      status
-    );
+    const [ioDelivered, ioFeedback] = getInformalTimelineEvents({
+      ...pecStep,
+      channel: BffNotificationChannelType.Io,
+    });
     expect(ioDelivered).toMatchObject({ key: 'delivered.io', tag: 'DELIVERED' });
     expect(ioFeedback.tag).toBeUndefined();
   });
 
   it('tags the reading on IO and the reading from web after the filed row', () => {
     expect(
-      getInformalTimelineEvents(
-        { channel: BffNotificationChannelType.Io, events: [viewedEvent] },
-        status
-      )
+      getInformalTimelineEvents({ channel: BffNotificationChannelType.Io, events: [viewedEvent] })
     ).toEqual([
       {
         id: viewedEvent.elementId,
@@ -155,7 +148,6 @@ describe('informalNotificationTimeline utility', () => {
           channel: BffNotificationChannelType.Send,
           events: [{ ...viewedEvent, details: { ...viewedDetails, sourceChannel: 'WEB' } }],
         },
-        status,
         '2026-09-21T13:59:18Z'
       ).map(({ key, tag }) => ({ key, tag }))
     ).toEqual([
@@ -174,10 +166,10 @@ describe('informalNotificationTimeline utility', () => {
     };
 
     expect(
-      getInformalTimelineEvents(
-        { channel: BffNotificationChannelType.Email, events: [deliveredEvent, progressEvent] },
-        status
-      )
+      getInformalTimelineEvents({
+        channel: BffNotificationChannelType.Email,
+        events: [deliveredEvent, progressEvent],
+      })
     ).toEqual([
       {
         id: deliveredEvent.elementId,
@@ -192,10 +184,10 @@ describe('informalNotificationTimeline utility', () => {
       },
     ]);
 
-    const [ioDelivered, ioProgress] = getInformalTimelineEvents(
-      { channel: BffNotificationChannelType.Io, events: [deliveredEvent, progressEvent] },
-      status
-    );
+    const [ioDelivered, ioProgress] = getInformalTimelineEvents({
+      channel: BffNotificationChannelType.Io,
+      events: [deliveredEvent, progressEvent],
+    });
     expect(ioDelivered).toMatchObject({ key: 'delivered.io', tag: 'DELIVERED' });
     expect(ioProgress).toEqual({
       id: progressEvent.elementId,
@@ -219,10 +211,10 @@ describe('informalNotificationTimeline utility', () => {
     };
 
     expect(
-      getInformalTimelineEvents(
-        { channel: BffNotificationChannelType.Io, events: [ioFeedbackEvent] },
-        status
-      )
+      getInformalTimelineEvents({
+        channel: BffNotificationChannelType.Io,
+        events: [ioFeedbackEvent],
+      })
     ).toEqual([
       {
         id: ioFeedbackEvent.elementId,
@@ -234,25 +226,22 @@ describe('informalNotificationTimeline utility', () => {
 
   it('keeps the raw category for the UNKNOWN channel and discards the events without a copy', () => {
     expect(
-      getInformalTimelineEvents({ ...pecStep, channel: BffNotificationChannelType.Unknown }, status)
+      getInformalTimelineEvents({ ...pecStep, channel: BffNotificationChannelType.Unknown })
     ).toEqual([
       expect.objectContaining({ key: 'DELIVERED', raw: true }),
       expect.objectContaining({ key: 'SEND_DIGITAL_MESSAGE_FEEDBACK', raw: true }),
     ]);
 
     expect(
-      getInformalTimelineEvents(
-        {
-          ...pecStep,
-          events: [
-            {
-              ...feedbackEvent,
-              category: InformalTimelineElementCategoryV1.SendDigitalMessageProgress,
-            },
-          ],
-        },
-        status
-      )
+      getInformalTimelineEvents({
+        ...pecStep,
+        events: [
+          {
+            ...feedbackEvent,
+            category: InformalTimelineElementCategoryV1.SendDigitalMessageProgress,
+          },
+        ],
+      })
     ).toEqual([]);
   });
 });

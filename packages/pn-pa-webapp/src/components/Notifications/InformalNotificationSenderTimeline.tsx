@@ -82,9 +82,11 @@ const InformalTimelineItemDescription = ({
 const InformalNotificationSenderTimeline = ({ statusHistory, communicationOutcomes }: Props) => {
   const { t } = useTranslation('campaigns');
 
-  const filedDate = statusHistory.find(
+  const acceptedIndex = statusHistory.findIndex(
     (item) => item.status === InformalNotificationStatusV1.Accepted
-  )?.activeFrom;
+  );
+
+  const filedDate = statusHistory[acceptedIndex]?.activeFrom;
 
   return (
     <MITimeline>
@@ -108,7 +110,7 @@ const InformalNotificationSenderTimeline = ({ statusHistory, communicationOutcom
         </MITimelineItem>
       )}
 
-      {getInformalTimelineStatusHistory(statusHistory).map((item) => {
+      {getInformalTimelineStatusHistory(statusHistory).map((item, index) => {
         const presentation = TIMELINE_ITEM_PRESENTATION[item.status];
 
         return (
@@ -137,8 +139,7 @@ const InformalNotificationSenderTimeline = ({ statusHistory, communicationOutcom
                   <InformalNotificationTimelineChannelStep
                     key={`step-${step.channel}-${stepIndex}`}
                     step={step}
-                    status={item.status}
-                    filedDate={filedDate}
+                    filedDate={index === acceptedIndex - 1 ? filedDate : undefined}
                   />
                 ))}
               </Stack>

@@ -36,8 +36,8 @@ describe('InformalNotificationSenderTimeline Component', () => {
     expect(getByText('informal.timeline.event.filed.send')).toBeInTheDocument();
   });
 
-  it('shows the processing status with the SEND group when the BFF does not return it', () => {
-    const { getByText } = render(
+  it('shows the SEND group in the status next to the accepted one when the BFF does not return the processing status', () => {
+    const { getByText, queryByText } = render(
       <InformalNotificationSenderTimeline
         statusHistory={notificationStatusHistory.filter(
           (item) => item.status !== InformalNotificationStatusV1.Processing
@@ -46,7 +46,8 @@ describe('InformalNotificationSenderTimeline Component', () => {
       />
     );
 
-    expect(getByText('informal.status.processing.label')).toBeInTheDocument();
+    expect(queryByText('informal.status.processing.label')).not.toBeInTheDocument();
+    expect(getByText('informal.status.completed.label')).toBeInTheDocument();
     expect(getByText('informal.detail.send-by-channel.channel.send')).toBeInTheDocument();
     expect(getByText('informal.timeline.event.filed.send')).toBeInTheDocument();
   });

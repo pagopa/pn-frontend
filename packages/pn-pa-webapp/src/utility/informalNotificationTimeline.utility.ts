@@ -66,46 +66,34 @@ export const EVENT_TAG_ICON: Record<InformalTimelineEventTag, ComponentType<SvgI
 export const getChannelLabelKey = (channel: BffNotificationChannelType) =>
   `informal.detail.send-by-channel.channel.${channel.toLowerCase()}`;
 
-const withSendStep = (
-  item: BffInformalNotificationTimelineStatusHistoryV1
-): BffInformalNotificationTimelineStatusHistoryV1 =>
-  item.steps.some((step) => step.channel === BffNotificationChannelType.Send)
-    ? item
-    : { ...item, steps: [...item.steps, { channel: BffNotificationChannelType.Send, events: [] }] };
-
 /**
- * Once the notification is accepted, the PROCESSING status with the SEND group is always shown,
- * since every notification is filed on SEND: if the backend doesn't return the status, it is created
- * right after the ACCEPTED one, and if it doesn't return the SEND group, it is added to the status.
+ * Every notification is filed on SEND, so the status next to the ACCEPTED one always has the SEND group:
+ * if the backend doesn't return it, it is added to that status.
  * The history goes from the most recent status to the oldest one.
  * @param statusHistory - Status history of the notification
  */
 export const getInformalTimelineStatusHistory = (
   statusHistory: Array<BffInformalNotificationTimelineStatusHistoryV1>
 ): Array<BffInformalNotificationTimelineStatusHistoryV1> => {
-  if (statusHistory.some((item) => item.status === InformalNotificationStatusV1.Processing)) {
-    return statusHistory.map((item) =>
-      item.status === InformalNotificationStatusV1.Processing ? withSendStep(item) : item
-    );
-  }
+  const filedStatusIndex =
+    statusHistory.findIndex((item) => item.status === InformalNotificationStatusV1.Accepted) - 1;
+  const filedStatus = statusHistory[filedStatusIndex];
 
-  const acceptedIndex = statusHistory.findIndex(
-    (item) => item.status === InformalNotificationStatusV1.Accepted
-  );
-
-  if (acceptedIndex === -1) {
+  if (
+    !filedStatus ||
+    filedStatus.steps.some((step) => step.channel === BffNotificationChannelType.Send)
+  ) {
     return statusHistory;
   }
 
-  return [
-    ...statusHistory.slice(0, acceptedIndex),
-    withSendStep({
-      status: InformalNotificationStatusV1.Processing,
-      activeFrom: statusHistory[acceptedIndex].activeFrom,
-      steps: [],
-    }),
-    ...statusHistory.slice(acceptedIndex),
-  ];
+  return statusHistory.map((item, index) =>
+    index === filedStatusIndex
+      ? {
+          ...item,
+          steps: [...item.steps, { channel: BffNotificationChannelType.Send, events: [] }],
+        }
+      : item
+  );
 };
 
 /**
@@ -211,15 +199,13 @@ const toEventView = (
 
 /**
  * Maps the events of a channel group to the rows to show, discarding the ones without a copy.
- * In the PROCESSING status the SEND group starts with the "filed" row, since every notification is filed on SEND.
+ * When the filed date is given, the SEND group starts with the "filed" row, since every notification is filed on SEND.
  * The UNKNOWN group has no copy to pick, so its events have the raw category as key.
  * @param step - Channel group
- * @param status - Status the channel group belongs to
- * @param filedDate - Date the notification was filed on SEND
+ * @param filedDate - Date the notification was filed on SEND, given only to the status next to the ACCEPTED one
  */
 export const getInformalTimelineEvents = (
   step: BffInformalNotificationTimelineGroup,
-  status: InformalNotificationStatusV1,
   filedDate?: string
 ): Array<InformalTimelineEventView> => {
   const events = step.events.flatMap((event, index) => {
@@ -228,10 +214,7 @@ export const getInformalTimelineEvents = (
     return copy ? [toEventView(copy, getEventId(event, step, index), event.eventTimestamp)] : [];
   });
 
-  if (
-    status !== InformalNotificationStatusV1.Processing ||
-    step.channel !== BffNotificationChannelType.Send
-  ) {
+  if (!filedDate || step.channel !== BffNotificationChannelType.Send) {
     return events;
   }
 
