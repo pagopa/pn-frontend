@@ -200,6 +200,7 @@ const toEventView = (
 /**
  * Maps the events of a channel group to the rows to show, discarding the ones without a copy.
  * When the filed date is given, the SEND group starts with the "filed" row, since every notification is filed on SEND.
+ * In the PROCESSING status the SEND group ends with the "filed" row, since every notification is filed on SEND
  * The UNKNOWN group has no copy to pick, so its events have the raw category as key.
  * @param step - Channel group
  * @param filedDate - Date the notification was filed on SEND, given only to the status next to the ACCEPTED one
@@ -218,5 +219,5 @@ export const getInformalTimelineEvents = (
     return events;
   }
 
-  return [toEventView({ key: 'filed.send' }, 'filed', filedDate), ...events];
+  return [...events, toEventView({ key: 'filed.send' }, 'filed', filedDate)];
 };

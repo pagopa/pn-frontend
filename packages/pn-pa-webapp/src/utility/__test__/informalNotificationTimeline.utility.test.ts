@@ -129,7 +129,7 @@ describe('informalNotificationTimeline utility', () => {
     expect(ioFeedback.tag).toBeUndefined();
   });
 
-  it('tags the reading on IO and the reading from web after the filed row', () => {
+  it('tags the reading on IO and the reading from web before the filed row', () => {
     expect(
       getInformalTimelineEvents({ channel: BffNotificationChannelType.Io, events: [viewedEvent] })
     ).toEqual([
@@ -151,8 +151,8 @@ describe('informalNotificationTimeline utility', () => {
         '2026-09-21T13:59:18Z'
       ).map(({ key, tag }) => ({ key, tag }))
     ).toEqual([
-      { key: 'filed.send', tag: undefined },
       { key: 'informal_notification_viewed.send', tag: 'VIEWED' },
+      { key: 'filed.send', tag: undefined },
     ]);
   });
 
