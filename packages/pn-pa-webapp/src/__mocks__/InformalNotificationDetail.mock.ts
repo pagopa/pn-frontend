@@ -3,7 +3,7 @@ import { INFORMAL_NOTIFICATION_TIMELINE_MOCK } from './InformalNotificationTimel
 
 export const INFORMAL_NOTIFICATION_DETAIL_MOCK: BffFullSentInformalNotificationV1 = {
   iun: INFORMAL_NOTIFICATION_TIMELINE_MOCK.iun,
-  senderDenomination: 'Comune di Palermo',
+  senderDenomination: 'Comune di Test',
   recipients: INFORMAL_NOTIFICATION_TIMELINE_MOCK.recipients,
   subject: 'Test workflow',
   documents: [
