@@ -2,6 +2,7 @@ export enum ChannelType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
   SMS = 'SMS',
+  WHATSAPP = 'WHATSAPP',
   IOMSG = 'APPIO',
   SERCQ_SEND = 'SERCQ_SEND',
 }
