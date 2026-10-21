@@ -1,0 +1,134 @@
+{
+  "api-key-copied": "Ključ API kopiran",
+  "banner": {
+    "description-admin": "Osebnih ključev ni mogoče uporabiti, ker je bila integracija onemogočena. Če jih želiš uporabiti, registriraj javni ključ.",
+    "description-operator": "Osebnih ključev ni mogoče uporabiti, ker je bila integracija onemogočena. Za njihovo uporabo prosi administratorja, da omogoči integracijo.",
+    "title": "Integracija onemogočena"
+  },
+  "block-button": "Blokiraj",
+  "context-menu": {
+    "block": "Blokiraj",
+    "rotate": "Rotiraj",
+    "title": "Možnosti za API Key",
+    "view": "Prikaži kodo"
+  },
+  "dialogs": {
+    "block-subtitle": "Če blokiraš ključ, bo vsaka zahteva, izvedena prek njega, neuspešna.",
+    "block-title": "Blokiraj ključ",
+    "delete-subtitle": "Če ključ trajno izbrišeš, ga ne bo več mogoče znova aktivirati in uporabiti.",
+    "delete-title": "Izbriši ključ",
+    "rotate-public-key-subtitle": "Z rotacijo obstoječega javnega ključa moraš vnesti novega in pridobiš vrednosti Kid in Issuer.",
+    "rotate-title": "Rotiraj ključ",
+    "rotate-virtual-key-subtitle": "Z rotacijo obstoječega ključa ga deaktiviraš in generiraš novega z enakimi atributi.",
+    "rotate-warning": "Ko zaključiš to operacijo, blokiraj in izbriši rotirani ključ."
+  },
+  "error-fecth-public-api-keys": "Napaka pri pridobivanju javnih ključev",
+  "messages": {
+    "error": {
+      "accept-tos-failed": "Prišlo je do napake. Poskusi znova.",
+      "key-already-registered": "Ta vrednost je bila že prej vnesena. Vnesi drug ključ.",
+      "name-allowed-charset": "Polje za ime lahko vsebuje samo naslednje znake: \"{{allowedCharset}}\"",
+      "no-tos-version": "Pri pridobivanju pogojev storitve je prišlo do napake. Poskusi znova.",
+      "rotate-invalid-kid": "Ključa ni mogoče rotirati. Drug administrator je že izvedel operacijo."
+    },
+    "success": {
+      "public-key-blocked": "Javni ključ uspešno blokiran.",
+      "public-key-deleted": "Javni ključ uspešno izbrisan.",
+      "public-key-registered": "Javni ključ uspešno registriran.",
+      "public-key-rotated": "Javni ključ uspešno rotiran."
+    }
+  },
+  "new-public-key": {
+    "button": {
+      "register": "Registriraj"
+    },
+    "issuer-copied": "Issuer kopiran!",
+    "kid-copied": "KID kopiran!",
+    "prompt": {
+      "message": "Če zapustiš stran, bodo vsi doslej vneseni podatki izgubljeni.",
+      "title": "Ali želiš izstopiti?"
+    },
+    "steps": {
+      "get-returned-parameters": {
+        "description": "Tukaj so parametri za integracijo: uporabi te podatke za konfiguracijo svojega ključa za dostop do SEND. Podatke lahko kadar koli pridobiš v razdelku »Integracija API«.",
+        "issuer": "Issuer",
+        "kid": "Kid",
+        "title": "Pridobi parametre"
+      },
+      "insert-data": {
+        "content": "Javni ključ (JWKS) je potreben za <strong>varno avtentikacijo zahtev, ki prihajajo iz tvojih sistemov za upravljanje.</strong> Ključ poteče po 355 dneh.",
+        "name": {
+          "default": "Ključ-",
+          "description": "Izberi ime za ključ ali ohrani privzeto.",
+          "label": "Ime"
+        },
+        "publicKey": {
+          "begin": "-----BEGIN PUBLIC KEY-----",
+          "description": "Vnesi vrednost ključa",
+          "end": "-----END PUBLIC KEY-----",
+          "placeholder": "Vnesi Public Key"
+        },
+        "title": "Vnesi podatke",
+        "tos": "S pritiskom na \"Registriraj\" izjavljaš, da si prebral in sprejemaš <0>Pogoje storitve</0>."
+      }
+    },
+    "subtitle": "Vnesi zahtevane podatke, da omogočiš varno integracijo sistemov za upravljanje tvojega podjetja.",
+    "title": "Registriraj javni ključ"
+  },
+  "publicKeys": {
+    "empty-state": "Še ni javnega ključa. Registriraj javni ključ, da omogočiš integracijo.",
+    "issuer": "Issuer",
+    "kid": "Kid",
+    "new-key-button": "Registriraj javni ključ",
+    "personal-key": "Osebni ključ",
+    "table": {
+      "endDate": "Potek",
+      "name": "Ime",
+      "status": "Stanje",
+      "value": "Vrednost"
+    },
+    "title": "Javni ključ",
+    "view-subtitle": "Kopiraj kode, ki jih potrebuješ.",
+    "view-title": "Prikaži kodo"
+  },
+  "rotate-public-key-button": "Rotiraj in registriraj nov ključ",
+  "rotate-virtual-key-button": "Rotiraj",
+  "status": {
+    "active": "Aktiven",
+    "blocked": "Blokiran",
+    "disabled": "Onemogočen",
+    "enabled": "Aktiven",
+    "rotated": "Rotiran"
+  },
+  "subTitle": "Generiraj in upravljaj ključe za omogočanje varne integracije med sistemi za upravljanje tvojega podjetja in platformo SEND.",
+  "title": "Integracija API",
+  "tooltip": {
+    "blocked": "Blokiran",
+    "blocked-in": "Blokiran dne",
+    "created": "Ustvarjen",
+    "created-in": "Ustvarjen dne",
+    "enabled": "Aktiviran",
+    "enabled-in": "Aktiviran dne",
+    "from": "Od",
+    "rotated": "Rotiran",
+    "rotated-in": "Rotiran dne"
+  },
+  "virtualKeys": {
+    "default": "Ključ-",
+    "empty-state": "Za tvoje podjetje še ni bil generiran noben osebni ključ.",
+    "new-key-button": "Generiraj osebni ključ",
+    "not-enabled-empty-state": "Da lahko ustvariš osebni ključ, mora administrator najprej omogočiti integracijo.",
+    "personal-key": "Osebni ključ",
+    "table": {
+      "lastUpdate": "Zadnja sprememba",
+      "name": "Ime",
+      "personal": "Ti",
+      "status": "Stanje",
+      "value": "Vrednost"
+    },
+    "title": "Osebni ključ",
+    "understood-button": "V redu, razumem",
+    "view-subtitle": "Lahko jo uporabiš za avtentikacijo na platformi in integracijo SEND. Svoj osebni ključ lahko kadar koli kopiraš v razdelku »Integracija API«.",
+    "view-title": "Tvoj osebni ključ"
+  }
+}

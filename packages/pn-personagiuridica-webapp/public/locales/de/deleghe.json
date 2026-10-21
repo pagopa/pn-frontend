@@ -86,6 +86,10 @@
       "message": "Du kannst dich nicht selbst bevollmächtigen",
       "title": "Fehler bei der Eingabe der Vollmacht"
     },
+    "fiscal_code": {
+      "message": "Die eingegebene Steuernummer ist ungültig.",
+      "title": "Ungültige Steuernummer"
+    },
     "invalid_verification_code": {
       "message": "Überprüfe ihn und gib ihn erneut ein",
       "title": "Der Code ist falsch"
@@ -109,6 +113,7 @@
       "businessName": "Firmenbezeichnung",
       "date-duration": "Gültigkeitsdauer der Vollmacht",
       "endDate": "Ende der Vollmacht",
+      "endDate-input-aria-label": "Gib das Enddatum der Vollmacht ein.",
       "firstName": "Vorname",
       "fiscalCode": "Steuernummer",
       "lastName": "Nachname",
@@ -118,11 +123,13 @@
       "onlySelected": "Nur ausgewählte Körperschaften",
       "party-not-found": "Keine Körperschaft gefunden",
       "personType": "Rechtssubjekt:",
+      "personType-content-subtitle": "Wähle die Art des Rechtssubjekts aus",
       "selectEntities": "Körperschaft wählen",
       "submit": "Anfrage senden",
       "verificationCode": "Verifizierungs-Code",
       "verificationCodeDescr": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei der Annahme der Vollmacht eingeben.",
-      "viewFrom": "Kann Bescheide von anzeigen:"
+      "viewFrom": "Kann Bescheide von anzeigen:",
+      "viewFrom-content-subtitle": "Wähle eine Option aus"
     },
     "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, die du zum Lesen der Zustellungen von {{organizationName}} bevollmächtigen möchtest.",
     "title": "Vollmacht hinzufügen",
@@ -139,7 +146,8 @@
       },
       "fiscalCode": {
         "required": "Die Steuernummer ist erforderlich",
-        "wrong": "Der eingegebene Code ist falsch"
+        "wrong": "Der eingegebene Code ist falsch",
+        "wrong-pg": "Gib nur Ziffern ein. Wenn die Steuernummer der Person, die du bevollmächtigen möchtest, auch aus Buchstaben besteht, wähle „Natürliche Person“."
       },
       "name": {
         "required": "Der Name ist erforderlich"

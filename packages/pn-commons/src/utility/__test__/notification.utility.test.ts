@@ -23,7 +23,7 @@ import {
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { initLocalizationForTest } from '../../test-utils';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
-import { initLocalizationExists } from '../localization.utility';
+import { hasLocalizedLabel, initLocalizationExists } from '../localization.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -32,6 +32,21 @@ import {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '../notification.utility';
+
+// Defines the base multi-recipient keys. Individual tests control optional variants.
+const baseMultiLocalizationKeys = new Set(
+  ['delivered', 'viewed', 'unreachable', 'effective-date', 'returned-to-sender'].flatMap((status) =>
+    ['', '-tooltip', '-description'].map((suffix) => `status.${status}${suffix}-multirecipient`)
+  )
+);
+
+function initStatusLocalizationExists(
+  exists?: NonNullable<Parameters<typeof initLocalizationExists>[0]>
+) {
+  initLocalizationExists(
+    (namespace, path) => baseMultiLocalizationKeys.has(path) || !!exists?.(namespace, path)
+  );
+}
 
 function testNotificationStatusInfos(
   expectedColor:
@@ -63,9 +78,17 @@ function testNotificationStatusInfos(
   expect(description).toStrictEqual(expectedDescription);
 }
 
+beforeEach(() => {
+  initLocalizationForTest();
+});
+
+// afterEach(() => {
+//   initLocalizationForTest();
+// });
+
 describe('notification status texts', () => {
-  beforeAll(() => {
-    initLocalizationForTest();
+  beforeEach(() => {
+    initStatusLocalizationExists();
   });
 
   it('return notification status infos - DELIVERED - single recipient - analog shipment', () => {
@@ -345,7 +368,7 @@ describe('notification status texts', () => {
     'uses the new DELIVERED description for $deliveryMode$suffix',
     ({ deliveryMode, recipients, suffix }) => {
       const localizationKey = `status.delivered-description-${deliveryMode}${suffix}`;
-      initLocalizationExists((_namespace, path) => path === localizationKey);
+      initStatusLocalizationExists((_namespace, path) => path === localizationKey);
 
       testNotificationStatusInfos(
         'default',
@@ -360,13 +383,11 @@ describe('notification status texts', () => {
         },
         { recipients }
       );
-
-      initLocalizationForTest();
     }
   );
 
   it('keeps the legacy DELIVERED description when the new content is unavailable', () => {
-    initLocalizationExists(() => false);
+    initStatusLocalizationExists(() => false);
 
     testNotificationStatusInfos(
       'default',
@@ -383,15 +404,13 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTO.recipients }
     );
-
-    initLocalizationForTest();
   });
 
   it.each([NotificationDeliveryMode.DIGITAL, NotificationDeliveryMode.ANALOG])(
     'uses the delegate DELIVERED description for %s in the delegate view',
     (deliveryMode) => {
       const delegateKey = `status.delivered-description-${deliveryMode}-delegate`;
-      initLocalizationExists((_namespace, path) => path === delegateKey);
+      initStatusLocalizationExists((_namespace, path) => path === delegateKey);
 
       testNotificationStatusInfos(
         'default',
@@ -410,14 +429,12 @@ describe('notification status texts', () => {
           delegatorName: 'Mario Cucumber',
         }
       );
-
-      initLocalizationForTest();
     }
   );
 
   it('keeps the DELIVERED description of the recipient view when the delegate one is unavailable', () => {
     const localizationKey = `status.delivered-description-${NotificationDeliveryMode.DIGITAL}`;
-    initLocalizationExists((_namespace, path) => path === localizationKey);
+    initStatusLocalizationExists((_namespace, path) => path === localizationKey);
 
     testNotificationStatusInfos(
       'default',
@@ -436,12 +453,34 @@ describe('notification status texts', () => {
         delegatorName: 'Mario Cucumber',
       }
     );
+  });
 
-    initLocalizationForTest();
+  it('keeps the multi-recipient delivery-mode description when the delegate variant is unavailable', () => {
+    const localizationKey = `status.delivered-description-${NotificationDeliveryMode.DIGITAL}-multirecipient`;
+
+    initStatusLocalizationExists((_ns, path) => path === localizationKey);
+
+    testNotificationStatusInfos(
+      'default',
+      'notifiche - status.delivered-multirecipient',
+      'notifiche - status.delivered-tooltip-multirecipient',
+      `notifiche - ${localizationKey}`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.DIGITAL,
+      },
+      {
+        recipients: notificationDTOMultiRecipient.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
   });
 
   it('keeps the legacy DELIVERED description in the delegate view when the new content is unavailable', () => {
-    initLocalizationExists(() => false);
+    initStatusLocalizationExists(() => false);
 
     testNotificationStatusInfos(
       'default',
@@ -462,8 +501,6 @@ describe('notification status texts', () => {
         delegatorName: 'Mario Cucumber',
       }
     );
-
-    initLocalizationForTest();
   });
 
   it('return notification status infos - DELIVERING', () => {
@@ -515,7 +552,7 @@ describe('notification status texts', () => {
 
   it('uses the delegate UNREACHABLE description when the revised copy is available', () => {
     const delegateKey = 'status.unreachable-description-delegate';
-    initLocalizationExists((_namespace, path) => path === delegateKey);
+    initStatusLocalizationExists((_namespace, path) => path === delegateKey);
 
     testNotificationStatusInfos(
       'error',
@@ -529,12 +566,10 @@ describe('notification status texts', () => {
         delegatorName: 'Mario Cucumber',
       }
     );
-
-    initLocalizationForTest();
   });
 
   it('keeps the legacy UNREACHABLE description when the revised copy is unavailable', () => {
-    initLocalizationExists(() => false);
+    initStatusLocalizationExists(() => false);
 
     testNotificationStatusInfos(
       'error',
@@ -548,8 +583,6 @@ describe('notification status texts', () => {
         delegatorName: 'Mario Cucumber',
       }
     );
-
-    initLocalizationForTest();
   });
 
   it('return notification status infos - PAID - passing the status only', () => {
@@ -658,7 +691,9 @@ describe('notification status texts', () => {
   });
 
   it('return notification status infos - EFFECTIVE_DATE - delegate view, with the revised copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.effective-date-description-delegate');
+    initStatusLocalizationExists(
+      (_ns, path) => path === 'status.effective-date-description-delegate'
+    );
     testNotificationStatusInfos(
       'info',
       `notifiche - status.effective-date`,
@@ -680,11 +715,10 @@ describe('notification status texts', () => {
         delegatorName: 'Mario Cucumber',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - EFFECTIVE_DATE - delegate view, without the revised copy', () => {
-    initLocalizationExists(() => false);
+    initStatusLocalizationExists(() => false);
     testNotificationStatusInfos(
       'info',
       `notifiche - status.effective-date`,
@@ -705,11 +739,10 @@ describe('notification status texts', () => {
         delegatorName: 'Mario Cucumber',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - by delegate, with the revised copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -729,11 +762,10 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTO.recipients }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - by delegate, the viewed event wins over the tax id carried by recipient', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -759,11 +791,10 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTO.recipients }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, access made by the reading delegate', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -795,11 +826,12 @@ describe('notification status texts', () => {
         userTaxId: 'TSTUTN00A07A001G',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, access made by another delegate', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-other-delegate-description');
+    initStatusLocalizationExists(
+      (_ns, path) => path === 'status.viewed-by-other-delegate-description'
+    );
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -832,11 +864,10 @@ describe('notification status texts', () => {
         userTaxId: 'TSTUTN00A07A001G',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, access made by the recipient', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -859,11 +890,12 @@ describe('notification status texts', () => {
         userTaxId: 'TSTUTN00A07A001G',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, no delegateInfo falls back on the delegate carried by recipient', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-other-delegate-description');
+    initStatusLocalizationExists(
+      (_ns, path) => path === 'status.viewed-by-other-delegate-description'
+    );
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -890,11 +922,10 @@ describe('notification status texts', () => {
         userTaxId: 'TSTUTN00A07A001G',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, multi recipient access without delegate keeps the multi recipient copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed-multirecipient`,
@@ -916,11 +947,10 @@ describe('notification status texts', () => {
         delegatorName: 'Mario Cucumber',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view without the delegator name keeps the standard copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -943,7 +973,6 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTO.recipients, mandateId: 'mandate-1' }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - multi recipient - no delegate', () => {
@@ -966,7 +995,7 @@ describe('notification status texts', () => {
   });
 
   it('return notification status infos - VIEWED - multi recipient - without legal fact, with the revised copy', () => {
-    initLocalizationExists(
+    initStatusLocalizationExists(
       (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
     );
     testNotificationStatusInfos(
@@ -984,11 +1013,39 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTOMultiRecipient.recipients }
     );
-    initLocalizationForTest();
+  });
+
+  it('prefers the delegate VIEWED description over the multi-recipient without-legal-fact variant', () => {
+    initStatusLocalizationExists(
+      (_ns, path) =>
+        path === 'status.viewed-without-legal-fact-description-multirecipient' ||
+        path === 'status.viewed-by-delegate-description'
+    );
+
+    testNotificationStatusInfos(
+      'success',
+      'notifiche - status.viewed-multirecipient',
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.delegate - ${JSON.stringify({
+          name: notificationDTOMultiRecipient.recipients[0].denomination,
+        })}`,
+      })}`,
+      `notifiche - status.viewed-by-delegate-description - ${JSON.stringify({
+        name: notificationDTOMultiRecipient.recipients[0].denomination,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        recipient: notificationDTOMultiRecipient.recipients[0].denomination,
+        steps: [],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
   });
 
   it('return notification status infos - VIEWED - multi recipient - with legal fact, with the revised copy', () => {
-    initLocalizationExists(
+    initStatusLocalizationExists(
       (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
     );
     testNotificationStatusInfos(
@@ -1021,7 +1078,6 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTOMultiRecipient.recipients }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - CANCELLED - passing status only', () => {
@@ -1035,7 +1091,7 @@ describe('notification status texts', () => {
   });
 
   it('return notification status infos - RETURNED_TO_SENDER - without legal fact', () => {
-    initLocalizationExists(
+    initStatusLocalizationExists(
       (_ns, path) => path === 'status.returned-to-sender-with-legal-fact-description'
     );
     testNotificationStatusInfos(
@@ -1050,11 +1106,10 @@ describe('notification status texts', () => {
         steps: [],
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - RETURNED_TO_SENDER - with legal fact, with the revised copy', () => {
-    initLocalizationExists(
+    initStatusLocalizationExists(
       (_ns, path) => path === 'status.returned-to-sender-with-legal-fact-description'
     );
     testNotificationStatusInfos(
@@ -1083,7 +1138,39 @@ describe('notification status texts', () => {
         ],
       }
     );
-    initLocalizationForTest();
+  });
+
+  it('falls back to the standalone RETURNED_TO_SENDER legal-fact description for multiple recipients', () => {
+    initStatusLocalizationExists(
+      (_ns, path) => path === 'status.returned-to-sender-with-legal-fact-description'
+    );
+
+    testNotificationStatusInfos(
+      'warning',
+      'notifiche - status.returned-to-sender-multirecipient',
+      'notifiche - status.returned-to-sender-tooltip-multirecipient',
+      'notifiche - status.returned-to-sender-with-legal-fact-description',
+      {
+        status: NotificationStatus.RETURNED_TO_SENDER,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: 'NOTIFICATION_VIEWED.IUN_ABCD-EFGH-IJKL-202601-M-1.RECINDEX_0',
+            timestamp: '2026-01-15T10:20:30.123456789Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            details: { recIndex: 0 },
+            legalFactsIds: [
+              {
+                key: 'safestorage://PN_LEGAL_FACTS-viewed.pdf',
+                category: LegalFactType.RECIPIENT_ACCESS,
+              },
+            ],
+          },
+        ],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
   });
 
   it('return notification status infos - RETURNED_TO_SENDER - with legal fact, without the revised copy', () => {
@@ -1124,13 +1211,59 @@ describe('notification status texts', () => {
       NotificationStatus.CANCELLATION_IN_PROGRESS
     );
   });
+
+  it.each(['label', 'tooltip', 'description'] as const)(
+    'falls back only the unavailable multi %s without the base catalog fixture',
+    (missingPart) => {
+      const parts = {
+        label: 'status.unreachable',
+        tooltip: 'status.unreachable-tooltip',
+        description: 'status.unreachable-description',
+      };
+      const available = new Set(
+        Object.entries(parts)
+          .filter(([part]) => part !== missingPart)
+          .map(([, key]) => `${key}-multirecipient`)
+      );
+      initLocalizationExists((_namespace, key) => available.has(key));
+      const result = getNotificationStatusInfos(NotificationStatus.UNREACHABLE, {
+        recipients: ['A', 'B'],
+      });
+      for (const part of ['label', 'tooltip', 'description'] as const) {
+        expect(result[part]).toBe(
+          `notifiche - ${parts[part]}${part === missingPart ? '' : '-multirecipient'}`
+        );
+      }
+    }
+  );
+
+  it('allows all multi localizations to be unavailable', () => {
+    initLocalizationExists(() => false);
+    testNotificationStatusInfos(
+      'error',
+      'notifiche - status.unreachable',
+      'notifiche - status.unreachable-tooltip',
+      'notifiche - status.unreachable-description',
+      NotificationStatus.UNREACHABLE,
+      { recipients: ['A', 'B'] }
+    );
+  });
+
+  it('starts with base multi keys and without optional viewer keys for every test', () => {
+    expect(hasLocalizedLabel('notifications', 'status.viewed-description-multirecipient')).toBe(
+      true
+    );
+    expect(hasLocalizedLabel('notifications', 'status.viewed-by-delegate-description')).toBe(false);
+    expect(
+      hasLocalizedLabel(
+        'notifications',
+        'detail.timeline.completely-unreachable-description-delegate'
+      )
+    ).toBe(false);
+  });
 });
 
 describe('timeline legal fact link text', () => {
-  beforeAll(() => {
-    initLocalizationForTest();
-  });
-
   it('return legalFact label - default', () => {
     const timelineElem = {
       elementId: 'GET_ADDRESS.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1.SOURCE_SPECIAL.ATTEMPT_0',
@@ -1445,7 +1578,6 @@ describe('timeline event description', () => {
         recipient: 'Mario Cucumber',
       })}`
     );
-    initLocalizationForTest();
   });
 });
 

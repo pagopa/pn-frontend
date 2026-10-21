@@ -1,0 +1,134 @@
+{
+  "api-key-copied": "API-Schlüssel kopiert",
+  "banner": {
+    "description-admin": "Persönliche Schlüssel können nicht verwendet werden, da die Integration deaktiviert wurde. Um sie zu verwenden, registriere einen öffentlichen Schlüssel.",
+    "description-operator": "Die persönlichen Schlüssel können nicht verwendet werden, da die Integration deaktiviert wurde. Um sie zu nutzen, bitte eine Administratorin oder einen Administrator, die Integration zu aktivieren.",
+    "title": "Integration deaktiviert"
+  },
+  "block-button": "Sperren",
+  "context-menu": {
+    "block": "Sperren",
+    "rotate": "Rotieren",
+    "title": "API-Key-Optionen",
+    "view": "Code anzeigen"
+  },
+  "dialogs": {
+    "block-subtitle": "Wenn du den Schlüssel sperrst, schlägt jede über ihn getätigte Anfrage fehl.",
+    "block-title": "Schlüssel sperren",
+    "delete-subtitle": "Wenn du den Schlüssel endgültig löschst, kann er nicht wieder aktiviert und verwendet werden.",
+    "delete-title": "Schlüssel löschen",
+    "rotate-public-key-subtitle": "Beim Rotieren des bestehenden öffentlichen Schlüssels musst du einen neuen eingeben und erhältst die Werte für Kid und Issuer.",
+    "rotate-title": "Schlüssel rotieren",
+    "rotate-virtual-key-subtitle": "Beim Rotieren des bestehenden Schlüssels deaktivierst du ihn und generierst einen neuen mit denselben Attributen.",
+    "rotate-warning": "Nachdem du diesen Vorgang abgeschlossen hast, sperre und lösche den rotierten Schlüssel."
+  },
+  "error-fecth-public-api-keys": "Fehler beim Abrufen der öffentlichen Schlüssel",
+  "messages": {
+    "error": {
+      "accept-tos-failed": "Ein Fehler ist aufgetreten. Versuche es erneut.",
+      "key-already-registered": "Dieser Wert wurde bereits zuvor eingegeben. Gib einen anderen Schlüssel ein.",
+      "name-allowed-charset": "Das Namensfeld darf nur folgende Zeichen enthalten: \"{{allowedCharset}}\"",
+      "no-tos-version": "Beim Abrufen der Nutzungsbedingungen ist ein Fehler aufgetreten. Versuche es erneut.",
+      "rotate-invalid-kid": "Der Schlüssel kann nicht rotiert werden. Ein anderer Administrator hat den Vorgang bereits durchgeführt."
+    },
+    "success": {
+      "public-key-blocked": "Öffentlicher Schlüssel erfolgreich gesperrt.",
+      "public-key-deleted": "Öffentlicher Schlüssel erfolgreich gelöscht.",
+      "public-key-registered": "Öffentlicher Schlüssel erfolgreich registriert.",
+      "public-key-rotated": "Öffentlicher Schlüssel erfolgreich rotiert."
+    }
+  },
+  "new-public-key": {
+    "button": {
+      "register": "Registrieren"
+    },
+    "issuer-copied": "Issuer kopiert!",
+    "kid-copied": "KID kopiert!",
+    "prompt": {
+      "message": "Wenn du die Seite verlässt, verlierst du alle bisher eingegebenen Daten.",
+      "title": "Möchtest du beenden?"
+    },
+    "steps": {
+      "get-returned-parameters": {
+        "description": "Hier sind die Integrationsparameter: Verwende diese Daten, um deinen SEND-Zugangsschlüssel zu konfigurieren. Du kannst die Daten jederzeit im Bereich „API-Integration“ abrufen.",
+        "issuer": "Issuer",
+        "kid": "Kid",
+        "title": "Parameter abrufen"
+      },
+      "insert-data": {
+        "content": "Der öffentliche Schlüssel (JWKS) ist erforderlich, um <strong>Anfragen aus deinen Verwaltungssystemen sicher zu authentifizieren.</strong> Der Schlüssel läuft nach 355 Tagen ab.",
+        "name": {
+          "default": "Schlüssel-",
+          "description": "Wähle einen Namen für den Schlüssel oder behalte den Standard bei.",
+          "label": "Name"
+        },
+        "publicKey": {
+          "begin": "-----BEGIN PUBLIC KEY-----",
+          "description": "Gib den Wert des Schlüssels ein",
+          "end": "-----END PUBLIC KEY-----",
+          "placeholder": "Public Key eingeben"
+        },
+        "title": "Gib die Daten ein",
+        "tos": "Mit dem Klick auf „Registrieren“ erklärst du, die <0>Nutzungsbedingungen</0> gelesen und akzeptiert zu haben."
+      }
+    },
+    "subtitle": "Gib die erforderlichen Daten ein, um die sichere Integration der Verwaltungssoftware deines Unternehmens zu aktivieren.",
+    "title": "Öffentlichen Schlüssel registrieren"
+  },
+  "publicKeys": {
+    "empty-state": "Noch kein öffentlicher Schlüssel. Registriere einen öffentlichen Schlüssel, um die Integration zu ermöglichen.",
+    "issuer": "Issuer",
+    "kid": "Kid",
+    "new-key-button": "Öffentlichen Schlüssel registrieren",
+    "personal-key": "Persönlicher Schlüssel",
+    "table": {
+      "endDate": "Ablauf",
+      "name": "Name",
+      "status": "Status",
+      "value": "Wert"
+    },
+    "title": "Öffentlicher Schlüssel",
+    "view-subtitle": "Kopiere die Codes, die du benötigst.",
+    "view-title": "Code anzeigen"
+  },
+  "rotate-public-key-button": "Neuen Schlüssel rotieren und registrieren",
+  "rotate-virtual-key-button": "Rotieren",
+  "status": {
+    "active": "Aktiv",
+    "blocked": "Gesperrt",
+    "disabled": "Deaktiviert",
+    "enabled": "Aktiv",
+    "rotated": "Rotiert"
+  },
+  "subTitle": "Generiere und verwalte die Schlüssel, um eine sichere Integration zwischen den Verwaltungssystemen deines Unternehmens und SEND zu ermöglichen.",
+  "title": "API-Integration",
+  "tooltip": {
+    "blocked": "Gesperrt",
+    "blocked-in": "Gesperrt am",
+    "created": "Erstellt",
+    "created-in": "Erstellt am",
+    "enabled": "Aktiviert",
+    "enabled-in": "Aktiviert am",
+    "from": "Ab",
+    "rotated": "Rotiert",
+    "rotated-in": "Rotiert am"
+  },
+  "virtualKeys": {
+    "default": "Schlüssel-",
+    "empty-state": "Für dein Unternehmen wurde noch kein persönlicher Schlüssel generiert.",
+    "new-key-button": "Persönlichen Schlüssel generieren",
+    "not-enabled-empty-state": "Um einen persönlichen Schlüssel erstellen zu können, muss ein Administrator zuerst die Integration aktivieren.",
+    "personal-key": "Persönlicher Schlüssel",
+    "table": {
+      "lastUpdate": "Letzte Änderung",
+      "name": "Name",
+      "personal": "Du",
+      "status": "Status",
+      "value": "Wert"
+    },
+    "title": "Persönlicher Schlüssel",
+    "understood-button": "OK, verstanden",
+    "view-subtitle": "Du kannst sie verwenden, um dich auf der Plattform zu authentifizieren und SEND zu integrieren. Du kannst deinen persönlichen Schlüssel jederzeit im Bereich „API-Integration“ kopieren.",
+    "view-title": "Dein persönlicher Schlüssel"
+  }
+}
