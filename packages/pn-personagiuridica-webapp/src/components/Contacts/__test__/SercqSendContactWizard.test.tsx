@@ -26,6 +26,7 @@ describe('SercqSendContactWizard', () => {
   beforeEach(() => {
     mock.reset();
     vi.restoreAllMocks();
+    goToStep.mockClear();
   });
 
   afterAll(() => {

@@ -184,6 +184,7 @@
     "fallback-notification": "Dettaglio notifica",
     "groups": "Gruppi",
     "integrazione-api": "Integrazione API",
+    "new-notifications": "Nuove notifiche da leggere",
     "notifiche": "In arrivo",
     "notifiche-delegato": "In arrivo dalle deleghe",
     "notifiche-impresa": "In arrivo per {{organization}}",
