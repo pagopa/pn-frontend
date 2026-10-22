@@ -234,7 +234,7 @@
   },
   "status": {
     "accepted": "Notifica pronta per l’invio",
-    "accepted-description": "La notifica a valore legale ha superato le verifiche di conformità. Puoi effettuare il <0>download dell’attestazione</0>.",
+    "accepted-description": "La notifica a valore legale ha superato le verifiche di conformità ed è stata depositata sulla piattaforma. Puoi effettuare il <0>download dell’attestazione</0>.",
     "canceled": "Notifica annullata",
     "canceled-description": "L'ente ha annullato l'invio della notifica SEND, che dall'annullamento in poi non produrrà più effetti giuridici. È possibile effettuare il <0>download della dichiarazione di annullamento</0>.",
     "delivered": "Nuova notifica ricevuta",
