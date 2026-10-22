@@ -1,6 +1,10 @@
 import { uniqWith } from 'lodash-es';
 
-import { PaymentDetails, PaymentStatus } from '../models/NotificationDetail';
+import {
+  ExtRegistriesPaymentDetails,
+  PaymentDetails,
+  PaymentStatus,
+} from '../models/NotificationDetail';
 import { PaymentCache, paymentCacheSchema } from '../models/PaymentCache';
 
 export const PAYMENT_CACHE_KEY = 'payments';
@@ -155,4 +159,18 @@ export const checkIfPaymentsIsAlreadyInCache = (
         cachedPayment.pagoPa?.creditorTaxId === paymentInfo.creditorTaxId
     )
   );
+};
+
+export const setInformalPaymentsInCache = (
+  paymentInfo: Array<ExtRegistriesPaymentDetails>,
+  iun: string
+) => {
+  const payments: Array<PaymentDetails> = paymentInfo.map((info) => ({
+    pagoPa: {
+      ...info,
+      applyCost: false,
+    },
+  }));
+
+  setPaymentsInCache(payments, iun);
 };
