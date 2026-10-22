@@ -27,7 +27,6 @@
     ]
   },
   "resolutions": {
-    "**/tsconfig-paths": "^4.1.2",
-    "@types/parse-path": "7.0.3"
+    "**/tsconfig-paths": "^4.1.2"
   }
 }
