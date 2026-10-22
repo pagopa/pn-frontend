@@ -74,6 +74,8 @@ const userSlice = createSlice({
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       const user = action.payload;
 
+      // PT users are redirected to the partner portal: we don't save them in the session storage
+      // nor in redux, so that no API is called with their token. Loading is kept to true until the redirect
       if (user.organization.institutionType === InstitutionType.PT) {
         return;
       }
