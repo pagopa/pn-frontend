@@ -250,7 +250,11 @@ describe('PecStep - Mixpanel events', () => {
     const { getByRole } = render(<PecStep {...props} />);
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'digital-contact.edit-email-aria-label',
+        })
+      );
     });
 
     expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -268,7 +272,11 @@ describe('PecStep - Mixpanel events', () => {
     const { getByRole } = render(<PecStep {...props} />);
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'digital-contact.edit-email-aria-label',
+        })
+      );
     });
 
     await act(async () => {

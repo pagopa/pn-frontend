@@ -193,7 +193,7 @@ describe('DigitalContact Component', () => {
 
   it('renders component - filled', () => {
     // render component
-    const { container } = render(
+    const { container, queryByRole } = render(
       <DigitalContact
         label="Mocked label"
         value="mocked@pec.it"
@@ -204,6 +204,7 @@ describe('DigitalContact Component', () => {
         insertButtonLabel="Button"
         onSubmit={mockSubmitCbk}
         onDelete={mockDeleteCbk}
+        showVerifiedIcon={false}
       />
     );
     const label = queryById(container, 'default_pec-label');
@@ -215,6 +216,11 @@ describe('DigitalContact Component', () => {
     expect(buttons).toHaveLength(2);
     expect(buttons[0]).toHaveTextContent('button.modifica');
     expect(buttons[1]).toHaveTextContent('button.elimina');
+    expect(
+      queryByRole('img', {
+        name: 'digital-contact.verified-aria-label',
+      })
+    ).not.toBeInTheDocument();
   });
 
   it('renders component - filled with verified icon', () => {
@@ -234,8 +240,119 @@ describe('DigitalContact Component', () => {
       />
     );
 
-    const verifiedIcon = result.getByTestId('CheckCircleRoundedIcon');
+    const verifiedIcon = result.getByRole('img', {
+      name: 'digital-contact.verified-aria-label',
+    });
+
     expect(verifiedIcon).toBeInTheDocument();
+    expect(verifiedIcon).not.toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it.each([
+    {
+      channelType: ChannelType.EMAIL,
+      value: 'mocked@email.it',
+      accessibleName: 'digital-contact.edit-email-aria-label',
+    },
+    {
+      channelType: ChannelType.SMS,
+      value: '3331234567',
+      accessibleName: 'digital-contact.edit-sms-aria-label',
+    },
+    {
+      channelType: ChannelType.PEC,
+      value: 'mocked@pec.it',
+      accessibleName: 'digital-contact.edit-pec-aria-label',
+    },
+  ])(
+    'renders the contextual edit button for $channelType',
+    ({ channelType, value, accessibleName }) => {
+      const { getByRole, getByTestId } = render(
+        <DigitalContact
+          label="Mocked label"
+          value={value}
+          channelType={channelType}
+          inputProps={{
+            label: 'Mocked input label',
+          }}
+          insertButtonLabel="Button"
+          onSubmit={mockSubmitCbk}
+          onDelete={mockDeleteCbk}
+        />
+      );
+
+      const editButton = getByRole('button', {
+        name: accessibleName,
+      });
+
+      expect(editButton).toHaveTextContent('button.modifica');
+
+      const editIcon = getByTestId('CreateRoundedIcon');
+
+      expect(editButton).toContainElement(editIcon);
+      expect(editIcon).toHaveAttribute('aria-hidden', 'true');
+    }
+  );
+
+  it('does not expose the verified icon in edit mode', async () => {
+    const { getByRole, queryByRole } = render(
+      <DigitalContact
+        label="Mocked label"
+        value="mocked@pec.it"
+        channelType={ChannelType.PEC}
+        inputProps={{
+          label: 'Mocked input label',
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+        showVerifiedIcon
+      />
+    );
+
+    expect(
+      getByRole('img', {
+        name: 'digital-contact.verified-aria-label',
+      })
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      getByRole('button', {
+        name: 'digital-contact.edit-pec-aria-label',
+      })
+    );
+
+    expect(getByRole('textbox', { name: 'Mocked input label' })).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(
+        queryByRole('img', {
+          name: 'digital-contact.verified-aria-label',
+        })
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('preserves the visible edit label for unmapped channel SERCQ_SEND', () => {
+    const { getByRole } = render(
+      <DigitalContact
+        label="Mocked label"
+        value="Mocked contact value"
+        channelType={ChannelType.SERCQ_SEND}
+        inputProps={{
+          label: 'Mocked input label',
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+      />
+    );
+
+    const editButton = getByRole('button', {
+      name: 'button.modifica',
+    });
+
+    expect(editButton).toHaveTextContent('button.modifica');
+    expect(editButton).not.toHaveAttribute('aria-label');
   });
 
   it('edit value', async () => {

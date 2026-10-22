@@ -120,6 +120,11 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     });
 
     const semanticTextFieldProps = getSemanticTextFieldProps(channelType);
+    const editButtonAriaLabels: Partial<Record<ChannelType, string>> = {
+      [ChannelType.EMAIL]: t('digital-contact.edit-email-aria-label', { ns: 'recapiti' }),
+      [ChannelType.SMS]: t('digital-contact.edit-sms-aria-label', { ns: 'recapiti' }),
+      [ChannelType.PEC]: t('digital-contact.edit-pec-aria-label', { ns: 'recapiti' }),
+    };
 
     const handleChangeTouched = async (e: ChangeEvent) => {
       formik.handleChange(e);
@@ -307,7 +312,12 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 {value}
               </Typography>
               {showVerifiedIcon && (
-                <CheckCircleRoundedIcon sx={{ ml: 1 }} fontSize="small" color="success" />
+                <CheckCircleRoundedIcon
+                  sx={{ ml: 1 }}
+                  fontSize="small"
+                  color="success"
+                  titleAccess={t('digital-contact.verified-aria-label', { ns: 'recapiti' })}
+                />
               )}
             </Stack>
             <Stack
@@ -323,6 +333,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 startIcon={<CreateRoundedIcon />}
                 sx={{ justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}
+                aria-label={editButtonAriaLabels[channelType]}
                 variant="text"
               >
                 {t('button.modifica')}
