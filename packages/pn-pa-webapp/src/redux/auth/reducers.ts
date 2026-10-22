@@ -1,4 +1,9 @@
-import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
+import {
+  ConsentType,
+  InstitutionType,
+  basicInitialUserData,
+  basicNoLoggedUserData,
+} from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
@@ -69,6 +74,9 @@ const userSlice = createSlice({
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       const user = action.payload;
 
+      if (user.organization.institutionType === InstitutionType.PT) {
+        return;
+      }
       sessionStorage.setItem('user', JSON.stringify(user));
       state.user = user;
       state.loading = false;

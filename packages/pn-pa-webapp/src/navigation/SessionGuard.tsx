@@ -42,7 +42,6 @@ const SessionGuard = () => {
     title: '',
     message: '',
   });
-  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const spidToken = new URLSearchParams(location.hash.substring(1)).get('selfCareToken'); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
 
@@ -51,8 +50,6 @@ const SessionGuard = () => {
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
       if (user.organization.institutionType === InstitutionType.PT) {
-        setIsRedirecting(true);
-        dispatch(resetState());
         goToPartnerPortal(user.sessionToken);
         return;
       }
@@ -127,7 +124,7 @@ const SessionGuard = () => {
 
   return (
     <>
-      {loading || isRedirecting ? (
+      {loading ? (
         <LoadingPage renderType="whole" />
       ) : (
         <>
