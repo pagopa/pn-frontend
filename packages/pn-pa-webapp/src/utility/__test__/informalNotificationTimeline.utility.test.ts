@@ -52,7 +52,7 @@ describe('informalNotificationTimeline utility', () => {
     ]);
   });
 
-  it('adds the SEND group only in the processing status, starting it with the filed row', () => {
+  it('adds the SEND group only in the processing status, ending it with the filed row', () => {
     const steps = getInformalTimelineSteps(processingStatus.steps, status);
     const sendStep = steps.find((step) => step.channel === BffNotificationChannelType.Send)!;
 
@@ -115,7 +115,7 @@ describe('informalNotificationTimeline utility', () => {
     expect(ioFeedback.tag).toBeUndefined();
   });
 
-  it('tags the reading on IO and the reading from web after the filed row', () => {
+  it('tags the reading on IO and the reading from web before the filed row', () => {
     expect(
       getInformalTimelineEvents(
         { channel: BffNotificationChannelType.Io, events: [viewedEvent] },
@@ -141,8 +141,8 @@ describe('informalNotificationTimeline utility', () => {
         '2026-09-21T13:59:18Z'
       ).map(({ key, tag }) => ({ key, tag }))
     ).toEqual([
-      { key: 'filed.send', tag: undefined },
       { key: 'informal_notification_viewed.send', tag: 'VIEWED' },
+      { key: 'filed.send', tag: undefined },
     ]);
   });
 
