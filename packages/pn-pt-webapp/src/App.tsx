@@ -1,9 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { initLocalization, initLocalizationExists } from '@pagopa-pn/pn-commons';
+import DnsOutlinedIcon from '@mui/icons-material/DnsOutlined';
+import {
+  Layout,
+  SideMenu,
+  SideMenuItem,
+  initLocalization,
+  initLocalizationExists,
+} from '@pagopa-pn/pn-commons';
+import { JwtUser, ProductEntity } from '@pagopa/mui-italia';
 
+import { institutionsDTO } from './__mocks__/User.mock';
 import Router from './navigation/routes';
+import * as routes from './navigation/routes.const';
+import { getConfiguration } from './services/configuration.service';
+import { selfcareMenuItems } from './utility/menu.utility';
+
+// MOCKED DATA (waiting for APIs)
+const loggedUser: JwtUser = {
+  id: '1',
+  name: 'Partner',
+  surname: 'Tecnologico',
+  email: 'test@partner-tecnologico.it',
+};
+
+const PRODUCT_ID = 'prod-pn-pt';
+
+const getProductsList = (t: (key: string) => string): Array<ProductEntity> => [
+  {
+    id: 'selfcare',
+    title: t('header.reserved-area'),
+    productUrl: '',
+    linkType: 'external',
+  },
+  {
+    id: PRODUCT_ID,
+    title: t('header.notification-platform'),
+    productUrl: '',
+    linkType: 'internal',
+  },
+];
 
 const App = () => {
   const { t, i18n } = useTranslation(['common']);
@@ -18,7 +55,61 @@ const App = () => {
     }
   }, [isInitialized]);
 
-  return isInitialized ? <Router /> : <div />;
+  return isInitialized ? <ActualApp /> : <div />;
+};
+
+const ActualApp = () => {
+  const { t, i18n } = useTranslation(['common']);
+  const { ACCESSIBILITY_LINK, SERCQ_SERVICE_STATEMENT_LINK, PAGOPA_HELP_EMAIL } =
+    getConfiguration();
+
+  const menuItems: Array<SideMenuItem> = useMemo(
+    () => [{ label: t('menu.institutions'), icon: DnsOutlinedIcon, route: routes.HOME }],
+    [i18n.language]
+  );
+
+  const selfCareItems: Array<SideMenuItem> = useMemo(
+    () =>
+      selfcareMenuItems(institutionsDTO.id, i18n.language).map((item) => ({
+        ...item,
+        label: t(item.label),
+      })),
+    [i18n.language]
+  );
+
+  const productsList = useMemo(() => getProductsList(t), [i18n.language]);
+
+  const handleAssistanceClick = () => {
+    /* eslint-disable-next-line functional/immutable-data */
+    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
+
+  // TODO: call the logout API once available
+  const handleLogout = () => {};
+
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
+  return (
+    <Layout
+      onExitAction={handleLogout}
+      sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfCareItems} />}
+      productsList={productsList}
+      productId={PRODUCT_ID}
+      partyId={institutionsDTO.id}
+      partyList={[institutionsDTO]}
+      loggedUser={loggedUser}
+      currentLanguage={i18n.language}
+      onLanguageChanged={changeLanguageHandler}
+      onAssistanceClick={handleAssistanceClick}
+      isLogged
+      accessibilityLink={ACCESSIBILITY_LINK}
+      sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
+    >
+      <Router />
+    </Layout>
+  );
 };
 
 export default App;

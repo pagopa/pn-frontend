@@ -1,5 +1,41 @@
 {
+  "footer": {
+    "321-model": "Modello 231",
+    "accessibility": "Accessibilità",
+    "certifications": "Certificazioni",
+    "company": "Società trasparente",
+    "cookie": "Preferenze Cookie",
+    "disclosure": "Responsible Disclosure Policy",
+    "follow": "Seguici su",
+    "go-to": "Vai al link",
+    "go-to-pagopa": "Vai al sito di PagoPA S.p.A.",
+    "legal-part-1": "società per azioni - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009",
+    "personal-data": "Diritto alla protezione dei dati personali",
+    "privacy-info": "Informativa Privacy",
+    "resources": "Risorse",
+    "security": "Sicurezza delle informazioni",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Vai al sito {{social}} di PagoPA S.p.A.",
+    "terms-conditions": "Termini e Condizioni",
+    "who": "Chi siamo",
+    "work": "Lavora con noi"
+  },
+  "header": {
+    "assistance": "Assistenza",
+    "login": "Accedi",
+    "logout": "Esci",
+    "notification-platform": "SEND - Servizio Notifiche Digitali",
+    "pago-pa-link": "Sito di PagoPA S.p.A.",
+    "reserved-area": "Area Riservata"
+  },
   "home": {
+    "subtitle": "Benvenuto nel portale di SEND dedicato ai Partner Tecnologici.",
     "title": "SEND - Partner Tecnologici"
+  },
+  "menu": {
+    "groups": "Gruppi",
+    "institutions": "I tuoi enti",
+    "users": "Utenti"
   }
 }

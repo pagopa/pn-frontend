@@ -1,13 +1,19 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import { TitleBox } from '@pagopa-pn/pn-commons';
 
 const Home: React.FC = () => {
   const { t } = useTranslation(['common']);
 
   return (
     <Box p={3} data-testid="homePage">
-      <Typography variant="h4">{t('home.title')}</Typography>
+      <TitleBox
+        title={t('home.title')}
+        subTitle={t('home.subtitle')}
+        variantTitle="h4"
+        variantSubTitle="body1"
+      />
     </Box>
   );
 };
