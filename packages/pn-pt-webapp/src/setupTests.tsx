@@ -22,6 +22,10 @@ console.warn = (...args) => {
 beforeAll(() => {
   Configuration.setForTest<PtConfiguration>({
     API_BASE_URL: 'https://mock-api-base-url/',
+    PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
+    ACCESSIBILITY_LINK: 'https://accessibility-link.it',
+    SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
+    SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
   });
   // mock translations
   vi.mock('react-i18next', () => ({

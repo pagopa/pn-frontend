@@ -3,12 +3,23 @@ import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface PtConfiguration {
   API_BASE_URL: string;
+  PAGOPA_HELP_EMAIL: string;
+  ACCESSIBILITY_LINK: string;
+  SERCQ_SERVICE_STATEMENT_LINK: string;
+  SELFCARE_BASE_URL: string;
 }
 
 class PtConfigurationValidator extends Validator<PtConfiguration> {
   constructor() {
     super();
     this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
+    this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
+    this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('SELFCARE_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
   }
 }
 
