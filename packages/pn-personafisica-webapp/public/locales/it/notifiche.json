@@ -190,6 +190,9 @@
         "sender-ack": "notifica presa in carico"
       },
       "notification-cancelled-document": "Dichiarazione annullamento notifica",
+      "pec-address-source-general": "L’indirizzo PEC figura nei registri pubblici",
+      "pec-address-source-special": "L’indirizzo PEC è stato registrato come canale di contatto dall’ente mittente",
+      "pec-address-source-platform": "L’indirizzo PEC è stato inserito come recapito su SEND",
       "prepare-analog-domicile-failure": "Aggiornamento sull'invio cartaceo",
       "prepare-analog-domicile-failure-D00-description": "Non è stato trovato nessun nuovo indirizzo per predisporre un altro tentativo di invio.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Non è stato trovato nessun nuovo indirizzo per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio.",

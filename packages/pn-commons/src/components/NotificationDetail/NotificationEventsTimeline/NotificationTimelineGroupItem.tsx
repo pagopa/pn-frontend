@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
@@ -61,7 +61,10 @@ const NotificationTimelineGroupItem = ({
     group.category === NotificationTimelineGroupCategory.DIGITAL &&
     group.channel === TimelineEventsChannel.PEC;
 
-  const pecSections = isPecGroup ? buildPecTimelineSections(group.events) : [];
+  const pecSections = useMemo(
+    () => (isPecGroup ? buildPecTimelineSections(group.events) : []),
+    [isPecGroup, group.events]
+  );
 
   const renderEvent = (event: NotificationTimelineEvent) => (
     <NotificationTimelineEventItem
@@ -92,7 +95,7 @@ const NotificationTimelineGroupItem = ({
       return (
         <Box
           component="li"
-          key={`address-${section.address}`}
+          key={`address-${section.address}-${section.source ?? 'unknown'}`}
           sx={{ listStyleType: 'disc' }}
           data-testid="timeline-pec-address-group"
         >

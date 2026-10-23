@@ -128,17 +128,18 @@ describe('NotificationTimelineGroupItem', () => {
   });
 
   describe('PEC timeline sections', () => {
-    it('renders events of the same PEC address in one address group', () => {
+    it('renders events with the same PEC address and source in one group', () => {
       const first = createPecEvent(
         'SEND_DIGITAL_DOMICILE',
         TimelineCategory.SEND_DIGITAL_DOMICILE,
-        'first@pec.it',
+        'recipient@example.test',
         'SPECIAL'
       );
       const second = createPecEvent(
         'SEND_DIGITAL_FEEDBACK',
         TimelineCategory.SEND_DIGITAL_FEEDBACK,
-        'first@pec.it'
+        'recipient@example.test',
+        'SPECIAL'
       );
 
       const { getByTestId, getAllByTestId } = renderGroup(createPecGroup([first, second]));
@@ -147,9 +148,81 @@ describe('NotificationTimelineGroupItem', () => {
 
       const addressGroup = getByTestId('timeline-pec-address-group');
 
-      expect(addressGroup).toHaveTextContent('first@pec.it');
+      expect(addressGroup).toHaveTextContent('recipient@example.test');
       expect(within(addressGroup).getAllByTestId('timeline-event')).toHaveLength(2);
       expect(getAllByTestId('timeline-pec-address-group')).toHaveLength(1);
+    });
+
+    it('renders separate PEC groups for the same address with different sources', () => {
+      const address = 'recipient@example.test';
+
+      const specialFeedback = createPecEvent(
+        'SPECIAL_FEEDBACK',
+        TimelineCategory.SEND_DIGITAL_FEEDBACK,
+        address,
+        'SPECIAL'
+      );
+      const specialProgress = createPecEvent(
+        'SPECIAL_PROGRESS',
+        TimelineCategory.SEND_DIGITAL_PROGRESS,
+        address,
+        'SPECIAL'
+      );
+      const specialDomicile = createPecEvent(
+        'SPECIAL_DOMICILE',
+        TimelineCategory.SEND_DIGITAL_DOMICILE,
+        address,
+        'SPECIAL'
+      );
+
+      const platformFeedback = createPecEvent(
+        'PLATFORM_FEEDBACK',
+        TimelineCategory.SEND_DIGITAL_FEEDBACK,
+        address,
+        'PLATFORM'
+      );
+      const platformProgress = createPecEvent(
+        'PLATFORM_PROGRESS',
+        TimelineCategory.SEND_DIGITAL_PROGRESS,
+        address,
+        'PLATFORM'
+      );
+      const platformDomicile = createPecEvent(
+        'PLATFORM_DOMICILE',
+        TimelineCategory.SEND_DIGITAL_DOMICILE,
+        address,
+        'PLATFORM'
+      );
+
+      const { getByTestId, getAllByTestId } = renderGroup(
+        createPecGroup([
+          specialFeedback,
+          specialProgress,
+          specialDomicile,
+          platformFeedback,
+          platformProgress,
+          platformDomicile,
+        ])
+      );
+
+      fireEvent.click(getByTestId('timeline-group-header'));
+
+      const addressGroups = getAllByTestId('timeline-pec-address-group');
+
+      expect(addressGroups).toHaveLength(2);
+
+      expect(addressGroups[0]).toHaveTextContent(address);
+      expect(addressGroups[1]).toHaveTextContent(address);
+
+      expect(within(addressGroups[0]).getAllByTestId('timeline-event')).toHaveLength(2);
+      expect(within(addressGroups[1]).getAllByTestId('timeline-event')).toHaveLength(2);
+
+      expect(
+        within(addressGroups[0]).getByTestId('timeline-pec-source-description')
+      ).toHaveTextContent('detail.timeline.pec-address-source-special');
+      expect(
+        within(addressGroups[1]).getByTestId('timeline-pec-source-description')
+      ).toHaveTextContent('detail.timeline.pec-address-source-platform');
     });
 
     it('renders different PEC addresses in separate groups', () => {

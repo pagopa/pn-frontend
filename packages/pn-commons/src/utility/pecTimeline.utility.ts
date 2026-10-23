@@ -43,60 +43,52 @@ const getPecEventAddress = (event: NotificationTimelineEvent): string | null => 
 };
 
 /**
- * Resolves the source associated with a PEC address.
- * If events for the same address report different valid sources,
- * the first valid source in timeline order takes precedence.
- */
-const resolvePecAddressSource = (
-  events: Array<NotificationTimelineEvent>,
-  address: string
-): DigitalSource | null =>
-  events
-    .filter((event) => getPecEventAddress(event) === address)
-    .map((event) =>
-      resolveTimelineDigitalAddressSource({
-        digitalAddressSource: getPecEventDetails(event)?.digitalAddressSource,
-        elementId: event.elementId,
-      })
-    )
-    .find((source) => source !== null) ?? null;
-
-/**
- * Groups PEC events by digital address within a single delivery attempt.
- * General workflow events remain outside address sections.
+ * Groups PEC events by address and source within a single digital delivery attempt.
+ * Events with the same address but different sources belong to separate sections.
+ * Events without a known source are grouped separately from those with a known source.
  *
- * The original event objects and their relative order within each address
- * are preserved.
+ * General workflow events remain outside PEC address sections.
+ * Input events are not modified, and their relative order within each section is preserved.
  */
+/* eslint-disable functional/immutable-data -- Local mutations are used to build PEC sections in a single pass without mutating input events. */
 export const buildPecTimelineSections = (
   events: Array<NotificationTimelineEvent>
-): Array<PecTimelineSection> =>
-  events.reduce<Array<PecTimelineSection>>((sections, event) => {
+): Array<PecTimelineSection> => {
+  const sections: Array<PecTimelineSection> = [];
+  const addressSections = new Map<string, Extract<PecTimelineSection, { kind: 'address' }>>();
+
+  for (const event of events) {
     const address = getPecEventAddress(event);
 
     if (!address) {
-      return [...sections, { kind: 'general', event }];
+      sections.push({ kind: 'general', event });
+      continue;
     }
 
-    const existingIndex = sections.findIndex(
-      (section) => section.kind === 'address' && section.address === address
-    );
+    const source = resolveTimelineDigitalAddressSource({
+      digitalAddressSource: getPecEventDetails(event)?.digitalAddressSource,
+      elementId: event.elementId,
+    });
 
-    if (existingIndex === -1) {
-      return [
-        ...sections,
-        {
-          kind: 'address',
-          address,
-          source: resolvePecAddressSource(events, address),
-          events: [event],
-        },
-      ];
+    const groupKey = JSON.stringify([address, source]);
+    const existingSection = addressSections.get(groupKey);
+
+    if (existingSection) {
+      existingSection.events.push(event);
+      continue;
     }
 
-    return sections.map((section, index) =>
-      index === existingIndex && section.kind === 'address'
-        ? { ...section, events: [...section.events, event] }
-        : section
-    );
-  }, []);
+    const section: Extract<PecTimelineSection, { kind: 'address' }> = {
+      kind: 'address',
+      address,
+      source,
+      events: [event],
+    };
+
+    sections.push(section);
+    addressSections.set(groupKey, section);
+  }
+
+  return sections;
+};
+/* eslint-enable functional/immutable-data */

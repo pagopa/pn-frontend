@@ -11,6 +11,7 @@ import {
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
+import notifications from '../../../public/locales/it/notifiche.json';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { NotificationTimelineResponse } from '../../__mocks__/NotificationTimeline.mock';
@@ -39,6 +40,16 @@ vi.mock('../../services/configuration.service', async () => {
       IS_NEW_TIMELINE_COPY_ENABLED: mockIsNewTimelineCopyEnabledGetter() ?? false,
     }),
   };
+});
+
+describe('PEC timeline translations', () => {
+  it.each([
+    'pec-address-source-general',
+    'pec-address-source-special',
+    'pec-address-source-platform',
+  ])('has the %s key in the base translations', (key) => {
+    expect(Object.prototype.hasOwnProperty.call(notifications.detail.timeline, key)).toBe(true);
+  });
 });
 
 describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
