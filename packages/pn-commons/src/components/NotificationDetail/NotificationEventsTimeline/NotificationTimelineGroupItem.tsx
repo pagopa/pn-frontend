@@ -9,8 +9,12 @@ import { LegalFactId, NotificationDetailRecipient } from '../../../models/Notifi
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroup,
+  NotificationTimelineGroupCategory,
+  TimelineEventsChannel,
 } from '../../../models/NotificationTimeline';
+import { DigitalSource } from '../../../utility';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
+import { buildPecTimelineSections } from '../../../utility/pecTimeline.utility';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import { getTimelineGroupHeader } from './timelineGroupHeader.config';
 
@@ -25,6 +29,12 @@ type Props = {
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
   delegatorName?: string;
+};
+
+const PEC_SOURCE_LABEL_KEYS: Record<DigitalSource, string> = {
+  [DigitalSource.PLATFORM]: 'detail.timeline.pec-address-source-platform',
+  [DigitalSource.SENDER]: 'detail.timeline.pec-address-source-special',
+  [DigitalSource.REGISTRY]: 'detail.timeline.pec-address-source-general',
 };
 
 const NotificationTimelineGroupItem = ({
@@ -46,6 +56,83 @@ const NotificationTimelineGroupItem = ({
   const panelId = `timeline-group-panel-${generatedId}`;
   const { channel, icon: ChannelIcon, detail } = getTimelineGroupHeader(group, hasMultipleAttempts);
   const headerLabel = detail ? `${channel} · ${detail}` : channel;
+
+  const isPecGroup =
+    group.category === NotificationTimelineGroupCategory.DIGITAL &&
+    group.channel === TimelineEventsChannel.PEC;
+
+  const pecSections = isPecGroup ? buildPecTimelineSections(group.events) : [];
+
+  const renderEvent = (event: NotificationTimelineEvent) => (
+    <NotificationTimelineEventItem
+      key={event.elementId}
+      event={event}
+      allEvents={allEvents}
+      recipients={recipients}
+      clickHandler={clickHandler}
+      disableDownloads={disableDownloads}
+      language={language}
+      insideAGroup
+      isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+      perfectionLink={perfectionLink}
+      delegatorName={delegatorName}
+    />
+  );
+
+  const renderPecSections = () =>
+    pecSections.map((section) => {
+      if (section.kind === 'general') {
+        return renderEvent(section.event);
+      }
+
+      const sourceDescription = section.source
+        ? getLocalizedOrDefaultLabel('notifications', PEC_SOURCE_LABEL_KEYS[section.source])
+        : null;
+
+      return (
+        <Box
+          component="li"
+          key={`address-${section.address}`}
+          sx={{ listStyleType: 'disc' }}
+          data-testid="timeline-pec-address-group"
+        >
+          <Typography
+            component="span"
+            variant="body2"
+            fontWeight={600}
+            sx={{ overflowWrap: 'anywhere' }}
+          >
+            {getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.timeline.send-digital-domicile-PEC-group-label'
+            )}{' '}
+            · {section.address}
+          </Typography>
+
+          {sourceDescription && (
+            <Typography
+              component="p"
+              variant="body2"
+              color="text.secondary"
+              data-testid="timeline-pec-source-description"
+            >
+              {sourceDescription}
+            </Typography>
+          )}
+
+          <Box
+            component="ul"
+            sx={{
+              listStyleType: 'circle',
+              pl: 3,
+              display: 'grid',
+            }}
+          >
+            {section.events.map(renderEvent)}
+          </Box>
+        </Box>
+      );
+    });
 
   return (
     <Box width="100%" data-testid="timeline-group">
@@ -116,21 +203,7 @@ const NotificationTimelineGroupItem = ({
             rowGap: 1,
           }}
         >
-          {group.events.map((event) => (
-            <NotificationTimelineEventItem
-              key={event.elementId}
-              event={event}
-              allEvents={allEvents}
-              recipients={recipients}
-              clickHandler={clickHandler}
-              disableDownloads={disableDownloads}
-              language={language}
-              insideAGroup
-              isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-              perfectionLink={perfectionLink}
-              delegatorName={delegatorName}
-            />
-          ))}
+          {isPecGroup ? renderPecSections() : group.events.map(renderEvent)}
         </Box>
       </Collapse>
     </Box>
