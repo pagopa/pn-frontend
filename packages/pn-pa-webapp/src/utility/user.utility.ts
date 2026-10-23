@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { basicUserDataMatcherContents, dataRegex } from '@pagopa-pn/pn-commons';
+import { InstitutionType, basicUserDataMatcherContents, dataRegex } from '@pagopa-pn/pn-commons';
 
 import { Organization, PNRole, PartyRole, Role } from '../models/user';
 
@@ -26,6 +26,10 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
     })
     .notRequired(),
   ipaCode: yup.string().notRequired(),
+  institutionType: yup
+    .mixed<InstitutionType.PA | InstitutionType.PT>()
+    .oneOf([InstitutionType.PA, InstitutionType.PT])
+    .notRequired(),
 });
 
 const isSupportOrganization = (organization: Organization) =>
