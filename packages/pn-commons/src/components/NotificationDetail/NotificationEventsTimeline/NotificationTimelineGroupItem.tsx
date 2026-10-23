@@ -12,7 +12,7 @@ import {
   NotificationTimelineGroupCategory,
   TimelineEventsChannel,
 } from '../../../models/NotificationTimeline';
-import { DigitalSource } from '../../../utility';
+import { DigitalSource } from '../../../utility/StatusHistory/types';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import { buildPecTimelineSections } from '../../../utility/pecTimeline.utility';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
