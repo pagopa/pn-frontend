@@ -563,7 +563,8 @@
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "open": "Apri",
-    "status": "Stato"
+    "status": "Stato",
+    "to-read": "Da leggere"
   },
   "tppLanding": {
     "access-button": "Accedi ai documenti",

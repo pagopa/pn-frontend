@@ -1,5 +1,6 @@
+import Circle from '@mui/icons-material/Circle';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
@@ -20,13 +21,15 @@ import {
 
 const NewNotificationBadge: React.FC<{ isNew: boolean }> = ({ isNew }) =>
   isNew ? (
-    <Box
+    <Circle
       data-testid="new-notification-badge"
+      role="img"
+      aria-hidden={false}
+      aria-label={getLocalizedOrDefaultLabel('notifications', 'table.to-read')}
       sx={{
         width: 8,
         height: 8,
-        borderRadius: '50%',
-        bgcolor: 'primary.main',
+        color: 'primary.main',
         flexShrink: 0,
         mr: 1,
       }}
