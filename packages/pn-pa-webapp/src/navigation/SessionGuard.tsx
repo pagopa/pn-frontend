@@ -50,7 +50,7 @@ const SessionGuard = () => {
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
       if (user.organization.institutionType === InstitutionType.PT) {
-        goToPartnerPortal(user.sessionToken);
+        goToPartnerPortal(token);
         return;
       }
       sessionCheck(user.desired_exp);
