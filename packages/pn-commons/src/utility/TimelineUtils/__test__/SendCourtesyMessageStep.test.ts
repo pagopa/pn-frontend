@@ -10,7 +10,7 @@ describe('SendCourtesyMessageStep', () => {
 
   it.each([
     { type: DigitalDomicileType.APPIO, expectedType: 'app IO' },
-    { type: DigitalDomicileType.SMS, expectedType: 'sms' },
+    { type: DigitalDomicileType.SMS, expectedType: 'SMS' },
     { type: DigitalDomicileType.EMAIL, expectedType: 'email' },
     { type: DigitalDomicileType.TPP, expectedType: 'notifiche - detail.timeline.tpp-type' },
   ])('test getTimelineStepInfo $type', ({ type, expectedType }) => {
