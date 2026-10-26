@@ -22,3 +22,9 @@ export interface ConsentUser {
   isFirstAccept: boolean;
   consentVersion: string;
 }
+
+export enum InstitutionType {
+  PA = 'PA',
+  PG = 'PG',
+  PT = 'PT',
+}
