@@ -549,7 +549,8 @@
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "open": "Apri",
-    "status": "Stato"
+    "status": "Stato",
+    "to-read": "Da leggere"
   },
   "title": "In arrivo per {{organization}}",
   "title-delegated-notifications": "In arrivo dalle deleghe"
