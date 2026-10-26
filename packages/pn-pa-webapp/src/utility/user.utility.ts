@@ -26,10 +26,7 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
     })
     .notRequired(),
   ipaCode: yup.string().notRequired(),
-  institutionType: yup
-    .mixed<InstitutionType.PA | InstitutionType.PT>()
-    .oneOf([InstitutionType.PA, InstitutionType.PT])
-    .notRequired(),
+  institutionType: yup.mixed<InstitutionType.PA>().oneOf([InstitutionType.PA]).notRequired(),
 });
 
 const isSupportOrganization = (organization: Organization) =>
