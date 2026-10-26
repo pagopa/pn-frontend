@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import App from '../App';
 import { institutionsDTO } from '../__mocks__/User.mock';
-import { GROUPS, USERS } from '../navigation/routes.const';
+import { GROUPS, HOME, USERS } from '../navigation/routes.const';
 import { fireEvent, render, screen, within } from './test-utils';
 
 describe('App', () => {
@@ -34,5 +34,14 @@ describe('App', () => {
     fireEvent.click(screen.getByTestId('sideMenuItem-menu.groups'));
     expect(windowOpenSpy).toHaveBeenCalledWith(GROUPS(institutionsDTO.id, 'it'));
     windowOpenSpy.mockRestore();
+  });
+
+  it('renders the not found page for an unknown route and goes back to home', () => {
+    const { router } = render(<App />, { route: '/unknown-route' });
+    expect(screen.getByTestId('not-found')).toBeInTheDocument();
+    expect(screen.queryByTestId('institutionsPage')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('not-found-back-button'));
+    expect(router.state.location.pathname).toBe(HOME);
+    expect(screen.getByTestId('institutionsPage')).toBeInTheDocument();
   });
 });

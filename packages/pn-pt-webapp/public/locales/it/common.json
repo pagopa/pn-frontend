@@ -33,5 +33,10 @@
     "groups": "Gruppi",
     "institutions": "I tuoi enti",
     "users": "Utenti"
+  },
+  "not-found": {
+    "back-to-home": "Torna alla home",
+    "description": "La pagina che hai tentato di raggiungere non esiste o non è più disponibile.",
+    "title": "Quello che cercavi non è qui."
   }
 }
