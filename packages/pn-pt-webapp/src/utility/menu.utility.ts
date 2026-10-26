@@ -21,14 +21,24 @@ export function selfcareMenuItems(idOrganization: string, lang: string): Array<S
   ];
 }
 
+/**
+ * Products shown in the header product switch
+ * @param t translation function
+ * @param productId id of the current product
+ * @param idOrganization id of the organization, used to build the SelfCare dashboard url
+ * @param lang current language
+ * @returns the list of products: SelfCare reserved area and the current product
+ */
 export const getProductsList = (
   t: (key: string) => string,
-  productId: string
+  productId: string,
+  idOrganization: string,
+  lang: string
 ): Array<ProductEntity> => [
   {
     id: 'selfcare',
     title: t('header.reserved-area'),
-    productUrl: '',
+    productUrl: routes.DASHBOARD(idOrganization, lang),
     linkType: 'external',
   },
   {

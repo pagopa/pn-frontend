@@ -63,7 +63,10 @@ const ActualApp = () => {
     [i18n.language]
   );
 
-  const productsList = useMemo(() => getProductsList(t, PRODUCT_ID), [i18n.language]);
+  const productsList = useMemo(
+    () => getProductsList(t, PRODUCT_ID, institutionsDTO.id, i18n.language),
+    [i18n.language]
+  );
 
   const handleAssistanceClick = () => {
     /* eslint-disable-next-line functional/immutable-data */

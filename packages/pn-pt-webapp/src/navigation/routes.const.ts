@@ -6,6 +6,13 @@ const SELFCARE_DASHBOARD = '/dashboard';
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
 
+/** DASHBOARD navigation link to SelfCare "Area Riservata"
+ * @param idOrganization
+ * @param lang
+ */
+export const DASHBOARD = (idOrganization: string, lang: string) =>
+  `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_DASHBOARD}/${idOrganization}?lang=${lang}`;
+
 /** USERS navigation link to SelfCare "Utenti" section
  * @param idOrganization
  * @param lang
