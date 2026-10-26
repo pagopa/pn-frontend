@@ -23,7 +23,7 @@ describe('App', () => {
     // footer
     expect(container).toHaveTextContent(/PagoPA S.p.A. — società per azioni/i);
     // page content
-    expect(screen.getByTestId('homePage')).toBeInTheDocument();
+    expect(screen.getByTestId('institutionsPage')).toBeInTheDocument();
   });
 
   it('opens SelfCare users and groups pages from the side menu', () => {

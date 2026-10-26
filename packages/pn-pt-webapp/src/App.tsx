@@ -9,13 +9,13 @@ import {
   initLocalization,
   initLocalizationExists,
 } from '@pagopa-pn/pn-commons';
-import { JwtUser, ProductEntity } from '@pagopa/mui-italia';
+import { JwtUser } from '@pagopa/mui-italia';
 
 import { institutionsDTO } from './__mocks__/User.mock';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getConfiguration } from './services/configuration.service';
-import { selfcareMenuItems } from './utility/menu.utility';
+import { getProductsList, selfcareMenuItems } from './utility/menu.utility';
 
 // MOCKED DATA (waiting for APIs)
 const loggedUser: JwtUser = {
@@ -25,22 +25,8 @@ const loggedUser: JwtUser = {
   email: 'test@partner-tecnologico.it',
 };
 
+// TODO - Read this from /products API
 const PRODUCT_ID = 'prod-pn-pt';
-
-const getProductsList = (t: (key: string) => string): Array<ProductEntity> => [
-  {
-    id: 'selfcare',
-    title: t('header.reserved-area'),
-    productUrl: '',
-    linkType: 'external',
-  },
-  {
-    id: PRODUCT_ID,
-    title: t('header.notification-platform'),
-    productUrl: '',
-    linkType: 'internal',
-  },
-];
 
 const App = () => {
   const { t, i18n } = useTranslation(['common']);
@@ -77,7 +63,7 @@ const ActualApp = () => {
     [i18n.language]
   );
 
-  const productsList = useMemo(() => getProductsList(t), [i18n.language]);
+  const productsList = useMemo(() => getProductsList(t, PRODUCT_ID), [i18n.language]);
 
   const handleAssistanceClick = () => {
     /* eslint-disable-next-line functional/immutable-data */

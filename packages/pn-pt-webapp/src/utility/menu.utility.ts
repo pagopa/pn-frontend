@@ -3,6 +3,7 @@ import {
   PersonOutline as UsersIcon,
 } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
 
@@ -19,3 +20,21 @@ export function selfcareMenuItems(idOrganization: string, lang: string): Array<S
     { label: 'menu.groups', icon: GroupsIcon, route: routes.GROUPS(idOrganization, lang) },
   ];
 }
+
+export const getProductsList = (
+  t: (key: string) => string,
+  productId: string
+): Array<ProductEntity> => [
+  {
+    id: 'selfcare',
+    title: t('header.reserved-area'),
+    productUrl: '',
+    linkType: 'external',
+  },
+  {
+    id: productId,
+    title: t('header.notification-platform'),
+    productUrl: '',
+    linkType: 'internal',
+  },
+];
