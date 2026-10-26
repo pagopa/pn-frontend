@@ -15,6 +15,7 @@ import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
+import { informalNotificationMock } from '../../../__mocks__/InformalNotification.mock';
 import {
   cancelledNotificationDTO,
   cancelledNotificationToFe,
@@ -38,10 +39,12 @@ import {
   getReceivedNotificationPaymentUrl,
   getReceivedNotificationTimeline,
 } from '../actions';
+import { getReceivedInformalNotification } from '../informalActions';
 import { resetState } from '../reducers';
 
 const initialState = {
   loading: false,
+  informalNotification: undefined,
   notification: {
     additionalLanguages: [],
     subject: '',
@@ -133,6 +136,33 @@ describe('Notification detail redux state tests', () => {
       expect(payment.pagoPa?.attachmentIdx).toBe(attachmentIdx);
       expect(payment.pagoPa?.recIndex).toBe(recipientIdx);
     });
+  });
+
+  it('Should be able to fetch the informal notification detail', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/informal/received/${informalNotificationMock.iun}`)
+      .reply(200, informalNotificationMock);
+    const action = await store.dispatch(
+      getReceivedInformalNotification(informalNotificationMock.iun)
+    );
+    expect(action.type).toBe('getReceivedInformalNotification/fulfilled');
+    expect(action.payload).toEqual(informalNotificationMock);
+    const state = store.getState().notificationState;
+    expect(state.informalNotification).toStrictEqual(informalNotificationMock);
+  });
+
+  it('Should NOT update the informal notification if the api fails', async () => {
+    const mockedStore = createMockedStore({});
+    mock
+      .onGet(`/bff/v1/notifications/informal/received/${informalNotificationMock.iun}`)
+      .reply(errorMock.status, errorMock.data);
+    const action = await mockedStore.dispatch(
+      getReceivedInformalNotification(informalNotificationMock.iun)
+    );
+    expect(action.type).toBe('getReceivedInformalNotification/rejected');
+    expect(action.payload).toEqual({ response: errorMock });
+    const state = mockedStore.getState().notificationState;
+    expect(state.informalNotification).toBeUndefined();
   });
 
   it('Should be able to fetch the notification timeline', async () => {
