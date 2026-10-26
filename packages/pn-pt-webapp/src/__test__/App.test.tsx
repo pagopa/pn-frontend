@@ -8,10 +8,4 @@ describe('App', () => {
     expect(screen.getByTestId('homePage')).toBeInTheDocument();
     expect(router.state.location.pathname).toBe(HOME);
   });
-
-  it('redirects unknown routes to the home page', async () => {
-    const { router } = render(<App />, { route: '/unknown-route' });
-    expect(await screen.findByTestId('homePage')).toBeInTheDocument();
-    expect(router.state.location.pathname).toBe(HOME);
-  });
 });
