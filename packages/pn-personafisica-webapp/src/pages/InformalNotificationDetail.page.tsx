@@ -37,9 +37,8 @@ import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
-const { SELFCARE_CDN_URL } = getConfiguration();
-
 const InformalNotificationDetail: React.FC = () => {
+  const { SELFCARE_CDN_URL } = getConfiguration();
   const { id } = useParams();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const dispatch = useAppDispatch();

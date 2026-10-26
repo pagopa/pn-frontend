@@ -17,6 +17,7 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
+  NotificationCommunicationType,
   formatIun,
   tenYearsAgo,
   today,
@@ -120,7 +121,7 @@ const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: 
             }}
             SelectProps={{
               renderValue: (value) =>
-                value === 'LEGAL' ? (
+                value === NotificationCommunicationType.LEGAL ? (
                   <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <VerifiedRounded sx={{ color: 'primary.main', fontSize: '16px' }} />
                     {communicationTypeLabels.LEGAL}
@@ -134,13 +135,13 @@ const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: 
             sx={{ marginBottom: isMobile ? '20px' : '0' }}
             size="small"
           >
-            <MenuItem value="LEGAL">
+            <MenuItem value={NotificationCommunicationType.LEGAL}>
               <ListItemIcon>
                 <VerifiedRounded sx={{ color: 'primary.main', fontSize: '16px' }} />
               </ListItemIcon>
               <ListItemText>{communicationTypeLabels.LEGAL}</ListItemText>
             </MenuItem>
-            <MenuItem value="INFORMAL">
+            <MenuItem value={NotificationCommunicationType.INFORMAL}>
               <ListItemText>{communicationTypeLabels.INFORMAL}</ListItemText>
             </MenuItem>
           </TextField>
