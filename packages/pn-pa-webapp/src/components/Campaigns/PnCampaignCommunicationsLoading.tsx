@@ -66,7 +66,7 @@ const PnCampaignCommunicationsLoading = () => {
             <Skeleton variant="rounded" width={100} height={16} sx={{ borderRadius: '8px' }} />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid item xs={3}>
             <Skeleton variant="rounded" width={120} height={16} sx={{ borderRadius: '8px' }} />
           </Grid>
         </Grid>

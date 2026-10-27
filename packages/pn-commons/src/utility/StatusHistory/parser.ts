@@ -7,13 +7,8 @@ import {
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
-import {
-  type DeliveryOutcome,
-  DeliveryOutcomeType,
-  type DigitalDomicileChannel,
-  DigitalSource,
-  type DigitalSource as DigitalSourceType,
-} from './types';
+import { resolveTimelineDigitalAddressSource } from '../contacts.utility';
+import { type DeliveryOutcome, DeliveryOutcomeType, type DigitalDomicileChannel } from './types';
 
 type ParsedStatusHistory = {
   categories: ReadonlySet<TimelineCategory>;
@@ -21,9 +16,15 @@ type ParsedStatusHistory = {
   hasViewedStatus: boolean;
 };
 
-export class StatusHistoryParser {
-  private static readonly DIGITAL_SOURCES = new Set<string>(Object.values(DigitalSource));
+type StatusHistoryStepDetails = {
+  digitalAddressSource?: unknown;
+  responseStatus?: ResponseStatus;
+  digitalAddress?: {
+    type?: DigitalDomicileType;
+  } | null;
+};
 
+export class StatusHistoryParser {
   private constructor(private readonly parsed: ParsedStatusHistory) {}
 
   static parse(
@@ -82,7 +83,11 @@ export class StatusHistoryParser {
 
     const okFeedbackStep = this.parsed.firstOkDigitalFeedbackStep;
     if (okFeedbackStep) {
-      const source = StatusHistoryParser.resolveDigitalSource(okFeedbackStep);
+      const source = resolveTimelineDigitalAddressSource({
+        digitalAddressSource: StatusHistoryParser.getDetails(okFeedbackStep)?.digitalAddressSource,
+        elementId: okFeedbackStep.elementId,
+      });
+
       const domicileType = StatusHistoryParser.resolveDigitalDomicileType(okFeedbackStep);
 
       return {
@@ -98,9 +103,9 @@ export class StatusHistoryParser {
     return null;
   }
 
-  private static getDetails(step: INotificationDetailTimeline): any | null {
-    const details = (step as any).details;
-    return details && typeof details === 'object' ? details : null;
+  private static getDetails(step: INotificationDetailTimeline): StatusHistoryStepDetails | null {
+    const details: unknown = step.details;
+    return details && typeof details === 'object' ? (details as StatusHistoryStepDetails) : null;
   }
 
   private static isSendDigitalFeedbackOk(step: INotificationDetailTimeline): boolean {
@@ -110,36 +115,6 @@ export class StatusHistoryParser {
 
     const details = this.getDetails(step);
     return details?.responseStatus === ResponseStatus.OK;
-  }
-
-  private static resolveDigitalSource(step: INotificationDetailTimeline): DigitalSourceType | null {
-    const details = this.getDetails(step);
-    const source = details?.digitalAddressSource;
-
-    if (this.isDigitalSource(source)) {
-      return source;
-    }
-    return this.parseDigitalSourceFromElementId(step.elementId);
-  }
-
-  private static parseDigitalSourceFromElementId(
-    elementId: string | null | undefined
-  ): DigitalSourceType | null {
-    if (!elementId) {
-      return null;
-    }
-
-    const match = /\.SOURCE_([A-Z_]+)\./.exec(elementId);
-    if (!match) {
-      return null;
-    }
-
-    const token = match[1];
-    return this.isDigitalSource(token) ? token : null;
-  }
-
-  private static isDigitalSource(value: unknown): value is DigitalSourceType {
-    return typeof value === 'string' && this.DIGITAL_SOURCES.has(value);
   }
 
   private static resolveDigitalDomicileType(

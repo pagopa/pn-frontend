@@ -75,6 +75,118 @@ describe('StatusHistoryParser', () => {
     });
   });
 
+  it('resolves digital source from elementId when details source is missing', () => {
+    const history = [
+      historyItem({
+        steps: [
+          step({
+            elementId: 'SEND_DIGITAL_FEEDBACK.SOURCE_SPECIAL.RETRY_0',
+            details: {
+              responseStatus: ResponseStatus.OK,
+              digitalAddress: { type: DigitalDomicileType.PEC },
+            },
+          }),
+        ],
+      }),
+    ];
+
+    const parser = StatusHistoryParser.parse(history);
+
+    expect(parser.resolveDeliveryOutcome()).toEqual({
+      type: DeliveryOutcomeType.DIGITAL,
+      details: {
+        source: DigitalSource.SENDER,
+        domicileType: DigitalDomicileType.PEC,
+      },
+    });
+  });
+
+  it('returns DIGITAL with null source when no valid source is available', () => {
+    const history = [
+      historyItem({
+        steps: [
+          step({
+            elementId: 'SEND_DIGITAL_FEEDBACK.RETRY_0',
+            details: {
+              responseStatus: ResponseStatus.OK,
+              digitalAddress: { type: DigitalDomicileType.PEC },
+            },
+          }),
+        ],
+      }),
+    ];
+
+    const parser = StatusHistoryParser.parse(history);
+
+    expect(parser.resolveDeliveryOutcome()).toEqual({
+      type: DeliveryOutcomeType.DIGITAL,
+      details: {
+        source: null,
+        domicileType: DigitalDomicileType.PEC,
+      },
+    });
+  });
+
+  it('ignores non-OK digital feedback when resolving delivery outcome', () => {
+    const history = [
+      historyItem({
+        steps: [
+          step({
+            details: {
+              responseStatus: ResponseStatus.KO,
+              digitalAddressSource: DigitalSource.PLATFORM,
+              digitalAddress: { type: DigitalDomicileType.PEC },
+            },
+          }),
+        ],
+      }),
+    ];
+
+    const parser = StatusHistoryParser.parse(history);
+
+    expect(parser.resolveDeliveryOutcome()).toBeNull();
+  });
+
+  it('uses the first OK digital feedback when multiple feedback events are present', () => {
+    const history = [
+      historyItem({
+        steps: [
+          step({
+            details: {
+              responseStatus: ResponseStatus.KO,
+              digitalAddressSource: DigitalSource.PLATFORM,
+              digitalAddress: { type: DigitalDomicileType.PEC },
+            },
+          }),
+          step({
+            details: {
+              responseStatus: ResponseStatus.OK,
+              digitalAddressSource: DigitalSource.SENDER,
+              digitalAddress: { type: DigitalDomicileType.SERCQ },
+            },
+          }),
+          step({
+            details: {
+              responseStatus: ResponseStatus.OK,
+              digitalAddressSource: DigitalSource.PLATFORM,
+              digitalAddress: { type: DigitalDomicileType.PEC },
+            },
+          }),
+        ],
+      }),
+    ];
+
+    const parser = StatusHistoryParser.parse(history);
+
+    expect(parser.resolveDeliveryOutcome()).toEqual({
+      type: DeliveryOutcomeType.DIGITAL,
+      details: {
+        source: DigitalSource.SENDER,
+        domicileType: DigitalDomicileType.SERCQ,
+      },
+    });
+  });
+
   it('returns VIEWED if only VIEWED is present and no explicit channel outcome exists', () => {
     const history = [
       historyItem({
