@@ -9,9 +9,9 @@ import {
 } from '../../../generated-client/informal-notifications';
 import InformalNotificationTimelineChannelStep from '../InformalNotificationTimelineChannelStep';
 
-const pecStep = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusHistory.find(
-  (item) => item.status === InformalNotificationStatusV1.Processing
-)!.steps[0];
+const pecStep = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusHistory
+  .find((item) => item.status === InformalNotificationStatusV1.Processing)!
+  .steps.find((step) => step.channel === BffNotificationChannelType.Pec)!;
 
 const viewedDetails: InformalNotificationViewedDetails = {
   recIndex: 0,

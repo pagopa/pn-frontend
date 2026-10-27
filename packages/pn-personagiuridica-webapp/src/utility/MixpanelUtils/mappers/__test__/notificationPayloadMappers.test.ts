@@ -122,7 +122,7 @@ describe('notificationPayloadMappers', () => {
 
   it('should map legal notification detail data to event payload', () => {
     const payload = mapNotificationDetailToEventPayload({
-      notificationType: 'LEGAL',
+      notificationType: NotificationCommunicationType.LEGAL,
       downtimeEvents: [],
       mandateId: undefined,
       notificationStatus: notificationToFe.notificationStatus,
@@ -156,7 +156,7 @@ describe('notificationPayloadMappers', () => {
     vi.setSystemTime(new Date(firstOpeningAt));
 
     const payload = mapNotificationDetailToEventPayload({
-      notificationType: 'INFORMAL',
+      notificationType: NotificationCommunicationType.INFORMAL,
       notificationStatus: InformalNotificationStatus.ACCEPTED,
       paymentCount: 1,
       timeline: [
@@ -186,7 +186,7 @@ describe('notificationPayloadMappers', () => {
 
   it('should map informal notification detail data after first opening', () => {
     const payload = mapNotificationDetailToEventPayload({
-      notificationType: 'INFORMAL',
+      notificationType: NotificationCommunicationType.INFORMAL,
       notificationStatus: InformalNotificationStatus.ACCEPTED,
       paymentCount: 1,
       timeline: [
@@ -220,7 +220,7 @@ describe('notificationPayloadMappers', () => {
 
   it('should map legal notification attachment to download payload', () => {
     const payload = mapNotificationAttachmentToDocumentDownloadPayload({
-      notificationType: 'LEGAL',
+      notificationType: NotificationCommunicationType.LEGAL,
       documentType: NotificationDocumentType.ATTACHMENT,
     });
 
@@ -232,7 +232,7 @@ describe('notificationPayloadMappers', () => {
 
   it('should map legal notification AAR to download payload', () => {
     const payload = mapNotificationAttachmentToDocumentDownloadPayload({
-      notificationType: 'LEGAL',
+      notificationType: NotificationCommunicationType.LEGAL,
       documentType: NotificationDocumentType.AAR,
     });
 
@@ -244,7 +244,7 @@ describe('notificationPayloadMappers', () => {
 
   it('should map legal notification payment attachment to download payload', () => {
     const payload = mapNotificationAttachmentToDocumentDownloadPayload({
-      notificationType: 'LEGAL',
+      notificationType: NotificationCommunicationType.LEGAL,
       documentType: PaymentAttachmentSName.F24,
     });
 
@@ -256,7 +256,7 @@ describe('notificationPayloadMappers', () => {
 
   it('should map informal notification attachment to download payload', () => {
     const payload = mapNotificationAttachmentToDocumentDownloadPayload({
-      notificationType: 'INFORMAL',
+      notificationType: NotificationCommunicationType.INFORMAL,
       documentType: NotificationDocumentType.ATTACHMENT,
     });
 
@@ -268,7 +268,7 @@ describe('notificationPayloadMappers', () => {
 
   it('should map informal notification payment attachment to download payload', () => {
     const payload = mapNotificationAttachmentToDocumentDownloadPayload({
-      notificationType: 'INFORMAL',
+      notificationType: NotificationCommunicationType.INFORMAL,
       documentType: PaymentAttachmentSName.PAGOPA,
     });
 
