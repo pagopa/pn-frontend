@@ -7,6 +7,7 @@ import { LoadingPage } from '@pagopa-pn/pn-commons';
 import { themeNext } from '@pagopa/mui-italia';
 
 import App from './App';
+import { initAxiosClients } from './api/apiClients';
 import './i18n';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -18,6 +19,7 @@ async function doTheRender() {
   try {
     // load config from JSON file
     await loadPtConfiguration();
+    initAxiosClients();
 
     const router = createBrowserRouter([
       {
