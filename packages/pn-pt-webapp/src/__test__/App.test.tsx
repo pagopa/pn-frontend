@@ -1,8 +1,11 @@
+import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import App from '../App';
 import { institutionsDTO } from '../__mocks__/User.mock';
-import { DASHBOARD, GROUPS, HOME, USERS } from '../navigation/routes.const';
+import { authClient } from '../api/apiClients';
+import { DASHBOARD, GROUPS, HOME, SELFCARE_LOGOUT_PATH, USERS } from '../navigation/routes.const';
+import { getConfiguration } from '../services/configuration.service';
 import { fireEvent, render, screen, waitFor, within } from './test-utils';
 
 describe('App', () => {
@@ -56,5 +59,62 @@ describe('App', () => {
     fireEvent.click(within(productDropdown).getByText('header.reserved-area'));
     expect(assignFn).toHaveBeenCalledWith(DASHBOARD(institutionsDTO.id, 'it'));
     vi.unstubAllGlobals();
+  });
+
+  describe('logout', () => {
+    let mockAuth: MockAdapter;
+    const mockOpenFn = vi.fn();
+    const logoutUrl = () => `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`;
+
+    beforeAll(() => {
+      mockAuth = new MockAdapter(authClient);
+    });
+
+    beforeEach(() => {
+      vi.stubGlobal('open', mockOpenFn);
+    });
+
+    afterEach(() => {
+      mockAuth.reset();
+      mockOpenFn.mockClear();
+      vi.unstubAllGlobals();
+    });
+
+    afterAll(() => {
+      mockAuth.restore();
+    });
+
+    it('calls the logout api and redirects to SelfCare logout', async () => {
+      mockAuth.onPost('/logout').reply(200);
+      render(<App />);
+      fireEvent.click(screen.getAllByRole('button', { name: 'Esci' })[0]);
+      fireEvent.click(await screen.findByTestId('confirm-button'));
+      await waitFor(() => {
+        expect(mockAuth.history.post).toHaveLength(1);
+        expect(mockOpenFn).toHaveBeenCalledWith(logoutUrl(), '_self');
+      });
+    });
+
+    it('redirects to SelfCare logout even if the logout api fails', async () => {
+      mockAuth.onPost('/logout').reply(500);
+      render(<App />);
+      fireEvent.click(screen.getAllByRole('button', { name: 'Esci' })[0]);
+      fireEvent.click(await screen.findByTestId('confirm-button'));
+      await waitFor(() => {
+        expect(mockAuth.history.post).toHaveLength(1);
+        expect(mockOpenFn).toHaveBeenCalledWith(logoutUrl(), '_self');
+      });
+    });
+
+    it('does not logout if the user cancels', async () => {
+      render(<App />);
+      fireEvent.click(screen.getAllByRole('button', { name: 'Esci' })[0]);
+      fireEvent.click(await screen.findByRole('button', { name: 'button.annulla' }));
+      await waitFor(() => {
+        expect(screen.queryByTestId('confirm-button')).not.toBeInTheDocument();
+      });
+      expect(mockAuth.history.post).toHaveLength(0);
+      expect(mockOpenFn).not.toHaveBeenCalled();
+    });
   });
 });

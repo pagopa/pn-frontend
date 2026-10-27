@@ -8,6 +8,7 @@ import { vi } from 'vitest';
 import { Configuration } from '@pagopa-pn/pn-commons';
 import '@testing-library/jest-dom';
 
+import { initAxiosClients } from './api/apiClients';
 import { PtConfiguration } from './services/configuration.service';
 
 const originalWarn = console.warn;
@@ -27,6 +28,7 @@ beforeAll(() => {
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
   });
+  initAxiosClients();
   // mock translations
   vi.mock('react-i18next', () => ({
     // this mock makes sure any components using the translate hook can use it without a warning being shown

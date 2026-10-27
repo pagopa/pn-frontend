@@ -3,6 +3,7 @@ import { getConfiguration } from '../services/configuration.service';
 export const HOME = '/';
 
 const SELFCARE_DASHBOARD = '/dashboard';
+export const SELFCARE_LOGOUT_PATH = '/auth/logout';
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
 
