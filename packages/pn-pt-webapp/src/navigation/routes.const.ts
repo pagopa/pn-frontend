@@ -1,9 +1,12 @@
 import { getConfiguration } from '../services/configuration.service';
 
 export const HOME = '/';
+export const NOT_ACCESSIBLE = '/non-accessibile';
+
+export const SELFCARE_LOGIN_PATH = '/auth/login';
+export const SELFCARE_LOGOUT_PATH = '/auth/logout';
 
 const SELFCARE_DASHBOARD = '/dashboard';
-export const SELFCARE_LOGOUT_PATH = '/auth/logout';
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
 

@@ -1,6 +1,38 @@
 {
+  "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
   "button": {
-    "annulla": "Annulla"
+    "annulla": "Annulla",
+    "close": "Chiudi",
+    "exit": "Esci",
+    "go-to-home": "Torna alla home page",
+    "go-to-login": "Accedi"
+  },
+  "error-boundary": {
+    "action": "Ricarica la pagina",
+    "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
+    "title": "Qualcosa è andato storto"
+  },
+  "errors": {
+    "internal_server": {
+      "message": "Il servizio non è disponibile a causa di un problema tecnico. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.",
+      "title": "Si è verificato un errore"
+    },
+    "invalid_body": {
+      "message": "Si è verificato un errore durante l’invio dei dati. Controlla che siano corretti, senza spazi o caratteri speciali, e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.",
+      "title": "I dati non sono validi"
+    },
+    "technical-error": {
+      "copy-to-clipboard": "Copia informazioni errore",
+      "title": "Informazioni errore"
+    },
+    "unhandled": {
+      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.",
+      "title": "Si è verificato un errore"
+    },
+    "unknown": {
+      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.",
+      "title": "Si è verificato un errore"
+    }
   },
   "footer": {
     "321-model": "Modello 231",
@@ -34,14 +66,65 @@
     "pago-pa-link": "Sito di PagoPA S.p.A.",
     "reserved-area": "Area Riservata"
   },
+  "home": {
+    "subtitle": "Benvenuto nel portale di SEND dedicato ai Partner Tecnologici.",
+    "title": "SEND - Partner Tecnologici"
+  },
+  "inactivity": {
+    "action": "Mantieni l’accesso",
+    "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
+    "title": "Vuoi davvero uscire da SEND?"
+  },
+  "leaving-app": {
+    "message": "Verrai reindirizzato",
+    "title": "Stai uscendo da SEND"
+  },
+  "loading": "Caricamento in corso",
   "menu": {
     "groups": "Gruppi",
     "institutions": "I tuoi enti",
     "users": "Utenti"
   },
+  "messages": {
+    "401-message": "L'utente corrente non ha le autorizzazioni",
+    "401-title": "Utente non autorizzato",
+    "403-message": "Entra e accedi con SPID o CIE.",
+    "403-title": "La sessione è scaduta",
+    "404-message": "Si è verificato un errore. Si prega di riprovare più tardi",
+    "404-title": "Risorsa non trovata",
+    "451-message": "Non è possibile accedere alla piattaforma",
+    "451-title": "Piattaforma non accessibile",
+    "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
+    "500-title": "Il servizio non è disponibile",
+    "error-in-initial-info-loading": "Non siamo riusciti a recuperare dati necessari per l'avvio dell'applicazione",
+    "generic-api-error-action-text": "Ricarica",
+    "generic-api-error-main-text": "Non siamo riusciti a recuperare questi dati.",
+    "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",
+    "generic-title": "Errore generico",
+    "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
+    "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
+    "lacking-grants-for-app-title": "Non sei autorizzato ad accedere"
+  },
+  "not-accessible": {
+    "action": "visita il sito dedicato",
+    "description": "In questo momento SEND è in fase di collaudo e non è ancora disponibile. Se sei un Ente e hai completato l'adesione, riceverai aggiornamenti in merito alla data di attivazione della piattaforma. Per maggiori informazioni sull'iniziativa,",
+    "title": "Non è possibile accedere alla piattaforma"
+  },
   "not-found": {
     "back-to-home": "Torna alla home",
     "description": "La pagina che hai tentato di raggiungere non esiste o non è più disponibile.",
     "title": "Quello che cercavi non è qui."
+  },
+  "roles": {
+    "admin": "Amministratore",
+    "operator": "Referente operativo"
+  },
+  "toast": {
+    "aria-label": "Icona di chisura toast"
+  },
+  "user-validation-failed": {
+    "cta": "Contatta l’assistenza",
+    "description": "Uno o più dati associati alla tua utenza non risultano validi, contatta l’assistenza per risolvere il problema.",
+    "title": "I dati inseriti non sono validi"
   }
 }

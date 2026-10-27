@@ -9,6 +9,7 @@ import { Configuration } from '@pagopa-pn/pn-commons';
 import '@testing-library/jest-dom';
 
 import { initAxiosClients } from './api/apiClients';
+import { initStore } from './redux/store';
 import { PtConfiguration } from './services/configuration.service';
 
 const originalWarn = console.warn;
@@ -27,7 +28,11 @@ beforeAll(() => {
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
+    INACTIVITY_HANDLER_MINUTES: 0,
+    WORK_IN_PROGRESS: false,
+    LANDING_SITE_URL: 'https://test.landing.pagopa.it',
   });
+  initStore(false);
   initAxiosClients();
   // mock translations
   vi.mock('react-i18next', () => ({
