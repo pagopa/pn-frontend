@@ -16,7 +16,7 @@ import {
   NotificationTimelineStatusHistory,
   NotificationTimelineStep,
 } from '../../../../models/NotificationTimeline';
-import { createMatchMedia, fireEvent, render, within } from '../../../../test-utils';
+import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../../test-utils';
 import NotificationEventsTimeline from '../NotificationEventsTimeline';
 import { PERFECTION_ANCHORS } from '../timelineItem.config';
 
@@ -276,6 +276,49 @@ describe('NotificationEventsTimeline', () => {
     const groupBody = within(firstGroup).getByTestId('timeline-group-body');
 
     expect(within(groupBody).getAllByTestId('timeline-event')).toHaveLength(2);
+  });
+
+  it('expands and collapses all the groups of the delivering status with the expand all button', async () => {
+    const { getByTestId, getAllByTestId, queryAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={multiRecipientStatusHistory}
+        clickHandler={clickHandler}
+      />
+    );
+    const expandAllButton = getByTestId('timeline-expand-all');
+
+    fireEvent.click(expandAllButton);
+    expect(getAllByTestId('timeline-group-body')).toHaveLength(3);
+
+    fireEvent.click(expandAllButton);
+    await waitFor(() => expect(queryAllByTestId('timeline-group-body')).toHaveLength(0));
+  });
+
+  it('does not show the expand all button when the status is not delivering', () => {
+    const { queryByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[deliveredStatus(NotificationDeliveryMode.ANALOG)]}
+        clickHandler={clickHandler}
+      />
+    );
+
+    expect(queryByTestId('timeline-expand-all')).not.toBeInTheDocument();
+  });
+
+  it('does not show the expand all button when the delivering status has a single group', () => {
+    const [singleGroupStep] = multiRecipientStatusHistory[0].steps;
+    const { getAllByTestId, queryByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[{ ...multiRecipientStatusHistory[0], steps: [singleGroupStep] }]}
+        clickHandler={clickHandler}
+      />
+    );
+
+    expect(getAllByTestId('timeline-group')).toHaveLength(1);
+    expect(queryByTestId('timeline-expand-all')).not.toBeInTheDocument();
   });
 
   it('shows the recipient before the groups only when it changes, on multi-recipient notifications', () => {

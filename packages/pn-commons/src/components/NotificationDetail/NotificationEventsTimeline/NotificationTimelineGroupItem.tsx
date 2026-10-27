@@ -29,6 +29,8 @@ type Props = {
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
   delegatorName?: string;
+  expanded?: boolean;
+  onToggle?: () => void;
 };
 
 const PEC_SOURCE_LABEL_KEYS: Record<DigitalSource, string> = {
@@ -48,9 +50,13 @@ const NotificationTimelineGroupItem = ({
   isNewTimelineCopyEnabled = false,
   perfectionLink,
   delegatorName,
+  expanded: controlledExpanded,
+  onToggle,
 }: Props) => {
   const generatedId = useId();
-  const [expanded, setExpanded] = useState(false);
+  const [internalExpanded, setInternalExpanded] = useState(false);
+  const isControlled = controlledExpanded !== undefined;
+  const expanded = isControlled ? controlledExpanded : internalExpanded;
 
   const headerId = `timeline-group-header-${generatedId}`;
   const panelId = `timeline-group-panel-${generatedId}`;
@@ -144,7 +150,7 @@ const NotificationTimelineGroupItem = ({
         type="button"
         aria-expanded={expanded}
         aria-controls={panelId}
-        onClick={() => setExpanded((current) => !current)}
+        onClick={() => (isControlled ? onToggle?.() : setInternalExpanded((current) => !current))}
         data-testid="timeline-group-header"
         sx={{
           width: '100%',

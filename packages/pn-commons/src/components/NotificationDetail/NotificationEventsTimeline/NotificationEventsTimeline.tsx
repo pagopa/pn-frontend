@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
@@ -26,6 +26,7 @@ import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineDescription from './NotificationTimelineDescription';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
+import TimelineExpandAllButton from './TimelineExpandAllButton';
 import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
 import { PERFECTION_ANCHORS, getTimelineItems } from './timelineItem.config';
 
@@ -114,6 +115,24 @@ const NotificationEventsTimeline = ({
     ]
   );
 
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+
+  const toggleGroup = (groupId: string) =>
+    setExpandedGroups((current) => {
+      const next = new Set(current);
+      if (!next.delete(groupId)) {
+        next.add(groupId);
+      }
+      return next;
+    });
+
+  const setGroupsExpanded = (groupIds: Array<string>, expanded: boolean) =>
+    setExpandedGroups((current) => {
+      const next = new Set(current);
+      groupIds.forEach((id) => (expanded ? next.add(id) : next.delete(id)));
+      return next;
+    });
+
   return (
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
@@ -136,6 +155,14 @@ const NotificationEventsTimeline = ({
                   isTimelineGroupStep(step) || !plan.hiddenEventIds.has(step.event.elementId)
               );
 
+            const groupIds = visibleSteps.flatMap(({ step }) =>
+              isTimelineGroupStep(step) ? [step.group.groupId] : []
+            );
+            const allExpanded =
+              groupIds.length > 0 && groupIds.every((id) => expandedGroups.has(id));
+            const showExpandAll =
+              status.status === NotificationStatus.DELIVERING && groupIds.length > 1;
+
             const statusPerfectionLink = isNewTimelineCopyEnabled
               ? getStatusPerfectionLink(perfectionLink, status)
               : perfectionLink;
@@ -148,14 +175,30 @@ const NotificationEventsTimeline = ({
                 title={
                   <Stack
                     component="span"
-                    direction={{ xs: 'column-reverse', sm: 'row' }}
-                    fontWeight={600}
-                    alignItems={{ xs: 'flex-start', sm: 'center' }}
-                    fontSize="16px"
-                    gap={{ xs: 0.5, sm: 1 }}
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    flex={1}
+                    minWidth={0}
+                    gap={1}
                   >
-                    {label}
-                    <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
+                    <Stack
+                      component="span"
+                      direction={{ xs: 'column-reverse', sm: 'row' }}
+                      fontWeight={600}
+                      alignItems={{ xs: 'flex-start', sm: 'center' }}
+                      fontSize="16px"
+                      gap={{ xs: 0.5, sm: 1 }}
+                    >
+                      {label}
+                      <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
+                    </Stack>
+                    {showExpandAll && (
+                      <TimelineExpandAllButton
+                        allExpanded={allExpanded}
+                        onClick={() => setGroupsExpanded(groupIds, !allExpanded)}
+                      />
+                    )}
                   </Stack>
                 }
               >
@@ -232,6 +275,8 @@ const NotificationEventsTimeline = ({
                           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                           perfectionLink={perfectionLink}
                           delegatorName={delegatorName}
+                          expanded={expandedGroups.has(step.group.groupId)}
+                          onToggle={() => toggleGroup(step.group.groupId)}
                         />
                       </Fragment>
                     );
