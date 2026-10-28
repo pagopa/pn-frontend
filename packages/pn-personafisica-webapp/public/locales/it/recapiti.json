@@ -38,7 +38,7 @@
     "link-sms-placeholder": "Il tuo cellulare",
     "remove-email": "Disattiva email",
     "remove-email-and-sercq": "Disattiva email e domicilio",
-    "remove-email-and-sercq-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le comunicazioni via raccomandata e <strong>pagare i relativi costi.</strong></0>",
+    "remove-email-and-sercq-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le notifiche via raccomandata e <strong>pagare i relativi costi.</strong></0>",
     "remove-email-and-sercq-title": "Con l’email si disattiva anche il domicilio digitale SEND",
     "remove-email-no-domicile-message": "Se confermi, non riceverai più l’email su {{value}} quando c’è una notifica SEND da leggere.",
     "remove-email-no-domicile-title": "Disattiva email",
@@ -170,13 +170,13 @@
     "remove-pec-message": "<0>Non avrai più un recapito per le notifiche a valore legale della Pubblica Amministrazione e potresti riceverle su carta, con eventuali costi a tuo carico.</0><1>Continuerai però a ricevere avvisi sui canali che hai attivato.</1>",
     "remove-pec-title": "Confermi di voler disattivare la PEC?",
     "remove-sercq_send-confirm": "Disattiva domicilio digitale",
-    "remove-sercq_send-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le comunicazioni via raccomandata e <strong>pagare i relativi costi.</strong></0><1>Continuerai a ricevere gli avvisi via email, puoi disattivarli nella sezione I tuoi recapiti.</1>",
+    "remove-sercq_send-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le notifiche via raccomandata e <strong>pagare i relativi costi.</strong></0><1>Continuerai a ricevere gli avvisi via email, puoi disattivarli nella sezione I tuoi recapiti.</1>",
     "remove-sercq_send-title": "Confermi di voler disattivare il domicilio digitale su SEND?",
     "sercq-send-active": "Attiva",
     "sercq-send-active-pec-enabled": "Attiva domicilio digitale",
     "sercq-send-description-pec-enabled": "Usa SEND come domicilio digitale per gestire le tue notifiche SEND in un unico punto, senza preoccuparti più delle raccomandate cartacee e dei costi annessi.",
     "sercq-send-info-advantages": "Perché è utile?",
-    "sercq-send-info-description": "Se attivi il domicilio digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le comunicazioni della PA.",
+    "sercq-send-info-description": "Se attivi il domicilio digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le notifiche della PA.",
     "sercq-send-info-list": [
       {
         "description": "Le notifiche SEND non ti arriveranno più in forma cartacea.",
@@ -193,7 +193,7 @@
     ],
     "sercq-send-info-title": "Attiva SEND come tuo domicilio digitale",
     "sercq-send-io-advantages": "Su IO",
-    "sercq-send-io-description": "Attiva SEND - Notifiche Digitali su IO per<strong> ricevere direttamente in app</strong> le comunicazioni inviate al tuo domicilio digitale SEND.",
+    "sercq-send-io-description": "Attiva SEND - Notifiche Digitali su IO per<strong> ricevere direttamente in app</strong> le notifiche inviate al tuo domicilio digitale SEND.",
     "sercq-send-io-title": "Attiva SEND su IO",
     "sercq-send-wizard": {
       "button-activation": "Attiva domicilio digitale",
