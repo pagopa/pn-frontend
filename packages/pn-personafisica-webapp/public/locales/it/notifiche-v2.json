@@ -3,6 +3,7 @@
     "document-unavailable": "Il documento non è più disponibile. Contatta l’ente per maggiori informazioni.",
     "timeline": {
       "analog-failure-workflow": "Impossibile recapitare la notifica",
+      "analog-failure-workflow-monorecipient": "Impossibile recapitare la notifica SEND",
       "analog-failure-workflow-description": "Risulti irreperibile perché all’indirizzo indicato non erano presenti tuoi riferimenti, oppure perché l’indirizzo fornito è inesistente, insufficiente o inesatto. Viene quindi messo a disposizione <0>l’avviso di avvenuta ricezione</0>. <1>Consulta le modalità di perfezionamento</1> per sapere quando la notifica SEND assumerà comunque valore di legge.",
       "analog-failure-workflow-description-delegate": "{{recipient}} risulta irreperibile perché all’indirizzo indicato non erano presenti i suoi riferimenti, oppure perché l’indirizzo fornito è inesistente, insufficiente o inesatto. Viene quindi messo a disposizione <0>l’avviso di avvenuta ricezione</0>. <1>Consulta le modalità di perfezionamento</1> per sapere quando la notifica SEND assumerà comunque valore di legge.",
       "analog-workflow-failure-cause": {
@@ -208,6 +209,7 @@
       "send-digital-domicile-PEC-description": "Verrà effettuato un tentativo di inviarti la notifica SEND all'indirizzo PEC {{address}}.",
       "send-digital-domicile-PEC-description-delegate": "Verrà effettuato un tentativo di inviare a {{recipient}} la notifica SEND all'indirizzo PEC {{address}}.",
       "send-digital-domicile-SERCQ-SEND": "Invio via domicilio digitale SEND iniziato",
+      "send-digital-domicile-SERCQ-SEND-description-delegate": "L'invio della notifica SEND a {{recipient}} {{taxId}} è in corso.",
       "send-digital-error-description": "La tua casella PEC {{address}} risulta satura, non valida o inattiva, come attestato dalla <0>ricevuta di mancata consegna</0>.",
       "send-digital-error-description-delegate": "La casella PEC {{address}} di {{recipient}} risulta satura, non valida o inattiva, come attestato dalla <0>ricevuta di mancata consegna</0>.",
       "send-digital-progress-error": "PEC non accettata dal servizio",
@@ -223,6 +225,7 @@
       "send-digital-success-PEC-description": "Hai ricevuto la notifica SEND all'indirizzo PEC {{address}}, come attestato dalla <0>ricevuta di consegna</0>.",
       "send-digital-success-PEC-description-delegate": "{{recipient}} ha ricevuto la notifica SEND all'indirizzo PEC {{address}}, come attestato dalla <0>ricevuta di consegna</0>.",
       "send-digital-success-SERCQ-SEND": "Invio via domicilio digitale SEND riuscito",
+      "send-digital-success-SERCQ-SEND-description-delegate": "{{recipient}} {{taxId}} ha ricevuto la notifica SEND.",
       "send-simple-registered-letter": "Processo di invio raccomandata iniziato",
       "send-simple-registered-letter-description": "Una raccomandata semplice ti sarà spedita all'indirizzo {{address}}.",
       "send-simple-registered-letter-description-delegate": "Una raccomandata semplice sarà spedita a {{recipient}} all'indirizzo {{address}}.",

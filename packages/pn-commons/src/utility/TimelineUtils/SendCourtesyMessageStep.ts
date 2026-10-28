@@ -5,7 +5,7 @@ import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineS
 export class SendCourtesyMessageStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
     /* eslint-disable-next-line functional/no-let */
-    let type = 'sms';
+    let type = 'SMS';
     const digitalType = (payload.step?.details as SendCourtesyMessageDetails).digitalAddress.type;
     if (digitalType === DigitalDomicileType.EMAIL) {
       type = 'email';
