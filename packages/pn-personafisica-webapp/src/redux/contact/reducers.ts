@@ -70,10 +70,21 @@ const contactsSlice = createSlice({
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {
+        const { addressType, channelType, senderId } = action.meta.arg;
+        // SMS e WhatsApp sono alternativi sullo stesso ente: il backend elimina il recapito "gemello",
+        // lo stato locale viene allineato di conseguenza
+        if (channelType === ChannelType.SMS || channelType === ChannelType.WHATSAPP) {
+          state.digitalAddresses = removeAddress(
+            addressType,
+            channelType === ChannelType.SMS ? ChannelType.WHATSAPP : ChannelType.SMS,
+            senderId,
+            state.digitalAddresses
+          );
+        }
         updateAddressesList(
-          action.meta.arg.addressType,
-          action.meta.arg.channelType,
-          action.meta.arg.senderId,
+          addressType,
+          channelType,
+          senderId,
           state.digitalAddresses,
           action.payload
         );
