@@ -394,7 +394,7 @@
     "clean-filters-cta": "Rimuovi filtri",
     "delegate": "Qui vedrai le notifiche a valore legale di {{name}}",
     "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
-    "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le comunicazioni a valore legale solo in digitale?",
+    "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le notifiche a valore legale solo in digitale?",
     "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
     "filtered-description": "Rimuovili o prova con un’altra combinazione.",
     "go-to-contacts-cta": "Vai ai tuoi recapiti",
@@ -573,13 +573,13 @@
       "title": "Domande frequenti",
       "what-are-notifications": {
         "answer": "Significa che l'invio e la ricezione di queste comunicazioni producono degli effetti giuridici sia nei confronti di chi le invia sia di chi le riceve. Per esempio, se ricevi una multa per violazione del codice stradale, la data in cui la ricevi incide sull'importo che dovrai pagare o sulla tua facoltà di contestarla.",
-        "question": "Che cosa sono le comunicazioni a valore legale"
+        "question": "Che cosa sono le notifiche a valore legale"
       },
       "what-is-send": {
         "answer": "SEND - Servizio Notifiche Digitali è una piattaforma che digitalizza e semplifica la gestione delle notifiche: permette infatti di riceverle, scaricare i documenti notificati e pagare eventuali importi direttamente online.\nSEND può inviare notifiche per conto degli enti sia ai cittadini, ai liberi professionisti e alle ditte individuali, cioè le \"persone fisiche\", che alle imprese, cioè le \"persone giuridiche\".",
         "question": "Cos’è SEND e come funziona"
       }
     },
-    "title": "Ciao,\nhai ricevuto una comunicazione a valore legale"
+    "title": "Ciao,\nhai ricevuto una notifica a valore legale"
   }
 }
