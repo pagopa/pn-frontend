@@ -52,7 +52,7 @@
     "remove-sms-title-dod-enabled": "Vuoi disattivare gli avvisi via SMS?",
     "sms-add": "Aggiungi numero",
     "sms-added-successfully": "Numero di cellulare aggiunto correttamente",
-    "sms-description": "Quando c’è una notifica SENDper te, ti avvisiamo con un SMS.",
+    "sms-description": "Quando c’è una notifica SEND per te, ti avvisiamo con un SMS.",
     "sms-new-code": "Non l’hai ricevuto? Controlla di aver inserito il numero di cellulare corretto oppure <0>genera un nuovo codice</0>.",
     "sms-removed-successfully": "Numero di cellulare rimosso correttamente",
     "sms-title": "Il tuo cellulare",
