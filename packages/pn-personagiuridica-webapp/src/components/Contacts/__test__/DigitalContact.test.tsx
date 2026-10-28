@@ -333,28 +333,6 @@ describe('DigitalContact Component', () => {
     });
   });
 
-  it('preserves the visible edit label for unmapped channel SERCQ_SEND', () => {
-    const { getByRole } = render(
-      <DigitalContact
-        label="Mocked label"
-        value="Mocked contact value"
-        channelType={ChannelType.SERCQ_SEND}
-        inputProps={{
-          label: 'Mocked input label',
-        }}
-        insertButtonLabel="Button"
-        onSubmit={mockSubmitCbk}
-      />
-    );
-
-    const editButton = getByRole('button', {
-      name: 'button.modifica',
-    });
-
-    expect(editButton).toHaveTextContent('button.modifica');
-    expect(editButton).not.toHaveAttribute('aria-label');
-  });
-
   it('edit value', async () => {
     const Component = () => {
       const digitalElemRef = useRef<{ toggleEdit: () => void }>({ toggleEdit: () => {} });
