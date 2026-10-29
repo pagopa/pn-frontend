@@ -134,12 +134,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
             components={[legalFactSlot, perfectionLinkSlot]}
           />
         )}
-        {date && language && (
-          <>
-            &nbsp;
-            <NotificationTimelineEventDate date={date} language={language} />
-          </>
-        )}
+        {date && language && <NotificationTimelineEventDate date={date} language={language} />}
       </Typography>
       {legalFactsToList.map((legalFact) => (
         <NotificationTimelineEventLegalFact
