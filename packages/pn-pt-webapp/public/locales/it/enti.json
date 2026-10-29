@@ -1,5 +1,11 @@
 {
   "subtitle": "Visualizza gli enti gestiti per il prodotto SEND.",
   "title": "I tuoi enti",
-  "work-in-progress": "Il portale è in fase di sviluppo, al momento non è possibile gestire SEND per conto dei tuoi enti da qui."
+  "work-in-progress": "Il portale è in fase di sviluppo, al momento non è possibile gestire SEND per conto dei tuoi enti da qui.",
+  "table": {
+    "empty": {
+      "title": "Qui vedrai i tuoi enti",
+      "description": "Per permetterti di gestire SEND per conto dell’ente, è necessario che l’ente attivi una delega a tuo nome."
+    }
+  }
 }
