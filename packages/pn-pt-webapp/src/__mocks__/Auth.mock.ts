@@ -24,7 +24,7 @@ export const userResponse: User = {
         role: PNRole.ADMIN,
       },
     ],
-    fiscal_code: '80016350821',
+    fiscal_code: '12345678901',
     hasGroups: false,
     institutionType: InstitutionType.PT,
   },
