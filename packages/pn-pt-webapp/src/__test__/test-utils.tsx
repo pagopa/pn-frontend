@@ -1,17 +1,23 @@
 import { ReactElement, ReactNode, createContext, useContext } from 'react';
+import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { ThemeProvider } from '@mui/material';
 import { themeNext } from '@pagopa/mui-italia';
+import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
 
+import { RootState, appReducers } from '../redux/store';
+
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  preloadedState?: any;
   route?: string | Array<string>;
   initialIndex?: number;
   path?: string;
 }
 
 type CustomRenderResult = RenderResult & {
+  testStore: EnhancedStore<RootState>;
   router: ReturnType<typeof createMemoryRouter>;
 };
 
@@ -26,8 +32,24 @@ const RouterBridge = () => {
 
 const customRender = (
   ui: ReactElement,
-  { route = '/', initialIndex, path = '*', ...renderOptions }: CustomRenderOptions = {}
+  {
+    preloadedState,
+    route = '/',
+    initialIndex,
+    path = '*',
+    ...renderOptions
+  }: CustomRenderOptions = {}
 ): CustomRenderResult => {
+  // test redux store
+  const testStore = configureStore({
+    reducer: appReducers,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+  });
+
   // test router
   const entries = Array.isArray(route) ? route : [route];
   const activeIndex = initialIndex ?? entries.length - 1;
@@ -46,11 +68,13 @@ const customRender = (
 
   // test view
   const Wrapper = ({ children }: { children: ReactNode }) => (
-    <ThemeProvider theme={themeNext}>
-      <UiContext.Provider value={children as ReactElement}>
-        <RouterProvider router={router} />
-      </UiContext.Provider>
-    </ThemeProvider>
+    <Provider store={testStore}>
+      <ThemeProvider theme={themeNext}>
+        <UiContext.Provider value={children as ReactElement}>
+          <RouterProvider router={router} />
+        </UiContext.Provider>
+      </ThemeProvider>
+    </Provider>
   );
 
   const view = render(ui, {
@@ -58,7 +82,7 @@ const customRender = (
     ...renderOptions,
   });
 
-  return { ...view, router };
+  return { ...view, testStore, router };
 };
 
 export * from '@testing-library/react';

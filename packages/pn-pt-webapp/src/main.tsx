@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
@@ -8,8 +9,10 @@ import { themeNext } from '@pagopa/mui-italia';
 
 import App from './App';
 import { initAxiosClients } from './api/apiClients';
+import { setUpInterceptor } from './api/interceptors';
 import './i18n';
 import './index.css';
+import { initStore, store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import { loadPtConfiguration } from './services/configuration.service';
 
@@ -19,7 +22,11 @@ async function doTheRender() {
   try {
     // load config from JSON file
     await loadPtConfiguration();
+
+    // init actions (previously static code) which make use of config
+    initStore();
     initAxiosClients();
+    setUpInterceptor(store);
 
     const router = createBrowserRouter([
       {
@@ -29,14 +36,16 @@ async function doTheRender() {
     ]);
 
     root.render(
-      <React.StrictMode>
-        <ThemeProvider theme={themeNext}>
-          <CssBaseline />
-          <Suspense fallback={<LoadingPage renderType="whole" />}>
-            <RouterProvider router={router} />
-          </Suspense>
-        </ThemeProvider>
-      </React.StrictMode>
+      <Provider store={store}>
+        <React.StrictMode>
+          <ThemeProvider theme={themeNext}>
+            <CssBaseline />
+            <Suspense fallback={<LoadingPage renderType="whole" />}>
+              <RouterProvider router={router} />
+            </Suspense>
+          </ThemeProvider>
+        </React.StrictMode>
+      </Provider>
     );
 
     // If you want to start measuring performance in your app, pass a function

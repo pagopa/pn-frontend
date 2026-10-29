@@ -20,8 +20,10 @@
     "react-dom": "^18.3.1",
     "react-i18next": "^11.16.1",
     "react-router-dom": "^6.30.3",
+    "redux-logger": "^3.0.6",
     "typescript": "^5.2.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "dev": "vite",
@@ -52,6 +54,7 @@
     "@types/node": "^20.10.7",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
+    "@types/redux-logger": "^3.0.9",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
     "@vitejs/plugin-basic-ssl": "1.2.0",
