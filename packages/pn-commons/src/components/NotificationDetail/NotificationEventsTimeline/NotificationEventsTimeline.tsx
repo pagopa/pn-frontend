@@ -3,6 +3,7 @@ import { Fragment, useMemo, useState } from 'react';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../../hooks/useIsMobile';
 import { NotificationStatus } from '../../../models';
 import {
   DigitalDomicileType,
@@ -115,6 +116,7 @@ const NotificationEventsTimeline = ({
     ]
   );
 
+  const isMobile = useIsMobile('sm');
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
   const toggleGroup = (groupId: string) =>
@@ -161,7 +163,7 @@ const NotificationEventsTimeline = ({
             const allExpanded =
               groupIds.length > 0 && groupIds.every((id) => expandedGroups.has(id));
             const showExpandAll =
-              status.status === NotificationStatus.DELIVERING && groupIds.length > 1;
+              !isMobile && status.status === NotificationStatus.DELIVERING && groupIds.length > 1;
 
             const statusPerfectionLink = isNewTimelineCopyEnabled
               ? getStatusPerfectionLink(perfectionLink, status)
@@ -175,24 +177,15 @@ const NotificationEventsTimeline = ({
                 title={
                   <Stack
                     component="span"
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flex={1}
-                    minWidth={0}
-                    gap={1}
+                    direction={{ xs: 'column-reverse', sm: 'row' }}
+                    fontWeight={600}
+                    alignItems={{ xs: 'flex-start', sm: 'center' }}
+                    fontSize="16px"
+                    gap={{ xs: 0.5, sm: 1 }}
+                    width="100%"
                   >
-                    <Stack
-                      component="span"
-                      direction={{ xs: 'column-reverse', sm: 'row' }}
-                      fontWeight={600}
-                      alignItems={{ xs: 'flex-start', sm: 'center' }}
-                      fontSize="16px"
-                      gap={{ xs: 0.5, sm: 1 }}
-                    >
-                      {label}
-                      <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
-                    </Stack>
+                    {label}
+                    <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
                     {showExpandAll && (
                       <TimelineExpandAllButton
                         allExpanded={allExpanded}

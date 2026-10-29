@@ -16,7 +16,7 @@ const TimelineExpandAllButton = ({ allExpanded, onClick }: Props) => (
     data-testid="timeline-expand-all"
     endIcon={allExpanded ? <UnfoldLessIcon /> : <UnfoldMoreIcon />}
     onClick={onClick}
-    sx={{ display: { xs: 'none', sm: 'inline-flex' }, flexShrink: 0, p: 0 }}
+    sx={{ flexShrink: 0, ml: 'auto', p: 0 }}
   >
     {getLocalizedOrDefaultLabel(
       'notifications',
