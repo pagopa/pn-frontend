@@ -133,6 +133,31 @@ describe('NotificationTimelineEventItem', () => {
     expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
   });
 
+  it('renders an event outside a group as a bullet item, followed by one bullet item for each listed legal fact', () => {
+    const firstLegalFact = visibleEvent.legalFactsIds![0];
+    const event = {
+      ...visibleEvent,
+      legalFactsIds: [
+        firstLegalFact,
+        { ...firstLegalFact, key: 'safestorage://fictional-second-legal-fact.pdf' },
+      ],
+    };
+
+    const { container, getByTestId, getAllByTestId } = renderEvent(event, {
+      isNewTimelineCopyEnabled: true,
+    });
+
+    const items = container.querySelectorAll('ul > li');
+    expect(items).toHaveLength(3);
+    expect(items[0]).toBe(getByTestId('timeline-event'));
+    expect(
+      within(getByTestId('timeline-event')).queryByTestId('download-legalfact-micro')
+    ).toBeNull();
+    getAllByTestId('download-legalfact-micro').forEach((button, index) => {
+      expect(items[index + 1]).toContainElement(button);
+    });
+  });
+
   it('renders as a list item when insideAGroup is set', () => {
     const { container } = renderEvent(visibleEvent, { insideAGroup: true });
 

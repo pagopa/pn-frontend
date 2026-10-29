@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import {
   LegalFactId,
@@ -6,9 +6,15 @@ import {
   TimelineCategory,
 } from '../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../models/NotificationTimeline';
-import { getNotificationTimelineStatusInfos } from '../../../utility/notification.utility';
+import {
+  getLegalFactLabel,
+  getNotificationTimelineStatusInfos,
+} from '../../../utility/notification.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
-import NotificationTimelineDescription from './NotificationTimelineDescription';
+import NotificationTimelineDescription, {
+  NotificationTimelineEventLegalFact,
+  isLegalFactDownloadDisabled,
+} from './NotificationTimelineDescription';
 import TimelineLegalFacts from './TimelineLegalFacts';
 import { PERFECTION_ANCHORS } from './timelineItem.config';
 
@@ -93,6 +99,11 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   // Event level mirrors the status rule: a single legal fact is inlined in the description
   // text, several ones are listed below it. Inlining only happens with the new copy.
   const eventLegalFacts = (event.legalFactsIds ?? []).map((lf) => ({ event, lf }));
+  const isLegalFactInlined = isNewTimelineCopyEnabled && eventLegalFacts.length === 1;
+
+  // Outside a group (which is already a list) the listed legal facts are rendered as events,
+  // each one with its own bullet. Inside a group they stay below the event description.
+  const listedLegalFacts = insideAGroup || isLegalFactInlined ? [] : eventLegalFacts;
 
   const eventPerfectionLink =
     isNewTimelineCopyEnabled &&
@@ -101,11 +112,11 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
       ? `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`
       : perfectionLink;
 
-  return (
+  const eventItem = (
     <Stack
-      component={insideAGroup ? 'li' : 'div'}
+      component="li"
       spacing={0.5}
-      sx={{ overflowWrap: 'anywhere', display: insideAGroup ? 'list-item' : 'flex', py: 1 }}
+      sx={{ overflowWrap: 'anywhere', display: 'list-item', py: 1 }}
       data-testid="timeline-event"
     >
       <Stack component="span" direction="row" alignItems="center" gap={1}>
@@ -118,7 +129,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         date={event.timestamp}
         language={language}
         event={event}
-        legalFacts={eventLegalFacts}
+        legalFacts={insideAGroup || isLegalFactInlined ? eventLegalFacts : []}
         clickHandler={clickHandler}
         slotProps={{ typography: { variant: 'body2', sx: { fontWeight: 400 } } }}
         isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
@@ -126,6 +137,29 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         perfectionLink={eventPerfectionLink}
       />
     </Stack>
+  );
+
+  if (insideAGroup) {
+    return eventItem;
+  }
+
+  return (
+    <Box component="ul" sx={{ listStyleType: 'disc', pl: 3, m: 0 }}>
+      {eventItem}
+      {listedLegalFacts.map(({ lf }) => (
+        <Stack component="li" key={lf.key} sx={{ display: 'list-item', py: 1 }}>
+          <NotificationTimelineEventLegalFact
+            legalFact={lf}
+            clickHandler={clickHandler}
+            disableDownloads={isLegalFactDownloadDisabled(event.category, disableDownloads)}
+            dataTestId="download-legalfact-micro"
+            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+          >
+            {getLegalFactLabel(event, lf.category, lf.key || '')}
+          </NotificationTimelineEventLegalFact>
+        </Stack>
+      ))}
+    </Box>
   );
 };
 
