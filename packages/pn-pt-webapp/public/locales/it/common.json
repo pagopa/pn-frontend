@@ -120,7 +120,7 @@
     "operator": "Referente operativo"
   },
   "toast": {
-    "aria-label": "Icona di chisura toast"
+    "aria-label": "Icona di chiusura toast"
   },
   "user-validation-failed": {
     "cta": "Contatta l’assistenza",
