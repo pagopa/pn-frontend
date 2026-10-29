@@ -1,0 +1,68 @@
+import { fireEvent, render } from '../../__test__/test-utils';
+import { getConfiguration } from '../../services/configuration.service';
+import AppNotAccessibleRoute from '../AppNotAccessibleRoute';
+import * as routes from '../routes.const';
+
+describe('AppNotAccessibleRoute Component', () => {
+  let landingSiteUrl: string;
+  let supportEmail: string;
+  const originalLocation = globalThis.location;
+
+  beforeAll(() => {
+    const config = getConfiguration();
+    landingSiteUrl = config.LANDING_SITE_URL;
+    supportEmail = config.PAGOPA_HELP_EMAIL;
+  });
+
+  beforeEach(() => {
+    globalThis.history.pushState({}, '', '/');
+  });
+
+  afterEach(() => {
+    globalThis.location = originalLocation;
+  });
+
+  it('uses "not-accessible" as default reason when query param is missing', () => {
+    const { container } = render(<AppNotAccessibleRoute />, { route: routes.NOT_ACCESSIBLE });
+
+    expect(container).toHaveTextContent('not-accessible.title');
+    expect(container).toHaveTextContent('not-accessible.description');
+    expect(container).toHaveTextContent('not-accessible.action');
+  });
+
+  it('uses "user-validation-failed" reason when query param is set', () => {
+    const { container } = render(<AppNotAccessibleRoute />, {
+      route: `${routes.NOT_ACCESSIBLE}?reason=user-validation-failed`,
+    });
+
+    expect(container).toHaveTextContent('user-validation-failed.title');
+    expect(container).toHaveTextContent('user-validation-failed.description');
+    expect(container).toHaveTextContent('user-validation-failed.cta');
+  });
+
+  it('redirects to landing site when reason is "not-accessible"', () => {
+    const { getByTestId } = render(<AppNotAccessibleRoute />, { route: routes.NOT_ACCESSIBLE });
+
+    const mockLocation = { href: '' };
+    globalThis.location = mockLocation as any;
+
+    const button = getByTestId('goToLanding-link');
+    fireEvent.click(button);
+
+    expect(mockLocation.href).toBe(landingSiteUrl);
+  });
+
+  it('opens mailto to support when reason is "user-validation-failed"', () => {
+    const { getByTestId } = render(<AppNotAccessibleRoute />, {
+      route: `${routes.NOT_ACCESSIBLE}?reason=user-validation-failed`,
+    });
+
+    const mockLocation = { href: '' };
+    globalThis.location = mockLocation as any;
+
+    const button = getByTestId('feedback-button');
+    fireEvent.click(button);
+
+    expect(mockLocation.href).toBe(`mailto:${supportEmail}`);
+  });
+});
