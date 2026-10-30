@@ -131,7 +131,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           <Trans
             i18nKey="description" // this is fake and is needed to run trans functionality
             t={() => description}
-            components={[legalFactSlot, perfectionLinkSlot]}
+            components={[legalFactSlot, perfectionLinkSlot, <strong key="bold" />]}
           />
         )}
         {date && language && (

@@ -1,6 +1,7 @@
 import { ComponentType } from 'react';
 
 import {
+  DraftsOutlined,
   EuroRounded,
   GavelRounded,
   InfoOutlined,
@@ -47,10 +48,14 @@ const DEFAULT_TIMELINE_STATUS_PRESENTATION: TimelineStatusPresentation = {
 
 export const getTimelineItemPresentation = (
   status: NotificationStatus,
-  isFirst: boolean
+  isFirst: boolean,
+  hasEffectiveDate = false
 ): TimelineStatusPresentation => {
-  const { icon, variant } =
+  const { icon: statusIcon, variant } =
     TIMELINE_STATUS_PRESENTATION[status] ?? DEFAULT_TIMELINE_STATUS_PRESENTATION;
+  // the viewed status shows the DraftsOutlined icon when the timeline also contains the effective date status
+  const icon =
+    status === NotificationStatus.VIEWED && hasEffectiveDate ? DraftsOutlined : statusIcon;
 
   return {
     icon,

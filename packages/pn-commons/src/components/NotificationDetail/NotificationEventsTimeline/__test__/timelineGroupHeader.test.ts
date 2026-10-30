@@ -6,6 +6,7 @@ import {
   NotificationTimelineStatusHistory,
   TimelineEventsChannel,
 } from '../../../../models/NotificationTimeline';
+import MailOffRounded from '../../../Icons/MailOffRounded';
 import MobileRounded from '../../../Icons/MobileRounded';
 import SendIcon from '../../../Icons/SendIcon';
 import { getMultiAttemptGroupIds, getTimelineGroupHeader } from '../timelineGroupHeader.config';
@@ -113,10 +114,23 @@ describe('timelineGroupHeader config', () => {
     expect(getTimelineGroupHeader(analogFailureGroup).channel).toBe(
       'detail.timeline.registered-letter'
     );
-    expect(getTimelineGroupHeader(analogFailureGroup).icon).toBe(MailOutlineRounded);
+    expect(getTimelineGroupHeader(analogFailureGroup).icon).toBe(MailOffRounded);
     expect(getTimelineGroupHeader(digitalGroup).channel).toBe(
       'detail.timeline.digital-send-fallback'
     );
+  });
+
+  it('getTimelineGroupHeader - shows a dedicated presentation when the preparation of the second analog attempt fails', () => {
+    const secondAttemptFailureGroup: NotificationTimelineGroup = {
+      ...analogGroup('analog-failure-group', 2),
+      category: 'ANALOG_FAILURE',
+      channel: undefined,
+    };
+
+    const header = getTimelineGroupHeader(secondAttemptFailureGroup);
+    expect(header.channel).toBe('detail.timeline.analog-failure-second-attempt-group-label');
+    expect(header.icon).toBe(MailOffRounded);
+    expect(header.detail).toBeUndefined();
   });
 
   it('getTimelineGroupHeader - falls back to a generic presentation when neither the channel nor the category are mapped', () => {
