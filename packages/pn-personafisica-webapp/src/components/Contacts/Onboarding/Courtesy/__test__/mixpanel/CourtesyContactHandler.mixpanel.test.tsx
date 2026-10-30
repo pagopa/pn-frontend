@@ -46,7 +46,7 @@ describe('CourtesyContactHandler - Mixpanel events', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: 'digital-contact.edit-email-aria-label',
+          name: 'button.modifica',
         })
       );
     });
@@ -63,7 +63,7 @@ describe('CourtesyContactHandler - Mixpanel events', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: 'digital-contact.edit-sms-aria-label',
+          name: 'button.modifica',
         })
       );
     });
@@ -81,7 +81,7 @@ describe('CourtesyContactHandler - Mixpanel events', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: 'digital-contact.edit-email-aria-label',
+          name: 'button.modifica',
         })
       );
     });
@@ -102,7 +102,7 @@ describe('CourtesyContactHandler - Mixpanel events', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: 'digital-contact.edit-sms-aria-label',
+          name: 'button.modifica',
         })
       );
     });

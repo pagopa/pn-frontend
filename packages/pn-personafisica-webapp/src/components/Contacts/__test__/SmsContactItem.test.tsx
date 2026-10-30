@@ -82,7 +82,7 @@ describe('test SmsContactItem', () => {
     const phoneValue = getById(form!, 'default_sms-typography');
     expect(phoneValue).toHaveTextContent(defaultAddress?.value!);
     const editButton = getByRole('button', {
-      name: 'digital-contact.edit-sms-aria-label',
+      name: 'button.modifica',
     });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_sms"]`);
@@ -210,7 +210,7 @@ describe('test SmsContactItem', () => {
     let smsValue = getById(form!, 'default_sms-typography');
     expect(smsValue).toHaveTextContent(defaultAddress!.value);
     let editButton = result.getByRole('button', {
-      name: 'digital-contact.edit-sms-aria-label',
+      name: 'button.modifica',
     });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_sms"]`);

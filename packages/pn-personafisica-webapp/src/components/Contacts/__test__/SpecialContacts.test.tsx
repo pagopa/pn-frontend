@@ -98,7 +98,7 @@ describe('SpecialContacts Component', () => {
       /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
     );
     const editButton = within(specialContactForms[0]).getByRole('button', {
-      name: 'digital-contact.edit-pec-aria-label',
+      name: 'button.modifica',
     });
     fireEvent.click(editButton);
 
@@ -269,7 +269,7 @@ describe('SpecialContacts Component', () => {
       /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
     );
     const editButton = within(specialContactForms[1]).getByRole('button', {
-      name: 'digital-contact.edit-pec-aria-label',
+      name: 'button.modifica',
     });
     fireEvent.click(editButton);
 

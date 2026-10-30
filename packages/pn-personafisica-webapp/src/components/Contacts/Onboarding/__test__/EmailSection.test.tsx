@@ -88,7 +88,7 @@ describe('EmailSection', () => {
     expect(getByText(mockEmail)).toBeInTheDocument();
     expect(
       queryByRole('button', {
-        name: 'digital-contact.edit-email-aria-label',
+        name: 'button.modifica',
       })
     ).not.toBeInTheDocument();
   });
@@ -103,7 +103,7 @@ describe('EmailSection', () => {
     expect(getByText(`${labelPrefix}.pec.email-present-description`)).toBeInTheDocument();
     expect(getByText(mockEmail)).toBeInTheDocument();
     const editButton = getByRole('button', {
-      name: 'digital-contact.edit-email-aria-label',
+      name: 'button.modifica',
     });
 
     expect(editButton).toBeInTheDocument();

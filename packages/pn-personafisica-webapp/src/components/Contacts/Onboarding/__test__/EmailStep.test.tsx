@@ -42,7 +42,7 @@ describe('EmailStep', () => {
     expect(getByRole('button', { name: `${labelPrefix}.verify-cta` })).toBeInTheDocument();
     expect(
       queryByRole('button', {
-        name: 'digital-contact.edit-email-aria-label',
+        name: 'button.modifica',
       })
     ).not.toBeInTheDocument();
   });
@@ -112,7 +112,7 @@ describe('EmailStep', () => {
     expect(getByText(mockEmail)).toBeInTheDocument();
     expect(
       queryByRole('button', {
-        name: 'digital-contact.edit-email-aria-label',
+        name: 'button.modifica',
       })
     ).not.toBeInTheDocument();
   });
@@ -127,7 +127,7 @@ describe('EmailStep', () => {
     expect(getByText(`${labelPrefix}.title-existing`)).toBeInTheDocument();
     expect(getByText(mockEmail)).toBeInTheDocument();
     const editButton = getByRole('button', {
-      name: 'digital-contact.edit-email-aria-label',
+      name: 'button.modifica',
     });
 
     expect(editButton).toBeInTheDocument();
@@ -151,7 +151,7 @@ describe('EmailStep', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: 'digital-contact.edit-email-aria-label',
+          name: 'button.modifica',
         })
       );
     });
@@ -189,7 +189,7 @@ describe('EmailStep', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: 'digital-contact.edit-email-aria-label',
+          name: 'button.modifica',
         })
       );
     });

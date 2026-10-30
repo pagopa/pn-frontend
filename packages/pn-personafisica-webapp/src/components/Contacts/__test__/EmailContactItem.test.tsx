@@ -61,7 +61,7 @@ describe('testing EmailContactItem', () => {
     const phoneValue = getById(form!, 'default_email-typography');
     expect(phoneValue).toHaveTextContent(defaultAddress?.value!);
     const editButton = getByRole('button', {
-      name: 'digital-contact.edit-email-aria-label',
+      name: 'button.modifica',
     });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_email"]`);
@@ -167,7 +167,7 @@ describe('testing EmailContactItem', () => {
     let mailValue = getById(form!, 'default_email-typography');
     expect(mailValue).toHaveTextContent(defaultAddress!.value);
     let editButton = result.getByRole('button', {
-      name: 'digital-contact.edit-email-aria-label',
+      name: 'button.modifica',
     });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_email"]`);

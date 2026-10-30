@@ -178,7 +178,7 @@ describe('EmailStep - Mixpanel events', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: 'digital-contact.edit-email-aria-label',
+          name: 'button.modifica',
         })
       );
     });
@@ -197,7 +197,7 @@ describe('EmailStep - Mixpanel events', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: 'digital-contact.edit-email-aria-label',
+          name: 'button.modifica',
         })
       );
     });

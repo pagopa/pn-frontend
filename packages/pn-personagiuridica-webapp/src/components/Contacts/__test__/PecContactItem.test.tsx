@@ -203,7 +203,7 @@ describe('PecContactItem component', () => {
     const pecValue = getById(form!, 'default_pec-typography');
     expect(pecValue).toHaveTextContent(defaultAddress!.value);
     const editButton = getByRole('button', {
-      name: 'digital-contact.edit-pec-aria-label',
+      name: 'button.modifica',
     });
     fireEvent.click(editButton);
     const input = container.querySelector('[name="default_pec"]');
@@ -246,7 +246,7 @@ describe('PecContactItem component', () => {
     let pecValue = getById(form!, 'default_pec-typography');
     expect(pecValue).toHaveTextContent(defaultAddress!.value);
     let editButton = result.getByRole('button', {
-      name: 'digital-contact.edit-pec-aria-label',
+      name: 'button.modifica',
     });
     fireEvent.click(editButton);
     const input = result.container.querySelector('[name="default_pec"]');
