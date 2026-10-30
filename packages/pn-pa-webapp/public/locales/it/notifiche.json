@@ -97,6 +97,7 @@
       "aar-document": "Avviso di avvenuta ricezione",
       "collapse-all-groups": "Comprimi",
       "expand-all-groups": "Espandi",
+      "analog-failure-second-attempt-group-label": "Secondo invio via raccomandata - Tentativo fallito",
       "analog-failure-workflow": "Aggiornamento sull'invio cartaceo",
       "analog-failure-workflow-description": "Il destinatario è risultato irreperibile assoluto. Si deposita e mette a disposizione l'avviso di avvenuta ricezione.",
       "analog-failure-workflow-description-multirecipient": "Il destinatario {{name}} {{taxId}} è risultato irreperibile assoluto. Si deposita e mette a disposizione l'avviso di avvenuta ricezione.",
