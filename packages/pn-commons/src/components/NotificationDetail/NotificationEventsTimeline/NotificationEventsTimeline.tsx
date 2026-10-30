@@ -82,6 +82,10 @@ const getStatusPerfectionLink = (
   return perfectionLink;
 };
 
+// The same group can be shown in more than one status: its expanded state is tracked per status
+const getGroupKey = (status: NotificationTimelineStatusHistory, groupId: string) =>
+  `${status.status}_${groupId}`;
+
 const NotificationEventsTimeline = ({
   recipients,
   statusHistory,
@@ -121,19 +125,19 @@ const NotificationEventsTimeline = ({
   const isMobile = useIsMobile('sm');
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
-  const toggleGroup = (groupId: string) =>
+  const toggleGroup = (groupKey: string) =>
     setExpandedGroups((current) => {
       const next = new Set(current);
-      if (!next.delete(groupId)) {
-        next.add(groupId);
+      if (!next.delete(groupKey)) {
+        next.add(groupKey);
       }
       return next;
     });
 
-  const setGroupsExpanded = (groupIds: Array<string>, expanded: boolean) =>
+  const setGroupsExpanded = (groupKeys: Array<string>, expanded: boolean) =>
     setExpandedGroups((current) => {
       const next = new Set(current);
-      groupIds.forEach((id) => (expanded ? next.add(id) : next.delete(id)));
+      groupKeys.forEach((key) => (expanded ? next.add(key) : next.delete(key)));
       return next;
     });
 
@@ -159,13 +163,13 @@ const NotificationEventsTimeline = ({
                   isTimelineGroupStep(step) || !plan.hiddenEventIds.has(step.event.elementId)
               );
 
-            const groupIds = visibleSteps.flatMap(({ step }) =>
-              isTimelineGroupStep(step) ? [step.group.groupId] : []
+            const groupKeys = visibleSteps.flatMap(({ step }) =>
+              isTimelineGroupStep(step) ? [getGroupKey(status, step.group.groupId)] : []
             );
             const allExpanded =
-              groupIds.length > 0 && groupIds.every((id) => expandedGroups.has(id));
+              groupKeys.length > 0 && groupKeys.every((key) => expandedGroups.has(key));
             const showExpandAll =
-              !isMobile && status.status === NotificationStatus.DELIVERING && groupIds.length > 1;
+              !isMobile && status.status === NotificationStatus.DELIVERING && groupKeys.length > 1;
 
             const statusPerfectionLink = isNewTimelineCopyEnabled
               ? getStatusPerfectionLink(perfectionLink, status)
@@ -191,7 +195,7 @@ const NotificationEventsTimeline = ({
                     {showExpandAll && (
                       <TimelineExpandAllButton
                         allExpanded={allExpanded}
-                        onClick={() => setGroupsExpanded(groupIds, !allExpanded)}
+                        onClick={() => setGroupsExpanded(groupKeys, !allExpanded)}
                       />
                     )}
                   </Stack>
@@ -280,8 +284,8 @@ const NotificationEventsTimeline = ({
                           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                           perfectionLink={perfectionLink}
                           delegatorName={delegatorName}
-                          expanded={expandedGroups.has(step.group.groupId)}
-                          onToggle={() => toggleGroup(step.group.groupId)}
+                          expanded={expandedGroups.has(getGroupKey(status, step.group.groupId))}
+                          onToggle={() => toggleGroup(getGroupKey(status, step.group.groupId))}
                         />
                       </Fragment>
                     );

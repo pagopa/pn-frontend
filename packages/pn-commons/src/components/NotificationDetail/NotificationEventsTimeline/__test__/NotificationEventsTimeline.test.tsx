@@ -295,6 +295,34 @@ describe('NotificationEventsTimeline', () => {
     await waitFor(() => expect(queryAllByTestId('timeline-group-body')).toHaveLength(0));
   });
 
+  it('expands a group only in its own status when the same group is shown in more than one status', () => {
+    const sharedGroup = groupOfRecipient('shared-group', multiRecipients[0], 0);
+    const { getAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[
+          {
+            status: NotificationStatus.EFFECTIVE_DATE,
+            activeFrom: '2026-08-08T09:14:58.508308Z',
+            steps: [{ stepType: 'GROUP', group: sharedGroup }],
+          },
+          {
+            status: NotificationStatus.DELIVERING,
+            activeFrom: '2026-08-06T09:14:58.508308Z',
+            steps: [{ stepType: 'GROUP', group: sharedGroup }],
+          },
+        ]}
+        clickHandler={clickHandler}
+      />
+    );
+
+    const [effectiveDateGroup, deliveringGroup] = getAllByTestId('timeline-group');
+    fireEvent.click(within(deliveringGroup).getByTestId('timeline-group-header'));
+
+    expect(within(deliveringGroup).getByTestId('timeline-group-body')).toBeInTheDocument();
+    expect(within(effectiveDateGroup).queryByTestId('timeline-group-body')).toBeNull();
+  });
+
   it('does not show the expand all button when the status is not delivering', () => {
     const { queryByTestId } = render(
       <NotificationEventsTimeline
