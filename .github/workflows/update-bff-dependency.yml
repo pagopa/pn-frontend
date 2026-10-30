@@ -28,7 +28,8 @@ jobs:
           git config user.email "<>"
 
       - name: Install Packages
-        run: cd .github/workflows/actions/update-dependency && npm install
+        working-directory: .github/workflows/actions/update-dependency
+        run: npm ci
 
       - name: Update BFF Dependency
         uses: ./.github/workflows/actions/update-dependency
