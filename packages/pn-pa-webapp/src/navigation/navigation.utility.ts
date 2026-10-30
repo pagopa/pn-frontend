@@ -24,6 +24,11 @@ export function goToSelfcareLogout(isSupportUser: boolean): void {
   window.open(`${SELFCARE_BASE_URL}${logoutPath}`, '_self');
 }
 
+export function goToPartnerPortal(selfCareToken: string): void {
+  const { PARTNER_PORTAL_URL } = getConfiguration();
+  window.location.replace(`${PARTNER_PORTAL_URL}#selfCareToken=${selfCareToken}`);
+}
+
 /**
  * This method returns an EventPageType used to track user experience base on current location.
  * In this way, we avoid to share current url and therfore personal information.

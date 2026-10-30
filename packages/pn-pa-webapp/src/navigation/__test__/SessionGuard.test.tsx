@@ -3,6 +3,8 @@ import { sub } from 'date-fns';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
+import { InstitutionType } from '@pagopa-pn/pn-commons';
+
 import { supportUserResponse, userResponse } from '../../__mocks__/Auth.mock';
 import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
@@ -25,10 +27,12 @@ describe('SessionGuard Component', () => {
   let mock: MockAdapter;
   let result: RenderResult;
   const mockOpenFn = vi.fn();
+  const mockReplaceFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
     vi.stubGlobal('open', mockOpenFn);
+    vi.stubGlobal('location', { href: '', replace: mockReplaceFn });
   });
 
   afterEach(() => {
@@ -131,6 +135,44 @@ describe('SessionGuard Component', () => {
       expect(result.router.state.location.search).toBe('?reason=user-validation-failed');
       expect(result.router.state.historyAction).toBe('REPLACE');
     });
+  });
+
+  it('token-exchange user validation failed - institution type not allowed', async () => {
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, {
+      ...userResponse,
+      organization: { ...userResponse.organization, institutionType: InstitutionType.PG },
+    });
+
+    await act(async () => {
+      result = render(<Guard />, { route: '/#selfCareToken=pg_token' });
+    });
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOT_ACCESSIBLE);
+      expect(result.router.state.location.search).toBe('?reason=user-validation-failed');
+      expect(result.router.state.historyAction).toBe('REPLACE');
+    });
+  });
+
+  it('PT user logged in', async () => {
+    mock.onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: 'pt_token' }).reply(200, {
+      ...userResponse,
+      organization: { ...userResponse.organization, institutionType: InstitutionType.PT },
+    });
+
+    await act(async () => {
+      render(<Guard />, { route: '/#selfCareToken=pt_token' });
+    });
+
+    await waitFor(() => {
+      expect(mockReplaceFn).toHaveBeenCalledTimes(1);
+      expect(mockReplaceFn).toHaveBeenCalledWith(
+        `${getConfiguration().PARTNER_PORTAL_URL}#selfCareToken=pt_token`
+      );
+    });
+    expect(screen.queryByText('Generic Page')).toBeNull();
+    expect(store.getState().userState.user.sessionToken).toEqual('');
+    expect(sessionStorage.getItem('user')).toBeNull();
   });
 
   it('support user logged in', async () => {
