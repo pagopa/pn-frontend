@@ -26,7 +26,7 @@ type InstitutionFilters = {
 };
 
 const InstitutionsPage: React.FC = () => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const { t } = useTranslation('enti');
 
@@ -94,8 +94,8 @@ const InstitutionsPage: React.FC = () => {
       values: emptyFilters,
     });
 
-    dispatch(resetCommunicationsPagination());
-    fetchCampaignCommunications(0, communicationsPagination.size, emptyFilters);
+    // dispatch(resetCommunicationsPagination());
+    // fetchCampaignCommunications(0, communicationsPagination.size, emptyFilters);
   };
 
   const institutions: any[] = [];
