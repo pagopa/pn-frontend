@@ -121,4 +121,4 @@ export type {
   NotificationTimelineStatusHistory,
   NotificationPaymentTimeline,
 } from './NotificationTimeline';
-export { basicNoLoggedUserData } from './User';
+export { basicNoLoggedUserData, InstitutionType } from './User';
