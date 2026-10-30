@@ -252,46 +252,40 @@ describe('DigitalContact Component', () => {
     {
       channelType: ChannelType.EMAIL,
       value: 'mocked@email.it',
-      accessibleName: 'digital-contact.edit-email-aria-label',
     },
     {
       channelType: ChannelType.SMS,
       value: '3331234567',
-      accessibleName: 'digital-contact.edit-sms-aria-label',
     },
     {
       channelType: ChannelType.PEC,
       value: 'mocked@pec.it',
-      accessibleName: 'digital-contact.edit-pec-aria-label',
     },
-  ])(
-    'renders the contextual edit button for $channelType',
-    ({ channelType, value, accessibleName }) => {
-      const { getByRole, getByTestId } = render(
-        <DigitalContact
-          label="Mocked label"
-          value={value}
-          channelType={channelType}
-          inputProps={{
-            label: 'Mocked input label',
-          }}
-          insertButtonLabel="Button"
-          onSubmit={mockSubmitCbk}
-          onDelete={mockDeleteCbk}
-        />
-      );
+  ])('renders the contextual edit button for $channelType', ({ channelType, value }) => {
+    const { getByRole, getByTestId } = render(
+      <DigitalContact
+        label="Mocked label"
+        value={value}
+        channelType={channelType}
+        inputProps={{
+          label: 'Mocked input label',
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+      />
+    );
 
-      const editButton = getByRole('button', {
-        name: accessibleName,
-      });
+    const editButton = getByRole('button', {
+      name: 'button.modifica',
+    });
 
-      expect(editButton).toHaveTextContent('button.modifica');
-      const editIcon = getByTestId('CreateRoundedIcon');
+    expect(editButton).toHaveTextContent('button.modifica');
+    const editIcon = getByTestId('CreateRoundedIcon');
 
-      expect(editButton).toContainElement(editIcon);
-      expect(editIcon).toHaveAttribute('aria-hidden', 'true');
-    }
-  );
+    expect(editButton).toContainElement(editIcon);
+    expect(editIcon).toHaveAttribute('aria-hidden', 'true');
+  });
 
   it('does not expose the verified icon in edit mode', async () => {
     const { getByRole, queryByRole } = render(
@@ -317,7 +311,7 @@ describe('DigitalContact Component', () => {
 
     fireEvent.click(
       getByRole('button', {
-        name: 'digital-contact.edit-pec-aria-label',
+        name: 'button.modifica',
       })
     );
 

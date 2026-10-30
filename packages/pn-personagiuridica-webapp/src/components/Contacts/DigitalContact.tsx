@@ -328,9 +328,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 startIcon={<CreateRoundedIcon />}
                 sx={{ justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}
-                aria-label={t(`digital-contact.edit-${contactType}-aria-label`, {
-                  ns: 'recapiti',
-                })}
                 variant="text"
               >
                 {t('button.modifica')}
