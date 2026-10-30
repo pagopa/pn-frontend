@@ -169,20 +169,13 @@ describe('NotificationTimelineEventItem', () => {
       deliveringAllEvents
     );
     expect(item).toHaveTextContent(`${statusInfo!.label} - ${statusInfo!.description}`);
-
-    const { container: bulletContainer } = renderEvent(hiddenEvent, { insideAGroup: true });
-    expect(within(bulletContainer).getAllByTestId('download-legalfact-micro')).toHaveLength(1);
   });
 
-  it('wraps a hidden event in a <li> when rendered inside a bullet list', () => {
+  it('does not wrap the legal facts of a hidden event in a <li>, even inside a group', () => {
     const { container } = renderEvent(hiddenEvent, { insideAGroup: true });
 
-    const legalFactButton = within(container).getByTestId('download-legalfact-micro');
-    expect(legalFactButton.closest('li')).not.toBeNull();
-
-    const { container: noListContainer } = renderEvent(hiddenEvent);
-    const legalFactButtonNoList = within(noListContainer).getByTestId('download-legalfact');
-    expect(legalFactButtonNoList.closest('li')).toBeNull();
+    const legalFactButton = within(container).getByTestId('download-legalfact');
+    expect(legalFactButton.closest('li')).toBeNull();
   });
 
   it('disables the download when disableDownloads is set, except for the cancelled notification', () => {

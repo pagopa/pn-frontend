@@ -31,34 +31,6 @@ type Props = {
   delegatorName?: string;
 };
 
-const NotificationTimelineEventItemLegalFacts: React.FC<
-  Pick<Props, 'event' | 'clickHandler' | 'disableDownloads' | 'insideAGroup'>
-> = ({ event, clickHandler, disableDownloads, insideAGroup }) => {
-  if (!event.legalFactsIds?.length) {
-    return null;
-  }
-
-  const legalFacts = (
-    <TimelineLegalFacts
-      event={event}
-      clickHandler={clickHandler}
-      disableDownloads={disableDownloads}
-      withIcon
-      testId={insideAGroup ? 'download-legalfact-micro' : 'download-legalfact'}
-    />
-  );
-
-  // insideAGroup is true when the legal fact is in a group,
-  // otherwise it is under the notification status
-  return insideAGroup ? (
-    <Stack component="li" sx={{ display: 'list-item' }}>
-      {legalFacts}
-    </Stack>
-  ) : (
-    legalFacts
-  );
-};
-
 const NotificationTimelineEventItem: React.FC<Props> = ({
   event,
   allEvents,
@@ -75,11 +47,12 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   // this component means the event has to be rendered.
   if (event.isHidden && !isNewTimelineCopyEnabled) {
     return (
-      <NotificationTimelineEventItemLegalFacts
+      <TimelineLegalFacts
         event={event}
-        insideAGroup={insideAGroup}
-        disableDownloads={disableDownloads}
         clickHandler={clickHandler}
+        disableDownloads={disableDownloads}
+        withIcon
+        testId="download-legalfact"
       />
     );
   }
