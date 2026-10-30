@@ -14,4 +14,4 @@ HTTPS=true
 PORT=443
 ```
 
-Now you can run `yarn dev` to run your application and to make redirect from reference URL to app in localhost.
+Now you can run `yarn dev` to run your application and to make redirect from reference URL to app in localhost
