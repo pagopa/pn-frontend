@@ -26,12 +26,7 @@ type Props = {
   legalFacts: Array<StatusLegalFact<NotificationTimelineEvent | INotificationDetailTimeline>>;
 };
 
-export const isLegalFactDownloadDisabled = (
-  category: TimelineCategory,
-  disableDownloads: boolean
-) => disableDownloads && category !== TimelineCategory.NOTIFICATION_CANCELLED;
-
-export const NotificationTimelineEventLegalFact: React.FC<
+const NotificationTimelineEventLegalFact: React.FC<
   Pick<Props, 'slotProps' | 'clickHandler' | 'disableDownloads' | 'isNewTimelineCopyEnabled'> & {
     legalFact: LegalFactId;
     children?: React.ReactNode;
@@ -93,15 +88,15 @@ const NotificationTimelineDescription: React.FC<Props> = ({
 
   const legalFactsToList = inlineLegalFact ? [] : legalFacts;
 
+  const downloadIsDisabled = (category: TimelineCategory) =>
+    disableDownloads && category !== TimelineCategory.NOTIFICATION_CANCELLED;
+
   const legalFactSlot = inlineLegalFact ? (
     <NotificationTimelineEventLegalFact
       legalFact={inlineLegalFact.lf}
       clickHandler={clickHandler}
       slotProps={slotProps}
-      disableDownloads={isLegalFactDownloadDisabled(
-        inlineLegalFact.event.category,
-        disableDownloads
-      )}
+      disableDownloads={downloadIsDisabled(inlineLegalFact.event.category)}
       dataTestId={event ? 'download-legalfact-micro' : 'download-legalfact'}
       isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
     />
@@ -139,7 +134,12 @@ const NotificationTimelineDescription: React.FC<Props> = ({
             components={[legalFactSlot, perfectionLinkSlot]}
           />
         )}
-        {date && language && <NotificationTimelineEventDate date={date} language={language} />}
+        {date && language && (
+          <>
+            &nbsp;
+            <NotificationTimelineEventDate date={date} language={language} />
+          </>
+        )}
       </Typography>
       {legalFactsToList.map((legalFact) => (
         <NotificationTimelineEventLegalFact
@@ -147,7 +147,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           legalFact={legalFact.lf}
           clickHandler={clickHandler}
           slotProps={{ ...slotProps, button: { sx: { display: 'block' } } }}
-          disableDownloads={isLegalFactDownloadDisabled(legalFact.event.category, disableDownloads)}
+          disableDownloads={downloadIsDisabled(legalFact.event.category)}
           dataTestId="download-legalfact-micro"
           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         >

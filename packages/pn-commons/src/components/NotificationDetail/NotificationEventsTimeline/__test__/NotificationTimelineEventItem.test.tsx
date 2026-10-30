@@ -133,31 +133,6 @@ describe('NotificationTimelineEventItem', () => {
     expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
   });
 
-  it('renders an event outside a group as a bullet item, followed by one bullet item for each listed legal fact', () => {
-    const firstLegalFact = visibleEvent.legalFactsIds![0];
-    const event = {
-      ...visibleEvent,
-      legalFactsIds: [
-        firstLegalFact,
-        { ...firstLegalFact, key: 'safestorage://fictional-second-legal-fact.pdf' },
-      ],
-    };
-
-    const { container, getByTestId, getAllByTestId } = renderEvent(event, {
-      isNewTimelineCopyEnabled: true,
-    });
-
-    const items = container.querySelectorAll('ul > li');
-    expect(items).toHaveLength(3);
-    expect(items[0]).toBe(getByTestId('timeline-event'));
-    expect(
-      within(getByTestId('timeline-event')).queryByTestId('download-legalfact-micro')
-    ).toBeNull();
-    getAllByTestId('download-legalfact-micro').forEach((button, index) => {
-      expect(items[index + 1]).toContainElement(button);
-    });
-  });
-
   it('renders as a list item when insideAGroup is set', () => {
     const { container } = renderEvent(visibleEvent, { insideAGroup: true });
 
@@ -169,13 +144,20 @@ describe('NotificationTimelineEventItem', () => {
       deliveringAllEvents
     );
     expect(item).toHaveTextContent(`${statusInfo!.label} - ${statusInfo!.description}`);
+
+    const { container: bulletContainer } = renderEvent(hiddenEvent, { insideAGroup: true });
+    expect(within(bulletContainer).getAllByTestId('download-legalfact-micro')).toHaveLength(1);
   });
 
-  it('does not wrap the legal facts of a hidden event in a <li>, even inside a group', () => {
+  it('wraps a hidden event in a <li> when rendered inside a bullet list', () => {
     const { container } = renderEvent(hiddenEvent, { insideAGroup: true });
 
-    const legalFactButton = within(container).getByTestId('download-legalfact');
-    expect(legalFactButton.closest('li')).toBeNull();
+    const legalFactButton = within(container).getByTestId('download-legalfact-micro');
+    expect(legalFactButton.closest('li')).not.toBeNull();
+
+    const { container: noListContainer } = renderEvent(hiddenEvent);
+    const legalFactButtonNoList = within(noListContainer).getByTestId('download-legalfact');
+    expect(legalFactButtonNoList.closest('li')).toBeNull();
   });
 
   it('disables the download when disableDownloads is set, except for the cancelled notification', () => {

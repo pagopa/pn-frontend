@@ -25,7 +25,9 @@ import {
 } from '../../../utility/notificationTimeline.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineDescription from './NotificationTimelineDescription';
-import NotificationTimelineEventItem from './NotificationTimelineEventItem';
+import NotificationTimelineEventItem, {
+  isLegalFactsOnlyEvent,
+} from './NotificationTimelineEventItem';
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
 import TimelineExpandAllButton from './TimelineExpandAllButton';
 import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
@@ -228,20 +230,30 @@ const NotificationEventsTimeline = ({
                     );
 
                     if (!isTimelineGroupStep(step)) {
+                      const eventItem = (
+                        <NotificationTimelineEventItem
+                          event={step.event}
+                          allEvents={legacyStatus.steps}
+                          recipients={recipients}
+                          clickHandler={clickHandler}
+                          disableDownloads={disableDownloads}
+                          language={language}
+                          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+                          perfectionLink={perfectionLink}
+                          delegatorName={delegatorName}
+                        />
+                      );
+
                       return (
                         <Fragment key={step.event.elementId}>
                           {recipientHeader}
-                          <NotificationTimelineEventItem
-                            event={step.event}
-                            allEvents={legacyStatus.steps}
-                            recipients={recipients}
-                            clickHandler={clickHandler}
-                            disableDownloads={disableDownloads}
-                            language={language}
-                            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-                            perfectionLink={perfectionLink}
-                            delegatorName={delegatorName}
-                          />
+                          {isLegalFactsOnlyEvent(step.event, isNewTimelineCopyEnabled) ? (
+                            eventItem
+                          ) : (
+                            <Box component="ul" sx={{ listStyleType: 'disc', pl: 3, m: 0 }}>
+                              {eventItem}
+                            </Box>
+                          )}
                         </Fragment>
                       );
                     }
