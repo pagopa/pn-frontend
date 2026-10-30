@@ -40,6 +40,7 @@ type Props = {
 type ContactRecapData = {
   title: string;
   value?: string;
+  statusAlreadyInText?: boolean;
   cta: {
     text: string;
     action: () => void;
@@ -102,6 +103,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
               defaultAPPIOAddress?.value === IOAllowedValues.ENABLED
                 ? t(`${labelPrefix}.io.textEnabled`)
                 : undefined,
+            statusAlreadyInText: true,
             cta: {
               text: t(`${labelPrefix}.io.textDisabled`),
               action: () => handleGoToStep(ChannelType.IOMSG),
@@ -248,7 +250,15 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
                   )}
                 </ListItemText>
                 {item.value ? (
-                  <CheckCircleRoundedIcon fontSize="small" color="success" aria-hidden="true" />
+                  <CheckCircleRoundedIcon
+                    fontSize="small"
+                    color="success"
+                    titleAccess={
+                      item.statusAlreadyInText
+                        ? undefined
+                        : t('digital-contact.verified-aria-label', { ns: 'recapiti' })
+                    }
+                  />
                 ) : (
                   <ErrorRoundedIcon fontSize="small" color="warning" aria-hidden="true" />
                 )}

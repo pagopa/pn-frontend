@@ -40,7 +40,11 @@ describe('EmailStep', () => {
     expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
     expect(getByLabelText(`${labelPrefix}.input-label`)).toBeInTheDocument();
     expect(getByRole('button', { name: `${labelPrefix}.verify-cta` })).toBeInTheDocument();
-    expect(queryByRole('button', { name: 'button.modifica' })).not.toBeInTheDocument();
+    expect(
+      queryByRole('button', {
+        name: 'button.modifica',
+      })
+    ).not.toBeInTheDocument();
   });
 
   it('shows a validation error when the email is invalid', async () => {
@@ -106,7 +110,11 @@ describe('EmailStep', () => {
     expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.label`)).toBeInTheDocument();
     expect(getByText(mockEmail)).toBeInTheDocument();
-    expect(queryByRole('button', { name: 'button.modifica' })).not.toBeInTheDocument();
+    expect(
+      queryByRole('button', {
+        name: 'button.modifica',
+      })
+    ).not.toBeInTheDocument();
   });
 
   it('renders an existing email in editable mode and enters edit state', async () => {
@@ -118,10 +126,14 @@ describe('EmailStep', () => {
 
     expect(getByText(`${labelPrefix}.title-existing`)).toBeInTheDocument();
     expect(getByText(mockEmail)).toBeInTheDocument();
-    expect(getByRole('button', { name: 'button.modifica' })).toBeInTheDocument();
+    const editButton = getByRole('button', {
+      name: 'button.modifica',
+    });
+
+    expect(editButton).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(editButton);
     });
 
     expect(getByLabelText(`${labelPrefix}.input-label`)).toBeInTheDocument();
@@ -137,7 +149,11 @@ describe('EmailStep', () => {
     );
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'button.modifica',
+        })
+      );
     });
 
     await act(async () => {
@@ -171,7 +187,11 @@ describe('EmailStep', () => {
     );
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'button.modifica',
+        })
+      );
     });
 
     await act(async () => {

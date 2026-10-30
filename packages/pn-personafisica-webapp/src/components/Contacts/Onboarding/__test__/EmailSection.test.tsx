@@ -86,7 +86,11 @@ describe('EmailSection', () => {
 
     expect(getByText(`${labelPrefix}.pec.email-present-description`)).toBeInTheDocument();
     expect(getByText(mockEmail)).toBeInTheDocument();
-    expect(queryByRole('button', { name: 'button.modifica' })).not.toBeInTheDocument();
+    expect(
+      queryByRole('button', {
+        name: 'button.modifica',
+      })
+    ).not.toBeInTheDocument();
   });
 
   it('renders the edit state through DigitalContact and forwards submit', async () => {
@@ -98,9 +102,13 @@ describe('EmailSection', () => {
 
     expect(getByText(`${labelPrefix}.pec.email-present-description`)).toBeInTheDocument();
     expect(getByText(mockEmail)).toBeInTheDocument();
-    expect(getByRole('button', { name: 'button.modifica' })).toBeInTheDocument();
+    const editButton = getByRole('button', {
+      name: 'button.modifica',
+    });
 
-    fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+    expect(editButton).toBeInTheDocument();
+
+    fireEvent.click(editButton);
 
     expect(getByLabelText(`${labelPrefix}.email.input-label`)).toBeInTheDocument();
     expect(getByRole('button', { name: 'button.conferma' })).toBeInTheDocument();
