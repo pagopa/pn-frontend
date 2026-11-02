@@ -95,7 +95,7 @@
   },
   "insert-code": "Inserisci codice",
   "io-contact": {
-    "description": "Collegare SEND a IO è il modo più pratico per ricevere e gestire notifiche a valore legale: quando c’è una notifica per te, la ricevi in app e puoi pagare eventuali spese.",
+    "description": "Collegare SEND a IO è il modo più pratico per ricevere e gestire notifiche a valore legale: quando ce n'è una per te, la ricevi in app e puoi pagare eventuali spese.",
     "description-enabled": "Quando c’è una notifica SEND per te, la ricevi direttamente in app e puoi pagare eventuali spese.",
     "disable-modal": {
       "confirm-dod-enabled": "Disattiva SEND su IO",
@@ -128,7 +128,7 @@
       "sercq_send-active": "La piattaforma SEND è il tuo domicilio digitale",
       "special_contacts": {
         "action": "Personalizza per ente",
-        "content": "Scegli dove ricevere le notifiche che ti invia un ente specifico.",
+        "content": "Scegli dove ricevere le notifiche SEND che ti invia un ente specifico.",
         "title": "Personalizza il tuo domicilio digitale per ente mittente"
       },
       "title": "Gestisci il tuo domicilio digitale",
@@ -146,7 +146,7 @@
     "pec-contact-wizard": {
       "content-description": "Quando un ente ti invia una notifica SEND, la ricevi sulla PEC che hai scelto.",
       "content-title": "Inserisci la tua PEC",
-      "disclaimer": "Accetto che questo indirizzo sia utilizzato da SEND in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri.",
+      "disclaimer": "Accetto che l’indirizzo PEC indicato sia utilizzato in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri.",
       "input-label": "Indirizzo PEC",
       "sercq-info-alert": "La PEC sostituirà la piattaforma SEND come tuo domicilio digitale.",
       "title": "Usa una PEC come domicilio digitale",
