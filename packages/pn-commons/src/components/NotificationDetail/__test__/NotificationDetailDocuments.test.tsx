@@ -68,7 +68,7 @@ describe('NotificationDetailDocuments Component', () => {
         clickHandler={mockClickFn}
         documentsAvailable
         downloadFilesMessage={{ ...filesMessage, components: [<strong key="0" />] }}
-        inlineDownloadFilesMessage
+        isSender
       />
     );
     expect(queryByTestId('documentsMessage')).not.toBeInTheDocument();
@@ -90,7 +90,7 @@ describe('NotificationDetailDocuments Component', () => {
         clickHandler={mockClickFn}
         documentsAvailable
         downloadFilesMessage={filesMessage}
-        inlineDownloadFilesMessage
+        isSender
       />
     );
     getAllByTestId('documentButton').forEach((documentButton) => {

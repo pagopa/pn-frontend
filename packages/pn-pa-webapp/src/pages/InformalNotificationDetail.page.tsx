@@ -264,7 +264,7 @@ const InformalNotificationDetail: React.FC = () => {
                       documentDownloadHandler(typeof document === 'string' ? document : undefined);
                     }}
                     titleVariant="h5"
-                    inlineDownloadFilesMessage
+                    isSender
                   />
                 </MIPaper>
               )}

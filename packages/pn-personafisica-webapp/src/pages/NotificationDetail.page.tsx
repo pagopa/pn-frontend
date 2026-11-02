@@ -674,6 +674,8 @@ const NotificationDetail: React.FC = () => {
                     iun={notification.iun}
                     abstract={notification.abstract}
                     selfcareCdnUrl={SELFCARE_CDN_URL}
+                    isDelegate={!!mandateId}
+                    recipient={currentRecipient}
                   />
                   {banner}
                   {pecUnreachableAlert}
@@ -767,8 +769,6 @@ const NotificationDetail: React.FC = () => {
                   />
                 )}
                 <NotificationDetailSection
-                  isDelegate={!!mandateId}
-                  recipient={currentRecipient}
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
                   isCancelled={isCancelled.cancellationInTimeline}
