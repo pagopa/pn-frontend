@@ -2,10 +2,32 @@
   "subtitle": "Visualizza gli enti gestiti per il prodotto SEND.",
   "title": "I tuoi enti",
   "work-in-progress": "Il portale è in fase di sviluppo, al momento non è possibile gestire SEND per conto dei tuoi enti da qui.",
+  "search": {
+    "label": "Cerca per Nome o Codice Fiscale",
+    "button": "Cerca",
+    "min-length": "Inserisci almeno tre caratteri"
+  },
   "table": {
+    "error": {
+      "title": "Non è stato possibile recuperare l’elenco degli enti gestiti.",
+      "action": "Prova di nuovo"
+    },
+    "columns": {
+      "institution-name": "Nome dell’ente",
+      "tax-code": "Codice Fiscale",
+      "delegation": "Delega"
+    },
+    "delegation-status": {
+      "active": "Attiva dal {{date}}",
+      "revoked": "Revocata il {{date}}"
+    },
     "empty": {
       "title": "Qui vedrai i tuoi enti",
       "description": "Per permetterti di gestire SEND per conto dell’ente, è necessario che l’ente attivi una delega a tuo nome."
+    },
+    "no-results": {
+      "title": "Nessuna corrispondenza per “{{search}}”.",
+      "description": "Prova con una ricerca diversa."
     }
   }
 }

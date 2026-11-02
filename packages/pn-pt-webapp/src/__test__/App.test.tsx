@@ -4,8 +4,8 @@ import { vi } from 'vitest';
 import App from '../App';
 import { operatorUserResponse, userResponse } from '../__mocks__/Auth.mock';
 import { authClient } from '../api/apiClients';
-import { AUTH_LOGOUT } from '../api/auth/auth.routes';
-import { DASHBOARD, GROUPS, HOME, SELFCARE_LOGOUT_PATH, USERS } from '../navigation/routes.const';
+import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
+import { DASHBOARD, ENTI, GROUPS, SELFCARE_LOGOUT_PATH, USERS } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 import { act, fireEvent, render, screen, waitFor, within } from './test-utils';
 
@@ -129,7 +129,22 @@ describe('App', () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId('not-found-back-button'));
     });
-    expect(router.state.location.pathname).toBe(HOME);
+    expect(router.state.location.pathname).toBe(ENTI);
+    expect(screen.getByTestId('institutionsPage')).toBeInTheDocument();
+  });
+
+  it('removes the selfCareToken from the url after the token exchange', async () => {
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
+      .reply(200, userResponse);
+    const { router } = await act(async () =>
+      render(<App />, { route: '/#selfCareToken=200_token' })
+    );
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(router.state.location.pathname).toBe(ENTI);
+      expect(router.state.location.hash).toBe('');
+    });
     expect(screen.getByTestId('institutionsPage')).toBeInTheDocument();
   });
 
