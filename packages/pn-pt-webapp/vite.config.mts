@@ -10,6 +10,8 @@ const vitestConfig = defineVitestConfig({
     setupFiles: './src/setupTests.tsx',
     environment: 'jsdom',
     exclude: configDefaults.exclude,
+    reporters: ['vitest-sonar-reporter', 'default'],
+    outputFile: 'test-report.xml',
     coverage: {
       provider: 'v8',
       reporter: ['lcov'],
