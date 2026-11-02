@@ -109,7 +109,7 @@ const NotificationDetailSection: FC<Props> = ({
                     )
                   }
                 >
-                  <Stack key={document.documentId} data-testid="aarBox" pb={0}>
+                  <Stack pb={0}>
                     <Typography
                       variant="body2"
                       fontWeight={600}
