@@ -40,18 +40,18 @@ type StatusProps = {
 };
 
 const STATUSES_WITH_DESCRIPTION: Set<BffChannelStatusV1> = new Set([
-  'READY_TO_SEND',
-  'WAITING_TO_SEND',
-  'UNAVAILABLE',
-  'WORKFLOW_ENDED',
+  BffChannelStatusV1.ReadyToSend,
+  BffChannelStatusV1.WaitingToSend,
+  BffChannelStatusV1.Unavailable,
+  BffChannelStatusV1.WorkflowEnded,
 ]);
 
 const getStatusIconColor = (status: BffChannelStatusV1): string => {
   switch (status) {
-    case 'FILED':
-    case 'SENT':
-    case 'DELIVERED':
-    case 'VIEWED':
+    case BffChannelStatusV1.Filed:
+    case BffChannelStatusV1.Sent:
+    case BffChannelStatusV1.Delivered:
+    case BffChannelStatusV1.Viewed:
       return themeNext.colors.success[700];
     default:
       return themeNext.colors.neutral.grey[300];
@@ -62,19 +62,19 @@ const getStatusIconComponent = (
   status: BffChannelStatusV1
 ): ComponentType<SvgIconProps> | undefined => {
   switch (status) {
-    case 'READY_TO_SEND':
-    case 'WAITING_TO_SEND':
+    case BffChannelStatusV1.ReadyToSend:
+    case BffChannelStatusV1.WaitingToSend:
       return WaitingIcon;
-    case 'FILED':
-    case 'SENT':
+    case BffChannelStatusV1.Filed:
+    case BffChannelStatusV1.Sent:
       return SentIcon;
-    case 'DELIVERED':
+    case BffChannelStatusV1.Delivered:
       return DeliveredIcon;
-    case 'VIEWED':
+    case BffChannelStatusV1.Viewed:
       return ViewedIcon;
-    case 'UNAVAILABLE':
+    case BffChannelStatusV1.Unavailable:
       return UnavailableIcon;
-    case 'NOT_DELIVERED':
+    case BffChannelStatusV1.NotDelivered:
       return NotDeliveredIcon;
     default:
       return undefined;
@@ -94,7 +94,7 @@ const InformalNotificationChannelStatusBox = ({ channelsStatus }: Props) => {
   };
 
   const getStatusPresentation = (status: BffChannelStatusV1): StatusProps | undefined => {
-    if (status === 'WORKFLOW_ENDED') {
+    if (status === BffChannelStatusV1.WorkflowEnded) {
       return undefined;
     }
 
@@ -119,7 +119,7 @@ const InformalNotificationChannelStatusBox = ({ channelsStatus }: Props) => {
 
     const statusLabel = `informal.detail.send-by-channel.description.${status.toLowerCase()}`;
 
-    if (status === 'UNAVAILABLE' || status === 'WORKFLOW_ENDED') {
+    if (status === BffChannelStatusV1.Unavailable || status === BffChannelStatusV1.WorkflowEnded) {
       return t(`${statusLabel}.${channel.toLowerCase()}`);
     }
 

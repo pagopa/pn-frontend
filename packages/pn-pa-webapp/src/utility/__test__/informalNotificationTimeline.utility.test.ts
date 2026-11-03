@@ -18,7 +18,9 @@ import {
 const processingStatus = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusHistory.find(
   (item) => item.status === InformalNotificationStatusV1.Processing
 )!;
-const pecStep = processingStatus.steps[0];
+const pecStep = processingStatus.steps.find(
+  (step) => step.channel === BffNotificationChannelType.Pec
+)!;
 const [deliveredEvent, feedbackEvent] = pecStep.events;
 
 const viewedDetails: InformalNotificationViewedDetails = {
@@ -59,7 +61,7 @@ describe('informalNotificationTimeline utility', () => {
     const statusHistory = getInformalTimelineStatusHistory(notificationStatusHistory);
     expect(statusHistory).toEqual([
       completedStatus,
-      { ...processingStatus, steps: [pecStep, sendStep] },
+      { ...processingStatus, steps: [...processingStatus.steps, sendStep] },
       acceptedStatus,
     ]);
     // an already present SEND group is left untouched

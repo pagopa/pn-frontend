@@ -60,6 +60,44 @@ describe('NotificationDetailDocuments Component', () => {
     expect(documentsMessage).toBeInTheDocument();
   });
 
+  it('renders component - with documents and inline download message', () => {
+    const { getAllByTestId, queryByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationDTO.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        downloadFilesMessage={{ ...filesMessage, components: [<strong key="0" />] }}
+        inlineDownloadFilesMessage
+      />
+    );
+    expect(queryByTestId('documentsMessage')).not.toBeInTheDocument();
+    const documentButtons = getAllByTestId('documentButton');
+    expect(documentButtons).toHaveLength(notificationDTO.documents.length);
+    documentButtons.forEach((documentButton, index) => {
+      const currentDoc = notificationDTO.documents[index];
+      expect(documentButton).toHaveTextContent(currentDoc.title || currentDoc.ref.key);
+      expect(documentButton).toHaveTextContent(filesMessage.ns);
+      expect(documentButton).toHaveTextContent(filesMessage.key);
+    });
+  });
+
+  it('renders component - with documents and inline download message without components', () => {
+    const { getAllByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationDTO.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        downloadFilesMessage={filesMessage}
+        inlineDownloadFilesMessage
+      />
+    );
+    getAllByTestId('documentButton').forEach((documentButton) => {
+      expect(documentButton).toHaveTextContent(filesMessage.key);
+    });
+  });
+
   it('clicks on document button', async () => {
     const { getAllByTestId } = render(
       <NotificationDetailDocuments
