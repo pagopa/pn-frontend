@@ -1,9 +1,9 @@
 import { useFormik } from 'formik';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Skeleton, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
@@ -37,13 +37,27 @@ const delegationStatusChip: Record<
   REVOKED: { label: 'table.delegation-status.revoked', color: 'default' },
 };
 
+const visuallyHidden = {
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  height: '1px',
+  margin: '-1px',
+  overflow: 'hidden',
+  padding: 0,
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: '1px',
+} as const;
+
 const InstitutionsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const institutions = useAppSelector((state: RootState) => state.institutionsState.institutions);
   const search = useAppSelector((state: RootState) => state.institutionsState.search);
   const pagination = useAppSelector((state: RootState) => state.institutionsState.pagination);
 
-  const { t } = useTranslation('enti');
+  const { t } = useTranslation(['enti', 'common']);
+  const [loading, setLoading] = useState(true);
+  const lastRequestId = useRef(0);
 
   const institutionsColumns: Array<SmartTableData<InstitutionRow>> = [
     {
@@ -79,7 +93,10 @@ const InstitutionsPage: React.FC = () => {
   ];
 
   const validationSchema = yup.object({
-    search: yup.string().trim().required(t('search.min-length')).min(3, t('search.min-length')),
+    search: yup
+      .string()
+      .trim()
+      .test('min-length', t('search.min-length'), (value) => !value || value.length >= 3),
   });
 
   const formik = useFormik({
@@ -92,6 +109,9 @@ const InstitutionsPage: React.FC = () => {
     },
   });
 
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   const handleChangePage = (paginationData: PaginationData) => {
     const hasSizeChanged = paginationData.size !== pagination.size;
     dispatch(
@@ -103,13 +123,21 @@ const InstitutionsPage: React.FC = () => {
   };
 
   const fetchInstitutions = useCallback(() => {
+    // only the latest request can end the loading, to ignore slower outdated responses
+    // eslint-disable-next-line functional/immutable-data
+    const requestId = ++lastRequestId.current;
+    setLoading(true);
     void dispatch(
       getInstitutions({
         search: search || undefined,
         limit: pagination.size,
         lastKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
       })
-    );
+    ).finally(() => {
+      if (requestId === lastRequestId.current) {
+        setLoading(false);
+      }
+    });
   }, [search, pagination.page, pagination.size]);
 
   useEffect(() => {
@@ -125,12 +153,24 @@ const InstitutionsPage: React.FC = () => {
     pagination.page + 1
   );
 
-  const data: Array<Row<InstitutionRow>> = institutions.items.map((institution) => ({
-    ...institution,
-    id: institution.institutionId,
-  }));
+  const data: Array<Row<InstitutionRow>> = loading
+    ? Array.from(
+        { length: pagination.size },
+        (_, index) => ({ id: `skeleton-${index}` }) as Row<InstitutionRow>
+      )
+    : institutions.items.map((institution) => ({
+        ...institution,
+        id: institution.institutionId,
+      }));
 
   const renderCellContent = (row: Row<InstitutionRow>, columnId: keyof InstitutionRow) => {
+    if (loading) {
+      return columnId === 'status' ? (
+        <Skeleton variant="rounded" width={160} height={24} sx={{ borderRadius: 4 }} />
+      ) : (
+        <Skeleton variant="text" width="60%" />
+      );
+    }
     if (columnId === 'institutionName') {
       return (
         <Typography component="span" fontWeight={600}>
@@ -155,6 +195,19 @@ const InstitutionsPage: React.FC = () => {
       );
     }
     return String(row[columnId] ?? '');
+  };
+
+  const handleSearchBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    // keep the focused state when the focus moves to the clear button
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+      setIsSearchFocused(false);
+    }
+  };
+
+  const handleClearSearch = () => {
+    void formik.setFieldValue('search', '', false);
+    formik.setFieldError('search', undefined);
+    searchInputRef.current?.focus();
   };
 
   return (
@@ -185,17 +238,29 @@ const InstitutionsPage: React.FC = () => {
           mb: 3,
         }}
       >
-        <MITextField
-          id="search"
-          name="search"
-          label={t('search.label')}
-          required
-          value={formik.values.search}
-          onChange={formik.handleChange}
-          error={Boolean(formik.errors.search)}
-          helperText={formik.errors.search}
+        <Box
           sx={{ flexBasis: { sm: '55%' } }}
-        />
+          onFocus={() => setIsSearchFocused(true)}
+          onBlur={handleSearchBlur}
+          // prevents the input blur when clicking the clear button
+          onMouseDown={(e) => {
+            if ((e.target as HTMLElement).closest('button')) {
+              e.preventDefault();
+            }
+          }}
+        >
+          <MITextField
+            id="search"
+            name="search"
+            label={t('search.label')}
+            inputRef={searchInputRef}
+            value={formik.values.search}
+            onChange={formik.handleChange}
+            error={Boolean(formik.errors.search)}
+            helperText={formik.errors.search}
+            onDelete={isSearchFocused && formik.values.search ? handleClearSearch : undefined}
+          />
+        </Box>
         <MIButton type="submit" variant="outlined" data-testid="searchButton">
           {t('search.button')}
         </MIButton>
@@ -214,7 +279,10 @@ const InstitutionsPage: React.FC = () => {
           </Box>
         }
       >
-        <Box data-testid="institutionsList">
+        <Box data-testid="institutionsList" aria-busy={loading || undefined}>
+          <Typography role="status" aria-live="polite" aria-atomic="true" sx={visuallyHidden}>
+            {loading ? t('loading', { ns: 'common' }) : ''}
+          </Typography>
           <SmartTable
             data={data}
             conf={institutionsColumns}
@@ -251,7 +319,11 @@ const InstitutionsPage: React.FC = () => {
 
             <SmartBody>
               {data.map((row, index) => (
-                <SmartBodyRow key={row.id} index={index} testId="institutionsBodyRow">
+                <SmartBodyRow
+                  key={row.id}
+                  index={index}
+                  testId={loading ? 'institutionsSkeletonRow' : 'institutionsBodyRow'}
+                >
                   {institutionsColumns.map((column) => (
                     <SmartBodyCell
                       key={column.id.toString()}
@@ -268,7 +340,7 @@ const InstitutionsPage: React.FC = () => {
               ))}
             </SmartBody>
           </SmartTable>
-          {data.length > 0 && (
+          {!loading && data.length > 0 && (
             <CustomPagination
               paginationData={{
                 size: pagination.size,

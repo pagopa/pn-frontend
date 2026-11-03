@@ -56,6 +56,31 @@ describe('Institutions page', () => {
     expect(rows[1]).toHaveTextContent('table.delegation-status.revoked');
   });
 
+  it('shows the skeleton rows while the institutions are loading', async () => {
+    let resolveRequest: () => void = () => {};
+    getInstitutionsSpy.mockImplementationOnce(
+      (params) =>
+        new Promise((resolve) => {
+          resolveRequest = () => resolve(getInstitutionsResponse(params));
+        })
+    );
+    await renderPage();
+
+    expect(screen.getAllByTestId('institutionsSkeletonRowDesktop')).toHaveLength(10);
+    expect(screen.queryByTestId('institutionsBodyRowDesktop')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('pageSelector')).not.toBeInTheDocument();
+    expect(screen.queryByText('table.empty.title')).not.toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('loading');
+    expect(screen.getByTestId('institutionsList')).toHaveAttribute('aria-busy', 'true');
+
+    await act(async () => resolveRequest());
+
+    expect(screen.queryByTestId('institutionsSkeletonRowDesktop')).not.toBeInTheDocument();
+    expect(screen.getAllByTestId('institutionsBodyRowDesktop')).toHaveLength(10);
+    expect(screen.getByTestId('pageSelector')).toBeInTheDocument();
+    expect(screen.getByTestId('institutionsList')).not.toHaveAttribute('aria-busy');
+  });
+
   it('shows the error state and retries when the api fails', async () => {
     getInstitutionsSpy.mockRejectedValueOnce({ response: { status: 500, data: {} } });
     await act(async () =>
@@ -77,11 +102,24 @@ describe('Institutions page', () => {
     expect(getInstitutionsSpy).toHaveBeenCalledTimes(2);
   });
 
-  it('shows a validation error when searching with an empty value', async () => {
+  it('removes the filter when searching with an empty value', async () => {
     await renderPage();
+    const input = screen.getByRole('textbox', { name: /search.label/ });
+    fireEvent.change(input, { target: { value: 'Fittizio 02' } });
     fireEvent.click(screen.getByTestId('searchButton'));
-    expect(await screen.findByText('search.min-length')).toBeInTheDocument();
-    expect(getInstitutionsSpy).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(getInstitutionsSpy).toHaveBeenCalledTimes(2));
+
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    await waitFor(() => {
+      expect(getInstitutionsSpy).toHaveBeenCalledTimes(3);
+      expect(getInstitutionsSpy).toHaveBeenLastCalledWith({
+        search: undefined,
+        limit: 10,
+        lastKey: undefined,
+      });
+    });
+    expect(screen.queryByText('search.min-length')).not.toBeInTheDocument();
   });
 
   it('shows a validation error when searching with less than 3 characters', async () => {
