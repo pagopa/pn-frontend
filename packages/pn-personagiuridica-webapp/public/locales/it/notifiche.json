@@ -141,8 +141,6 @@
     "timeline-title": "Stato della notifica",
     "timeline": {
       "aar-document": "Avviso di avvenuta ricezione",
-      "collapse-all-groups": "Comprimi",
-      "expand-all-groups": "Espandi",
       "analog-failure-second-attempt-group-label": "Secondo invio via raccomandata - Tentativo fallito",
       "analog-failure-workflow": "Aggiornamento sull'invio cartaceo",
       "analog-failure-workflow-description": "Il destinatario è risultato irreperibile assoluto. Si deposita e mette a disposizione l'avviso di avvenuta ricezione.",
@@ -173,8 +171,10 @@
         "M09": "per altre motivazioni",
         "M10": "perché l'indirizzo non è leggibile"
       },
+      "collapse-all-groups": "Comprimi",
       "courtesy-group-label": "Messaggi di cortesia",
       "digital-send-fallback": "Invio digitale",
+      "expand-all-groups": "Espandi",
       "legalfact": {
         "analog-failure-delivery": "Deposito avviso di avvenuta ricezione",
         "digital-delivery-failure": "mancato recapito digitale",
@@ -190,8 +190,8 @@
       },
       "notification-cancelled-document": "Dichiarazione annullamento notifica",
       "pec-address-source-general": "L’indirizzo PEC figura nei registri pubblici",
-      "pec-address-source-special": "L’indirizzo PEC è stato registrato come canale di contatto dall’ente mittente",
       "pec-address-source-platform": "L’indirizzo PEC è stato inserito come recapito su SEND",
+      "pec-address-source-special": "L’indirizzo PEC è stato registrato come canale di contatto dall’ente mittente",
       "prepare-analog-domicile-failure": "Aggiornamento sull'invio cartaceo",
       "prepare-analog-domicile-failure-D00-description": "Non è stato trovato nessun nuovo indirizzo per predisporre un altro tentativo di invio.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Non è stato trovato nessun nuovo indirizzo per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio.",
