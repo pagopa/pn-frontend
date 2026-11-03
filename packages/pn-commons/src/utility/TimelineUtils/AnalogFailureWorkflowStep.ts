@@ -9,8 +9,8 @@ export class AnalogFailureWorkflowStep extends TimelineStep {
     const statusInfo = this.localizeTimelineStatus(
       'analog-failure-workflow',
       payload.isMultiRecipient,
-      'Invio analogico assolutamente fallimentare',
-      `Invio analogico a ${payload.recipient?.denomination} assolutamente fallimentare.`,
+      undefined,
+      undefined,
       this.nameAndTaxId(payload),
       payload.delegatorName
     );

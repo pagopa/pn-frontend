@@ -3,6 +3,7 @@
     "document-unavailable": "Dokument ni več na voljo. Za več informacij se obrnite na organ.",
     "timeline": {
       "analog-failure-workflow": "Obvestila ni mogoče dostaviti",
+      "analog-failure-workflow-monorecipient": "",
       "analog-failure-workflow-description": "Niste dosegljivi, ker na navedenem naslovu ni bilo vaših referenc, ali ker naveden naslov ne obstaja, je nepopoln ali netočen. Zato je na voljo <0>potrdilo o prejemu</0>. <1>Glejte načine zaključka</1>, da izveste, kdaj bo obvestilo SEND vseeno začelo pravno veljati.",
       "analog-failure-workflow-description-delegate": "Oseba {{recipient}} ni dosegljiva, ker na navedenem naslovu ni bilo njenih referenc, ali ker naveden naslov ne obstaja, je nepopoln ali netočen. Zato je na voljo <0>potrdilo o prejemu</0>. <1>Glejte načine zaključka</1>, da izveste, kdaj bo obvestilo SEND vseeno začelo pravno veljati.",
       "analog-workflow-failure-cause": {
@@ -208,6 +209,7 @@
       "send-digital-domicile-PEC-description": "Poskušali vam bomo poslati obvestilo SEND na naslov PEC {{address}}.",
       "send-digital-domicile-PEC-description-delegate": "Poskušali bomo poslati obvestilo SEND osebi {{recipient}} na naslov PEC {{address}}.",
       "send-digital-domicile-SERCQ-SEND": "Pošiljanje prek digitalnega naslova SEND se je začelo",
+      "send-digital-domicile-SERCQ-SEND-description-delegate": "",
       "send-digital-error-description": "Vaš predal PEC {{address}} je poln, neveljaven ali neaktiven, kot potrjuje <0>potrdilo o nedostavljivosti</0>.",
       "send-digital-error-description-delegate": "Predal PEC {{address}} osebe {{recipient}} je poln, neveljaven ali neaktiven, kot potrjuje <0>potrdilo o nedostavljivosti</0>.",
       "send-digital-progress-error": "Storitev ni sprejela PEC",
@@ -223,6 +225,7 @@
       "send-digital-success-PEC-description": "Prejeli ste obvestilo SEND na naslov PEC {{address}}, kot potrjuje <0>potrdilo o dostavi</0>.",
       "send-digital-success-PEC-description-delegate": "Oseba {{recipient}} je prejela obvestilo SEND na naslov PEC {{address}}, kot potrjuje <0>potrdilo o dostavi</0>.",
       "send-digital-success-SERCQ-SEND": "Pošiljanje prek digitalnega naslova SEND uspešno",
+      "send-digital-success-SERCQ-SEND-description-delegate": "",
       "send-simple-registered-letter": "Postopek pošiljanja priporočenega pisma se je začel",
       "send-simple-registered-letter-description": "Običajno priporočeno pismo vam bo poslano na naslov {{address}}.",
       "send-simple-registered-letter-description-delegate": "Običajno priporočeno pismo bo poslano osebi {{recipient}} na naslov {{address}}.",

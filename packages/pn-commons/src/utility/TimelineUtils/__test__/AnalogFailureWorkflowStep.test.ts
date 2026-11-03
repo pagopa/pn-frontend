@@ -36,22 +36,31 @@ describe('AnalogFailureWorkflowStep', () => {
     });
   });
 
-  it('test getTimelineStepInfo with monorecipient title', () => {
+  describe('title selection with the new timeline copy labels', () => {
     const analogFailureWorkflowStep = new AnalogFailureWorkflowStep();
-    try {
+
+    beforeEach(() => {
       initLocalizationExists(
         (_ns, path) =>
           path === 'detail.timeline.analog-failure-workflow-monorecipient' ||
           path === 'detail.timeline.analog-failure-workflow-description-delegate'
       );
-      // mono recipient, direct view
+    });
+
+    afterEach(() => {
+      initLocalizationExists(() => false);
+    });
+
+    it('uses the specific title for a mono recipient notification in the recipient direct view', () => {
       expect(analogFailureWorkflowStep.getTimelineStepInfo(payload)).toStrictEqual({
         label: `notifiche - detail.timeline.analog-failure-workflow-monorecipient`,
         description: `notifiche - detail.timeline.analog-failure-workflow-description - ${JSON.stringify(
           analogFailureWorkflowStep.nameAndTaxId(payload)
         )}`,
       });
-      // multi recipient
+    });
+
+    it('uses the default title for a multi recipient notification', () => {
       expect(
         analogFailureWorkflowStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
       ).toStrictEqual({
@@ -60,7 +69,9 @@ describe('AnalogFailureWorkflowStep', () => {
           analogFailureWorkflowStep.nameAndTaxId(payload)
         )}`,
       });
-      // delegate
+    });
+
+    it('uses the default title in the delegate view', () => {
       expect(
         analogFailureWorkflowStep.getTimelineStepInfo({
           ...payload,
@@ -72,8 +83,6 @@ describe('AnalogFailureWorkflowStep', () => {
           { ...analogFailureWorkflowStep.nameAndTaxId(payload), recipient: 'Test Delegator' }
         )}`,
       });
-    } finally {
-      initLocalizationExists(() => false);
-    }
+    });
   });
 });

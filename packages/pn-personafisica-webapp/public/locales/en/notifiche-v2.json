@@ -3,6 +3,7 @@
     "document-unavailable": "The document is no longer available. Contact the entity for more information.",
     "timeline": {
       "analog-failure-workflow": "Cannot deliver the notification",
+      "analog-failure-workflow-monorecipient": "",
       "analog-failure-workflow-description": "You are untraceable because there were no references to you at the indicated address, or because the address provided is non-existent, insufficient, or incorrect. Therefore, the <0>notice of receipt</0> is made available. <1>Consult the completion methods</1> to find out when the SEND notification will become legally binding anyway.",
       "analog-failure-workflow-description-delegate": "{{recipient}} is untraceable because there were no references to them at the indicated address, or because the address provided is non-existent, insufficient, or incorrect. Therefore, the <0>notice of receipt</0> is made available. <1>Consult the completion methods</1> to find out when the SEND notification will become legally binding anyway.",
       "analog-workflow-failure-cause": {
@@ -208,6 +209,7 @@
       "send-digital-domicile-PEC-description": "An attempt will be made to send the SEND notification to you at the PEC address {{address}}.",
       "send-digital-domicile-PEC-description-delegate": "An attempt will be made to send the SEND notification to {{recipient}} at the PEC address {{address}}.",
       "send-digital-domicile-SERCQ-SEND": "Sending via SEND digital domicile started",
+      "send-digital-domicile-SERCQ-SEND-description-delegate": "",
       "send-digital-error-description": "Your PEC mailbox {{address}} is full, invalid, or inactive, as certified by the <0>non-delivery receipt</0>.",
       "send-digital-error-description-delegate": "The PEC mailbox {{address}} of {{recipient}} is full, invalid, or inactive, as certified by the <0>non-delivery receipt</0>.",
       "send-digital-progress-error": "PEC not accepted by the service",
@@ -223,6 +225,7 @@
       "send-digital-success-PEC-description": "You have received the SEND notification at the PEC address {{address}}, as certified by the <0>delivery receipt</0>.",
       "send-digital-success-PEC-description-delegate": "{{recipient}} has received the SEND notification at the PEC address {{address}}, as certified by the <0>delivery receipt</0>.",
       "send-digital-success-SERCQ-SEND": "Sending via SEND digital domicile successful",
+      "send-digital-success-SERCQ-SEND-description-delegate": "",
       "send-simple-registered-letter": "Registered post sending process started",
       "send-simple-registered-letter-description": "A standard registered post will be sent to you at the address {{address}}.",
       "send-simple-registered-letter-description-delegate": "A standard registered post will be sent to {{recipient}} at the address {{address}}.",

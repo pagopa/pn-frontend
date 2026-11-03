@@ -3,6 +3,7 @@
     "document-unavailable": "Le document n'est plus disponible. Contactez l'organisme pour plus d'informations.",
     "timeline": {
       "analog-failure-workflow": "Impossible de livrer la notification",
+      "analog-failure-workflow-monorecipient": "",
       "analog-failure-workflow-description": "Vous êtes introuvable car il n'y avait aucune référence à vous à l'adresse indiquée, ou parce que l'adresse fournie est inexistante, insuffisante ou inexacte. L'<0>accusé de réception</0> est donc mis à disposition. <1>Consultez les modalités de prise d'effet</1> pour savoir quand la notification SEND prendra tout de même valeur juridique.",
       "analog-failure-workflow-description-delegate": "{{recipient}} est introuvable car il n'y avait aucune référence à cette personne à l'adresse indiquée, ou parce que l'adresse fournie est inexistante, insuffisante ou inexacte. L'<0>accusé de réception</0> est donc mis à disposition. <1>Consultez les modalités de prise d'effet</1> pour savoir quand la notification SEND prendra tout de même valeur juridique.",
       "analog-workflow-failure-cause": {
@@ -208,6 +209,7 @@
       "send-digital-domicile-PEC-description": "Une tentative d'envoi de la notification SEND à l'adresse PEC {{address}} sera effectuée.",
       "send-digital-domicile-PEC-description-delegate": "Une tentative d'envoi de la notification SEND à {{recipient}} à l'adresse PEC {{address}} sera effectuée.",
       "send-digital-domicile-SERCQ-SEND": "Envoi via le domicile numérique SEND commencé",
+      "send-digital-domicile-SERCQ-SEND-description-delegate": "",
       "send-digital-error-description": "Votre boîte PEC {{address}} est saturée, invalide ou inactive, comme l'atteste l'<0>avis de non-livraison</0>.",
       "send-digital-error-description-delegate": "La boîte PEC {{address}} de {{recipient}} est saturée, invalide ou inactive, comme l'atteste l'<0>avis de non-livraison</0>.",
       "send-digital-progress-error": "PEC non acceptée par le service",
@@ -223,6 +225,7 @@
       "send-digital-success-PEC-description": "Vous avez reçu la notification SEND à l'adresse PEC {{address}}, comme l'atteste l'<0>avis de livraison</0>.",
       "send-digital-success-PEC-description-delegate": "{{recipient}} a reçu la notification SEND à l'adresse PEC {{address}}, comme l'atteste l'<0>avis de livraison</0>.",
       "send-digital-success-SERCQ-SEND": "Envoi via le domicile numérique SEND réussi",
+      "send-digital-success-SERCQ-SEND-description-delegate": "",
       "send-simple-registered-letter": "Processus d'envoi par lettre recommandée commencé",
       "send-simple-registered-letter-description": "Une lettre recommandée ordinaire vous sera envoyée à l'adresse {{address}}.",
       "send-simple-registered-letter-description-delegate": "Une lettre recommandée ordinaire sera envoyée à {{recipient}} à l'adresse {{address}}.",
