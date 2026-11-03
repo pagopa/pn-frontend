@@ -113,7 +113,7 @@ const NotificationTimelineGroupItem = ({
           >
             {getLocalizedOrDefaultLabel(
               'notifications',
-              'detail.timeline.send-digital-domicile-PEC-group-label'
+              'detail.timeline.send-digital-domicile-PEC-subgroup-label'
             )}{' '}
             · {section.address}
           </Typography>

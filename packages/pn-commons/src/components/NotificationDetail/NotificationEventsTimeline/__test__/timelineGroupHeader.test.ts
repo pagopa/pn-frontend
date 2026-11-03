@@ -6,7 +6,7 @@ import {
   NotificationTimelineStatusHistory,
   TimelineEventsChannel,
 } from '../../../../models/NotificationTimeline';
-import MailOffRounded from '../../../Icons/MailOffRounded';
+import MailErrorRounded from '../../../Icons/MailErrorRounded';
 import MobileRounded from '../../../Icons/MobileRounded';
 import SendIcon from '../../../Icons/SendIcon';
 import { getMultiAttemptGroupIds, getTimelineGroupHeader } from '../timelineGroupHeader.config';
@@ -58,7 +58,7 @@ describe('timelineGroupHeader config', () => {
 
   it('getTimelineGroupHeader - shows the attempt label when the channel has multiple attempts', () => {
     expect(getTimelineGroupHeader(analogGroup('first-attempt', 1), true).channel).toBe(
-      'detail.timeline.send-analog-domicile-ar-first-attempt-group-label'
+      'detail.timeline.send-analog-domicile-ar-group-label'
     );
     expect(getTimelineGroupHeader(analogGroup('second-attempt', 2), true).channel).toBe(
       'detail.timeline.send-analog-domicile-ar-second-attempt-group-label'
@@ -114,7 +114,7 @@ describe('timelineGroupHeader config', () => {
     expect(getTimelineGroupHeader(analogFailureGroup).channel).toBe(
       'detail.timeline.registered-letter'
     );
-    expect(getTimelineGroupHeader(analogFailureGroup).icon).toBe(MailOffRounded);
+    expect(getTimelineGroupHeader(analogFailureGroup).icon).toBe(MailErrorRounded);
     expect(getTimelineGroupHeader(digitalGroup).channel).toBe(
       'detail.timeline.digital-send-fallback'
     );
@@ -129,7 +129,7 @@ describe('timelineGroupHeader config', () => {
 
     const header = getTimelineGroupHeader(secondAttemptFailureGroup);
     expect(header.channel).toBe('detail.timeline.analog-failure-second-attempt-group-label');
-    expect(header.icon).toBe(MailOffRounded);
+    expect(header.icon).toBe(MailErrorRounded);
     expect(header.detail).toBeUndefined();
   });
 

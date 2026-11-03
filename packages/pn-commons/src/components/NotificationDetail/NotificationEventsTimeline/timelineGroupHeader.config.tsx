@@ -53,7 +53,7 @@ const CHANNEL_ATTEMPT_PRESENTATION: Partial<
 > = {
   AR_REGISTERED_LETTER: {
     1: {
-      labelKey: 'detail.timeline.send-analog-domicile-ar-first-attempt-group-label',
+      labelKey: 'detail.timeline.send-analog-domicile-ar-group-label',
       icon: () => <LetterIcon number={1} />,
     },
     2: {
@@ -63,7 +63,7 @@ const CHANNEL_ATTEMPT_PRESENTATION: Partial<
   },
   REGISTERED_LETTER_890: {
     1: {
-      labelKey: 'detail.timeline.send-analog-domicile-890-first-attempt-group-label',
+      labelKey: 'detail.timeline.send-analog-domicile-890-group-label',
       icon: () => <LetterIcon number={1} />,
     },
     2: {
@@ -77,7 +77,7 @@ const CHANNEL_ATTEMPT_PRESENTATION: Partial<
       icon: () => <LetterIcon number={1} />,
     },
     2: {
-      labelKey: 'detail.timeline.send-digital-domicile-PEC-group-label',
+      labelKey: 'detail.timeline.send-digital-domicile-PEC-second-attempt-group-label',
       icon: () => <LetterIcon number={2} />,
     },
   },
