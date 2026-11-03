@@ -55,6 +55,7 @@ beforeAll(() => {
     STATISTICS_MAINTENANCE_DATES: '2025-08-14_2025-08-25',
     IS_NEW_TIMELINE_ENABLED: true,
     IS_NEW_TIMELINE_COPY_ENABLED: false,
+    PARTNER_PORTAL_URL: 'https://test.partner.pagopa.it',
   });
   initStore(false);
   initAxiosClients();
