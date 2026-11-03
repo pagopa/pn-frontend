@@ -66,6 +66,10 @@ const NotificationDetailSection: FC<Props> = ({
     return null;
   };
 
+  if (aarDocumentAvailable && aarDocuments.length === 0) {
+    return null;
+  }
+
   return (
     <MIPaper padding={24} data-testid="aarDownload">
       <Stack spacing={2}>
