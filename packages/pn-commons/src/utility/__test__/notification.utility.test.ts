@@ -456,6 +456,46 @@ describe('notification status texts', () => {
     }
   );
 
+  it.each([NotificationDeliveryMode.DIGITAL, NotificationDeliveryMode.ANALOG])(
+    'uses the default DELIVERED description for %s when the recipient is the same from the one to whom the notification was delivered',
+    (deliveryMode) => {
+      const recipientKey = `status.delivered-description-${deliveryMode}-multirecipient`;
+      const category =
+        deliveryMode === NotificationDeliveryMode.DIGITAL
+          ? TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+          : TimelineCategory.ANALOG_SUCCESS_WORKFLOW;
+      initStatusLocalizationExists((_namespace, path) => path === recipientKey);
+
+      const status = {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: `${category}.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0`,
+            timestamp: '2023-01-26T13:57:16.42843144Z',
+            category,
+            details: { recIndex: 0 },
+          },
+        ],
+        deliveryMode,
+      };
+
+      testNotificationStatusInfos(
+        'default',
+        'notifiche - status.delivered-multirecipient',
+        'notifiche - status.delivered-tooltip-multirecipient',
+        `notifiche - ${recipientKey}`,
+        status,
+        {
+          recipients: notificationDTOMultiRecipient.recipients,
+          userTaxId: notificationDTOMultiRecipient.recipients[0].taxId,
+          statusHistory: [status],
+        }
+      );
+    }
+  );
+
   it('keeps the DELIVERED description of the recipient view when the delegate one is unavailable', () => {
     const localizationKey = `status.delivered-description-${NotificationDeliveryMode.DIGITAL}`;
     initStatusLocalizationExists((_namespace, path) => path === localizationKey);

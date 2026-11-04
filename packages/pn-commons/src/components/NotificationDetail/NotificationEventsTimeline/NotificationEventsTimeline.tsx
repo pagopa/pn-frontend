@@ -111,13 +111,13 @@ const NotificationEventsTimeline = ({
         statusHistory,
         legacyStatusHistory,
         recipients,
+        userTaxId,
         isSenderTimeline,
-        delegator && mandateId && userTaxId
+        delegator && mandateId
           ? {
               mandateId,
               delegatorName: delegator?.displayName,
               delegatorTaxId: delegator?.fiscalCode,
-              taxId: userTaxId,
             }
           : undefined
       ),
@@ -129,6 +129,7 @@ const NotificationEventsTimeline = ({
       language,
       mandateId,
       delegator,
+      userTaxId,
     ]
   );
 

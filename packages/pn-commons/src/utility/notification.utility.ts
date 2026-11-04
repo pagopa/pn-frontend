@@ -217,23 +217,29 @@ function deliveredStatusVariant(
   const recIndex = options?.recipients.findIndex((rec) =>
     typeof rec === 'string' ? rec === userTaxId : rec.taxId === userTaxId
   );
-  const digitalSuccessEvent = options?.statusHistory
-    ?.reduce<Array<INotificationDetailTimeline>>(
-      (arr, status) => arr.concat(status.steps ?? []),
-      []
-    )
-    .find(
-      (step) =>
-        step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW &&
-        step.details.recIndex === recIndex
-    );
+  const plainStatusHistory = options?.statusHistory?.reduce<Array<INotificationDetailTimeline>>(
+    (arr, status) => arr.concat(status.steps ?? []),
+    []
+  );
+  const digitalSuccessEvent = plainStatusHistory?.find(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+  const analogSuccessEvent = plainStatusHistory?.find(
+    (step) =>
+      step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+
   const digitalChannel = (digitalSuccessEvent?.details as SendDigitalDetails)?.digitalAddress?.type;
 
   const context: StatusLocalizationContext = {
     isMultiRecipient,
     deliveryMode,
     isDelegate: !!(deliveryMode && delegatorName),
-    viewer: !digitalSuccessEvent && isMultiRecipient ? 'by-recipient' : undefined,
+    viewer:
+      !digitalSuccessEvent && !analogSuccessEvent && isMultiRecipient ? 'by-recipient' : undefined,
   };
 
   const description = resolveStatusLocalization(
