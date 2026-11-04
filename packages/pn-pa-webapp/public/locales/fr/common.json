@@ -52,6 +52,10 @@
     },
     "today-uppercase-initial": "Aujourd’hui"
   },
+  "downtime_language_banner": {
+    "link": "Consulter les traductions",
+    "message": "Le texte original de ces documents est en italien. En cas de différences entre la version italienne et ses traductions, le sens et les conditions de la langue italienne feront foi."
+  },
   "error-boundary": {
     "action": "Recharger la page",
     "description": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",

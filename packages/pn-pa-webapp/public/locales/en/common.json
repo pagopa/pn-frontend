@@ -52,6 +52,10 @@
     },
     "today-uppercase-initial": "Today"
   },
+  "downtime_language_banner": {
+    "link": "Consult the translations",
+    "message": "The original text of these documents is in Italian. In case of conflict between the Italian version and the translations into other languages, the meaning and conditions of the Italian language shall prevail."
+  },
   "error-boundary": {
     "action": "Reload the page",
     "description": "We were unable to load the page. Reload it, or try again later.",
