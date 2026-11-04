@@ -52,6 +52,10 @@
     },
     "today-uppercase-initial": "Heute"
   },
+  "downtime_language_banner": {
+    "link": "Übersetzungen konsultieren",
+    "message": "Der Originaltext dieser Dokumente ist auf Italienisch. Bei Abweichungen zwischen der italienischen Fassung und den Übersetzungen in andere Sprachen sind die Bedeutung und die Bestimmungen der italienischen Sprache maßgebend."
+  },
   "error-boundary": {
     "action": "Seite neu laden",
     "description": "Die Seite konnte nicht geladen werden. Seite neu laden oder später erneut versuchen.",
