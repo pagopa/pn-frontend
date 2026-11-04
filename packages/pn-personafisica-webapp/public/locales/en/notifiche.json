@@ -390,7 +390,7 @@
     "delegate": "Here you will see the legally binding notifications of {{name}}",
     "description": "Update your contact details now and you will immediately know when you receive one.",
     "description-onboarding": "Did you know you can save money by choosing to receive legally binding communications only digitally?",
-    "filtered": "No notifications or communications for the selected filters",
+    "filtered": "No legally binding notifications or communications for the selected filters",
     "filtered-description": "Remove them or try another combination.",
     "go-to-contacts-cta": "Go to your contact details",
     "go-to-onboarding-cta": "Set up SEND",
