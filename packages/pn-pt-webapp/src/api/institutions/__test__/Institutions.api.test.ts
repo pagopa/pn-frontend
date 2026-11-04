@@ -1,29 +1,50 @@
+import MockAdapter from 'axios-mock-adapter';
+
+import { getInstitutionsResponse } from '../../../__mocks__/Institutions.mock';
+import { apiClient } from '../../apiClients';
 import { InstitutionsApi } from '../Institutions.api';
 
-// TODO: test the BFF call with MockAdapter on apiClient once the API is available
 describe('Institutions api tests', () => {
-  it('getInstitutions - pagination with lastKey', async () => {
-    const firstPage = await InstitutionsApi.getInstitutions({ limit: 2 });
-    expect(firstPage.items).toHaveLength(2);
-    expect(firstPage.items[0].institutionName).toBe('Ente Provvisorio 01');
-    expect(firstPage.lastKey).toBe('2');
+  let mock: MockAdapter;
 
-    const lastPage = await InstitutionsApi.getInstitutions({
-      limit: 2,
-      lastKey: firstPage.lastKey,
-    });
-    expect(lastPage.items).toHaveLength(1);
-    expect(lastPage.items[0].institutionName).toBe('Ente Provvisorio 03');
-    expect(lastPage.lastKey).toBeUndefined();
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
   });
 
-  it('getInstitutions - search by name or tax code', async () => {
-    const byName = await InstitutionsApi.getInstitutions({ search: 'provvisorio 02' });
-    expect(byName.items).toHaveLength(1);
-    expect(byName.items[0].institutionName).toBe('Ente Provvisorio 02');
+  afterEach(() => {
+    mock.reset();
+  });
 
-    const byTaxCode = await InstitutionsApi.getInstitutions({ search: '99999999903' });
-    expect(byTaxCode.items).toHaveLength(1);
-    expect(byTaxCode.items[0].institutionTaxCode).toBe('99999999903');
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('getInstitutions - first page', async () => {
+    const params = { limit: 10 };
+    const expected = getInstitutionsResponse(params);
+    mock.onGet(/\/bff\/v1\/pt\/institutions.*/).reply(200, expected);
+
+    const result = await InstitutionsApi.getInstitutions(params);
+    expect(result).toStrictEqual(expected);
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toBe('/bff/v1/pt/institutions?limit=10');
+  });
+
+  it('getInstitutions - search, status and lastKey are sent as query params', async () => {
+    const params = { search: 'fittizio', status: 'ACTIVE' as const, limit: 10, lastKey: '10' };
+    const expected = getInstitutionsResponse(params);
+    mock.onGet(/\/bff\/v1\/pt\/institutions.*/).reply(200, expected);
+
+    const result = await InstitutionsApi.getInstitutions(params);
+    expect(result).toStrictEqual(expected);
+
+    const [path, query] = mock.history.get[0].url!.split('?');
+    expect(path).toBe('/bff/v1/pt/institutions');
+    expect(Object.fromEntries(new URLSearchParams(query))).toStrictEqual({
+      search: 'fittizio',
+      status: 'ACTIVE',
+      limit: '10',
+      lastKey: '10',
+    });
   });
 });
