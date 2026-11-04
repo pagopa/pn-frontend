@@ -67,7 +67,7 @@
       "send-by-channel": {
         "channel": {
           "analog": "Poštna storitev",
-          "email": "E-pošta",
+          "email": "Email",
           "io": "IO",
           "pec": "PEC",
           "send": "SEND",
