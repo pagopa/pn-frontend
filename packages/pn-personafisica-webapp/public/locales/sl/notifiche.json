@@ -390,7 +390,7 @@
     "delegate": "Tukaj boš videl/a pravno veljavna obvestila osebe {{name}}",
     "description": "Posodobite svoje kontaktne podatke zdaj in takoj boste obveščeni, ko prejmete novo.",
     "description-onboarding": "Ali ste vedeli, da lahko prihranite, če se odločite za prejemanje uradnih sporočil le v digitalni obliki?",
-    "filtered": "Ni obvestil ali sporočil za izbrane filtre",
+    "filtered": "Ni uradnih obvestil ali sporočil za izbrane filtre",
     "filtered-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
     "go-to-contacts-cta": "Pojdite na svoje kontaktne podatke",
     "go-to-onboarding-cta": "Konfigurirajte SEND",

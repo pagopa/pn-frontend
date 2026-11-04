@@ -52,6 +52,10 @@
     },
     "today-uppercase-initial": "Danes"
   },
+  "downtime_language_banner": {
+    "link": "Oglejte si prevode",
+    "message": "Izvirno besedilo dokumentov je v italijanskem jeziku. V primeru neskladja med italijansko različico in prevodi v druge jezike bodo prevladali pomen in pogoji v italijanskem jeziku."
+  },
   "error-boundary": {
     "action": "Ponovno naloži stran",
     "description": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova pozneje.",

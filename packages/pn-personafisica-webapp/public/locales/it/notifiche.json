@@ -398,7 +398,7 @@
     "delegate": "Qui vedrai le notifiche a valore legale di {{name}}",
     "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
     "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le comunicazioni a valore legale solo in digitale?",
-    "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
+    "filtered": "Nessuna notifica a valore legale o comunicazione per i filtri selezionati",
     "filtered-description": "Rimuovili o prova con un’altra combinazione.",
     "go-to-contacts-cta": "Vai ai tuoi recapiti",
     "go-to-onboarding-cta": "Configura SEND",

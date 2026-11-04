@@ -390,7 +390,7 @@
     "delegate": "Ici, tu verras les notifications à valeur juridique de {{name}}",
     "description": "Mettez à jour vos coordonnées dès maintenant et vous saurez immédiatement quand vous en recevrez une.",
     "description-onboarding": "Saviez-vous que vous pouvez économiser en choisissant de recevoir les communications à valeur juridique uniquement au format numérique ?",
-    "filtered": "Aucune notification ou communication pour les filtres sélectionnés",
+    "filtered": "Aucune notification à valeur juridique ou communication pour les filtres sélectionnés",
     "filtered-description": "Supprime-les ou essaie une autre combinaison.",
     "go-to-contacts-cta": "Aller à vos coordonnées",
     "go-to-onboarding-cta": "Configurer SEND",
