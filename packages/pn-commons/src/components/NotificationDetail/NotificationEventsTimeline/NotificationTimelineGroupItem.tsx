@@ -7,6 +7,7 @@ import { Tag } from '@pagopa/mui-italia';
 
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import {
+  Delegator,
   NotificationTimelineEvent,
   NotificationTimelineGroup,
   NotificationTimelineGroupCategory,
@@ -28,7 +29,7 @@ type Props = {
   hasMultipleAttempts?: boolean;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
-  delegatorName?: string;
+  delegator?: Delegator;
   expanded?: boolean;
   onToggle?: () => void;
 };
@@ -49,7 +50,7 @@ const NotificationTimelineGroupItem = ({
   hasMultipleAttempts = false,
   isNewTimelineCopyEnabled = false,
   perfectionLink,
-  delegatorName,
+  delegator,
   expanded: controlledExpanded,
   onToggle,
 }: Props) => {
@@ -84,7 +85,7 @@ const NotificationTimelineGroupItem = ({
       insideAGroup
       isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
       perfectionLink={perfectionLink}
-      delegatorName={delegatorName}
+      delegator={delegator}
     />
   );
 
