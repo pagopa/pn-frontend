@@ -44,6 +44,7 @@ describe('NotificationDetailSection Component', () => {
       );
 
       expect(queryByTestId('aarBox')).not.toBeInTheDocument();
+      expect(queryByTestId('aarDownload')).not.toBeInTheDocument();
       expect(queryByTestId('documentButton')).not.toBeInTheDocument();
       expect(queryByText(`${availableMessage.ns} ${availableMessage.key}`)).not.toBeInTheDocument();
       expect(
@@ -66,6 +67,7 @@ describe('NotificationDetailSection Component', () => {
     );
 
     expect(queryByTestId('aarBox')).not.toBeInTheDocument();
+    expect(queryByTestId('aarDownload')).not.toBeInTheDocument();
     expect(queryByTestId('documentButton')).not.toBeInTheDocument();
   });
 
