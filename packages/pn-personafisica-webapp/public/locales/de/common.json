@@ -199,6 +199,7 @@
     "deleghe": "Vollmachten",
     "fallback-communication": "Mitteilungsdetails",
     "fallback-notification": "Zustellungsdetails",
+    "new-notifications": "Neue Zustellungen zu lesen",
     "notifiche": "Posteingang",
     "notifiche-delegato": "Posteingang für {{delegator}}",
     "notifiche-utente": "Dein Posteingang",
