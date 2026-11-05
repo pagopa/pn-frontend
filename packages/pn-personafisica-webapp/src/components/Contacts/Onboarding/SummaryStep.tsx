@@ -53,7 +53,7 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
           {
             id: 'email',
             label: t('onboarding.digital-domicile.summary.email-label'),
-            value: email,
+            value: `[${email}]`,
           },
         ]
       : []),

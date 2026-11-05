@@ -15,6 +15,7 @@ type Props = {
   onDiscard: () => void;
   onConfirm: (code?: string) => void;
   onError?: () => void;
+  variant?: 'default' | 'onboarding-email' | 'onboarding-pec';
 };
 
 const ContactCodeDialog: React.FC<Props> = ({
@@ -25,9 +26,17 @@ const ContactCodeDialog: React.FC<Props> = ({
   onDiscard,
   onConfirm,
   onError,
+  variant = 'default',
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const contactType = channelType.toLowerCase();
+  const isOnboardingEmail = variant === 'onboarding-email' && channelType === ChannelType.EMAIL;
+  const isOnboardingPec = variant === 'onboarding-pec' && channelType === ChannelType.PEC;
+  const isOnboardingOtp = isOnboardingEmail || isOnboardingPec;
+  const onboardingContactType = isOnboardingEmail ? 'email' : 'pec';
+  const onboardingTitleKey = isOnboardingEmail
+    ? 'onboarding.courtesy.email.verify-before-continue-title'
+    : 'onboarding.digital-domicile.pec.verify-before-continue-title';
   const codeModalRef = useRef<{
     updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
   }>(null);
@@ -65,15 +74,42 @@ const ContactCodeDialog: React.FC<Props> = ({
 
   return (
     <CodeModal
-      title={t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti', value })}
-      subtitle={<Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />}
+      title={
+        isOnboardingEmail || isOnboardingPec
+          ? t(onboardingTitleKey, { ns: 'recapiti' })
+          : t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti', value })
+      }
+      subtitle={
+        isOnboardingEmail || isOnboardingPec ? (
+          <>
+            <Trans
+              i18nKey={`onboarding.otp.description-${onboardingContactType}`}
+              ns="recapiti"
+              values={{ value }}
+              components={{ strong: <strong /> }}
+            />
+            <br />
+            <Trans
+              i18nKey="onboarding.otp.validity"
+              ns="recapiti"
+              components={{ strong: <strong /> }}
+            />
+          </>
+        ) : (
+          <Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />
+        )
+      }
       open={open}
       codeLength={5}
       codeSectionTitle={t(`insert-code`, { ns: 'recapiti' })}
       codeSectionAdditional={
         <Typography component={Box} variant="body2">
           <Trans
-            i18nKey={`${labelRoot}.${contactType}-new-code`}
+            i18nKey={
+              isOnboardingEmail || isOnboardingPec
+                ? `onboarding.otp.new-code-${onboardingContactType}`
+                : `${labelRoot}.${contactType}-new-code`
+            }
             ns="recapiti"
             components={[
               <MIButton
@@ -93,7 +129,13 @@ const ContactCodeDialog: React.FC<Props> = ({
         </Typography>
       }
       cancelLabel={t('button.annulla')}
-      confirmLabel={t('button.conferma')}
+      confirmLabel={
+        isOnboardingEmail || isOnboardingPec
+          ? t(`onboarding.otp.confirm-label`, {
+              ns: 'recapiti',
+            })
+          : t('button.conferma')
+      }
       cancelCallback={onDiscard}
       confirmCallback={(value: string) => onConfirm(value)}
       ref={codeModalRef}
