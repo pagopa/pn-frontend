@@ -62,6 +62,9 @@
     "valid-email": "E-poštni naslov ni veljaven",
     "valid-sms": "Neveljavna številka mobilnega telefona"
   },
+  "digital-contact": {
+    "verified-aria-label": "Preverjen podatek"
+  },
   "domicile-banner": {
     "add-io": "Aktivirajte SEND v aplikaciji IO",
     "complete-addresses": "Vnesite e-poštni naslov",

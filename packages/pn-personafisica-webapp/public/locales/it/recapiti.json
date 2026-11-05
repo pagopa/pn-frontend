@@ -62,6 +62,9 @@
     "valid-email": "Indirizzo email non valido",
     "valid-sms": "Numero di cellulare non valido"
   },
+  "digital-contact": {
+    "verified-aria-label": "Dato verificato"
+  },
   "domicile-banner": {
     "add-io": "Attiva SEND sull’app IO",
     "complete-addresses": "Inserisci una email",
@@ -535,8 +538,5 @@
     "pec-validation": "Validazione PEC in corso"
   },
   "subtitle": "Gestisci i recapiti digitali su cui ricevere le comunicazioni a valore legale di SEND e/o i relativi messaggi di cortesia.",
-  "title": "I tuoi recapiti",
-  "digital-contact": {
-    "verified-aria-label": "Dato verificato"
-  }
+  "title": "I tuoi recapiti"
 }

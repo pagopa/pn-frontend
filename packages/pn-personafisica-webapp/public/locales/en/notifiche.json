@@ -145,6 +145,7 @@
     "timeline-title": "Notification status",
     "timeline": {
       "aar-document": "Notification of receipt",
+      "analog-failure-second-attempt-group-label": "Second sending via registered mail - Failed attempt",
       "analog-failure-workflow": "Update on sending by mail",
       "analog-failure-workflow-description": "The recipient was absolutely untraceable. The notification of receipt is filed and made available.",
       "analog-failure-workflow-description-multirecipient": "The recipient {{name}} {{taxId}} was absolutely untraceable. The notification of receipt is filed and made available.",
@@ -174,8 +175,10 @@
         "M09": "for other reasons",
         "M10": "because the address is not legible"
       },
+      "collapse-all-groups": "Collapse",
       "courtesy-group-label": "Courtesy messages",
       "digital-send-fallback": "Digital delivery",
+      "expand-all-groups": "Expand",
       "legalfact": {
         "analog-failure-delivery": "Deposit of the notification of receipt",
         "digital-delivery-failure": "no digital address",
@@ -190,6 +193,9 @@
         "sender-ack": "notification taken over"
       },
       "notification-cancelled-document": "Declaration of notification cancellation",
+      "pec-address-source-general": "The PEC address is listed in public registers",
+      "pec-address-source-platform": "The PEC address has been added as a contact detail on SEND",
+      "pec-address-source-special": "The PEC address has been registered as a contact channel by the issuing institution",
       "prepare-analog-domicile-failure": "Update on sending by mail",
       "prepare-analog-domicile-failure-D00-description": "No new address was found to arrange another attempt at sending.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "No new address was found for the recipient {{name}} {{taxId}} to arrange another attempt at sending.",
@@ -355,6 +361,8 @@
       "send-digital-domicile-PEC-description": "The notification is being sent to the PEC address {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the PEC address {{address}}.",
       "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Second sending via PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Send via SEND digital domicile",
       "send-digital-domicile-SERCQ-SEND-description": "The sending of the notification to the SEND digital domicile is in progress.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the SEND digital domicile is in progress",
@@ -558,7 +566,8 @@
     "mittente": "Sender",
     "oggetto": "Subject",
     "open": "Open",
-    "status": "Status"
+    "status": "Status",
+    "to-read": "To read"
   },
   "tppLanding": {
     "access-button": "Access documents",
