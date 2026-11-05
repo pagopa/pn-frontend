@@ -115,7 +115,7 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
       dispatch(
         appStateActions.addSuccess({
           title: '',
-          message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
+          message: t('onboarding.courtesy.io-added-successfully', { ns: 'recapiti' }),
         })
       );
 

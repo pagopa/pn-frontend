@@ -224,7 +224,7 @@ const PecStep: React.FC<Props> = ({
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('courtesy-contacts.email-added-successfully', { ns: 'recapiti' }),
+            message: t('onboarding.courtesy.email-added-successfully', { ns: 'recapiti' }),
           })
         );
 
@@ -516,6 +516,7 @@ const PecStep: React.FC<Props> = ({
         addressType={codeDialogAddressType}
         channelType={codeDialogChannelType}
         open={Boolean(codeDialogFlow)}
+        variant={codeDialogFlow === 'email' ? 'onboarding-email' : 'onboarding-pec'}
         onConfirm={(code) => void handleCodeDialogConfirm(code)}
         onDiscard={() => void handleCodeDialogDiscard()}
       />

@@ -297,6 +297,14 @@
     "validation-progress-title": "Grazie!"
   },
   "onboarding": {
+    "otp": {
+      "description-email": "Inserisci il codice che trovi nell'email inviata all'indirizzo <strong>[{{value}}]</strong>",
+      "description-pec": "Inserisci il codice che trovi nella PEC inviata all'indirizzo <strong>{{value}}</strong>",
+      "validity": "Il codice è valido per <strong>15 minuti</strong>.",
+      "new-code-email": "Non l'hai ricevuto? Controlla che l'indirizzo sia corretto oppure <0>genera un nuovo codice</0>.",
+      "new-code-pec": "Non l'hai ricevuto? Controlla che l'indirizzo PEC sia corretto oppure <0>genera un nuovo codice</0>.",
+      "confirm-label": "Verifica"
+    },
     "cards": {
       "contacts": {
         "cta": "Attiva solo gli avvisi",
@@ -374,7 +382,10 @@
       "step-2-label": "Email e SMS",
       "success-description": "Riceverai un avviso sui canali che hai scelto quando ricevi una notifica SEND.",
       "success-title": "Hai attivato gli avvisi",
-      "title": "Attivazione avvisi"
+      "title": "Attivazione avvisi",
+      "email-added-successfully": "Hai attivato gli avvisi via email!",
+      "sms-added-successfully": "Numero di cellulare aggiunto correttamente",
+      "io-added-successfully": "Hai attivato gli avvisi su IO!"
     },
     "description": "Ottieni il massimo e risparmi!",
     "digital-domicile": {
@@ -415,7 +426,7 @@
         }
       },
       "io": {
-        "description": "C’è una notifica SEND per te?  Riceverai un avviso su IO e potrai consultarla direttamente in app!",
+        "description": "C’è una notifica SEND per te? Riceverai un avviso su IO e potrai consultarla direttamente in app!",
         "disabled": {
           "primary-cta": "Attiva gli avvisi su IO"
         },
@@ -461,7 +472,7 @@
       "summary": {
         "courtesy-title": "Riceverai un avviso via:",
         "ddom-label": "Domicilio digitale",
-        "disclaimer": "Premendo <strong>Conferma</strong> dichiari di aver letto l’<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
+        "disclaimer": "Premendo <strong>Conferma</strong> dichiari di aver letto l’<0>Informativa Privacy</0> e di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
         "email-label": "Email",
         "info-box": "Monitora i recapiti che hai scelto: una notifica digitale SEND inizia a produrre effetti giuridici anche se non l’hai consultata.",
         "io-label": "IO, l’app dei servizi pubblici",

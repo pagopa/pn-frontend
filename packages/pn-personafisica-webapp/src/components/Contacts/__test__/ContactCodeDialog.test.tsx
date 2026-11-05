@@ -75,6 +75,79 @@ describe('test ContactCodeDialog', () => {
     expect(confirmButton).toBeEnabled();
   });
 
+  it('render component - onboarding email variant', () => {
+    render(
+      <ContactCodeDialog
+        value="mocked@mail.it"
+        addressType={AddressType.COURTESY}
+        channelType={ChannelType.EMAIL}
+        variant="onboarding-email"
+        open
+        onConfirm={confirmHandler}
+        onDiscard={discardHandler}
+      />
+    );
+
+    const dialog = screen.getByTestId('codeDialog');
+    const titleEl = getById(dialog, 'dialog-title');
+    expect(titleEl).toHaveTextContent('onboarding.courtesy.email.verify-before-continue-title');
+
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+    expect(bodyEl).toHaveTextContent('onboarding.otp.description-email');
+    expect(bodyEl).toHaveTextContent('onboarding.otp.validity');
+    expect(bodyEl).toHaveTextContent('onboarding.otp.new-code-email');
+    expect(within(dialog).getByText('onboarding.otp.confirm-label')).toBeInTheDocument();
+  });
+
+  it('render component - onboarding pec variant', () => {
+    render(
+      <ContactCodeDialog
+        value="mocked@pec.it"
+        addressType={AddressType.LEGAL}
+        channelType={ChannelType.PEC}
+        variant="onboarding-pec"
+        open
+        onConfirm={confirmHandler}
+        onDiscard={discardHandler}
+      />
+    );
+
+    const dialog = screen.getByTestId('codeDialog');
+    const titleEl = getById(dialog, 'dialog-title');
+    expect(titleEl).toHaveTextContent(
+      'onboarding.digital-domicile.pec.verify-before-continue-title'
+    );
+
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+    expect(bodyEl).toHaveTextContent('onboarding.otp.description-pec');
+    expect(bodyEl).toHaveTextContent('onboarding.otp.validity');
+    expect(bodyEl).toHaveTextContent('onboarding.otp.new-code-pec');
+    expect(within(dialog).getByText('onboarding.otp.confirm-label')).toBeInTheDocument();
+  });
+
+  it('falls back to the original copy when onboarding email variant is used with PEC channel', () => {
+    render(
+      <ContactCodeDialog
+        value="mocked@pec.it"
+        addressType={AddressType.LEGAL}
+        channelType={ChannelType.PEC}
+        variant="onboarding-email"
+        open
+        onConfirm={confirmHandler}
+        onDiscard={discardHandler}
+      />
+    );
+
+    const dialog = screen.getByTestId('codeDialog');
+    const titleEl = getById(dialog, 'dialog-title');
+    expect(titleEl).toHaveTextContent('legal-contacts.pec-verify');
+
+    const bodyEl = within(dialog).getByTestId('dialog-content');
+    expect(bodyEl).toHaveTextContent('legal-contacts.pec-verify-descr');
+    expect(bodyEl).toHaveTextContent('legal-contacts.pec-new-code');
+    expect(within(dialog).getByText('button.conferma')).toBeInTheDocument();
+  });
+
   it('click on buttons', async () => {
     // render component
     const result = render(

@@ -186,7 +186,7 @@ const EmailSmsStep = ({
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`courtesy-contacts.${channelType.toLowerCase()}-added-successfully`, {
+            message: t(`onboarding.courtesy.${channelType.toLowerCase()}-added-successfully`, {
               ns: 'recapiti',
             }),
           })
@@ -320,6 +320,9 @@ const EmailSmsStep = ({
         value={currentAddress.current.value}
         addressType={AddressType.COURTESY}
         channelType={currentAddress.current.channelType}
+        variant={
+          currentAddress.current.channelType === ChannelType.EMAIL ? 'onboarding-email' : 'default'
+        }
         onConfirm={(code) => handleCodeVerification(currentAddress.current.channelType, code)}
         onDiscard={handleCancelCode}
       />
