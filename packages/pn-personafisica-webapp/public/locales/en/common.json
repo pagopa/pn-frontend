@@ -199,6 +199,7 @@
     "deleghe": "Delegations",
     "fallback-communication": "Communication details",
     "fallback-notification": "Notification details",
+    "new-notifications": "New notifications to read",
     "notifiche": "Inbox",
     "notifiche-delegato": "Inbox for {{delegator}}",
     "notifiche-utente": "Your inbox",

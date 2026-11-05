@@ -65,17 +65,24 @@ describe('getTimelineItems', () => {
     const legacyStatusHistory = toLegacyStatusHistory(statusHistory);
 
     expect(
-      getTimelineItems(statusHistory, legacyStatusHistory, [recipients[0]], true)[0]
-        .recipientPerStep
+      getTimelineItems(
+        statusHistory,
+        legacyStatusHistory,
+        [recipients[0]],
+        recipients[0].taxId,
+        true
+      )[0].recipientPerStep
     ).toStrictEqual([]);
     expect(
-      getTimelineItems(statusHistory, legacyStatusHistory, recipients, false)[0].recipientPerStep
+      getTimelineItems(statusHistory, legacyStatusHistory, recipients, undefined, false)[0]
+        .recipientPerStep
     ).toStrictEqual([]);
 
     const recipientPerStep = getTimelineItems(
       statusHistory,
       legacyStatusHistory,
       recipients,
+      undefined,
       true
     )[0].recipientPerStep;
     expect(recipientPerStep).toStrictEqual([recipients[0], recipients[1]]);

@@ -94,11 +94,13 @@
       "onlySelected": "Selected institutions only",
       "party-not-found": "No institution found",
       "personType": "Legal entity:",
+      "personType-content-subtitle": "Select the type of legal entity",
       "selectEntities": "Select institutions",
       "submit": "Submit request",
       "verificationCode": "Verification code",
       "verificationCodeDescr": "Share this code with the authorized representative: they will have to enter it when accepting the delegation. The code is valid for 7 days from the creation of the delegation request.",
-      "viewFrom": "You will be able to view notifications from:"
+      "viewFrom": "You will be able to view notifications from:",
+      "viewFrom-content-subtitle": "Select an option"
     },
     "subtitle": "Enter the data of the natural or legal person to whom you want to delegate the reading of your notifications.",
     "title": "Add a delegate",
@@ -115,7 +117,8 @@
       },
       "fiscalCode": {
         "required": "The Tax Code is mandatory",
-        "wrong": "The entered tax code is not correct"
+        "wrong": "The entered tax code is not correct",
+        "wrong-pg": "Enter numbers only. If the Fiscal Code of the person you want to delegate also contains letters, select “Natural person”."
       },
       "name": {
         "required": "The first name is mandatory"

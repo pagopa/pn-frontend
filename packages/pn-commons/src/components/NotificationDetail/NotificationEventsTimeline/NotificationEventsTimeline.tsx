@@ -14,6 +14,7 @@ import {
   TimelineCategory,
 } from '../../../models/NotificationDetail';
 import {
+  Delegator,
   NotificationTimelineEvent,
   NotificationTimelineStatusHistory,
 } from '../../../models/NotificationTimeline';
@@ -43,7 +44,7 @@ type Props = {
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
   mandateId?: string;
-  delegatorName?: string;
+  delegator?: Delegator;
   userTaxId?: string;
 };
 
@@ -96,7 +97,7 @@ const NotificationEventsTimeline = ({
   isNewTimelineCopyEnabled = false,
   perfectionLink,
   mandateId,
-  delegatorName,
+  delegator,
   userTaxId,
 }: Props) => {
   const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
@@ -106,11 +107,20 @@ const NotificationEventsTimeline = ({
   );
   const timelineItems = useMemo(
     () =>
-      getTimelineItems(statusHistory, legacyStatusHistory, recipients, isSenderTimeline, {
-        mandateId,
-        delegatorName,
-        taxId: userTaxId,
-      }),
+      getTimelineItems(
+        statusHistory,
+        legacyStatusHistory,
+        recipients,
+        userTaxId,
+        isSenderTimeline,
+        delegator && mandateId
+          ? {
+              mandateId,
+              delegatorName: delegator?.displayName,
+              delegatorTaxId: delegator?.fiscalCode,
+            }
+          : undefined
+      ),
     [
       statusHistory,
       legacyStatusHistory,
@@ -118,7 +128,8 @@ const NotificationEventsTimeline = ({
       isSenderTimeline,
       language,
       mandateId,
-      delegatorName,
+      delegator,
+      userTaxId,
     ]
   );
 
@@ -244,7 +255,7 @@ const NotificationEventsTimeline = ({
                           language={language}
                           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                           perfectionLink={perfectionLink}
-                          delegatorName={delegatorName}
+                          delegator={delegator}
                         />
                       );
 
@@ -283,7 +294,7 @@ const NotificationEventsTimeline = ({
                           hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
                           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                           perfectionLink={perfectionLink}
-                          delegatorName={delegatorName}
+                          delegator={delegator}
                           expanded={expandedGroups.has(getGroupKey(status, step.group.groupId))}
                           onToggle={() => toggleGroup(getGroupKey(status, step.group.groupId))}
                         />
