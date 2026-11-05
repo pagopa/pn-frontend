@@ -58,6 +58,7 @@
       "documents": {
         "document-not-available": "Le document n'est pas encore disponible. Réessayez plus tard.",
         "download-message-available": "<0>Disponible en ligne jusqu'à 180 jours</0> à compter de la date d'acceptation de la communication.",
+        "download-message-available-plural": "<0>Disponibles en ligne jusqu'à 180 jours</0> à compter de la date d'acceptation de la communication.",
         "download-message-expired": "Les documents ne sont plus disponibles en ligne.",
         "title": "Documents joints"
       },
