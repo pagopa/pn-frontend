@@ -6,7 +6,7 @@
     "generators": {
       "bff-pt-institutions": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/edda2d26ebc308dd66ffd868dfdbef3baf364a09/docs/openapi/api-external-pn-bff-pt-institutions.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/a0c081aefa4a95711728145f08e6a5b49c4695ec/docs/openapi/api-external-pn-bff-pt-institutions.yaml",
         "output": "./src/generated-client/pt-institutions",
         "additionalProperties": {
           "supportsES6": true,
