@@ -26,7 +26,7 @@ import { MIAlert, MIButton, MIChip, MITextField } from '@pagopa/mui-italia';
 import { DelegationStatus, InstitutionRow } from '../models/Institutions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { INSTITUTIONS_ACTIONS, getInstitutions } from '../redux/institutions/actions';
-import { setPagination, setSearch } from '../redux/institutions/reducers';
+import { resetState, setPagination, setSearch } from '../redux/institutions/reducers';
 import { RootState } from '../redux/store';
 
 const delegationStatusChip: Record<
@@ -144,6 +144,13 @@ const InstitutionsPage: React.FC = () => {
     fetchInstitutions();
   }, [fetchInstitutions]);
 
+  useEffect(
+    () => () => {
+      dispatch(resetState());
+    },
+    []
+  );
+
   // the api doesn't return the total: pages are known up to the last received lastKey
   const totalElements = pagination.size * (pagination.nextPagesKey.length + 1);
   const pagesToShow: Array<number> = calculatePages(
@@ -156,7 +163,7 @@ const InstitutionsPage: React.FC = () => {
   const data: Array<Row<InstitutionRow>> = loading
     ? Array.from(
         { length: pagination.size },
-        (_, index) => ({ id: `skeleton-${index}` }) as Row<InstitutionRow>
+        (_, index) => ({ id: `skeleton-${index}` } as Row<InstitutionRow>)
       )
     : institutions.items.map((institution) => ({
         ...institution,

@@ -30,6 +30,10 @@ const institutionsSlice = createSlice({
       state.pagination.page = action.payload.page;
     },
     setSearch: (state, action: PayloadAction<string>) => {
+      // no request would run to restore the cursors, so they must be kept
+      if (state.search === action.payload && state.pagination.page === 0) {
+        return;
+      }
       state.search = action.payload;
       state.pagination.page = 0;
       state.pagination.nextPagesKey = [];

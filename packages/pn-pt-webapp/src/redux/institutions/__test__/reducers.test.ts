@@ -101,6 +101,33 @@ describe('institutions redux state tests', () => {
     expect(state.pagination).toEqual({ page: 0, size: 10, nextPagesKey: [] });
   });
 
+  it('should keep the pagination keys when the same search is set on the first page', async () => {
+    store.dispatch(setSearch('Fittizio'));
+    getInstitutionsSpy.mockResolvedValueOnce(getInstitutionsResponse({ limit: 10 }));
+    await store.dispatch(getInstitutions({ search: 'Fittizio', limit: 10 }));
+
+    store.dispatch(setSearch('Fittizio'));
+    expect(store.getState().institutionsState.pagination).toEqual({
+      page: 0,
+      size: 10,
+      nextPagesKey: ['10'],
+    });
+  });
+
+  it('should reset the pagination when the same search is set on another page', async () => {
+    store.dispatch(setSearch('Fittizio'));
+    getInstitutionsSpy.mockResolvedValueOnce(getInstitutionsResponse({ limit: 10 }));
+    await store.dispatch(getInstitutions({ search: 'Fittizio', limit: 10 }));
+    store.dispatch(setPagination({ page: 1, size: 10 }));
+
+    store.dispatch(setSearch('Fittizio'));
+    expect(store.getState().institutionsState.pagination).toEqual({
+      page: 0,
+      size: 10,
+      nextPagesKey: [],
+    });
+  });
+
   it('should reset the state', async () => {
     getInstitutionsSpy.mockResolvedValueOnce(getInstitutionsResponse({ limit: 10 }));
     await store.dispatch(getInstitutions({ limit: 10 }));

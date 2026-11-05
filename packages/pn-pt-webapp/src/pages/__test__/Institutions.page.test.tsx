@@ -122,6 +122,21 @@ describe('Institutions page', () => {
     expect(screen.queryByText('search.min-length')).not.toBeInTheDocument();
   });
 
+  it('resets the search and pagination when leaving the page', async () => {
+    const { testStore, unmount } = await renderPage();
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: 'Fittizio' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    await waitFor(() => expect(testStore.getState().institutionsState.search).toBe('Fittizio'));
+
+    unmount();
+
+    const { search, pagination } = testStore.getState().institutionsState;
+    expect(search).toBe('');
+    expect(pagination).toEqual({ page: 0, size: 10, nextPagesKey: [] });
+  });
+
   it('shows a validation error when searching with less than 3 characters', async () => {
     await renderPage();
     fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
@@ -197,6 +212,36 @@ describe('Institutions page', () => {
     expect(
       within(screen.getByTestId('pageSelector')).queryByRole('button', { name: /4/ })
     ).not.toBeInTheDocument();
+  });
+
+  it('keeps the next pages available when the same search is submitted again', async () => {
+    await renderPage();
+    const input = screen.getByRole('textbox', { name: /search.label/ });
+    fireEvent.change(input, { target: { value: 'Ente' } });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    await waitFor(() => {
+      expect(getInstitutionsSpy).toHaveBeenCalledTimes(2);
+      expect(
+        within(screen.getByTestId('pageSelector')).getByRole('button', { name: /2/ })
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('searchButton'));
+    // let formik complete the async submit
+    await act(async () => {});
+    expect(getInstitutionsSpy).toHaveBeenCalledTimes(2);
+
+    fireEvent.click(within(screen.getByTestId('pageSelector')).getByRole('button', { name: /2/ }));
+    await waitFor(() => {
+      expect(getInstitutionsSpy).toHaveBeenLastCalledWith({
+        search: 'Ente',
+        limit: 10,
+        lastKey: '10',
+      });
+      expect(screen.getAllByTestId('institutionsBodyRowDesktop')[0]).toHaveTextContent(
+        'Ente Fittizio 11'
+      );
+    });
   });
 
   it('changes page size and resets to the first page', async () => {
