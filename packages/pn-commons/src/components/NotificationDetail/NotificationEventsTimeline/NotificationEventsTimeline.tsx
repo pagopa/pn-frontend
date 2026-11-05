@@ -16,6 +16,7 @@ import {
 import {
   Delegator,
   NotificationTimelineEvent,
+  NotificationTimelineLegacyStatusHistory,
   NotificationTimelineStatusHistory,
 } from '../../../models/NotificationTimeline';
 import {
@@ -50,34 +51,40 @@ type Props = {
 
 const getStatusPerfectionLink = (
   perfectionLink: string | undefined,
-  status: NotificationTimelineStatusHistory
+  history: Array<NotificationTimelineLegacyStatusHistory>
 ): string | undefined => {
   if (!perfectionLink) {
     return perfectionLink;
   }
-  if (status.deliveryMode === NotificationDeliveryMode.ANALOG) {
-    return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
-  }
-  if (status.deliveryMode !== NotificationDeliveryMode.DIGITAL) {
-    return perfectionLink;
-  }
-
-  const digitalSuccessWorkflow = status.steps.find(
-    (step) =>
-      !isTimelineGroupStep(step) &&
-      step.event.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+  const plainHistory = history.reduce<Array<NotificationTimelineEvent>>(
+    (arr, status) => arr.concat(status.steps ?? []),
+    []
   );
-  if (!digitalSuccessWorkflow || isTimelineGroupStep(digitalSuccessWorkflow)) {
-    return perfectionLink;
-  }
 
-  const digitalAddress = (digitalSuccessWorkflow.event.details as SendDigitalDetails)
-    .digitalAddress;
-  if (digitalAddress?.type === DigitalDomicileType.PEC) {
+  const delivered = history.find((status) => status.status === NotificationStatus.DELIVERED);
+
+  // if notification is delivered by analog flow it can be also after a digital workflow fails
+  if (delivered?.deliveryMode === NotificationDeliveryMode.ANALOG) {
+    const digitalFailure = plainHistory.some(
+      (step) => step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW
+    );
+    if (!digitalFailure) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
+    }
     return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
   }
-  if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
-    return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
+
+  if (delivered?.deliveryMode === NotificationDeliveryMode.DIGITAL) {
+    const digitalSuccess = plainHistory.find(
+      (step) => step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+    );
+    const digitalAddress = (digitalSuccess?.details as SendDigitalDetails).digitalAddress;
+    if (digitalAddress?.type === DigitalDomicileType.PEC) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+    }
+    if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
+    }
   }
 
   return perfectionLink;
@@ -152,6 +159,14 @@ const NotificationEventsTimeline = ({
       return next;
     });
 
+  const statusPerfectionLink = useMemo(
+    () =>
+      isNewTimelineCopyEnabled
+        ? getStatusPerfectionLink(perfectionLink, legacyStatusHistory)
+        : perfectionLink,
+    [legacyStatusHistory, perfectionLink]
+  );
+
   return (
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
@@ -181,10 +196,6 @@ const NotificationEventsTimeline = ({
               groupKeys.length > 0 && groupKeys.every((key) => expandedGroups.has(key));
             const showExpandAll =
               !isMobile && status.status === NotificationStatus.DELIVERING && groupKeys.length > 1;
-
-            const statusPerfectionLink = isNewTimelineCopyEnabled
-              ? getStatusPerfectionLink(perfectionLink, status)
-              : perfectionLink;
 
             return (
               <MITimelineItem
