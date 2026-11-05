@@ -58,6 +58,9 @@
     "valid-email": "Adresse courriel non valide",
     "valid-sms": "Numéro de portable non valide"
   },
+  "digital-contact": {
+    "verified-aria-label": "Donnée vérifiée"
+  },
   "domicile-banner": {
     "complete-addresses": "Insérer un courriel",
     "complete-configuration": "Terminer la configuration",

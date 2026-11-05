@@ -58,6 +58,9 @@
     "valid-email": "Invalid email address",
     "valid-sms": "Invalid mobile number"
   },
+  "digital-contact": {
+    "verified-aria-label": "Verified data"
+  },
   "domicile-banner": {
     "complete-addresses": "Enter an email",
     "complete-configuration": "Complete configuration",
