@@ -38,6 +38,8 @@ export interface PfConfiguration {
   SELFCARE_CDN_URL: string;
   IS_NEW_TIMELINE_ENABLED: boolean;
   IS_NEW_TIMELINE_COPY_ENABLED: boolean;
+  // abilita la scelta SMS / WhatsApp per il numero di cellulare
+  IS_WHATSAPP_ENABLED?: boolean;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -90,6 +92,7 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('SELFCARE_CDN_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_NEW_TIMELINE_ENABLED').isBoolean();
     this.ruleFor('IS_NEW_TIMELINE_COPY_ENABLED').isBoolean();
+    this.ruleFor('IS_WHATSAPP_ENABLED').isBoolean();
   }
 }
 

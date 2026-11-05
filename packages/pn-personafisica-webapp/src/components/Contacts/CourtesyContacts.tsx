@@ -9,13 +9,17 @@ import IOContact from './IOContact';
 import SmsContactItem from './SmsContactItem';
 
 const CourtesyContacts: React.FC = () => {
-  const { defaultSMSAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultSMSAddress, defaultWHATSAPPAddress } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
+  // la card del cellulare è unica: il numero è attivo su SMS oppure su WhatsApp
+  const hasMobileAddress = !!defaultSMSAddress || !!defaultWHATSAPPAddress;
 
   return (
     <Stack spacing={2} data-testid="courtesyContacts">
       <IOContact />
       <EmailContactItem />
-      {defaultSMSAddress && <SmsContactItem />}
+      {hasMobileAddress && <SmsContactItem />}
     </Stack>
   );
 };

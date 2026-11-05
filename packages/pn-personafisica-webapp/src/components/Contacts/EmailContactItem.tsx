@@ -40,7 +40,8 @@ const EmailContactItem: React.FC = () => {
     defaultSERCQ_SENDAddress,
     defaultPECAddress,
     defaultEMAILAddress,
-    defaultSMSAddress,
+    defaultSMSAddress: defaultSMSOnlyAddress,
+    defaultWHATSAPPAddress,
     legalAddresses,
     specialAddresses,
     specialEMAILAddresses,
@@ -51,6 +52,8 @@ const EmailContactItem: React.FC = () => {
     resetForm: () => Promise.resolve(),
   });
 
+  // il numero di cellulare può essere attivo su SMS o su WhatsApp (in alternativa)
+  const defaultSMSAddress = defaultSMSOnlyAddress ?? defaultWHATSAPPAddress;
   const isEmailActive = !!defaultEMAILAddress;
   const hasAnySERCQAddrEnabled =
     !!defaultSERCQ_SENDAddress ||
