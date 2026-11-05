@@ -7,6 +7,7 @@ import { Tag } from '@pagopa/mui-italia';
 
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import {
+  Delegator,
   NotificationTimelineEvent,
   NotificationTimelineGroup,
   NotificationTimelineGroupCategory,
@@ -28,7 +29,9 @@ type Props = {
   hasMultipleAttempts?: boolean;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
-  delegatorName?: string;
+  delegator?: Delegator;
+  expanded?: boolean;
+  onToggle?: () => void;
 };
 
 const PEC_SOURCE_LABEL_KEYS: Record<DigitalSource, string> = {
@@ -47,10 +50,14 @@ const NotificationTimelineGroupItem = ({
   hasMultipleAttempts = false,
   isNewTimelineCopyEnabled = false,
   perfectionLink,
-  delegatorName,
+  delegator,
+  expanded: controlledExpanded,
+  onToggle,
 }: Props) => {
   const generatedId = useId();
-  const [expanded, setExpanded] = useState(false);
+  const [internalExpanded, setInternalExpanded] = useState(false);
+  const isControlled = controlledExpanded !== undefined;
+  const expanded = isControlled ? controlledExpanded : internalExpanded;
 
   const headerId = `timeline-group-header-${generatedId}`;
   const panelId = `timeline-group-panel-${generatedId}`;
@@ -78,7 +85,7 @@ const NotificationTimelineGroupItem = ({
       insideAGroup
       isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
       perfectionLink={perfectionLink}
-      delegatorName={delegatorName}
+      delegator={delegator}
     />
   );
 
@@ -107,7 +114,7 @@ const NotificationTimelineGroupItem = ({
           >
             {getLocalizedOrDefaultLabel(
               'notifications',
-              'detail.timeline.send-digital-domicile-PEC-group-label'
+              'detail.timeline.send-digital-domicile-PEC-subgroup-label'
             )}{' '}
             · {section.address}
           </Typography>
@@ -144,7 +151,7 @@ const NotificationTimelineGroupItem = ({
         type="button"
         aria-expanded={expanded}
         aria-controls={panelId}
-        onClick={() => setExpanded((current) => !current)}
+        onClick={() => (isControlled ? onToggle?.() : setInternalExpanded((current) => !current))}
         data-testid="timeline-group-header"
         sx={{
           width: '100%',

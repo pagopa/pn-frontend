@@ -5,6 +5,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
 } from '../../models';
+import { Delegator } from '../../models/NotificationTimeline';
 import { getNotificationStatusInfos } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
@@ -23,7 +24,7 @@ type NotificationTimelineBoxProps = {
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
   mandateId?: string;
-  delegatorName?: string;
+  delegator?: Delegator;
   userTaxId?: string;
 };
 
@@ -36,7 +37,7 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   isNewTimelineCopyEnabled = false,
   perfectionLink,
   mandateId,
-  delegatorName,
+  delegator,
   userTaxId,
 }) => {
   if (statusHistory.length === 0) {
@@ -48,7 +49,7 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
     recipients,
     isParty,
     mandateId,
-    delegatorName,
+    delegator,
     userTaxId,
   });
 
