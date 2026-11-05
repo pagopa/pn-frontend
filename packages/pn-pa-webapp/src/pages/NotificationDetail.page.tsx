@@ -448,7 +448,7 @@ const NotificationDetail: React.FC = () => {
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                     titleVariant="h5"
-                    inlineDownloadFilesMessage
+                    isSender
                   />
                   {notification.radd && (
                     <MIAlert
@@ -497,8 +497,6 @@ const NotificationDetail: React.FC = () => {
                 />
               )}
               <NotificationDetailSection
-                isDelegate={false}
-                recipient={recipients[0]}
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDownloadHandler}
                 isCancelled={false}

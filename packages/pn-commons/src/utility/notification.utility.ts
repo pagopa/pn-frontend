@@ -9,6 +9,7 @@ import { MIChipProps } from '@pagopa/mui-italia';
 
 import {
   AnalogWorkflowDetails,
+  DigitalDomicileType,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
@@ -30,6 +31,7 @@ import {
 } from '../models/NotificationDetail';
 import { NotificationStatus } from '../models/NotificationStatus';
 import {
+  Delegator,
   NotificationPaymentTimeline,
   NotificationPaymentTimelineElement,
 } from '../models/NotificationTimeline';
@@ -60,21 +62,10 @@ type ViewedVariantOptions = {
   userTaxId?: string;
 };
 
-const statusLocalizationNames = {
-  [NotificationStatus.IN_VALIDATION]: 'in-validation',
-  [NotificationStatus.ACCEPTED]: 'accepted',
-  [NotificationStatus.DELIVERING]: 'delivering',
-  [NotificationStatus.DELIVERED]: 'delivered',
-  [NotificationStatus.VIEWED]: 'viewed',
-  [NotificationStatus.EFFECTIVE_DATE]: 'effective-date',
-  [NotificationStatus.PAID]: 'paid',
-  [NotificationStatus.UNREACHABLE]: 'unreachable',
-  [NotificationStatus.CANCELLED]: 'canceled',
-  [NotificationStatus.REFUSED]: 'refused',
-  [NotificationStatus.RETURNED_TO_SENDER]: 'returned-to-sender',
-  [NotificationStatus.NOTIFICATION_TIMELINE_REWORKED]: 'notification-timeline-reworked',
-  [NotificationStatus.CANCELLATION_IN_PROGRESS]: 'cancellation-in-progress',
-} as const satisfies Record<NotificationStatus, string>;
+const channelMap: Partial<Record<DigitalDomicileType, string>> = {
+  [DigitalDomicileType.PEC]: 'PEC',
+  [DigitalDomicileType.SERCQ]: 'SEND',
+};
 
 function viewedByVariant({
   statusObject,
@@ -216,16 +207,39 @@ function deliveredStatusVariant(
     statusHistory?: Array<NotificationStatusHistory>;
     recipients: Array<NotificationDetailRecipient | string>;
     isParty?: boolean;
-    delegatorName?: string;
+    delegator?: Delegator;
+    userTaxId?: string;
   }
 ): StatusInfo {
   const deliveryMode = statusObject?.deliveryMode;
-  const delegatorName = options?.delegatorName;
+  const delegatorName = options?.delegator?.displayName;
+  const userTaxId = options?.delegator ? options.delegator.fiscalCode : options?.userTaxId;
+  const recIndex = options?.recipients.findIndex((rec) =>
+    typeof rec === 'string' ? rec === userTaxId : rec.taxId === userTaxId
+  );
+  const plainStatusHistory = options?.statusHistory?.reduce<Array<INotificationDetailTimeline>>(
+    (arr, status) => arr.concat(status.steps ?? []),
+    []
+  );
+  const digitalSuccessEvent = plainStatusHistory?.find(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+  const analogSuccessEvent = plainStatusHistory?.find(
+    (step) =>
+      step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+
+  const digitalChannel = (digitalSuccessEvent?.details as SendDigitalDetails)?.digitalAddress?.type;
 
   const context: StatusLocalizationContext = {
     isMultiRecipient,
     deliveryMode,
     isDelegate: !!(deliveryMode && delegatorName),
+    viewer:
+      !digitalSuccessEvent && !analogSuccessEvent && isMultiRecipient ? 'by-recipient' : undefined,
   };
 
   const description = resolveStatusLocalization(
@@ -271,6 +285,13 @@ function deliveredStatusVariant(
     };
   }
 
+  if (digitalChannel && channelMap[digitalChannel]) {
+    descriptionData = {
+      ...descriptionData,
+      channel: channelMap[digitalChannel],
+    };
+  }
+
   return localizeStatus(
     NotificationStatus.DELIVERED,
     undefined,
@@ -307,7 +328,7 @@ function statusLocalizationKey(
   isMultiRecipient?: boolean,
   variant?: StatusLocalizationVariant
 ): string {
-  const suffix = isMultiRecipient ? '-multirecipient' : '';
+  const recipientSuffix = isMultiRecipient ? '-multirecipient' : '';
   const partSuffix = part === 'label' ? '' : `-${part}`;
   const modeSuffix = variant?.deliveryMode ? `-${variant.deliveryMode}` : '';
 
@@ -321,21 +342,11 @@ function statusLocalizationKey(
 
   const legalFactSuffix = variant?.legalFact ? `-${variant.legalFact}-legal-fact` : '';
 
-  return `status.${statusLocalizationNames[status]}${partSuffix}${modeSuffix}${delegateSuffix}${legalFactSuffix}${suffix}`;
-}
+  const statusKey =
+    status === NotificationStatus.CANCELLED ? 'canceled' : status.toLowerCase().replace(/_/g, '-');
 
-// Map non-canonical localization keys to their existing equivalents.
-// New keys follow the canonial suffix order: mode, viewer/delegate, legal fact, multirecipient
-const statusLocalizationAliases: Readonly<Record<string, string | undefined>> = {
-  'status.viewed-description-as-delegate': 'status.viewed-as-delegate-description',
-  'status.viewed-description-by-delegate': 'status.viewed-by-delegate-description',
-  'status.viewed-description-by-other-delegate': 'status.viewed-by-other-delegate-description',
-  'status.viewed-description-by-recipient': 'status.viewed-by-recipient-description',
-  'status.viewed-description-without-legal-fact-multirecipient':
-    'status.viewed-without-legal-fact-description-multirecipient',
-  'status.returned-to-sender-description-with-legal-fact':
-    'status.returned-to-sender-with-legal-fact-description',
-};
+  return `status.${statusKey}${partSuffix}${modeSuffix}${delegateSuffix}${legalFactSuffix}${recipientSuffix}`;
+}
 
 /**
  * Selects the most specific available localization variant, retaining
@@ -361,12 +372,6 @@ function resolveStatusLocalization(
 
     if (hasLocalizedLabel('notifications', key)) {
       return { key, variant, isMultiRecipient };
-    }
-
-    const alias = statusLocalizationAliases[key];
-
-    if (alias && hasLocalizedLabel('notifications', alias)) {
-      return { key: alias, variant, isMultiRecipient };
     }
 
     return undefined;
@@ -464,7 +469,7 @@ export function getNotificationStatusInfos(
     recipients: Array<NotificationDetailRecipient | string>;
     isParty?: boolean;
     mandateId?: string;
-    delegatorName?: string;
+    delegator?: Delegator;
     userTaxId?: string;
   }
 ): StatusInfoWithColor {
@@ -508,8 +513,8 @@ export function getNotificationStatusInfos(
       const statusInfos = localizeStatus(
         NotificationStatus.UNREACHABLE,
         undefined,
-        { isMultiRecipient, isDelegate: !!options?.delegatorName },
-        options?.delegatorName ? { recipient: options.delegatorName } : undefined
+        { isMultiRecipient, isDelegate: !!options?.delegator?.displayName },
+        options?.delegator?.displayName ? { recipient: options.delegator.displayName } : undefined
       );
 
       return { color: 'error', ...statusInfos };
@@ -532,8 +537,10 @@ export function getNotificationStatusInfos(
       const statusInfos = localizeStatus(
         NotificationStatus.EFFECTIVE_DATE,
         dateData,
-        { isMultiRecipient, isDelegate: !!options?.delegatorName },
-        options?.delegatorName ? { ...dateData, recipient: options.delegatorName } : undefined
+        { isMultiRecipient, isDelegate: !!options?.delegator?.displayName },
+        options?.delegator?.displayName
+          ? { ...dateData, recipient: options.delegator.displayName }
+          : undefined
       );
       return { color: 'info', ...statusInfos };
     }
@@ -550,7 +557,7 @@ export function getNotificationStatusInfos(
         statusObject,
         isMultiRecipient,
         mandateId: options?.mandateId,
-        delegatorName: options?.delegatorName,
+        delegatorName: options?.delegator?.displayName,
         userTaxId: options?.userTaxId,
       });
       return {
@@ -866,7 +873,7 @@ export function getNotificationTimelineStatusInfos(
   recipients: Array<NotificationDetailRecipient>,
   allStepsForThisStatus?: Array<INotificationDetailTimeline>,
   isNewTimelineCopyEnabled?: boolean,
-  delegatorName?: string
+  delegator?: Delegator
 ): TimelineStepInfo | null {
   const recipient = isNil(step.details.recIndex)
     ? undefined
@@ -898,7 +905,7 @@ export function getNotificationTimelineStatusInfos(
           recDescription.denomination && recDescription.taxId && recDescription.recipientType
       ).length > 1,
     allStepsForThisStatus,
-    delegatorName,
+    delegatorName: delegator?.displayName,
     isNewTimelineCopyEnabled,
   });
 }
