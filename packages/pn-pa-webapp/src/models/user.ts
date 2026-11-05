@@ -1,4 +1,4 @@
-import { BasicUser } from '@pagopa-pn/pn-commons';
+import { BasicUser, InstitutionType } from '@pagopa-pn/pn-commons';
 
 export interface Role {
   role: PNRole;
@@ -53,4 +53,5 @@ export interface Organization {
     id?: string;
     description?: string;
   };
+  institutionType?: InstitutionType.PA | InstitutionType.PT;
 }

@@ -91,7 +91,7 @@ describe('NotificationTimelineGroupItem', () => {
       const { container } = renderGroup(analogGroup, true);
 
       expect(within(container).getByTestId('timeline-group-header')).toHaveTextContent(
-        'detail.timeline.send-analog-domicile-890-first-attempt-group-label'
+        'detail.timeline.send-analog-domicile-890-group-label'
       );
     });
 

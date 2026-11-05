@@ -67,7 +67,7 @@
       "send-by-channel": {
         "channel": {
           "analog": "Postdienst",
-          "email": "E-Mail",
+          "email": "Email",
           "io": "IO",
           "pec": "PEC",
           "send": "SEND",

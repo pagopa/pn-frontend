@@ -524,5 +524,8 @@
     "pec-validation": "Validazione PEC in corso"
   },
   "subtitle": "Gestisci i recapiti digitali su cui ricevere le comunicazioni a valore legale di SEND e/o i relativi messaggi di cortesia.",
-  "title": "I tuoi recapiti"
+  "title": "I tuoi recapiti",
+  "digital-contact": {
+    "verified-aria-label": "Dato verificato"
+  }
 }
