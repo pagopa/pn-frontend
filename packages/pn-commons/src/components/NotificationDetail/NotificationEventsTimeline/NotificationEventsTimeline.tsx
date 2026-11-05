@@ -78,7 +78,8 @@ const getStatusPerfectionLink = (
     const digitalSuccess = plainHistory.find(
       (step) => step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
     );
-    const digitalAddress = (digitalSuccess?.details as SendDigitalDetails).digitalAddress;
+    const digitalAddress = (digitalSuccess?.details as SendDigitalDetails | undefined)
+      ?.digitalAddress;
     if (digitalAddress?.type === DigitalDomicileType.PEC) {
       return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
     }
