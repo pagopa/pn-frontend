@@ -58,6 +58,9 @@
     "valid-email": "Neveljaven e-poštni naslov",
     "valid-sms": "Neveljavna mobilna številka"
   },
+  "digital-contact": {
+    "verified-aria-label": "Preverjen podatek"
+  },
   "domicile-banner": {
     "complete-addresses": "Vnesite e-pošto",
     "complete-configuration": "Zaključi konfiguracijo",
