@@ -265,7 +265,12 @@
     "unreachable-multirecipient": "Destinataires injoignables",
     "viewed": "Notification lue",
     "viewed-description": "Vous avez accédé à cette notification ayant une valeur juridique. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
+    "viewed-description-as-delegate": "En tant que délégué, vous avez accédé à la notification SEND de {{recipient}}. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
+    "viewed-description-by-delegate": "En tant que délégué, {{name}} a accédé à la notification SEND. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
+    "viewed-description-by-other-delegate": "En tant que délégué, {{name}} a accédé à la notification SEND de {{recipient}}. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
+    "viewed-description-by-recipient": "{{recipient}} a accédé à la notification SEND. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
     "viewed-description-multirecipient": "Cette notification SEND a été envoyée à plusieurs destinataires, et au moins une personne parmi eux a accédé à la notification. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
+    "viewed-description-without-legal-fact-multirecipient": "Cette notification SEND a été envoyée à plusieurs destinataires, et au moins une personne parmi eux a accédé à la notification.",
     "viewed-multirecipient": "Notification lue"
   }
 }

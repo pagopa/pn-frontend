@@ -265,7 +265,12 @@
     "unreachable-multirecipient": "Nedosegljivi prejemniki",
     "viewed": "Prebrano obvestilo",
     "viewed-description": "Dostopali ste do tega uradnega sporočila. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
+    "viewed-description-as-delegate": "Kot pooblaščenec ste dostopali do obvestila SEND osebe {{recipient}}. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
+    "viewed-description-by-delegate": "Kot pooblaščenec je {{name}} dostopal do obvestila SEND. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
+    "viewed-description-by-other-delegate": "Kot pooblaščenec je {{name}} dostopal do obvestila SEND osebe {{recipient}}. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
+    "viewed-description-by-recipient": "Oseba {{recipient}} je dostopala do obvestila SEND. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
     "viewed-description-multirecipient": "To obvestilo SEND je bilo poslano več prejemnikom, pri čemer je vsaj ena oseba med njimi dostopala do obvestila. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
+    "viewed-description-without-legal-fact-multirecipient": "To obvestilo SEND je bilo poslano več prejemnikom, pri čemer je vsaj ena oseba med njimi dostopala do obvestila.",
     "viewed-multirecipient": "Prebrano obvestilo"
   }
 }

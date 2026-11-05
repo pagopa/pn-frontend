@@ -265,7 +265,12 @@
     "unreachable-multirecipient": "Nicht erreichbare Empfänger",
     "viewed": "Zustellung gelesen",
     "viewed-description": "Du hast auf diese rechtsgültige Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
+    "viewed-description-as-delegate": "Als delegierte Person hast du auf die SEND Zustellung von {{recipient}} zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
+    "viewed-description-by-delegate": "Als delegierte Person hat {{name}} auf die SEND Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
+    "viewed-description-by-other-delegate": "Als delegierte Person hat {{name}} auf die SEND Zustellung von {{recipient}} zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
+    "viewed-description-by-recipient": "{{recipient}} hat auf die SEND Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-description-multirecipient": "Diese SEND Zustellung wurde an mehrere Empfänger gesendet, und mindestens eine Person von ihnen hat auf die Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
+    "viewed-description-without-legal-fact-multirecipient": "Diese SEND Zustellung wurde an mehrere Empfänger gesendet, und mindestens eine Person von ihnen hat auf die Zustellung zugegriffen.",
     "viewed-multirecipient": "Zustellung gelesen"
   }
 }
