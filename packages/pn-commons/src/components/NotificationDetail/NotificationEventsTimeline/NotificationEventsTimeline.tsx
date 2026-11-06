@@ -51,21 +51,15 @@ type Props = {
 
 const getStatusPerfectionLink = (
   perfectionLink: string | undefined,
-  history: Array<NotificationTimelineLegacyStatusHistory>
+  status: NotificationTimelineLegacyStatusHistory
 ): string | undefined => {
   if (!perfectionLink) {
     return perfectionLink;
   }
-  const plainHistory = history.reduce<Array<NotificationTimelineEvent>>(
-    (arr, status) => arr.concat(status.steps ?? []),
-    []
-  );
-
-  const delivered = history.find((status) => status.status === NotificationStatus.DELIVERED);
 
   // if notification is delivered by analog flow it can be also after a digital workflow fails
-  if (delivered?.deliveryMode === NotificationDeliveryMode.ANALOG) {
-    const digitalFailure = plainHistory.some(
+  if (status.deliveryMode === NotificationDeliveryMode.ANALOG) {
+    const digitalFailure = status.steps.some(
       (step) => step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW
     );
     if (!digitalFailure) {
@@ -74,8 +68,8 @@ const getStatusPerfectionLink = (
     return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
   }
 
-  if (delivered?.deliveryMode === NotificationDeliveryMode.DIGITAL) {
-    const digitalSuccess = plainHistory.find(
+  if (status.deliveryMode === NotificationDeliveryMode.DIGITAL) {
+    const digitalSuccess = status.steps.find(
       (step) => step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
     );
     const digitalAddress = (digitalSuccess?.details as SendDigitalDetails | undefined)
@@ -160,14 +154,6 @@ const NotificationEventsTimeline = ({
       return next;
     });
 
-  const statusPerfectionLink = useMemo(
-    () =>
-      isNewTimelineCopyEnabled
-        ? getStatusPerfectionLink(perfectionLink, legacyStatusHistory)
-        : perfectionLink,
-    [legacyStatusHistory, perfectionLink]
-  );
-
   return (
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
@@ -197,6 +183,10 @@ const NotificationEventsTimeline = ({
               groupKeys.length > 0 && groupKeys.every((key) => expandedGroups.has(key));
             const showExpandAll =
               !isMobile && status.status === NotificationStatus.DELIVERING && groupKeys.length > 1;
+
+            const statusPerfectionLink = isNewTimelineCopyEnabled
+              ? getStatusPerfectionLink(perfectionLink, legacyStatus)
+              : perfectionLink;
 
             return (
               <MITimelineItem
