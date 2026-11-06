@@ -10,6 +10,9 @@ export interface PtConfiguration {
   INACTIVITY_HANDLER_MINUTES: number;
   WORK_IN_PROGRESS: boolean;
   LANDING_SITE_URL: string;
+  ONE_TRUST_DRAFT_MODE: boolean;
+  ONE_TRUST_PP: string;
+  ONE_TRUST_TOS: string;
 }
 
 class PtConfigurationValidator extends Validator<PtConfiguration> {
@@ -26,6 +29,9 @@ class PtConfigurationValidator extends Validator<PtConfiguration> {
     this.ruleFor('INACTIVITY_HANDLER_MINUTES').isNumber().isRequired();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean().isRequired();
     this.ruleFor('LANDING_SITE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean().isRequired();
+    this.ruleFor('ONE_TRUST_PP').isString().isRequired();
+    this.ruleFor('ONE_TRUST_TOS').isString().isRequired();
   }
 }
 
