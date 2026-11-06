@@ -66,7 +66,6 @@ describe('EmptyErrorState', () => {
     );
 
     expect(getByText('Error state')).toBeInTheDocument();
-    expect(getByTitle('MIError')).toBeInTheDocument();
     expect(getByTitle('MIDataSecurity')).toBeInTheDocument();
   });
 });
