@@ -1,0 +1,69 @@
+import React, { Suspense } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { LoadingPage } from '@pagopa-pn/pn-commons';
+import { themeNext } from '@pagopa/mui-italia';
+
+import App from './App';
+import { initAxiosClients } from './api/apiClients';
+import { setUpInterceptor } from './api/interceptors';
+import './i18n';
+import './index.css';
+import { initStore, store } from './redux/store';
+import reportWebVitals from './reportWebVitals';
+import { loadPtConfiguration } from './services/configuration.service';
+
+async function doTheRender() {
+  const container = document.getElementById('root');
+  const root = createRoot(container!);
+  try {
+    // load config from JSON file
+    await loadPtConfiguration();
+
+    // init actions (previously static code) which make use of config
+    initStore();
+    initAxiosClients();
+    setUpInterceptor(store);
+
+    const router = createBrowserRouter([
+      {
+        path: '*',
+        element: <App />,
+      },
+    ]);
+
+    root.render(
+      <Provider store={store}>
+        <React.StrictMode>
+          <ThemeProvider theme={themeNext}>
+            <CssBaseline />
+            <Suspense fallback={<LoadingPage renderType="whole" />}>
+              <RouterProvider router={router} />
+            </Suspense>
+          </ThemeProvider>
+        </React.StrictMode>
+      </Provider>
+    );
+
+    // If you want to start measuring performance in your app, pass a function
+    // to log results (for example: reportWebVitals(console.log))
+    // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+    reportWebVitals();
+  } catch (e) {
+    console.error(e);
+
+    root.render(
+      <React.StrictMode>
+        <div style={{ fontSize: 20, marginLeft: '2rem' }}>
+          Problems loading configuration - see console
+        </div>
+      </React.StrictMode>
+    );
+  }
+}
+
+// actual launching of the React app
+void doTheRender();
