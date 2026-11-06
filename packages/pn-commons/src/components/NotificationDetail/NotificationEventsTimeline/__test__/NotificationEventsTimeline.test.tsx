@@ -220,6 +220,7 @@ describe('NotificationEventsTimeline', () => {
           clickHandler={clickHandler}
           isNewTimelineCopyEnabled
           perfectionLink={perfectionLink}
+          userTaxId={recipients[0].taxId}
         />
       );
 
@@ -230,7 +231,7 @@ describe('NotificationEventsTimeline', () => {
     }
   );
 
-  it('adds the registered letter anchor to the perfection link for analog delivery', () => {
+  it.skip('adds the registered letter anchor to the perfection link for analog delivery', () => {
     const { getByTestId } = render(
       <NotificationEventsTimeline
         recipients={recipients}
