@@ -223,7 +223,6 @@
       "send-digital-success-PEC-description": "Vous avez reçu la notification SEND à l'adresse PEC {{address}}, comme l'atteste l'<0>avis de livraison</0>.",
       "send-digital-success-PEC-description-delegate": "{{recipient}} a reçu la notification SEND à l'adresse PEC {{address}}, comme l'atteste l'<0>avis de livraison</0>.",
       "send-digital-success-SERCQ-SEND": "Envoi via le domicile numérique SEND réussi",
-      "send-digital-success-SERCQ-SEND-description-delegate": "",
       "send-simple-registered-letter": "Processus d'envoi par lettre recommandée commencé",
       "send-simple-registered-letter-description": "Une lettre recommandée ordinaire vous sera envoyée à l'adresse {{address}}.",
       "send-simple-registered-letter-description-delegate": "Une lettre recommandée ordinaire sera envoyée à {{recipient}} à l'adresse {{address}}.",

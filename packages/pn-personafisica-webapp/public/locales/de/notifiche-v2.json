@@ -223,7 +223,6 @@
       "send-digital-success-PEC-description": "Du hast die SEND Zustellung an der PEC-Adresse {{address}} erhalten, wie durch die <0>Zustellquittung</0> bescheinigt.",
       "send-digital-success-PEC-description-delegate": "{{recipient}} hat die SEND Zustellung an der PEC-Adresse {{address}} erhalten, wie durch die <0>Zustellquittung</0> bescheinigt.",
       "send-digital-success-SERCQ-SEND": "Versand über das digitale SEND-Domizil erfolgreich",
-      "send-digital-success-SERCQ-SEND-description-delegate": "",
       "send-simple-registered-letter": "Prozess des Versands per Einschreiben gestartet",
       "send-simple-registered-letter-description": "Ein normales Einschreiben wird dir an die Adresse {{address}} gesendet.",
       "send-simple-registered-letter-description-delegate": "Ein normales Einschreiben wird an {{recipient}} an die Adresse {{address}} gesendet.",
