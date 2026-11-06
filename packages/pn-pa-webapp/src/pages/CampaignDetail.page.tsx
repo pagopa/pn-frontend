@@ -231,7 +231,7 @@ const CampaignDetail: React.FC = () => {
             />
           ) : (
             <EmptyErrorState
-              variant="empty-notification"
+              variant="empty"
               title={t('detail.communications.empty-state.title')}
               description={t('detail.communications.empty-state.description')}
             />

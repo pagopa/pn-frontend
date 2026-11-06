@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import { Box, Typography } from '@mui/material';
-import { IllusMIDataSecurity, IllusMIError, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
+import { IllusMIError, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
 
 import EmptyState from './EmptyState';
 
@@ -13,7 +13,8 @@ type DefaultAction = {
 type EmptyErrorStateProps = {
   title: ReactNode;
   description?: ReactNode;
-  variant?: 'empty-notification' | 'empty-institution' | 'error';
+  variant?: 'empty' | 'error';
+  icon?: ReactNode;
   action?: DefaultAction | ReactNode;
 };
 
@@ -30,17 +31,20 @@ const isDefaultAction = (action: DefaultAction | ReactNode): action is DefaultAc
 const EmptyErrorState = ({
   title,
   description,
-  variant = 'empty-notification',
+  variant = 'empty',
   action,
+  icon,
 }: EmptyErrorStateProps) => (
   <EmptyState
     slots={{ contentContainer: Box }}
     slotProps={{ contentContainer: CONTAINER_PROPS }}
     sentimentIcon={
-      variant === 'error' ? (
+      icon ? (
+        icon
+      ) : variant === 'error' ? (
         <IllusMIError size={56} />
-      ) : variant === 'empty-institution' ? (
-        <IllusMIDataSecurity size={56} />
+      ) : variant === 'empty' ? (
+        <IllusMIMessage size={56} />
       ) : (
         <IllusMIMessage size={56} />
       )

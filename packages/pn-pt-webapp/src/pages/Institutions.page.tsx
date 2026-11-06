@@ -21,6 +21,7 @@ import {
   calculatePages,
   formatDate,
 } from '@pagopa-pn/pn-commons';
+import { IllusMIDataSecurity } from '@pagopa/mui-italia';
 import { MIAlert, MIButton, MIChip, MITextField } from '@pagopa/mui-italia';
 
 import { DelegationStatus, InstitutionRow } from '../models/Institutions';
@@ -304,7 +305,8 @@ const InstitutionsPage: React.FC = () => {
                 />
               ) : (
                 <EmptyErrorState
-                  variant="empty-institution"
+                  variant="empty"
+                  icon={<IllusMIDataSecurity size={56} />}
                   title={t('table.empty.title')}
                   description={t('table.empty.description')}
                 />
