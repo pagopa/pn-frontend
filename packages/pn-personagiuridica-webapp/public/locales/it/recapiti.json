@@ -64,13 +64,13 @@
   "domicile-banner": {
     "complete-addresses": "Inserisci una email",
     "complete-configuration": "Completa la configurazione",
-    "no-courtesy-description": "Senza un recapito di cortesia non possiamo avvisarti quando c’è da leggere una notifica a valore legale su SEND.",
+    "no-courtesy-description": "Senza un indirizzo email aziendale non possiamo informarti quando c’è una notifica a valore legale da leggere su SEND per la tua impresa.",
     "no-courtesy-no-sercq-send-cta": "Conferma la tua email",
     "no-courtesy-no-sercq-send-description": "Aggiungi un indirizzo email per ricevere un avviso quando hai una nuova notifica SEND.",
     "no-courtesy-no-sercq-send-title": "Non perderti le comunicazioni importanti ",
     "no-courtesy-sercq-send-description": "Attiva SEND come domicilio digitale e non preoccuparti più delle raccomandate cartacee.",
     "no-courtesy-sercq-send-title": "Vuoi ricevere le prossime notifiche solo in digitale?",
-    "no-courtesy-title": "Non perderti le comunicazioni importanti",
+    "no-courtesy-title": "Completa i recapiti",
     "no-sercq-cta": "Attiva domicilio digitale",
     "no-sercq-send-description": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale e risparmiare.",
     "no-sercq-send-title": "Niente più documenti cartacei"
@@ -273,6 +273,6 @@
     "inactive": "Da attivare",
     "pec-validation": "Validazione PEC in corso"
   },
-  "subtitle": "Gestisci i recapiti digitali su cui ricevere le notifiche a valore legale e/o i relativi messaggi di cortesia per la <0>tua impresa</0>.",
+  "subtitle": "Gestisci i recapiti digitali su cui ricevere le notifiche a valore legale di SEND e/o i relativi messaggi di cortesia per la <0>tua impresa</0>.",
   "title": "Recapiti"
 }
