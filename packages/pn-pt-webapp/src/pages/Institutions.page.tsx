@@ -21,8 +21,7 @@ import {
   calculatePages,
   formatDate,
 } from '@pagopa-pn/pn-commons';
-import { IllusMIDataSecurity } from '@pagopa/mui-italia';
-import { MIAlert, MIButton, MIChip, MITextField } from '@pagopa/mui-italia';
+import { MIAlert, MIButton, MIChip, MITextField, IllusMIDataSecurity } from '@pagopa/mui-italia';
 
 import { DelegationStatus, InstitutionRow } from '../models/Institutions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -164,7 +163,7 @@ const InstitutionsPage: React.FC = () => {
   const data: Array<Row<InstitutionRow>> = loading
     ? Array.from(
         { length: pagination.size },
-        (_, index) => ({ id: `skeleton-${index}` } as Row<InstitutionRow>)
+        (_, index) => ({ id: `skeleton-${index}` }) as Row<InstitutionRow>
       )
     : institutions.items.map((institution) => ({
         ...institution,

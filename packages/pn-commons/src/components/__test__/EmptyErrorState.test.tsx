@@ -1,5 +1,7 @@
 import { vi } from 'vitest';
 
+import { IllusMIDataSecurity } from '@pagopa/mui-italia';
+
 import { fireEvent, render } from '../../test-utils';
 import EmptyErrorState from '../EmptyErrorState';
 
@@ -52,5 +54,19 @@ describe('EmptyErrorState', () => {
     );
 
     expect(getByRole('button', { name: 'Custom action' })).toBeInTheDocument();
+  });
+
+  it('renders a custom icon', () => {
+    const { getByText, getByTitle } = render(
+      <EmptyErrorState
+        variant="empty"
+        title="Error state"
+        icon={<IllusMIDataSecurity size={56} />}
+      />
+    );
+
+    expect(getByText('Error state')).toBeInTheDocument();
+    expect(getByTitle('MIError')).toBeInTheDocument();
+    expect(getByTitle('MIDataSecurity')).toBeInTheDocument();
   });
 });

@@ -39,15 +39,7 @@ const EmptyErrorState = ({
     slots={{ contentContainer: Box }}
     slotProps={{ contentContainer: CONTAINER_PROPS }}
     sentimentIcon={
-      icon ? (
-        icon
-      ) : variant === 'error' ? (
-        <IllusMIError size={56} />
-      ) : variant === 'empty' ? (
-        <IllusMIMessage size={56} />
-      ) : (
-        <IllusMIMessage size={56} />
-      )
+      icon ? icon : variant === 'error' ? <IllusMIError size={56} /> : <IllusMIMessage size={56} />
     }
   >
     <Typography
