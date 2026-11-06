@@ -94,23 +94,25 @@ const getPerfectionLink = (
     }
   }
 
-  // if notification is delivered by analog flow it can be also after a digital workflow fails
-  const analogSuccess = steps.some(
+  // if there is a digital failure, the notification is still a digital notification
+  const digitalFailure = steps.some(
     (step) =>
-      (step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW ||
-        step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) &&
+      step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW &&
       step.details.recIndex === recIndex
   );
-  if (analogSuccess) {
-    const digitalFailure = steps.some(
-      (step) =>
-        step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW &&
-        step.details.recIndex === recIndex
-    );
-    if (!digitalFailure) {
-      return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
-    }
+
+  if (digitalFailure) {
     return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+  }
+
+  const analogDelivery = steps.some(
+    (step) =>
+      (step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW ||
+        step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW) &&
+      step.details.recIndex === recIndex
+  );
+  if (analogDelivery) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
   }
 
   return perfectionLink;
