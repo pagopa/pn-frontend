@@ -58,6 +58,7 @@
       "documents": {
         "document-not-available": "Das Dokument ist noch nicht verfügbar. Versuche es später noch einmal.",
         "download-message-available": "<0>Bis zu 180 Tage online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
+        "download-message-available-plural": "<0>Bis zu 180 Tage online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
         "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
         "title": "Angehängte Dokumente"
       },
@@ -67,7 +68,7 @@
       "send-by-channel": {
         "channel": {
           "analog": "Postdienst",
-          "email": "E-Mail",
+          "email": "Email",
           "io": "IO",
           "pec": "PEC",
           "send": "SEND",

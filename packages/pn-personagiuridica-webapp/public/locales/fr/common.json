@@ -184,6 +184,7 @@
     "fallback-notification": "Détail de la notification",
     "groups": "Groupes",
     "integrazione-api": "Intégration API",
+    "new-notifications": "Nouvelles notifications à lire",
     "notifiche": "Boîte de réception",
     "notifiche-delegato": "En provenance des délégations",
     "notifiche-impresa": "Boîte de réception pour {{organization}}",

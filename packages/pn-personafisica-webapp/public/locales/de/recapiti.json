@@ -62,6 +62,9 @@
     "valid-email": "E-Mail-Adresse ungültig",
     "valid-sms": "Handynummer ungültig"
   },
+  "digital-contact": {
+    "verified-aria-label": "Verifizierte Angabe"
+  },
   "domicile-banner": {
     "add-io": "Aktiviere SEND auf der IO-App",
     "complete-addresses": "Eine E-Mail-Adresse eingeben",

@@ -141,6 +141,7 @@
     "timeline-title": "Status des Bescheids",
     "timeline": {
       "aar-document": "Empfangsbestätigung",
+      "analog-failure-second-attempt-group-label": "Zweiter Versand per Einschreiben - Fehlgeschlagener Versuch",
       "analog-failure-workflow": "Aktualisierung zum Versand in Papierform",
       "analog-failure-workflow-description": "Der Empfänger war unauffindbar. Die Empfangsbestätigung wird hinterlegt und zur Verfügung gestellt.",
       "analog-failure-workflow-description-multirecipient": "Der Empfänger {{name}} {{taxId}} war unauffindbar. Die Empfangsbestätigung wird hinterlegt und zur Verfügung gestellt.",
@@ -170,8 +171,10 @@
         "M09": "aus anderen Gründen",
         "M10": "weil die Adresse nicht lesbar ist"
       },
+      "collapse-all-groups": "Zuklappen",
       "courtesy-group-label": "Höflichkeitsmitteilungen",
       "digital-send-fallback": "Digitaler Versand",
+      "expand-all-groups": "Erweitern",
       "legalfact": {
         "analog-failure-delivery": "Hinterlegung der Empfangsbestätigung",
         "digital-delivery-failure": "fehlende digitale Zustellung",
@@ -186,6 +189,9 @@
         "sender-ack": "Benachrichtigung über Übernahme"
       },
       "notification-cancelled-document": "Erklärung zur Annullierung der Benachrichtigung",
+      "pec-address-source-general": "Die PEC-Adresse ist in den öffentlichen Registern eingetragen",
+      "pec-address-source-platform": "Die PEC-Adresse wurde als Adresse auf SEND hinzugefügt",
+      "pec-address-source-special": "Die PEC-Adresse wurde von der sendenden Einrichtung als Kontaktkanal registriert",
       "prepare-analog-domicile-failure": "Aktualisierung zum Versand in Papierform",
       "prepare-analog-domicile-failure-D00-description": "Es wurde keine neue Adresse für einen nochmaligen Versand gefunden.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Es wurde keine neue Adresse des Empfängers {{name}} {{taxId}} für einen nochmaligen Versand gefunden.",
@@ -215,13 +221,11 @@
       "send-analog-domicile-890": "Versand per Einschreiben 890",
       "send-analog-domicile-890-description": "Der Versand des Bescheids an die Adresse {{address}} per Einschreiben 890 hat begonnen.",
       "send-analog-domicile-890-description-multirecipient": "Der Versand des Bescheids an {{name}} {{taxId}} an die Adresse {{address}} per Einschreiben 890 hat begonnen.",
-      "send-analog-domicile-890-first-attempt-group-label": "Erstes Einschreiben 890",
       "send-analog-domicile-890-group-label": "Einschreiben 890",
       "send-analog-domicile-890-second-attempt-group-label": "Zweites Einschreiben 890",
       "send-analog-domicile-ar": "Einschreiben mit Rückschein",
       "send-analog-domicile-ar-description": "Der Versand des Bescheids an die Adresse {{address}} per Einschreiben mit Rückschein hat begonnen.",
       "send-analog-domicile-ar-description-multirecipient": "Der Versand des Bescheids an {{name}} {{taxId}} an die Adresse {{address}} per Einschreiben mit Rückschein hat begonnen.",
-      "send-analog-domicile-ar-first-attempt-group-label": "Erstes Einschreiben mit Rückschein",
       "send-analog-domicile-ar-group-label": "Einschreiben mit Rückschein",
       "send-analog-domicile-ar-second-attempt-group-label": "Zweites Einschreiben mit Rückschein",
       "send-analog-error": "Der Versand auf dem Postweg hat zu keiner Zustellung geführt",
@@ -353,6 +357,8 @@
       "send-digital-domicile-PEC-description": "Versand des Bescheids an die PEC-Adresse {{address}} läuft.",
       "send-digital-domicile-PEC-description-multirecipient": "Versand des Bescheids an {{name}} {{taxId}} an die PEC-Adresse {{address}} läuft.",
       "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Zweiter Versand über PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Versand über das digitale SEND-Domizil",
       "send-digital-domicile-SERCQ-SEND-description": "Der Versand der Benachrichtigung an das digitale SEND-Domizil ist im Gange.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Der Versand der Benachrichtigung an {{name}} {{taxId}} an das digitale SEND-Domizil ist im Gange",
@@ -385,7 +391,7 @@
     "clean-filters-cta": "Filter entfernen",
     "delegate": "Hier siehst du die rechtsgültigen Zustellungen, die an dein Unternehmen übertragen wurden.",
     "description": "Aktualisiere jetzt die digitalen Kontaktdaten, damit du sofort erfährst, wenn dein Unternehmen eine erhält.",
-    "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
+    "filtered": "Keine rechtsgültigen Zustellungen oder Mitteilungen für die ausgewählten Filter",
     "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
     "go-to-contacts-cta": "Zu den Kontaktdaten",
     "title": "Hier siehst du die rechtsgültigen Zustellungen und andere Mitteilungen"
@@ -549,7 +555,8 @@
     "mittente": "Absender",
     "oggetto": "Betreff",
     "open": "Öffnen",
-    "status": "Staat"
+    "status": "Staat",
+    "to-read": "Zu lesen"
   },
   "title": "Posteingang für {{organization}}",
   "title-delegated-notifications": "Posteingang für Vollmachtgeber"

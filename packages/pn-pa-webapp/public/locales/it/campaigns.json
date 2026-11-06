@@ -58,6 +58,7 @@
       "documents": {
         "document-not-available": "Il documento non è ancora disponibile. Riprova più tardi.",
         "download-message-available": "<0>Disponibile online fino a 180 giorni</0> dalla data di accettazione della comunicazione.",
+        "download-message-available-plural": "<0>Disponibili online fino a 180 giorni</0> dalla data di accettazione della comunicazione.",
         "download-message-expired": "I documenti non sono più disponibili online.",
         "title": "Documenti allegati"
       },
