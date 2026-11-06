@@ -25,9 +25,7 @@ export class SendDigitalDomicileStep extends TimelineStep {
         },
         payload.delegatorName
       );
-      if (!payload.isNewTimelineCopyEnabled) {
-        return statusInfo;
-      }
+
       // with the new copy, the description is shown only in the delegate view
       const showDelegateDescription =
         !!payload.delegatorName &&
