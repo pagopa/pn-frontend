@@ -36,15 +36,17 @@ export class SendDigitalFeedbackStep extends TimelineStep {
         },
         payload.delegatorName
       );
+      if (payload.isNewTimelineCopyEnabled) {
+        const showDelegateDescription =
+          !!payload.delegatorName &&
+          hasLocalizedLabel(
+            'notifications',
+            'detail.timeline.send-digital-success-SERCQ-SEND-description-delegate'
+          );
 
-      // with the new copy, the description is shown only in the delegate view
-      const showDelegateDescription =
-        !!payload.delegatorName &&
-        hasLocalizedLabel(
-          'notifications',
-          'detail.timeline.send-digital-success-SERCQ-SEND-description-delegate'
-        );
-      return showDelegateDescription ? statusInfo : { ...statusInfo, description: '' };
+        return showDelegateDescription ? statusInfo : { ...statusInfo, description: '' };
+      }
+      return statusInfo;
     }
     return {
       ...this.localizeTimelineStatus(

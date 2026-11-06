@@ -26,14 +26,16 @@ export class SendDigitalDomicileStep extends TimelineStep {
         payload.delegatorName
       );
 
-      // with the new copy, the description is shown only in the delegate view
-      const showDelegateDescription =
-        !!payload.delegatorName &&
-        hasLocalizedLabel(
-          'notifications',
-          'detail.timeline.send-digital-domicile-SERCQ-SEND-description-delegate'
-        );
-      return showDelegateDescription ? statusInfo : { ...statusInfo, description: '' };
+      if (payload.isNewTimelineCopyEnabled) {
+        const showDelegateDescription =
+          !!payload.delegatorName &&
+          hasLocalizedLabel(
+            'notifications',
+            'detail.timeline.send-digital-domicile-SERCQ-SEND-description-delegate'
+          );
+        return showDelegateDescription ? statusInfo : { ...statusInfo, description: '' };
+      }
+      return statusInfo;
     }
     return {
       ...this.localizeTimelineStatus(

@@ -42,7 +42,7 @@ describe('AnalogFailureWorkflowStep', () => {
     beforeEach(() => {
       initLocalizationExists(
         (_ns, path) =>
-          path === 'detail.timeline.analog-failure-workflow-monorecipient' ||
+          path === 'detail.timeline.analog-failure-workflow' ||
           path === 'detail.timeline.analog-failure-workflow-description-delegate'
       );
     });
@@ -53,7 +53,7 @@ describe('AnalogFailureWorkflowStep', () => {
 
     it('uses the specific title for a mono recipient notification in the recipient direct view', () => {
       expect(analogFailureWorkflowStep.getTimelineStepInfo(payload)).toStrictEqual({
-        label: `notifiche - detail.timeline.analog-failure-workflow-monorecipient`,
+        label: `notifiche - detail.timeline.analog-failure-workflow`,
         description: `notifiche - detail.timeline.analog-failure-workflow-description - ${JSON.stringify(
           analogFailureWorkflowStep.nameAndTaxId(payload)
         )}`,
