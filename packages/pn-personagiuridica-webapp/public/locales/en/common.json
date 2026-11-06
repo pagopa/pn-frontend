@@ -184,6 +184,7 @@
     "fallback-notification": "Notification details",
     "groups": "Groups",
     "integrazione-api": "API Integration",
+    "new-notifications": "New notifications to read",
     "notifiche": "Inbox",
     "notifiche-delegato": "Incoming from delegations",
     "notifiche-impresa": "Inbox for {{organization}}",

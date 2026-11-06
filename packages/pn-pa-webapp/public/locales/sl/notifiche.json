@@ -18,9 +18,12 @@
     "date": "Datum pošiljanja",
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
     "download-aar-available": "<0>Na voljo na spletu 10 let</0> od datuma, ko je obvestilo SEND začelo pravno veljati za naslovnika.",
+    "download-aar-available-plural": "Potrdila o prejemu so <0>na spletu na voljo 10 let</0> od datuma, ko je obvestilo SEND postalo pravno veljavno za prejemnika.",
     "download-aar-expired": "Potrdilo o prejemu ni več na voljo na spletu.",
+    "download-aar-expired-plural": "Potrdila o prejemu niso več na voljo na spletu.",
     "download-files-link": "Kdaj se obvestilo zaključi?",
     "download-message-available": "<0>Na voljo na spletu do 120 dni</0> od datuma, ko je obvestilo SEND začelo pravno veljati za naslovnika.",
+    "download-message-available-plural": "<0>Na spletu na voljo do 120 dni</0> od datuma, ko je obvestilo SEND postalo pravno veljavno za prejemnika.",
     "download-message-expired": "Dokumenti niso več na voljo na spletu.",
     "downtimes": {
       "apiErrorMessage": "Ni bilo mogoče naložiti morebitnih motenj, ki so vplivale na to obvestilo.",
@@ -95,6 +98,7 @@
     "timeline-title": "Stanje obvestila",
     "timeline": {
       "aar-document": "Potrdilo o prejemu",
+      "analog-failure-second-attempt-group-label": "Drugo pošiljanje s priporočenim pismom - Neuspešen poskus",
       "analog-failure-workflow": "Posodobitev o pošiljanju v papirni obliki",
       "analog-failure-workflow-description": "Prejemnika ni bilo mogoče izslediti. Obvestilo o prejemu se vloži in da na voljo.",
       "analog-failure-workflow-description-multirecipient": "Prejemnika {{name}} {{taxId}} ni bilo mogoče izslediti. Obvestilo o prejemu se vloži in da na voljo.",
@@ -124,8 +128,10 @@
         "M09": "ker naslov ne obstaja",
         "M10": "ker naslov ni čitljiv"
       },
+      "collapse-all-groups": "Strni",
       "courtesy-group-label": "Vljudnostna sporočila",
       "digital-send-fallback": "Digitalno pošiljanje",
+      "expand-all-groups": "Razširi",
       "legalfact": {
         "analog-failure-delivery": "Depozit potrdila o prejemu",
         "digital-delivery-failure": "brez digitalnega kontaktnega podatka",
@@ -140,6 +146,9 @@
         "sender-ack": "obvestilo o prevzemu"
       },
       "notification-cancelled-document": "Izjava o preklicu obvestila",
+      "pec-address-source-general": "Naslov PEC je vpisan v javnih registrih",
+      "pec-address-source-platform": "Naslov PEC je bil dodan kot kontaktni podatek na SEND",
+      "pec-address-source-special": "Naslov PEC je bil registriran kot kontaktni kanal s strani organa pošiljatelja",
       "prepare-analog-domicile-failure": "Posodobitev o pošiljanju v papirni obliki",
       "prepare-analog-domicile-failure-D00-description": "Najden ni bil noben nov naslov za ureditev drugega poskusa pošiljanja.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Za prejemnika {{name}} {{taxId}} ni bil najden nov naslov za ureditev drugega poskusa pošiljanja.",
@@ -306,6 +315,8 @@
       "send-digital-domicile-PEC-description": "Obvestilo se pošlje na potrjeni e-poštni naslov {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na potrjeni e-poštni naslov {{address}}.",
       "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Drugo pošiljanje prek PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Pošiljanje preko digitalnega prebivališča SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Pošiljanje obvestila na digitalno prebivališče SEND je v teku.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na digitalno prebivališče SEND",

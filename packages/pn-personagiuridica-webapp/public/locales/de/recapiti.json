@@ -58,6 +58,9 @@
     "valid-email": "Ungültige E-Mail-Adresse",
     "valid-sms": "Ungültige Handynummer"
   },
+  "digital-contact": {
+    "verified-aria-label": "Verifizierte Angabe"
+  },
   "domicile-banner": {
     "complete-addresses": "E-Mail eingeben",
     "complete-configuration": "Konfiguration abschließen",
