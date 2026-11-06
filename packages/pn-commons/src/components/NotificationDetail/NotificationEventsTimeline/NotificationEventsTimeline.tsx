@@ -97,7 +97,7 @@ const getPerfectionLink = (
   // if notification is delivered by analog flow it can be also after a digital workflow fails
   const analogSuccess = steps.some(
     (step) =>
-      (step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW ||
+      (step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW ||
         step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) &&
       step.details.recIndex === recIndex
   );
