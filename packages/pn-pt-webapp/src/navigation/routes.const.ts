@@ -10,6 +10,9 @@ const SELFCARE_DASHBOARD = '/dashboard';
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
 
+export const PRIVACY_POLICY = '/privacy-policy';
+export const TERMS_OF_SERVICE = '/terms-of-service';
+
 /** DASHBOARD navigation link to SelfCare "Area Riservata"
  * @param idOrganization
  * @param lang
