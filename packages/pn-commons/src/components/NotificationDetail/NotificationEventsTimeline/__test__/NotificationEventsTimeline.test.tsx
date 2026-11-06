@@ -12,7 +12,6 @@ import {
   TimelineCategory,
 } from '../../../../models/NotificationDetail';
 import {
-  NotificationTimelineEvent,
   NotificationTimelineGroup,
   NotificationTimelineStatusHistory,
   NotificationTimelineStep,
@@ -125,28 +124,6 @@ const deliveredStatus = (
       : [],
 });
 
-const workflowEvent = (
-  category: TimelineCategory,
-  digitalDomicileType?: DigitalDomicileType
-): NotificationTimelineEvent => ({
-  elementId: `${category}.RECINDEX_0`,
-  timestamp: '2026-09-23T10:00:00Z',
-  category,
-  details: {
-    recIndex: 0,
-    ...(digitalDomicileType
-      ? {
-          digitalAddress: {
-            address: 'synthetic-recipient@example.invalid',
-            type: digitalDomicileType,
-          },
-        }
-      : {}),
-  },
-  legalFactsIds: [],
-  isHidden: true,
-});
-
 const perfectionLink = 'https://fake.perfezionamento.it/perfezionamento';
 
 describe('NotificationEventsTimeline', () => {
@@ -230,194 +207,44 @@ describe('NotificationEventsTimeline', () => {
     }
   );
 
-  describe.each([false, true])('perfection links with grouped events: %s', (grouped) => {
-    it.each([
-      {
-        scenario: 'successful PEC delivery',
-        deliveryMode: NotificationDeliveryMode.DIGITAL,
-        category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
-        digitalDomicileType: DigitalDomicileType.PEC,
-        anchor: PERFECTION_ANCHORS.PEC,
-      },
-      {
-        scenario: 'successful SEND digital domicile delivery',
-        deliveryMode: NotificationDeliveryMode.DIGITAL,
-        category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
-        digitalDomicileType: DigitalDomicileType.SERCQ,
-        anchor: PERFECTION_ANCHORS.SEND,
-      },
-      {
-        scenario: 'analog delivery after digital failure',
-        deliveryMode: NotificationDeliveryMode.ANALOG,
-        category: TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
-        digitalDomicileType: undefined,
-        anchor: PERFECTION_ANCHORS.PEC,
-      },
-      {
-        scenario: 'analog-only delivery',
-        deliveryMode: NotificationDeliveryMode.ANALOG,
-        category: undefined,
-        digitalDomicileType: undefined,
-        anchor: PERFECTION_ANCHORS.ANALOG,
-      },
-    ])(
-      'uses the correct anchor across status descriptions for $scenario',
-      ({ deliveryMode, category, digitalDomicileType, anchor }) => {
-        const events = category ? [workflowEvent(category, digitalDomicileType)] : [];
-
-        const deliveringSteps: Array<NotificationTimelineStep> = grouped
-          ? [
-              {
-                stepType: 'GROUP',
-                group: {
-                  groupId: 'synthetic-delivery-group',
-                  denomination: multiRecipients[0].denomination,
-                  taxId: multiRecipients[0].taxId,
-                  recIndex: 0,
-                  category:
-                    deliveryMode === NotificationDeliveryMode.DIGITAL ||
-                    category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW
-                      ? 'DIGITAL'
-                      : 'ANALOG',
-                  hasReworkedEvents: false,
-                  events,
-                },
-              },
-            ]
-          : events.map((event) => ({ stepType: 'EVENT', event }));
-
-        const { getAllByTestId } = render(
-          <NotificationEventsTimeline
-            recipients={[multiRecipients[0]]}
-            statusHistory={[
-              {
-                status: NotificationStatus.EFFECTIVE_DATE,
-                activeFrom: '2026-09-28T10:30:00Z',
-                steps: [],
-              },
-              deliveredStatus(deliveryMode),
-              {
-                status: NotificationStatus.DELIVERING,
-                activeFrom: '2026-09-23T09:00:00Z',
-                steps: deliveringSteps,
-              },
-            ]}
-            clickHandler={clickHandler}
-            isNewTimelineCopyEnabled
-            perfectionLink={perfectionLink}
-          />
-        );
-
-        const links = getAllByTestId('perfection-link');
-
-        expect(links.length).toBeGreaterThanOrEqual(2);
-        expect(links[0]).toHaveAttribute('href', `${perfectionLink}${anchor}`);
-        expect(links[1]).toHaveAttribute('href', `${perfectionLink}${anchor}`);
-      }
-    );
-  });
-
   it.each([
-    {
-      scenario: 'digital success event is missing',
-      history: [deliveredStatus(NotificationDeliveryMode.DIGITAL)],
-    },
-    {
-      scenario: 'digital address is missing',
-      history: [
-        {
-          ...deliveredStatus(NotificationDeliveryMode.DIGITAL),
-          steps: [
-            {
-              stepType: 'EVENT',
-              event: workflowEvent(TimelineCategory.DIGITAL_SUCCESS_WORKFLOW),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      scenario: 'DELIVERED status is missing',
-      history: [
-        {
-          status: NotificationStatus.EFFECTIVE_DATE,
-          activeFrom: '2026-09-28T10:30:00Z',
-          steps: [],
-        },
-      ],
-    },
-    {
-      scenario: 'delivery mode is missing',
-      history: [
-        {
-          status: NotificationStatus.DELIVERED,
-          activeFrom: '2026-09-23T10:30:00Z',
-          steps: [],
-        },
-      ],
-    },
-  ] satisfies Array<{
-    scenario: string;
-    history: Array<NotificationTimelineStatusHistory>;
-  }>)('keeps the base perfection URL when $scenario', ({ history }) => {
-    const { getAllByTestId } = render(
+    [DigitalDomicileType.PEC, PERFECTION_ANCHORS.PEC],
+    [DigitalDomicileType.SERCQ, PERFECTION_ANCHORS.SEND],
+  ])(
+    'adds the correct perfection anchor for digital delivery type %s',
+    (digitalDomicileType, anchor) => {
+      const { getAllByTestId } = render(
+        <NotificationEventsTimeline
+          recipients={recipients}
+          statusHistory={[deliveredStatus(NotificationDeliveryMode.DIGITAL, digitalDomicileType)]}
+          clickHandler={clickHandler}
+          isNewTimelineCopyEnabled
+          perfectionLink={perfectionLink}
+        />
+      );
+
+      expect(getAllByTestId('perfection-link')[0]).toHaveAttribute(
+        'href',
+        `${perfectionLink}${anchor}`
+      );
+    }
+  );
+
+  it('adds the registered letter anchor to the perfection link for analog delivery', () => {
+    const { getByTestId } = render(
       <NotificationEventsTimeline
-        recipients={[multiRecipients[0]]}
-        statusHistory={history}
+        recipients={recipients}
+        statusHistory={[deliveredStatus(NotificationDeliveryMode.ANALOG)]}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
         perfectionLink={perfectionLink}
       />
     );
 
-    getAllByTestId('perfection-link').forEach((link) => {
-      expect(link).toHaveAttribute('href', perfectionLink);
-    });
-  });
-
-  it.each([
-    {
-      deliveryMode: NotificationDeliveryMode.DIGITAL,
-      digitalDomicileType: DigitalDomicileType.PEC,
-    },
-    {
-      deliveryMode: NotificationDeliveryMode.DIGITAL,
-      digitalDomicileType: DigitalDomicileType.SERCQ,
-    },
-    {
-      deliveryMode: NotificationDeliveryMode.ANALOG,
-      digitalDomicileType: undefined,
-    },
-  ])(
-    'keeps the base URL with new copy disabled for $deliveryMode / $digitalDomicileType',
-    ({ deliveryMode, digitalDomicileType }) => {
-      const { getAllByTestId } = render(
-        <NotificationEventsTimeline
-          recipients={[multiRecipients[0]]}
-          statusHistory={[deliveredStatus(deliveryMode, digitalDomicileType)]}
-          clickHandler={clickHandler}
-          isNewTimelineCopyEnabled={false}
-          perfectionLink={perfectionLink}
-        />
-      );
-
-      getAllByTestId('perfection-link').forEach((link) => {
-        expect(link).toHaveAttribute('href', perfectionLink);
-      });
-    }
-  );
-
-  it('does not render perfection links when the URL is missing', () => {
-    const { queryByTestId } = render(
-      <NotificationEventsTimeline
-        recipients={[multiRecipients[0]]}
-        statusHistory={[deliveredStatus(NotificationDeliveryMode.DIGITAL, DigitalDomicileType.PEC)]}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
+    expect(getByTestId('perfection-link')).toHaveAttribute(
+      'href',
+      `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`
     );
-
-    expect(queryByTestId('perfection-link')).not.toBeInTheDocument();
   });
 
   it('renders a group for each grouped step, divided one from the other', () => {

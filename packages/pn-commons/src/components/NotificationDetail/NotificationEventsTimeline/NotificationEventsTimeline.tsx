@@ -8,7 +8,6 @@ import { NotificationStatus } from '../../../models';
 import {
   DigitalDomicileType,
   LegalFactId,
-  NotificationDeliveryMode,
   NotificationDetailRecipient,
   SendDigitalDetails,
   TimelineCategory,
@@ -19,6 +18,7 @@ import {
   NotificationTimelineLegacyStatusHistory,
   NotificationTimelineStatusHistory,
 } from '../../../models/NotificationTimeline';
+import { getRecIndex } from '../../../utility/notification.utility';
 import {
   emptyLegalFactPlan,
   getStatusLegalFactPlan,
@@ -49,29 +49,41 @@ type Props = {
   userTaxId?: string;
 };
 
-const getStatusPerfectionLink = (
+const getPerfectionLink = (
   perfectionLink: string | undefined,
-  status: NotificationTimelineLegacyStatusHistory
+  history: Array<NotificationTimelineLegacyStatusHistory>,
+  recipients: Array<NotificationDetailRecipient>,
+  userTaxId?: string,
+  delegator?: Delegator,
+  isSender?: boolean
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): string | undefined => {
   if (!perfectionLink) {
     return perfectionLink;
   }
 
-  // if notification is delivered by analog flow it can be also after a digital workflow fails
-  if (status.deliveryMode === NotificationDeliveryMode.ANALOG) {
-    const digitalFailure = status.steps.some(
-      (step) => step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW
-    );
-    if (!digitalFailure) {
-      return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
-    }
-    return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+  // if notification is a multi recipient notification and we are inthe sender view, we cannot known what is the perfection link,
+  // because each recipient can recive the notification in different ways
+  if (recipients.length > 1 && isSender) {
+    return undefined;
   }
 
-  if (status.deliveryMode === NotificationDeliveryMode.DIGITAL) {
-    const digitalSuccess = status.steps.find(
-      (step) => step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
-    );
+  // get the recipientIndex
+  // if we are in the sender view, we are in a single recipient notification due to the previous if,
+  // otherwise we are in recipient view and we have to get the recIndex because we can be in the multi-recipient scenario
+  const recIndex = isSender ? 0 : getRecIndex(recipients, userTaxId, delegator);
+
+  const steps = history.reduce<Array<NotificationTimelineEvent>>(
+    (arr, status) => arr.concat(status.steps ?? []),
+    []
+  );
+
+  const digitalSuccess = steps.find(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+  if (digitalSuccess) {
     const digitalAddress = (digitalSuccess?.details as SendDigitalDetails | undefined)
       ?.digitalAddress;
     if (digitalAddress?.type === DigitalDomicileType.PEC) {
@@ -80,6 +92,25 @@ const getStatusPerfectionLink = (
     if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
       return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
     }
+  }
+
+  // if notification is delivered by analog flow it can be also after a digital workflow fails
+  const analogSuccess = steps.some(
+    (step) =>
+      (step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW ||
+        step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) &&
+      step.details.recIndex === recIndex
+  );
+  if (analogSuccess) {
+    const digitalFailure = steps.some(
+      (step) =>
+        step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW &&
+        step.details.recIndex === recIndex
+    );
+    if (!digitalFailure) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
+    }
+    return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
   }
 
   return perfectionLink;
@@ -154,6 +185,21 @@ const NotificationEventsTimeline = ({
       return next;
     });
 
+  const statusPerfectionLink = useMemo(
+    () =>
+      isNewTimelineCopyEnabled
+        ? getPerfectionLink(
+            perfectionLink,
+            legacyStatusHistory,
+            recipients,
+            userTaxId,
+            delegator,
+            isSenderTimeline
+          )
+        : perfectionLink,
+    [legacyStatusHistory, recipients]
+  );
+
   return (
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
@@ -183,10 +229,6 @@ const NotificationEventsTimeline = ({
               groupKeys.length > 0 && groupKeys.every((key) => expandedGroups.has(key));
             const showExpandAll =
               !isMobile && status.status === NotificationStatus.DELIVERING && groupKeys.length > 1;
-
-            const statusPerfectionLink = isNewTimelineCopyEnabled
-              ? getStatusPerfectionLink(perfectionLink, legacyStatus)
-              : perfectionLink;
 
             return (
               <MITimelineItem

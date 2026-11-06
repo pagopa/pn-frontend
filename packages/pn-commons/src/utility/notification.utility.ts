@@ -67,6 +67,20 @@ const channelMap: Partial<Record<DigitalDomicileType, string>> = {
   [DigitalDomicileType.SERCQ]: 'SEND',
 };
 
+export const getRecIndex = (
+  recipients: Array<NotificationDetailRecipient | string>,
+  userTaxId?: string,
+  delegator?: Delegator
+): number | undefined => {
+  if (!userTaxId) {
+    return;
+  }
+  const recTaxId = delegator ? delegator.fiscalCode : userTaxId;
+  return recipients.findIndex((rec) =>
+    typeof rec === 'string' ? rec === recTaxId : rec.taxId === recTaxId
+  );
+};
+
 function viewedByVariant({
   statusObject,
   isMultiRecipient,
@@ -213,10 +227,7 @@ function deliveredStatusVariant(
 ): StatusInfo {
   const deliveryMode = statusObject?.deliveryMode;
   const delegatorName = options?.delegator?.displayName;
-  const userTaxId = options?.delegator ? options.delegator.fiscalCode : options?.userTaxId;
-  const recIndex = options?.recipients.findIndex((rec) =>
-    typeof rec === 'string' ? rec === userTaxId : rec.taxId === userTaxId
-  );
+  const recIndex = getRecIndex(options?.recipients || [], options?.userTaxId, options?.delegator);
   const plainStatusHistory = options?.statusHistory?.reduce<Array<INotificationDetailTimeline>>(
     (arr, status) => arr.concat(status.steps ?? []),
     []
