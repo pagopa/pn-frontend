@@ -1059,16 +1059,16 @@ describe('notification status texts', () => {
   });
 
   it('return notification status infos - VIEWED - multi recipient - without legal fact, with the revised copy', () => {
-    initStatusLocalizationExists(
-      (_ns, path) => path === 'status.viewed-description-without-legal-fact-multirecipient'
-    );
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-legal-fact-download');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed-multirecipient`,
       `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
         subject: `notifiche - status.recipient`,
       })}`,
-      `notifiche - status.viewed-description-without-legal-fact-multirecipient`,
+      `notifiche - status.viewed-description-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: '2023-01-26T13:57:16.42843144Z',
@@ -1079,12 +1079,8 @@ describe('notification status texts', () => {
     );
   });
 
-  it('prefers the delegate VIEWED description over the multi-recipient without-legal-fact variant', () => {
-    initStatusLocalizationExists(
-      (_ns, path) =>
-        path === 'status.viewed-description-without-legal-fact-multirecipient' ||
-        path === 'status.viewed-description-by-delegate'
-    );
+  it('uses the delegate VIEWED description for multi-recipient notifications', () => {
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-description-by-delegate');
 
     testNotificationStatusInfos(
       'success',
@@ -1109,9 +1105,7 @@ describe('notification status texts', () => {
   });
 
   it('return notification status infos - VIEWED - multi recipient - with legal fact, with the revised copy', () => {
-    initStatusLocalizationExists(
-      (_ns, path) => path === 'status.viewed-description-without-legal-fact-multirecipient'
-    );
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-legal-fact-download');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed-multirecipient`,
@@ -1120,7 +1114,7 @@ describe('notification status texts', () => {
       })}`,
       `notifiche - status.viewed-description-multirecipient - ${JSON.stringify({
         subject: `notifiche - status.recipient`,
-      })}`,
+      })} notifiche - status.viewed-legal-fact-download`,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: '2023-01-26T13:57:16.42843144Z',
@@ -1141,6 +1135,193 @@ describe('notification status texts', () => {
         ],
       },
       { recipients: notificationDTOMultiRecipient.recipients }
+    );
+  });
+
+  describe('VIEWED - revised copy', () => {
+    const [recipient, otherRecipient] = notificationDTOMultiRecipient.recipients;
+    const delegateTaxId = 'LVLDAA85T50G702B';
+    const subjectData = JSON.stringify({ subject: 'notifiche - status.recipient' });
+    const viewedStatus = (
+      steps: Array<INotificationDetailTimeline>
+    ): NotificationStatusHistory => ({
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2023-08-25T11:38:05.392Z',
+      relatedTimelineElements: [],
+      steps,
+    });
+    const viewedStep = (recIndex: number, delegateTaxIdOfAccess?: string) =>
+      getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+        recIndex,
+        delegateInfo: delegateTaxIdOfAccess
+          ? { mandateId: 'mandate-1', denomination: 'Luigi Zucchini', taxId: delegateTaxIdOfAccess }
+          : undefined,
+      });
+    const withEffectiveDate = (status: NotificationStatusHistory) => [
+      status,
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom: '2023-08-20T11:38:05.392Z',
+        relatedTimelineElements: [],
+      },
+    ];
+    const delegateView = {
+      mandateId: 'mandate-1',
+      delegator: { displayName: recipient.denomination, fiscalCode: recipient.taxId },
+      userTaxId: delegateTaxId,
+    };
+
+    it('uses the recipient description when the user has accessed a multi-recipient notification', () => {
+      initStatusLocalizationExists(
+        (_ns, path) => path === 'status.viewed-description-by-other-recipient'
+      );
+      const { description } = getNotificationStatusInfos(viewedStatus([viewedStep(0)]), {
+        recipients: notificationDTOMultiRecipient.recipients,
+        userTaxId: recipient.taxId,
+      });
+      expect(description).toBe(
+        `notifiche - status.viewed-description-multirecipient - ${subjectData}`
+      );
+    });
+
+    it.each([
+      ['the recipient', {}],
+      ['a delegate of the recipient', delegateView],
+    ])(
+      'uses the other-recipient description when only another recipient has accessed - %s',
+      (_desc, options) => {
+        initStatusLocalizationExists(
+          (_ns, path) => path === 'status.viewed-description-by-other-recipient'
+        );
+        const { description } = getNotificationStatusInfos(viewedStatus([viewedStep(1)]), {
+          recipients: notificationDTOMultiRecipient.recipients,
+          userTaxId: recipient.taxId,
+          ...options,
+        });
+        expect(description).toBe('notifiche - status.viewed-description-by-other-recipient');
+      }
+    );
+
+    it('uses the by-recipient description when the delegator has accessed a multi-recipient notification', () => {
+      initStatusLocalizationExists(
+        (_ns, path) => path === 'status.viewed-description-by-recipient'
+      );
+      const { description } = getNotificationStatusInfos(
+        viewedStatus([viewedStep(1), viewedStep(0)]),
+        { recipients: notificationDTOMultiRecipient.recipients, ...delegateView }
+      );
+      expect(description).toBe(
+        `notifiche - status.viewed-description-by-recipient - ${JSON.stringify({
+          recipient: recipient.denomination,
+        })}`
+      );
+    });
+
+    it.each([
+      {
+        desc: 'recipient access',
+        steps: [viewedStep(0)],
+        options: { userTaxId: recipient.taxId },
+        expected: `notifiche - status.viewed-description-after-effective-date - ${subjectData}`,
+      },
+      {
+        desc: 'access made by the reading delegate',
+        steps: [viewedStep(0, delegateTaxId)],
+        options: delegateView,
+        expected: `notifiche - status.viewed-description-as-delegate-after-effective-date - ${JSON.stringify(
+          { recipient: recipient.denomination }
+        )}`,
+      },
+      {
+        desc: 'access made by another delegate',
+        steps: [viewedStep(0, otherRecipient.taxId)],
+        options: delegateView,
+        expected: `notifiche - status.viewed-description-by-other-delegate-after-effective-date - ${JSON.stringify(
+          { name: 'Luigi Zucchini', recipient: recipient.denomination }
+        )}`,
+      },
+      {
+        desc: 'access made by the delegator',
+        steps: [viewedStep(0)],
+        options: delegateView,
+        expected: `notifiche - status.viewed-description-by-recipient-after-effective-date - ${JSON.stringify(
+          { recipient: recipient.denomination }
+        )}`,
+      },
+      {
+        desc: 'access made by a delegate, without a dedicated variant',
+        steps: [viewedStep(0, delegateTaxId)],
+        options: { userTaxId: recipient.taxId },
+        expected: `notifiche - status.viewed-description-by-delegate - ${JSON.stringify({
+          name: 'Luigi Zucchini',
+        })}`,
+      },
+    ])('uses the after-effective-date description - $desc', ({ steps, options, expected }) => {
+      initStatusLocalizationExists(
+        (_ns, path) =>
+          path.startsWith('status.viewed-description-') &&
+          !path.endsWith('-multirecipient') &&
+          path !== 'status.viewed-description-by-delegate-after-effective-date'
+      );
+      const status = viewedStatus(steps);
+      const { description } = getNotificationStatusInfos(status, {
+        recipients: [recipient],
+        statusHistory: withEffectiveDate(status),
+        ...options,
+      });
+      expect(description).toBe(expected);
+    });
+
+    it.each([
+      [0, `notifiche - status.viewed-description-after-effective-date - ${subjectData}`],
+      [1, 'notifiche - status.viewed-description-by-other-recipient'],
+    ])(
+      'uses the after-effective-date description only for the own access in multi-recipient notifications - access by recIndex %s',
+      (recIndex, expected) => {
+        initStatusLocalizationExists(
+          (_ns, path) =>
+            path === 'status.viewed-description-after-effective-date' ||
+            path === 'status.viewed-description-by-other-recipient'
+        );
+        const status = viewedStatus([viewedStep(recIndex)]);
+        const { description } = getNotificationStatusInfos(status, {
+          recipients: notificationDTOMultiRecipient.recipients,
+          statusHistory: withEffectiveDate(status),
+          userTaxId: recipient.taxId,
+        });
+        expect(description).toBe(expected);
+      }
+    );
+
+    it.each([
+      [true, true, ' notifiche - status.viewed-legal-fact-download'],
+      [true, false, ''],
+      [false, true, ''],
+    ])(
+      'appends the legal fact sentence only when available - legal fact %s, sentence localized %s',
+      (hasLegalFact, isSentenceLocalized, expectedSuffix) => {
+        initStatusLocalizationExists(
+          (_ns, path) => isSentenceLocalized && path === 'status.viewed-legal-fact-download'
+        );
+        const step = {
+          ...viewedStep(0),
+          legalFactsIds: hasLegalFact
+            ? [
+                {
+                  key: 'safestorage://PN_LEGAL_FACTS-viewed.pdf',
+                  category: LegalFactType.RECIPIENT_ACCESS,
+                },
+              ]
+            : undefined,
+        };
+        const { description } = getNotificationStatusInfos(viewedStatus([step]), {
+          recipients: [recipient],
+          userTaxId: recipient.taxId,
+        });
+        expect(description).toBe(
+          `notifiche - status.viewed-description - ${subjectData}${expectedSuffix}`
+        );
+      }
     );
   });
 

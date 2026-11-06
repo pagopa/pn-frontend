@@ -50,17 +50,26 @@ type StatusInfoWithColor = StatusInfo & {
   color: MIChipProps['color'];
 };
 
-type StatusViewer = 'as-delegate' | 'by-delegate' | 'by-other-delegate' | 'by-recipient';
+type StatusViewer =
+  | 'as-delegate'
+  | 'by-delegate'
+  | 'by-other-delegate'
+  | 'by-recipient'
+  | 'by-other-recipient';
 
 type StatusLocalizationData = { [key: string]: string | undefined };
 
 type ViewedVariantOptions = {
   statusObject?: NotificationStatusHistory;
+  recipients?: Array<NotificationDetailRecipient | string>;
   isMultiRecipient?: boolean;
   mandateId?: string;
-  delegatorName?: string;
+  delegator?: Delegator;
   userTaxId?: string;
 };
+
+// Sentence appended to the VIEWED description only when the access legal fact is available
+const VIEWED_LEGAL_FACT_KEY = 'status.viewed-legal-fact-download';
 
 const channelMap: Partial<Record<DigitalDomicileType, string>> = {
   [DigitalDomicileType.PEC]: 'PEC',
@@ -69,17 +78,37 @@ const channelMap: Partial<Record<DigitalDomicileType, string>> = {
 
 function viewedByVariant({
   statusObject,
+  recipients,
   isMultiRecipient,
   mandateId,
-  delegatorName,
+  delegator,
   userTaxId,
-}: ViewedVariantOptions): { viewer: StatusViewer; data: StatusLocalizationData } | undefined {
-  const viewedEvent = statusObject?.steps?.find(
-    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED
+}: ViewedVariantOptions): { viewer: StatusViewer; data?: StatusLocalizationData } | undefined {
+  const viewedEvents =
+    statusObject?.steps?.filter((step) => step.category === TimelineCategory.NOTIFICATION_VIEWED) ??
+    [];
+  // In multi-recipient notifications, when the user is known, only the access of the recipient
+  // the user is acting for (the user or the delegator) is relevant.
+  const tracksRecipient = !!(isMultiRecipient && userTaxId);
+  const recipientTaxId = delegator ? delegator.fiscalCode : userTaxId;
+  const recIndex = recipients?.findIndex((rec) =>
+    typeof rec === 'string' ? rec === recipientTaxId : rec.taxId === recipientTaxId
   );
+  const viewedEvent = tracksRecipient
+    ? viewedEvents.find((step) => step.details.recIndex === recIndex)
+    : viewedEvents[0];
+
+  if (tracksRecipient && !viewedEvent) {
+    // the access was made by another recipient
+    return { viewer: 'by-other-recipient' };
+  }
+
   const delegateInfo = (viewedEvent?.details as NotificationViewedDetails | undefined)
     ?.delegateInfo;
-  const delegateName = delegateInfo?.denomination ?? statusObject?.recipient;
+  // statusObject.recipient refers to the first access, so it is reliable only if we don't track a specific recipient
+  const delegateName =
+    delegateInfo?.denomination ?? (tracksRecipient ? undefined : statusObject?.recipient);
+  const delegatorName = delegator?.displayName;
 
   if (mandateId && delegatorName && userTaxId) {
     if (delegateInfo?.taxId === userTaxId) {
@@ -91,9 +120,7 @@ function viewedByVariant({
         data: { name: delegateName, recipient: delegatorName },
       };
     }
-    return isMultiRecipient
-      ? undefined
-      : { viewer: 'by-recipient', data: { recipient: delegatorName } };
+    return { viewer: 'by-recipient', data: { recipient: delegatorName } };
   }
 
   return delegateName ? { viewer: 'by-delegate', data: { name: delegateName } } : undefined;
@@ -311,7 +338,9 @@ type StatusLocalizationVariant = {
   isDelegate?: boolean;
   // Who performed the access recorded in the VIEWED event.
   viewer?: StatusViewer;
-  legalFact?: 'with' | 'without';
+  // The access happened after the notification had been perfected (EFFECTIVE_DATE status).
+  afterEffectiveDate?: boolean;
+  legalFact?: 'with';
 };
 
 type StatusLocalizationContext = StatusLocalizationVariant & { isMultiRecipient?: boolean };
@@ -340,12 +369,13 @@ function statusLocalizationKey(
     delegateSuffix = '-delegate';
   }
 
+  const effectiveDateSuffix = variant?.afterEffectiveDate ? '-after-effective-date' : '';
   const legalFactSuffix = variant?.legalFact ? `-${variant.legalFact}-legal-fact` : '';
 
   const statusKey =
     status === NotificationStatus.CANCELLED ? 'canceled' : status.toLowerCase().replace(/_/g, '-');
 
-  return `status.${statusKey}${partSuffix}${modeSuffix}${delegateSuffix}${legalFactSuffix}${recipientSuffix}`;
+  return `status.${statusKey}${partSuffix}${modeSuffix}${delegateSuffix}${effectiveDateSuffix}${legalFactSuffix}${recipientSuffix}`;
 }
 
 /**
@@ -390,8 +420,8 @@ function resolveStatusLocalization(
     const selection = select(variant, selected.isMultiRecipient);
     if (selection) {
       selected = selection;
-    } else if (context.legalFact === 'with' && selected.isMultiRecipient) {
-      // the with-legal-fact variant can fll back to its standalone key
+    } else if (selected.isMultiRecipient) {
+      // the with-legal-fact variant can fall back to its standalone key
       selected = select({ legalFact: context.legalFact }, false) ?? selected;
     }
   }
@@ -402,6 +432,11 @@ function resolveStatusLocalization(
       select({ ...selected.variant, ...viewer }, selected.isMultiRecipient) ??
       select({ deliveryMode: context.deliveryMode, ...viewer }, false) ??
       selected;
+  }
+  if (context.afterEffectiveDate) {
+    // when no after-effective-date variant exists for the selected one, keep the selected one
+    const variant = { ...selected.variant, afterEffectiveDate: true };
+    selected = select(variant, selected.isMultiRecipient) ?? select(variant, false) ?? selected;
   }
   return selected;
 }
@@ -555,23 +590,37 @@ export function getNotificationStatusInfos(
       }
       const viewer = viewedByVariant({
         statusObject,
+        recipients: options?.recipients,
         isMultiRecipient,
         mandateId: options?.mandateId,
-        delegatorName: options?.delegator?.displayName,
+        delegator: options?.delegator,
         userTaxId: options?.userTaxId,
       });
+      const statusInfos = localizeStatus(
+        NotificationStatus.VIEWED,
+        { subject },
+        {
+          isMultiRecipient,
+          viewer: viewer?.viewer,
+          // same check used for the VIEWED status icon in the timeline
+          afterEffectiveDate: options?.statusHistory?.some(
+            (s) => s.status === NotificationStatus.EFFECTIVE_DATE
+          ),
+        },
+        viewer?.data
+      );
+      // the legal fact download sentence is shown only if the legal fact is actually available
+      const legalFactSentence =
+        hasViewedLegalFact(statusObject) &&
+        hasLocalizedLabel('notifications', VIEWED_LEGAL_FACT_KEY)
+          ? getLocalizedOrDefaultLabel('notifications', VIEWED_LEGAL_FACT_KEY)
+          : undefined;
       return {
         color: 'success',
-        ...localizeStatus(
-          NotificationStatus.VIEWED,
-          { subject },
-          {
-            isMultiRecipient,
-            viewer: viewer?.viewer,
-            legalFact: !hasViewedLegalFact(statusObject) ? 'without' : undefined,
-          },
-          viewer?.data
-        ),
+        ...statusInfos,
+        description: legalFactSentence
+          ? `${statusInfos.description} ${legalFactSentence}`
+          : statusInfos.description,
       };
     }
     case NotificationStatus.CANCELLED:
