@@ -3,7 +3,6 @@
     "document-unavailable": "Das Dokument ist nicht mehr verfügbar. Kontaktiere die Körperschaft für weitere Informationen.",
     "timeline": {
       "analog-failure-workflow": "Zustellung konnte nicht ausgeliefert werden",
-      "analog-failure-workflow-monorecipient": "",
       "analog-failure-workflow-description": "Du bist nicht auffindbar, da an der angegebenen Adresse keine Hinweise auf dich vorhanden waren, oder weil die angegebene Adresse nicht existiert, unzureichend oder falsch ist. Daher wird die <0>Empfangsbestätigung</0> zur Verfügung gestellt. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann die SEND Zustellung dennoch rechtsgültig wird.",
       "analog-failure-workflow-description-delegate": "{{recipient}} ist nicht auffindbar, da an der angegebenen Adresse keine Hinweise auf diese Person vorhanden waren, oder weil die angegebene Adresse nicht existiert, unzureichend oder falsch ist. Daher wird die <0>Empfangsbestätigung</0> zur Verfügung gestellt. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann die SEND Zustellung dennoch rechtsgültig wird.",
       "analog-workflow-failure-cause": {
@@ -209,7 +208,6 @@
       "send-digital-domicile-PEC-description": "Es wird ein Versuch unternommen, dir die SEND Zustellung an die PEC-Adresse {{address}} zu senden.",
       "send-digital-domicile-PEC-description-delegate": "Es wird ein Versuch unternommen, die SEND Zustellung an {{recipient}} an die PEC-Adresse {{address}} zu senden.",
       "send-digital-domicile-SERCQ-SEND": "Versand über das digitale SEND-Domizil gestartet",
-      "send-digital-domicile-SERCQ-SEND-description-delegate": "",
       "send-digital-error-description": "Dein PEC-Postfach {{address}} ist voll, ungültig oder inaktiv, wie durch die <0>Benachrichtigung über Unzustellbarkeit</0> bescheinigt.",
       "send-digital-error-description-delegate": "Das PEC-Postfach {{address}} von {{recipient}} ist voll, ungültig oder inaktiv, wie durch die <0>Benachrichtigung über Unzustellbarkeit</0> bescheinigt.",
       "send-digital-progress-error": "PEC vom Dienst nicht akzeptiert",
