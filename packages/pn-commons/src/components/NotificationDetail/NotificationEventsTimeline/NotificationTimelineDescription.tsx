@@ -52,6 +52,7 @@ const NotificationTimelineEventLegalFact: React.FC<
         textDecoration: 'underline',
         verticalAlign: 'baseline',
         ...slotProps?.button?.sx,
+        textAlign: 'left',
         fontWeight: 400,
       };
 
