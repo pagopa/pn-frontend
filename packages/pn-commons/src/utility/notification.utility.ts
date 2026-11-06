@@ -72,9 +72,6 @@ export const getRecIndex = (
   userTaxId?: string,
   delegator?: Delegator
 ): number | undefined => {
-  if (!userTaxId) {
-    return;
-  }
   const recTaxId = delegator ? delegator.fiscalCode : userTaxId;
   return recipients.findIndex((rec) =>
     typeof rec === 'string' ? rec === recTaxId : rec.taxId === recTaxId
