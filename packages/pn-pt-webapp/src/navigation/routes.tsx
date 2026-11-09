@@ -9,26 +9,25 @@ import TermsOfServicePage from '../pages/TermsOfService.page';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
-import { ENTI, HOME, NOT_ACCESSIBLE } from './routes.const';
 import * as routes from './routes.const';
 
 const Router: React.FC = () => {
   const navigate = useNavigate();
 
-  const navigateToHome = () => navigate(ENTI, { replace: true });
+  const navigateToHome = () => navigate(routes.ENTI, { replace: true });
 
   return (
     <Routes>
       <Route element={<SessionGuard />}>
         {/* protected routes */}
         <Route element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
-          <Route path={ENTI} element={<InstitutionsPage />} />
-          <Route path={HOME} element={<Navigate to={ENTI} replace />} />
+          <Route path={routes.ENTI} element={<InstitutionsPage />} />
+          <Route path={routes.HOME} element={<Navigate to={routes.ENTI} replace />} />
         </Route>
       </Route>
       <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
       <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
-      <Route path={NOT_ACCESSIBLE} element={<AppNotAccessibleRoute />} />
+      <Route path={routes.NOT_ACCESSIBLE} element={<AppNotAccessibleRoute />} />
       <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
     </Routes>
   );
