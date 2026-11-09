@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.4.0",
+    "generators": {
+      "bff-pt-institutions": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/a0c081aefa4a95711728145f08e6a5b49c4695ec/docs/openapi/api-external-pn-bff-pt-institutions.yaml",
+        "output": "./src/generated-client/pt-institutions",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
+      }
+    }
+  }
+}

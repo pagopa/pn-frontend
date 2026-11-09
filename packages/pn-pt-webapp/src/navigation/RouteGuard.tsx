@@ -6,7 +6,7 @@ import { PNRole } from '../models/user';
 import { authSelectors } from '../redux/auth/reducers';
 import { useAppSelector } from '../redux/hooks';
 import { goToSelfcareLogin } from './navigation.utility';
-import { HOME } from './routes.const';
+import { ENTI } from './routes.const';
 
 /**
  * The roles associated to the routes guarded by this Guard.
@@ -26,7 +26,7 @@ const RouteGuard = ({ roles }: Props) => {
     return (
       <AccessDenied
         isLogged={true}
-        goToHomePage={() => navigate(HOME, { replace: true })}
+        goToHomePage={() => navigate(ENTI, { replace: true })}
         goToLogin={() => goToSelfcareLogin()}
       />
     );

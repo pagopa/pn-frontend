@@ -4,10 +4,12 @@ import { IS_DEVELOP, appStateReducer } from '@pagopa-pn/pn-commons';
 import { Middleware, MiddlewareArray, configureStore } from '@reduxjs/toolkit';
 
 import userSlice from './auth/reducers';
+import institutionsSlice from './institutions/reducers';
 
 export const appReducers = {
   appState: appStateReducer,
   userState: userSlice.reducer,
+  institutionsState: institutionsSlice.reducer,
 };
 
 const createStore = (logReduxActions?: boolean) => {

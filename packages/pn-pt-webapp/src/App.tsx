@@ -79,7 +79,7 @@ const ActualApp = () => {
   );
 
   const menuItems: Array<SideMenuItem> = useMemo(
-    () => [{ label: t('menu.institutions'), icon: InstitutionsIcon, route: routes.HOME }],
+    () => [{ label: t('menu.institutions'), icon: InstitutionsIcon, route: routes.ENTI }],
     [i18n.language]
   );
 
