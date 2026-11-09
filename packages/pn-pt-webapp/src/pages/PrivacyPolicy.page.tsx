@@ -40,8 +40,6 @@ const PrivacyPolicyPage = () => {
 
   return (
     <>
-      <>PRIVACY POLICY DI PT</>
-
       <div
         key={`otnotice-${lang}`}
         role="article"

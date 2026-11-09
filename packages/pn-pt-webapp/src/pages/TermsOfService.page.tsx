@@ -40,7 +40,6 @@ const TermsOfServicePage = () => {
 
   return (
     <>
-      <>TERMINI DI PT</>
       <div
         key={`otnotice-${lang}`}
         role="article"

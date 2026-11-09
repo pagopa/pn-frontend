@@ -2,6 +2,8 @@ import { Configuration, IS_DEVELOP, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface PtConfiguration {
+  OT_DOMAIN_ID: string;
+  OT_SETTINGS_TOKEN: string;
   API_BASE_URL: string;
   PAGOPA_HELP_EMAIL: string;
   ACCESSIBILITY_LINK: string;
@@ -18,6 +20,8 @@ export interface PtConfiguration {
 class PtConfigurationValidator extends Validator<PtConfiguration> {
   constructor() {
     super();
+    this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.token);
+    this.ruleFor('OT_SETTINGS_TOKEN').isString().isRequired().matches(dataRegex.token);
     this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
