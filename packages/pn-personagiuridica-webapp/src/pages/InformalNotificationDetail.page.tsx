@@ -126,11 +126,9 @@ const InformalNotificationDetail: React.FC = () => {
       .unwrap()
       .then((paymentInfo) => {
         setPaymentsData({
-          pagoPaF24: paymentInfo.map((info, index) => ({
+          pagoPaF24: paymentInfo.map((info) => ({
             pagoPa: {
-              ...payments[index]?.pagoPa,
               ...info,
-              // applyCost is false because informal notifications do not have notification costs.
               applyCost: false,
             },
           })),

@@ -339,7 +339,12 @@ describe('Notification detail redux state tests', () => {
     );
 
     expect(action.type).toBe('getReceivedInformalNotificationPaymentInfo/fulfilled');
-    expect(action.payload).toEqual(paymentInfo);
+    expect(action.payload).toEqual(
+      paymentInfo.map((payment) => ({
+        ...payment,
+        applyCost: false,
+      }))
+    );
 
     const paymentCache = getPaymentCache(informalNotificationMock.iun);
 
@@ -420,6 +425,19 @@ describe('Notification detail redux state tests', () => {
 
     const currentPayment = paymentInfoRequest[0];
 
+    const otherPayment = {
+      ...currentPayment,
+      noticeCode: '302000100000019422',
+    };
+
+    setInformalPaymentsInCache(
+      [
+        { ...currentPayment, status: PaymentStatus.REQUIRED },
+        { ...otherPayment, status: PaymentStatus.REQUIRED },
+      ],
+      informalNotificationMock.iun
+    );
+
     setPaymentCache(
       {
         currentPayment,
@@ -441,20 +459,37 @@ describe('Notification detail redux state tests', () => {
     );
 
     expect(action.type).toBe('getReceivedInformalNotificationPaymentInfo/fulfilled');
-    expect(action.payload).toEqual(updatedPaymentInfo);
 
+    const originalPayment = informalPayments.find(
+      (payment) =>
+        payment.pagoPa?.noticeCode === currentPayment.noticeCode &&
+        payment.pagoPa?.creditorTaxId === currentPayment.creditorTaxId
+    )?.pagoPa;
+
+    const expectedPayments = [
+      {
+        ...originalPayment,
+        ...updatedPaymentInfo[0],
+        applyCost: false,
+      },
+      {
+        ...otherPayment,
+        status: PaymentStatus.REQUIRED,
+        applyCost: false,
+      },
+    ];
+
+    expect(action.payload).toEqual(expectedPayments);
     expect(mock.history.post).toHaveLength(1);
 
     const paymentCache = getPaymentCache(informalNotificationMock.iun);
 
-    expect(paymentCache?.payments).toEqual([
-      {
-        pagoPa: {
-          ...updatedPaymentInfo[0],
-          applyCost: false,
-        },
-      },
-    ]);
+    expect(paymentCache?.payments).toEqual(
+      expectedPayments.map((payment) => ({
+        pagoPa: payment,
+      }))
+    );
+    expect(paymentCache?.currentPayment).toBeUndefined();
   });
 
   it('Should be able to fetch payment info', async () => {

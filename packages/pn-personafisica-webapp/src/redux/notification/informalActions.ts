@@ -125,14 +125,17 @@ export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
   async ({ paymentInfoRequest }, { rejectWithValue, getState, signal }) => {
     try {
       const { notificationState } = getState();
-      const iun = notificationState.informalNotification?.iun;
+      const informalNotification = notificationState.informalNotification;
+      const iun = informalNotification?.iun;
 
       if (!iun) {
         throw new Error('IUN is not defined');
       }
 
+      const originalPayments = informalNotification.recipients?.[0]?.payments ?? [];
       const paymentCache = getPaymentCache(iun);
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
+
       if (paymentCache?.currentPayment) {
         const updatedPaymentResponse = await paymentsApiFactory.getPaymentsInfoV1(
           [paymentCache.currentPayment],
@@ -146,9 +149,9 @@ export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
           notification_type: EventNotificationTypes.INFORMAL,
         });
 
-        setInformalPaymentsInCache(updatedPayment, iun);
+        const updatedCache = setInformalPaymentsInCache(updatedPayment, iun, originalPayments);
 
-        return updatedPayment;
+        return updatedCache.payments.flatMap((payment) => (payment.pagoPa ? [payment.pagoPa] : []));
       }
 
       if (paymentCache?.payments && checkIfPaymentsIsAlreadyInCache(paymentInfoRequest, iun)) {
@@ -156,12 +159,11 @@ export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
       }
 
       const response = await paymentsApiFactory.getPaymentsInfoV1(paymentInfoRequest, { signal });
-
       const paymentInfo = response.data as Array<ExtRegistriesPaymentDetails>;
 
-      setInformalPaymentsInCache(paymentInfo, iun);
+      const updatedCache = setInformalPaymentsInCache(paymentInfo, iun, originalPayments);
 
-      return paymentInfo;
+      return updatedCache.payments.flatMap((payment) => (payment.pagoPa ? [payment.pagoPa] : []));
     } catch (e) {
       return rejectWithValue(parseError(e));
     }

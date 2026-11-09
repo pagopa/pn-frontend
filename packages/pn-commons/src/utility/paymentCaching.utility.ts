@@ -161,16 +161,37 @@ export const checkIfPaymentsIsAlreadyInCache = (
   );
 };
 
+const matchesInformalPayment = (
+  payment: { pagoPa?: Partial<NonNullable<PaymentDetails['pagoPa']>> },
+  info: ExtRegistriesPaymentDetails
+): boolean =>
+  payment.pagoPa?.noticeCode === info.noticeCode &&
+  payment.pagoPa?.creditorTaxId === info.creditorTaxId;
+
 export const setInformalPaymentsInCache = (
   paymentInfo: Array<ExtRegistriesPaymentDetails>,
-  iun: string
-) => {
-  const payments: Array<PaymentDetails> = paymentInfo.map((info) => ({
-    pagoPa: {
-      ...info,
-      applyCost: false,
-    },
-  }));
+  iun: string,
+  originalPayments: Array<{
+    pagoPa?: Partial<NonNullable<PaymentDetails['pagoPa']>>;
+  }> = []
+): PaymentCache => {
+  const cachedPayments = getPaymentCache(iun)?.payments ?? [];
 
-  setPaymentsInCache(payments, iun);
+  const payments: Array<PaymentDetails> = paymentInfo.map((info) => {
+    const cachedPayment = cachedPayments.find((payment) => matchesInformalPayment(payment, info));
+    const originalPayment = originalPayments.find((payment) =>
+      matchesInformalPayment(payment, info)
+    );
+
+    return {
+      pagoPa: {
+        ...cachedPayment?.pagoPa,
+        ...originalPayment?.pagoPa,
+        ...info,
+        applyCost: false,
+      },
+    };
+  });
+
+  return setPaymentsInCache(payments, iun);
 };
