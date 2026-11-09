@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Indietro",
     "breadcrumb-root": "Campagne",
-    "breadcrumb": {
-      "back": "Indietro",
-      "campaigns": "Campagne"
-    },
     "channels-label": "Canali selezionati",
     "channels": {
       "ANALOG": "Servizio postale",
@@ -15,7 +12,14 @@
     },
     "communications": {
       "empty-description": "Rimuovili o prova con un'altra combinazione.",
+      "empty-state": {
+        "description": "Non saranno visualizzate le comunicazioni rifiutate o ancora in validazione.",
+        "title": "Qui vedrai le comunicazioni della campagna."
+      },
       "empty-title": "Nessuna comunicazione per i filtri selezionati.",
+      "errors": {
+        "tax-id": "Inserisci un codice fiscale valido"
+      },
       "iun": "Codice IUN",
       "no-communications-description": "Non ci sono comunicazioni corrispondenti ai filtri selezionati.",
       "no-communications-title": "Nessuna comunicazione disponibile",
@@ -42,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Titolo campagna]",
       "generic-error": "Non è stato possibile recuperare i dettagli della campagna.",
+      "generic-error-comunications": "Non è stato possibile recuperare l'elenco delle comunicazioni.",
       "generic-error-cta": "Prova di nuovo"
     },
     "service-name": "Servizio",
@@ -53,6 +58,7 @@
       "documents": {
         "document-not-available": "Il documento non è ancora disponibile. Riprova più tardi.",
         "download-message-available": "<0>Disponibile online fino a 180 giorni</0> dalla data di accettazione della comunicazione.",
+        "download-message-available-plural": "<0>Disponibili online fino a 180 giorni</0> dalla data di accettazione della comunicazione.",
         "download-message-expired": "I documenti non sono più disponibili online.",
         "title": "Documenti allegati"
       },
@@ -115,7 +121,7 @@
       },
       "completed": {
         "description": "La comunicazione è stata inviata sui canali scelti.",
-        "label": "Invio riuscito"
+        "label": "Invio terminato"
       },
       "processing": {
         "description": "La comunicazione proverà a raggiungere la persona destinataria sui canali scelti.",

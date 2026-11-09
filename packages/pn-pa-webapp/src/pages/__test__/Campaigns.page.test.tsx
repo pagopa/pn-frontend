@@ -133,6 +133,40 @@ describe('Campaigns Page', () => {
     });
   });
 
+  it('keeps the current page when coming back to the list', async () => {
+    mock.onGet(campaignsPath(10, 'page-key-1')).reply(200, campaignsPage2DTO);
+
+    await act(async () => {
+      result = render(<Campaigns />, {
+        preloadedState: {
+          campaignState: {
+            campaigns: [],
+            pagination: {
+              nextPagesKey: ['page-key-1'],
+              size: 10,
+              page: 1,
+              moreResult: false,
+            },
+          },
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+    });
+
+    expect(mock.history.get[0].url).toBe(campaignsPath(10, 'page-key-1'));
+
+    campaignsPage2DTO.resultsPage.forEach((campaign) => {
+      expect(result.getByText(campaign.title)).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(result.container.querySelector('#page2')).toHaveAttribute('aria-current', 'true');
+    });
+  });
+
   it('navigates to campaign detail', async () => {
     mock.onGet(campaignsPath()).reply(200, campaignsDTO);
 

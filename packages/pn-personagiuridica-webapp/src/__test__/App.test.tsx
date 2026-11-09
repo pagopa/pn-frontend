@@ -18,7 +18,7 @@ import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from
 
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 
-const unmockedFetch = global.fetch;
+const unmockedFetch = globalThis.fetch;
 
 const Component = () => {
   return (
@@ -58,7 +58,7 @@ describe('App', () => {
     mockAuth = new MockAdapter(authClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
-    global.fetch = () =>
+    globalThis.fetch = () =>
       Promise.resolve({
         json: () => Promise.resolve([]),
       }) as Promise<Response>;
@@ -77,12 +77,13 @@ describe('App', () => {
     mock.reset();
     mockAuth.reset();
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
     mockAuth.restore();
-    global.fetch = unmockedFetch;
+    globalThis.fetch = unmockedFetch;
     vi.unstubAllGlobals();
   });
 

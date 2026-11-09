@@ -63,7 +63,7 @@
     "informal-disclaimer": "This communication may produce legal effects. Check the attachments, if present, to learn more.",
     "informal_notification_markdown": {
       "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali.",
-      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati</0>, che possono fornirti dettagli importanti.",
       "greeting": "Ciao {{recipientDenomination}},",
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
     },
@@ -145,6 +145,7 @@
     "timeline-title": "Notification status",
     "timeline": {
       "aar-document": "Notification of receipt",
+      "analog-failure-second-attempt-group-label": "Second sending via registered mail - Failed attempt",
       "analog-failure-workflow": "Update on sending by mail",
       "analog-failure-workflow-description": "The recipient was absolutely untraceable. The notification of receipt is filed and made available.",
       "analog-failure-workflow-description-multirecipient": "The recipient {{name}} {{taxId}} was absolutely untraceable. The notification of receipt is filed and made available.",
@@ -174,8 +175,10 @@
         "M09": "for other reasons",
         "M10": "because the address is not legible"
       },
+      "collapse-all-groups": "Collapse",
       "courtesy-group-label": "Courtesy messages",
       "digital-send-fallback": "Digital delivery",
+      "expand-all-groups": "Expand",
       "legalfact": {
         "analog-failure-delivery": "Deposit of the notification of receipt",
         "digital-delivery-failure": "no digital address",
@@ -190,6 +193,9 @@
         "sender-ack": "notification taken over"
       },
       "notification-cancelled-document": "Declaration of notification cancellation",
+      "pec-address-source-general": "The PEC address is listed in public registers",
+      "pec-address-source-platform": "The PEC address has been added as a contact detail on SEND",
+      "pec-address-source-special": "The PEC address has been registered as a contact channel by the issuing institution",
       "prepare-analog-domicile-failure": "Update on sending by mail",
       "prepare-analog-domicile-failure-D00-description": "No new address was found to arrange another attempt at sending.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "No new address was found for the recipient {{name}} {{taxId}} to arrange another attempt at sending.",
@@ -219,13 +225,11 @@
       "send-analog-domicile-890": "Sending by 890 registered letter",
       "send-analog-domicile-890-description": "The sending of the notification to the address {{address}} by 890 registered letter has started.",
       "send-analog-domicile-890-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via 890 registered letter has started.",
-      "send-analog-domicile-890-first-attempt-group-label": "First registered mail 890",
       "send-analog-domicile-890-group-label": "Registered mail 890",
       "send-analog-domicile-890-second-attempt-group-label": "Second registered mail 890",
       "send-analog-domicile-ar": "Sending by registered letter with acknowledgment of receipt",
       "send-analog-domicile-ar-description": "The sending of the notification to the address {{address}} by registered letter with acknowledgment of receipt has started.",
       "send-analog-domicile-ar-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via registered letter with acknowledgment of receipt has started.",
-      "send-analog-domicile-ar-first-attempt-group-label": "First registered mail with advice of receipt",
       "send-analog-domicile-ar-group-label": "Registered mail with advice of receipt",
       "send-analog-domicile-ar-second-attempt-group-label": "Second registered mail with advice of receipt",
       "send-analog-error": "Sending by mail did not result in delivery",
@@ -357,6 +361,8 @@
       "send-digital-domicile-PEC-description": "The notification is being sent to the PEC address {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the PEC address {{address}}.",
       "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Second sending via PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Send via SEND digital domicile",
       "send-digital-domicile-SERCQ-SEND-description": "The sending of the notification to the SEND digital domicile is in progress.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the SEND digital domicile is in progress",
@@ -392,7 +398,7 @@
     "delegate": "Here you will see the legally binding notifications of {{name}}",
     "description": "Update your contact details now and you will immediately know when you receive one.",
     "description-onboarding": "Did you know you can save money by choosing to receive legally binding communications only digitally?",
-    "filtered": "No notifications or communications for the selected filters",
+    "filtered": "No legally binding notifications or communications for the selected filters",
     "filtered-description": "Remove them or try another combination.",
     "go-to-contacts-cta": "Go to your contact details",
     "go-to-onboarding-cta": "Set up SEND",
@@ -560,7 +566,8 @@
     "mittente": "Sender",
     "oggetto": "Subject",
     "open": "Open",
-    "status": "Status"
+    "status": "Status",
+    "to-read": "To read"
   },
   "tppLanding": {
     "access-button": "Access documents",

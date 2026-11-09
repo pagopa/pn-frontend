@@ -1,11 +1,16 @@
 import { Stack } from '@mui/material';
 
-import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
-import { NotificationTimelineEvent } from '../../../models/NotificationTimeline';
+import {
+  LegalFactId,
+  NotificationDetailRecipient,
+  TimelineCategory,
+} from '../../../models/NotificationDetail';
+import { Delegator, NotificationTimelineEvent } from '../../../models/NotificationTimeline';
 import { getNotificationTimelineStatusInfos } from '../../../utility/notification.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineDescription from './NotificationTimelineDescription';
 import TimelineLegalFacts from './TimelineLegalFacts';
+import { PERFECTION_ANCHORS } from './timelineItem.config';
 
 type Props = {
   event: NotificationTimelineEvent;
@@ -17,6 +22,7 @@ type Props = {
   insideAGroup?: boolean;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
+  delegator?: Delegator;
 };
 
 const NotificationTimelineEventItemLegalFacts: React.FC<
@@ -47,6 +53,14 @@ const NotificationTimelineEventItemLegalFacts: React.FC<
   );
 };
 
+/**
+ * A hidden event with the old copy only renders its legal facts, with no description
+ */
+export const isLegalFactsOnlyEvent = (
+  event: NotificationTimelineEvent,
+  isNewTimelineCopyEnabled: boolean
+) => event.isHidden && !isNewTimelineCopyEnabled;
+
 const NotificationTimelineEventItem: React.FC<Props> = ({
   event,
   allEvents,
@@ -57,10 +71,11 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   insideAGroup = false,
   isNewTimelineCopyEnabled = false,
   perfectionLink,
+  delegator,
 }) => {
   // Events absorbed into a status description are filtered out by the caller, so reaching
   // this component means the event has to be rendered.
-  if (event.isHidden && !isNewTimelineCopyEnabled) {
+  if (isLegalFactsOnlyEvent(event, isNewTimelineCopyEnabled)) {
     return (
       <NotificationTimelineEventItemLegalFacts
         event={event}
@@ -71,7 +86,13 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
     );
   }
 
-  const statusInfo = getNotificationTimelineStatusInfos(event, recipients, allEvents);
+  const statusInfo = getNotificationTimelineStatusInfos(
+    event,
+    recipients,
+    allEvents,
+    isNewTimelineCopyEnabled,
+    delegator
+  );
 
   if (!statusInfo) {
     return null;
@@ -81,11 +102,18 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   // text, several ones are listed below it. Inlining only happens with the new copy.
   const eventLegalFacts = (event.legalFactsIds ?? []).map((lf) => ({ event, lf }));
 
+  const eventPerfectionLink =
+    isNewTimelineCopyEnabled &&
+    perfectionLink &&
+    event.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW
+      ? `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`
+      : perfectionLink;
+
   return (
     <Stack
-      component={insideAGroup ? 'li' : 'div'}
+      component="li"
       spacing={0.5}
-      sx={{ overflowWrap: 'anywhere', display: insideAGroup ? 'list-item' : 'flex', py: 1 }}
+      sx={{ overflowWrap: 'anywhere', display: 'list-item', py: 1 }}
       data-testid="timeline-event"
     >
       <Stack component="span" direction="row" alignItems="center" gap={1}>
@@ -103,7 +131,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         slotProps={{ typography: { variant: 'body2', sx: { fontWeight: 400 } } }}
         isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         disableDownloads={disableDownloads}
-        perfectionLink={perfectionLink}
+        perfectionLink={eventPerfectionLink}
       />
     </Stack>
   );

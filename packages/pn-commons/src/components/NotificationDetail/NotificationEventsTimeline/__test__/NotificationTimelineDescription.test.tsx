@@ -165,6 +165,25 @@ describe('NotificationTimelineDescription', () => {
     expect(getByTestId('dateItem')).toHaveTextContent(formatTimelineDate(event.timestamp, 'it'));
   });
 
+  it('renders title and date without separator when the description is empty', () => {
+    const event = createEvent();
+    const { getByTestId, container } = render(
+      <NotificationTimelineDescription
+        title="Evento digitale"
+        description=""
+        date={event.timestamp}
+        language="it"
+        event={event}
+        clickHandler={clickHandler}
+        legalFacts={[]}
+      />
+    );
+
+    expect(container).toHaveTextContent('Evento digitale');
+    expect(container).not.toHaveTextContent('Evento digitale -');
+    expect(getByTestId('dateItem')).toHaveTextContent(formatTimelineDate(event.timestamp, 'it'));
+  });
+
   it('renders the perfection link next to a legal fact, addressed by name', () => {
     const event = createEvent({
       legalFactsIds: [firstLegalFact],

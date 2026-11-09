@@ -1,4 +1,5 @@
 import { Formik } from 'formik';
+import { vi } from 'vitest';
 
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import {
@@ -32,8 +33,8 @@ describe('PreliminaryInformationsLang', () => {
     de: 'Tedesco',
   };
 
-  const mockOnChange = jest.fn();
-  const mockOnChangeTouched = jest.fn();
+  const mockOnChange = vi.fn();
+  const mockOnChangeTouched = vi.fn();
 
   it('renders correctly with initial values', async () => {
     const result = render(

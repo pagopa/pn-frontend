@@ -4,14 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { ArrowForward } from '@mui/icons-material';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { Box, Typography } from '@mui/material';
 import {
   CustomPagination,
   EmptyErrorState,
-  IUN_regex,
+  INFORMAL_IUN_regex,
   InformalNotificationStatus,
   PaginationData,
   Row,
+  SmartActions,
   SmartBody,
   SmartBodyCell,
   SmartBodyRow,
@@ -23,13 +25,15 @@ import {
   calculatePages,
   dataRegex,
   formatIun,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
 import { BffInformalSenderNotificationSearchRow } from '../../generated-client/informal-notifications';
 import { CommunicationFilters } from '../../models/Campaign';
 import * as routes from '../../navigation/routes.const';
-import { useAppSelector } from '../../redux/hooks';
+import { resetCommunicationsPagination } from '../../redux/campaign/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PnCampaignCommunicationsFilters from './PnCampaignCommunicationsFilters';
 import PnCommunicationOutcomeTag from './PnCommunicationOutcomeTag';
@@ -52,6 +56,8 @@ interface Props {
 const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: Props) => {
   const { t } = useTranslation('campaigns');
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
 
   const communicationsPagination = useAppSelector(
     (state: RootState) => state.campaignState.communicationsPagination
@@ -72,8 +78,10 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
   const validationSchema = yup.object({
     recipientId: yup
       .string()
-      .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
-    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
+      .matches(dataRegex.pIvaAndFiscalCode, t('detail.communications.errors.tax-id')),
+    iunMatch: yup
+      .string()
+      .matches(INFORMAL_IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
   });
 
   // Pagination handlers
@@ -101,19 +109,24 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
       values: emptyFilters,
     });
 
+    dispatch(resetCommunicationsPagination());
     fetchCampaignCommunications(0, communicationsPagination.size, emptyFilters);
   };
 
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
+    const input = e.target as HTMLInputElement;
+    formik.setFieldError(input.name, undefined);
     // eslint-disable-next-line functional/immutable-data
-    (e.target as HTMLInputElement).value = trimmedValue;
-    await formik.setFieldValue((e.target as HTMLInputElement).id, trimmedValue, false);
+    input.value = trimmedValue;
+    await formik.setFieldValue(input.name, trimmedValue, false);
   };
 
   const handleChangeTouched = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.id === 'iunMatch') {
+    formik.setFieldError(e.target.name, undefined);
+
+    if (e.target.name === 'iunMatch') {
       const originalEvent = e.target;
       const cursorPosition = originalEvent.selectionStart || 0;
       const newInput = formatIun(originalEvent.value);
@@ -125,20 +138,31 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
           ? 1
           : 0);
 
-      await formik.setFieldValue('iunMatch', newInput);
-      await formik.setFieldTouched('iunMatch', true, false);
+      await formik.setFieldValue('iunMatch', newInput, false);
 
       originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
-      formik.handleChange(e);
-      await formik.setFieldTouched(e.target.id, true, false);
+      await formik.setFieldValue(e.target.name, e.target.value, false);
     }
+  };
+
+  const handleSubmitFilters = async (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+    const submitted = await formik.submitForm();
+    return submitted === true;
   };
 
   const renderCellContent = (
     row: Row<CampaignCommunicationRow>,
     columnId: keyof CampaignCommunicationRow
   ) => {
+    if (columnId === 'iun' && isMobile) {
+      return (
+        <Typography component="span" fontWeight={600}>
+          {row.iun ?? ''}
+        </Typography>
+      );
+    }
     if (columnId === 'notificationStatus') {
       return (
         <PnCommunicationStatusMIChip
@@ -150,21 +174,18 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
     if (columnId === 'communicationOutcomes') {
       return <PnCommunicationOutcomeTag outcomes={row.communicationOutcomes} />;
     }
-
-    if (columnId === 'action') {
-      return (
-        <MIButton
-          variant="text"
-          endIcon={<ArrowForward />}
-          onClick={() => navigate(routes.GET_DETTAGLIO_COMBO_PATH(campaignId, row.id))}
-        >
-          {t('button.open', { ns: 'common' })}
-        </MIButton>
-      );
-    }
-
     return String(row[columnId] ?? '');
   };
+
+  const renderActionButton = (row: Row<CampaignCommunicationRow>) => (
+    <MIButton
+      variant="text"
+      endIcon={<ArrowForward />}
+      onClick={() => navigate(routes.GET_DETTAGLIO_COMBO_PATH(campaignId, row.id))}
+    >
+      {t('button.open', { ns: 'common' })}
+    </MIButton>
+  );
 
   const campaignCommunications = useAppSelector(
     (state: RootState) => state.campaignState.campaignCommunications
@@ -182,8 +203,12 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
       outcome: communicationFilters.outcome,
     },
     validationSchema,
-    onSubmit: () => {
-      fetchCampaignCommunications(0, communicationsPagination.size, formik.values);
+    validateOnChange: false,
+    validateOnBlur: false,
+    onSubmit: (values) => {
+      dispatch(resetCommunicationsPagination());
+      fetchCampaignCommunications(0, communicationsPagination.size, values);
+      return Promise.resolve(true);
     },
   });
 
@@ -248,11 +273,7 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
   );
 
   return (
-    <Box sx={{ mt: 3 }} data-testid="campaignsList">
-      <Typography component="h2" variant="h6">
-        {t('detail.communications.title')}
-      </Typography>
-
+    <Box data-testid="campaignsList">
       <SmartTable
         data={data}
         conf={communicationsColumns}
@@ -260,18 +281,23 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
         slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
         emptyState={
           <EmptyErrorState
-            variant="empty"
+            variant="error"
             title={t('detail.communications.empty-title')}
             description={t('detail.communications.empty-description')}
+            action={{
+              label: t('detail.communications.remove-filters'),
+              onClick: handleClearFilters,
+            }}
           />
         }
       >
         <SmartFilter
           filterLabel={t('button.filtra', { ns: 'common' })}
           cancelLabel={t('button.annulla filtro', { ns: 'common' })}
-          onSubmit={formik.handleSubmit}
+          mobileFilterIcon={<FilterAltOutlinedIcon fontSize="small" />}
+          onSubmit={handleSubmitFilters}
           onClear={handleClearFilters}
-          formIsValid={formik.isValid}
+          formIsValid
           formValues={formik.values}
           initialValues={{
             recipientId: '',
@@ -300,22 +326,28 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
         </SmartHeader>
 
         <SmartBody>
-          {data.map((row, index) => (
-            <SmartBodyRow key={row.id} index={index} testId="campaignCommunicationsBodyRow">
-              {communicationsColumns.map((column) => (
-                <SmartBodyCell
-                  key={column.id.toString()}
-                  columnId={column.id}
-                  mode={column.mode}
-                  tableProps={column.tableConfiguration}
-                  cardProps={column.cardConfiguration}
-                  isCardHeader={column.cardConfiguration?.isCardHeader}
-                >
-                  {renderCellContent(row, column.id)}
-                </SmartBodyCell>
-              ))}
-            </SmartBodyRow>
-          ))}
+          {data.map((row, index) => {
+            const actionButton = renderActionButton(row);
+
+            return (
+              <SmartBodyRow key={row.id} index={index} testId="campaignCommunicationsBodyRow">
+                {communicationsColumns.map((column) => (
+                  <SmartBodyCell
+                    key={column.id.toString()}
+                    columnId={column.id}
+                    mode={column.mode}
+                    tableProps={column.tableConfiguration}
+                    cardProps={column.cardConfiguration}
+                    isCardHeader={column.cardConfiguration?.isCardHeader}
+                    hideInCard={column.id === 'action'}
+                  >
+                    {column.id === 'action' ? actionButton : renderCellContent(row, column.id)}
+                  </SmartBodyCell>
+                ))}
+                <SmartActions>{actionButton}</SmartActions>
+              </SmartBodyRow>
+            );
+          })}
         </SmartBody>
       </SmartTable>
       {data.length > 0 && (

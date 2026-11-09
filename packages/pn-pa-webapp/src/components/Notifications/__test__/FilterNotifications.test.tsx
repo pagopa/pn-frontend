@@ -17,6 +17,7 @@ import {
   waitFor,
   within,
 } from '../../../__test__/test-utils';
+import { comunicationsList } from '../../../__mocks__/CampaignDetail.mock';
 import FilterNotifications from '../FilterNotifications';
 
 const localizedNotificationStatus = getNotificationAllowedStatus();
@@ -237,6 +238,20 @@ describe('Filter Notifications Table Component', () => {
       expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form).toHaveTextContent('filters.errors.iun');
+  });
+
+  it('test form submission - iunMatch of an informal notification (invalid)', async () => {
+    await act(async () => {
+      result = render(<FilterNotifications showFilters />);
+    });
+    form = result.container.querySelector('form') as HTMLFormElement;
+    await testInput(form, 'iunMatch', comunicationsList.resultsPage![0].iun!);
+    const submitButton = form.querySelector(`button[type="submit"]`);
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(form).toHaveTextContent('filters.errors.iun');
+    });
+    expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
   });
 
   it('test invalid date range - end before start', async () => {

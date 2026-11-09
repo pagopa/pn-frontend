@@ -1,21 +1,25 @@
 {
   "detail": {
+    "breadcrumb-back": "Nazaj",
     "breadcrumb-root": "Kampanje",
-    "breadcrumb": {
-      "back": "Nazaj",
-      "campaigns": "Kampanje"
-    },
     "channels-label": "Izbrani kanali",
     "channels": {
       "ANALOG": "Poštna storitev",
-      "EMAIL": "E-pošta",
+      "EMAIL": "Email",
       "IO": "IO",
       "PEC": "PEC",
       "SMS": "SMS"
     },
     "communications": {
       "empty-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
+      "empty-state": {
+        "description": "Zavrnjena sporočila ali sporočila, ki so še v preverjanju, ne bodo prikazana.",
+        "title": "Tukaj boste videli sporočila kampanje."
+      },
       "empty-title": "Za izbrane filtre ni sporočil.",
+      "errors": {
+        "tax-id": "Vnesi veljavno davčno številko"
+      },
       "iun": "Koda IUN",
       "no-communications-description": "Ni sporočil, ki bi ustrezala izbranim filtrom.",
       "no-communications-title": "Na voljo ni nobenega sporočila",
@@ -42,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Naslov kampanje]",
       "generic-error": "Podrobnosti kampanje ni bilo mogoče pridobiti.",
+      "generic-error-comunications": "Seznama sporočil ni bilo mogoče pridobiti.",
       "generic-error-cta": "Poskusite znova"
     },
     "service-name": "Storitev",
@@ -53,6 +58,7 @@
       "documents": {
         "document-not-available": "Dokument še ni na voljo. Poskusite znova pozneje.",
         "download-message-available": "<0>Na spletu na voljo do 180 dni</0> od datuma sprejetja sporočila.",
+        "download-message-available-plural": "<0>Na spletu na voljo do 180 dni</0> od datuma sprejema obvestila.",
         "download-message-expired": "Dokumenti niso več na voljo na spletu.",
         "title": "Priloženi dokumenti"
       },
@@ -62,7 +68,7 @@
       "send-by-channel": {
         "channel": {
           "analog": "Poštna storitev",
-          "email": "E-pošta",
+          "email": "Email",
           "io": "IO",
           "pec": "PEC",
           "send": "SEND",
@@ -115,7 +121,7 @@
       },
       "completed": {
         "description": "Sporočilo je bilo poslano na izbrane kanale.",
-        "label": "Uspešno poslano"
+        "label": "Pošiljanje končano"
       },
       "processing": {
         "description": "Sporočilo bo poskušalo doseči prejemnika na izbranih kanalih.",

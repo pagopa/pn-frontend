@@ -51,6 +51,11 @@ const campaignSlice = createSlice({
       state.communicationFilters = initialCommunicationFilters;
       state.communicationsPagination = initialCommunicationsPagination;
     },
+    resetCommunicationsPagination: (state) => {
+      state.communicationsPagination.page = 0;
+      state.communicationsPagination.nextPagesKey = [];
+      state.communicationsPagination.moreResult = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getCampaigns.fulfilled, (state, action) => {
@@ -114,6 +119,7 @@ const campaignSlice = createSlice({
   },
 });
 
-export const { resetCampaignDetail, resetCampaignCommunications } = campaignSlice.actions;
+export const { resetCampaignDetail, resetCampaignCommunications, resetCommunicationsPagination } =
+  campaignSlice.actions;
 
 export default campaignSlice;

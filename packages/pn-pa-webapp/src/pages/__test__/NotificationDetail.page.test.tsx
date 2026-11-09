@@ -86,7 +86,7 @@ describe('NotificationDetail Page', () => {
 
     expect(recipientDetail).not.toBeNull();
     expect(recipientDetail).toHaveTextContent(
-      `${notificationDTO.recipients[0].denomination} - ${notificationDTO.recipients[0].taxId}`
+      `${notificationDTO.recipients[0].denomination} (${notificationDTO.recipients[0].taxId})`
     );
     expect(within(recipientDetail!).queryByRole('list')).not.toBeInTheDocument();
 
@@ -113,7 +113,7 @@ describe('NotificationDetail Page', () => {
 
     expect(drawerRecipientDetail).not.toBeNull();
     expect(drawerRecipientDetail).toHaveTextContent(
-      `${notificationDTO.recipients[0].denomination} - ${notificationDTO.recipients[0].taxId}`
+      `${notificationDTO.recipients[0].denomination} (${notificationDTO.recipients[0].taxId})`
     );
     expect(within(drawerRecipientDetail!).queryByRole('list')).not.toBeInTheDocument();
 
@@ -511,7 +511,7 @@ describe('NotificationDetail Page', () => {
 
     notificationDTOMultiRecipient.recipients.forEach((recipient, index) => {
       expect(recipientItems[index]).toHaveTextContent(
-        `${recipient.denomination} - ${recipient.taxId}`
+        `${recipient.denomination} (${recipient.taxId})`
       );
     });
     // check payment history box

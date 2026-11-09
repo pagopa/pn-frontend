@@ -87,6 +87,9 @@ export const getCampaignDetail = createAsyncThunk<BffCampaignDetailResponseV1, s
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
+  },
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
   }
 );
 
@@ -120,5 +123,8 @@ export const getCampaignCommunications = createAsyncThunk(
     } catch (e) {
       return rejectWithValue(parseError(e));
     }
+  },
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
   }
 );

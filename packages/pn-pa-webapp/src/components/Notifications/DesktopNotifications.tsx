@@ -73,7 +73,7 @@ const DesktopNotifications = ({
       id: 'subject',
       label: t('table.subject'),
       mode: 'truncate',
-      cellProps: { width: '24%' },
+      cellProps: { width: '18%' },
     },
     {
       id: 'iun',
@@ -87,6 +87,11 @@ const DesktopNotifications = ({
           },
         },
       },
+    },
+    {
+      id: 'group',
+      label: t('table.groups'),
+      cellProps: { width: '6%' },
     },
     {
       id: 'notificationStatus',

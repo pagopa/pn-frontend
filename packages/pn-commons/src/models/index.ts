@@ -33,6 +33,7 @@ export type {
 export type {
   AnalogDetails,
   AnalogWorkflowDetails,
+  DelegateInfo,
   ExtRegistriesPaymentDetails,
   F24PaymentDetails,
   INotificationDetailTimeline,
@@ -49,6 +50,7 @@ export type {
   NotificationDocumentResponse,
   NotificationPayment,
   NotificationStatusHistory,
+  NotificationViewedDetails,
   PagoPAPaymentFullDetails,
   PaidDetails,
   PaymentAttachment,
@@ -119,4 +121,4 @@ export type {
   NotificationTimelineStatusHistory,
   NotificationPaymentTimeline,
 } from './NotificationTimeline';
-export { basicNoLoggedUserData } from './User';
+export { basicNoLoggedUserData, InstitutionType } from './User';

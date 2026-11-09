@@ -145,14 +145,12 @@ export class SendAnalogFlowStep extends TimelineStep {
       SEND_ANALOG_FLOW_NEW_ATTACHMENT_DETAIL_CODES.includes(deliveryDetailCode) &&
       !(attachments && attachments.length > 0);
 
-    const multiRecipientSuffix = payload.isMultiRecipient ? '-multirecipient' : '';
-
     // eslint-disable-next-line functional/no-let
     let description = '';
     if (!hideDescriptionNewAttachment) {
-      description = getLocalizedOrDefaultLabel(
-        'notifications',
-        `detail.timeline.send-analog-flow-${deliveryDetailCode}-description${multiRecipientSuffix}`,
+      description = this.localizeDescription(
+        `detail.timeline.send-analog-flow-${deliveryDetailCode}-description`,
+        payload.isMultiRecipient,
         '',
         {
           ...this.nameAndTaxId(payload),
@@ -160,7 +158,8 @@ export class SendAnalogFlowStep extends TimelineStep {
           registeredLetterKind: registeredLetterKindText,
           deliveryFailureCause: deliveryFailureCauseText,
           registeredLetterNumber,
-        }
+        },
+        payload.delegatorName
       );
     }
 

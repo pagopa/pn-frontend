@@ -226,4 +226,40 @@ describe('SendAnalogFlowStep', () => {
       label: sendAnalogFlowStep.getTimelineStepLabel(payload),
     });
   });
+
+  it('getTimelineStepInfo SEND_ANALOG_PROGRESS - delegate view', () => {
+    const sendAnalogFlowStep = new SendAnalogFlowStep();
+    timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_PROGRESS, {
+      deliveryDetailCode: 'CON080',
+      sendRequestId: 'SEND_ANALOG_DOMICILE_0',
+    });
+    const delegatePayload: TimelineStepPayload = {
+      ...payload,
+      step: timelineElem,
+      allStepsForThisStatus: [],
+      isMultiRecipient: true,
+      delegatorName: 'Mario Cucumber',
+    };
+    const data = {
+      ...sendAnalogFlowStep.nameAndTaxId(delegatePayload),
+      registeredLetterKind: '',
+      deliveryFailureCause: '',
+      registeredLetterNumber: '',
+    };
+    initLocalizationExists(
+      (_namespace, path) => path === 'detail.timeline.send-analog-flow-CON080-description-delegate'
+    );
+    expect(sendAnalogFlowStep.getTimelineStepInfo(delegatePayload)?.description).toBe(
+      `notifiche - detail.timeline.send-analog-flow-CON080-description-delegate - ${JSON.stringify({
+        ...data,
+        recipient: 'Mario Cucumber',
+      })}`
+    );
+
+    initLocalizationExists(() => false);
+    expect(sendAnalogFlowStep.getTimelineStepInfo(delegatePayload)).toStrictEqual(
+      sendAnalogFlowStep.getTimelineStepInfo({ ...delegatePayload, delegatorName: undefined })
+    );
+    initLocalizationForTest();
+  });
 });

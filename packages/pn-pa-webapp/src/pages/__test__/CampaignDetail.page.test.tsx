@@ -9,6 +9,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { campaignDetailMock, comunicationsList } from '../../__mocks__/CampaignDetail.mock';
+import { notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import CampaignDetail from '../CampaignDetail.page';
@@ -19,6 +20,9 @@ describe('CampaignDetail Page', () => {
 
   const startParam = encodeURIComponent(formatToTimezoneString(tenYearsAgo));
   const endParam = encodeURIComponent(formatToTimezoneString(today));
+
+  const informalIun = comunicationsList.resultsPage![0].iun!;
+  const legalIun = notificationsDTO.resultsPage[0].iun;
 
   const comunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=10`;
 
@@ -67,6 +71,49 @@ describe('CampaignDetail Page', () => {
       `/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`
     );
     expect(mock.history.get[1].url).toBe(comunicationsListPath);
+  });
+
+  it('shows campaign detail while communications are still loading, without global loading', async () => {
+    let resolveCommunications: (value: [number, typeof comunicationsList]) => void = () => {};
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+
+    mock.onGet(comunicationsListPath).reply(
+      () =>
+        new Promise((resolve) => {
+          resolveCommunications = resolve;
+        })
+    );
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+      });
+    });
+
+    await waitFor(() => {
+      expect(
+        result.getByRole('heading', {
+          name: campaignDetailMock.title,
+        })
+      ).toBeInTheDocument();
+    });
+
+    expect(result.getByTestId('campaignCommunicationsLoading')).toBeInTheDocument();
+    expect(result.queryByTestId('campaignsList')).not.toBeInTheDocument();
+    expect(result.testStore.getState().appState.loading.result).toBe(false);
+
+    await act(async () => {
+      resolveCommunications([200, comunicationsList]);
+    });
+
+    await waitFor(() => {
+      expect(result.getByTestId('campaignsList')).toBeInTheDocument();
+    });
+    expect(result.queryByTestId('campaignCommunicationsLoading')).not.toBeInTheDocument();
   });
 
   it('renders api error when campaign detail request fails', async () => {
@@ -233,7 +280,7 @@ describe('CampaignDetail Page', () => {
       campaignCommunications: {},
       communicationFilters: {
         recipientId: '',
-        iunMatch: 'ABCD-EFGH-IJKL-123456-M-1',
+        iunMatch: informalIun,
         status: [],
         outcome: '',
       },
@@ -266,7 +313,7 @@ describe('CampaignDetail Page', () => {
   });
 
   it('keeps communications filters and pagination when coming back to the same campaign', async () => {
-    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20&nextPagesKey=key-1`;
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=${informalIun}&size=20&nextPagesKey=key-1`;
 
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
@@ -285,5 +332,252 @@ describe('CampaignDetail Page', () => {
       expect(mock.history.get).toHaveLength(2);
     });
     expect(mock.history.get[1].url).toBe(filteredComunicationsListPath);
+  });
+
+  it('shows communications filters when applied filters return no results', async () => {
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=${informalIun}&size=20&nextPagesKey=key-1`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock
+      .onGet(filteredComunicationsListPath)
+      .reply(200, { resultsPage: [], moreResult: false, nextPagesKey: [] });
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: filteredState(campaignDetailMock.campaignId),
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.getByTestId('campaignsList')).toBeInTheDocument();
+    });
+    expect(
+      result.queryByText('detail.communications.no-communications-title')
+    ).not.toBeInTheDocument();
+  });
+
+  it('resets communications pagination when applying filters', async () => {
+    const paginatedState = {
+      campaignState: {
+        campaigns: [],
+        campaignDetail: {},
+        communicationsCampaignId: campaignDetailMock.campaignId,
+        campaignCommunications: comunicationsList,
+        communicationFilters: {
+          recipientId: '',
+          iunMatch: '',
+          status: [],
+          outcome: '',
+        },
+        pagination: { nextPagesKey: [], size: 10, page: 0, moreResult: false },
+        communicationsPagination: {
+          nextPagesKey: ['key-1'],
+          size: 10,
+          page: 0,
+          moreResult: true,
+        },
+      },
+    };
+
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=${informalIun}&size=10`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+
+    mock.onGet(comunicationsListPath).reply(200, comunicationsList);
+
+    mock.onGet(filteredComunicationsListPath).reply(200, {
+      resultsPage: comunicationsList.resultsPage?.slice(0, 2) ?? [],
+      moreResult: false,
+      nextPagesKey: [],
+    });
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: paginatedState,
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
+
+    fireEvent.change(result.getByLabelText('detail.communications.iun'), {
+      target: { value: informalIun },
+    });
+
+    fireEvent.click(
+      result.getByRole('button', {
+        name: 'button.filtra',
+      })
+    );
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+    });
+
+    expect(mock.history.get[2].url).toBe(filteredComunicationsListPath);
+
+    expect(result.testStore.getState().campaignState.communicationsPagination).toEqual({
+      nextPagesKey: [],
+      size: 10,
+      page: 0,
+      moreResult: false,
+    });
+
+    expect(result.container.querySelector('#page2')).not.toBeInTheDocument();
+  });
+
+  it('filters delivered communications excluding viewed ones', async () => {
+    const deliveredCommunicationsListPath =
+      `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent` +
+      `?startDate=${startParam}&endDate=${endParam}&viewed=false&delivered=true&size=10`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+
+    mock.onGet(comunicationsListPath).reply(200, comunicationsList);
+
+    mock.onGet(deliveredCommunicationsListPath).reply(200, {
+      resultsPage: comunicationsList.resultsPage?.filter(
+        (communication) =>
+          communication.communicationOutcomes?.delivered &&
+          !communication.communicationOutcomes?.viewed
+      ),
+      moreResult: false,
+      nextPagesKey: [],
+    });
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.getByTestId('campaignsList')).toBeInTheDocument();
+    });
+
+    fireEvent.mouseDown(
+      result.getByTestId('communicationOutcome').querySelector('[role="combobox"]')!
+    );
+
+    const deliveredOption = await result.findByRole('option', {
+      name: 'detail.communications.outcomes.delivered',
+    });
+
+    fireEvent.click(deliveredOption);
+
+    fireEvent.click(
+      result.getByRole('button', {
+        name: 'button.filtra',
+      })
+    );
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+    });
+
+    expect(mock.history.get[2].url).toBe(deliveredCommunicationsListPath);
+  });
+
+  it('shows communications filters errors only after submit and does not apply invalid filters', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock.onGet(comunicationsListPath).reply(200, comunicationsList);
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
+
+    const filterButton = result.getByRole('button', { name: 'button.filtra' });
+    expect(filterButton).toBeDisabled();
+
+    const recipientIdInput = result.getByLabelText('detail.communications.tax-id');
+    const iunInput = result.getByLabelText('detail.communications.iun');
+    fireEvent.change(recipientIdInput, { target: { value: 'A' } });
+    fireEvent.change(iunInput, { target: { value: legalIun } });
+
+    // filter button is enabled even if values are not valid and errors are not shown yet
+    await waitFor(() => {
+      expect(filterButton).toBeEnabled();
+    });
+    expect(result.queryByText('detail.communications.errors.tax-id')).not.toBeInTheDocument();
+    expect(result.queryByText('filters.errors.iun')).not.toBeInTheDocument();
+
+    fireEvent.click(filterButton);
+
+    await waitFor(() => {
+      expect(result.getByText('detail.communications.errors.tax-id')).toBeInTheDocument();
+      expect(result.getByText('filters.errors.iun')).toBeInTheDocument();
+    });
+    expect(mock.history.get).toHaveLength(2);
+    expect(filterButton).toBeEnabled();
+    expect(result.getByRole('button', { name: 'button.annulla filtro' })).toBeDisabled();
+
+    // editing a field hides its error
+    fireEvent.change(recipientIdInput, { target: { value: 'AB' } });
+    await waitFor(() => {
+      expect(result.queryByText('detail.communications.errors.tax-id')).not.toBeInTheDocument();
+    });
+    expect(result.getByText('filters.errors.iun')).toBeInTheDocument();
+
+    // pasting a value hides the field error too
+    fireEvent.paste(iunInput, { clipboardData: { getData: () => ` ${informalIun} ` } });
+    await waitFor(() => {
+      expect(result.queryByText('filters.errors.iun')).not.toBeInTheDocument();
+    });
+    expect(iunInput).toHaveValue(informalIun);
+  });
+
+  it('removes communications filters from the empty state', async () => {
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=${informalIun}&size=20&nextPagesKey=key-1`;
+    const unfilteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=20`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock
+      .onGet(filteredComunicationsListPath)
+      .reply(200, { resultsPage: [], moreResult: false, nextPagesKey: [] });
+    mock.onGet(unfilteredComunicationsListPath).reply(200, comunicationsList);
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: filteredState(campaignDetailMock.campaignId),
+      });
+    });
+
+    const removeFiltersButton = await waitFor(() =>
+      result.getByRole('button', { name: 'detail.communications.remove-filters' })
+    );
+
+    fireEvent.click(removeFiltersButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+    });
+    expect(mock.history.get[2].url).toBe(unfilteredComunicationsListPath);
+    expect(result.getByLabelText('detail.communications.iun')).toHaveValue('');
+    expect(result.getByTestId('cancelButton')).toBeDisabled();
   });
 });

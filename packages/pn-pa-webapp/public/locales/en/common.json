@@ -6,6 +6,7 @@
   "autocomplete": {
     "clear": "Remove selected options",
     "delete-selection": "Remove %s",
+    "no-results": "No matches to display",
     "selection-box": "Selected options",
     "selection-done": "%s selected",
     "toggle-close": "Close option selection menu",
@@ -51,6 +52,10 @@
     },
     "today-uppercase-initial": "Today"
   },
+  "downtime_language_banner": {
+    "link": "Consult the translations",
+    "message": "The original text of these documents is in Italian. In case of conflict between the Italian version and the translations into other languages, the meaning and conditions of the Italian language shall prevail."
+  },
   "error-boundary": {
     "action": "Reload the page",
     "description": "We were unable to load the page. Reload it, or try again later.",
@@ -70,7 +75,7 @@
     "follow": "Follow us on",
     "go-to": "Go to link",
     "go-to-pagopa": "Go to the website of PagoPA S.p.A.",
-    "legal-part-1": "joint stock company with sole shareholder – share capital of € 1,000,000 fully paid up – registered office in Rome, Piazza Colonna 370",
+    "legal-part-1": "joint stock company – share capital of € 1,000,000 fully paid up – registered office in Rome, Piazza Colonna 370",
     "legal-part-2": "ZIP CODE 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009",
     "personal-data": "Right to the protection of personal data",
     "privacy-info": "Privacy Policy",
@@ -86,16 +91,23 @@
     "assistance": "Assistance",
     "login": "Login",
     "logout": "Exit",
+    "logout-message": "Are you sure you want to exit the Reserved Area?",
     "notification-platform": "SEND - Servizio Notifiche Digitali",
     "pago-pa-link": "PagoPA S.p.A. website",
     "reserved-area": "Reserved Area",
     "support": "Support"
+  },
+  "inactivity": {
+    "action": "Stay logged in",
+    "body": "Log out in progress. If you change your mind, press “Stay logged in” within a few seconds.",
+    "title": "Do you really want to exit SEND?"
   },
   "invalid": "invalid",
   "leaving-app": {
     "message": "You will be redirected",
     "title": "You are exiting SEND"
   },
+  "loading": "Loading in progress",
   "menu": {
     "api-key": "API Key",
     "app-status": "Platform status",
@@ -135,6 +147,7 @@
   },
   "not-available": "Not available",
   "not-found": {
+    "back-to-home": "Back to home",
     "description": "You are here by mistake, try using navigation.",
     "title": "404: The page you are looking for does not exist"
   },
@@ -181,5 +194,10 @@
     "or": "or",
     "select-file": "upload the file",
     "sending": "Loading..."
+  },
+  "user-validation-failed": {
+    "cta": "Contact support",
+    "description": "One or more details associated with your account are invalid, contact support to resolve the problem.",
+    "title": "The entered data is invalid"
   }
 }

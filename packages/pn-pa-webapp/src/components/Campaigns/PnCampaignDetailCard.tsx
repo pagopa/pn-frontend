@@ -22,7 +22,7 @@ const PnCampaignDetailCard = ({
   return (
     <MIPaper padding={24}>
       <Grid container columnSpacing={3}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} order={{ xs: 1, md: 1 }}>
           <Stack>
             <Typography variant="body2" color="text.secondary">
               {t('detail.creation-date')}
@@ -32,7 +32,24 @@ const PnCampaignDetailCard = ({
             </Typography>
 
             <Divider sx={{ my: 2 }} />
+          </Stack>
+        </Grid>
 
+        <Grid item xs={12} md={6} order={{ xs: 2, md: 2 }}>
+          <Stack>
+            <Typography variant="body2" color="text.secondary">
+              {t('list.id')}
+            </Typography>
+            <Typography variant="body1" fontWeight={600}>
+              {campaignId}
+            </Typography>
+
+            <Divider sx={{ my: 2 }} />
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={6} order={{ xs: 3, md: 3 }}>
+          <Stack>
             <Typography variant="body2" color="text.secondary">
               {t('detail.service-name')}
             </Typography>
@@ -44,17 +61,8 @@ const PnCampaignDetailCard = ({
           </Stack>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} order={{ xs: 4, md: 4 }}>
           <Stack>
-            <Typography variant="body2" color="text.secondary">
-              {t('list.id')}
-            </Typography>
-            <Typography variant="body1" fontWeight={600}>
-              {campaignId}
-            </Typography>
-
-            <Divider sx={{ my: 2 }} />
-
             <Typography variant="body2" color="text.secondary">
               {t('detail.channels-label')}
             </Typography>

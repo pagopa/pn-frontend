@@ -6,6 +6,7 @@
   "autocomplete": {
     "clear": "Supprimer les options sélectionnées",
     "delete-selection": "Supprime %s",
+    "no-results": "Aucune correspondance à afficher",
     "selection-box": "Options sélectionnées",
     "selection-done": "%s sélectionnés",
     "toggle-close": "Ferme le menu de sélection",
@@ -51,6 +52,10 @@
     },
     "today-uppercase-initial": "Aujourd’hui"
   },
+  "downtime_language_banner": {
+    "link": "Consulter les traductions",
+    "message": "Le texte original de ces documents est en italien. En cas de différences entre la version italienne et ses traductions, le sens et les conditions de la langue italienne feront foi."
+  },
   "error-boundary": {
     "action": "Recharger la page",
     "description": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",
@@ -70,7 +75,7 @@
     "follow": "Suis-nous sur",
     "go-to": "Cliquer sur le lien",
     "go-to-pagopa": "Lien : aller sur le site de PagoPA S.p.A.",
-    "legal-part-1": "société anonyme à associé unique – capital social de 1 000 000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
+    "legal-part-1": "société anonyme – capital social de 1,000,000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
     "legal-part-2": "Code postal 00187 – N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009",
     "personal-data": "Droit à la protection des données personnelles",
     "privacy-info": "Charte de confidentialité",
@@ -86,16 +91,23 @@
     "assistance": "Assistance",
     "login": "Se connecter",
     "logout": "Sortir",
+    "logout-message": "Confirmes-tu vouloir quitter l'Espace réservé ?",
     "notification-platform": "SEND - Servizio Notifiche Digitali",
     "pago-pa-link": "Site de PagoPA S.p.A.",
     "reserved-area": "Espace réservé",
     "support": "Assistance"
+  },
+  "inactivity": {
+    "action": "Rester connecté",
+    "body": "Déconnexion en cours. Si tu as changé d'avis, appuie sur « Rester connecté » d'ici quelques secondes.",
+    "title": "Veux-tu vraiment quitter SEND ?"
   },
   "invalid": "Non valide",
   "leaving-app": {
     "message": "Vous serez redirigé(e)",
     "title": "Vous quittez SEND"
   },
+  "loading": "Chargement en cours",
   "menu": {
     "api-key": "API Key",
     "app-status": "État de la plateforme",
@@ -135,6 +147,7 @@
   },
   "not-available": "Non disponible",
   "not-found": {
+    "back-to-home": "Retour à l'accueil",
     "description": "Vous êtes ici par erreur, essayez d’utiliser la navigation.",
     "title": "404 : la page que vous cherchez n’existe pas"
   },
@@ -181,5 +194,10 @@
     "or": "ou",
     "select-file": "Charger un document",
     "sending": "Envoi en cours..."
+  },
+  "user-validation-failed": {
+    "cta": "Contacte l'assistance",
+    "description": "Une ou plusieurs données associées à ton compte ne sont pas valides, contacte l'assistance pour résoudre le problème.",
+    "title": "Les données saisies ne sont pas valides"
   }
 }

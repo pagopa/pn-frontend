@@ -3,7 +3,9 @@ import { vi } from 'vitest';
 import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimeline.mock';
 import { NotificationStatus } from '../../../../models';
 import {
+  DigitalDomicileType,
   LegalFactType,
+  NotificationDeliveryMode,
   NotificationDetailRecipient,
   RecipientType,
   ReworkedStatus,
@@ -14,8 +16,9 @@ import {
   NotificationTimelineStatusHistory,
   NotificationTimelineStep,
 } from '../../../../models/NotificationTimeline';
-import { createMatchMedia, fireEvent, render, within } from '../../../../test-utils';
+import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../../test-utils';
 import NotificationEventsTimeline from '../NotificationEventsTimeline';
+import { PERFECTION_ANCHORS } from '../timelineItem.config';
 
 const multiRecipients: Array<NotificationDetailRecipient> = [
   {
@@ -90,6 +93,39 @@ const orderedTestIds = (container: HTMLElement, testIds: Array<string>) =>
     container.querySelectorAll(testIds.map((testId) => `[data-testid="${testId}"]`).join(', '))
   ).map((el) => el.getAttribute('data-testid'));
 
+const deliveredStatus = (
+  deliveryMode: NotificationDeliveryMode,
+  digitalDomicileType?: DigitalDomicileType
+): NotificationTimelineStatusHistory => ({
+  status: NotificationStatus.DELIVERED,
+  activeFrom: '2026-09-23T10:30:00Z',
+  deliveryMode,
+  steps:
+    deliveryMode === NotificationDeliveryMode.DIGITAL && digitalDomicileType
+      ? [
+          {
+            stepType: 'EVENT',
+            event: {
+              elementId: 'DIGITAL_SUCCESS_WORKFLOW.RECINDEX_0',
+              timestamp: '2026-09-23T10:30:00Z',
+              category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+              details: {
+                recIndex: 0,
+                digitalAddress: {
+                  address: 'test-address',
+                  type: digitalDomicileType,
+                },
+              },
+              legalFactsIds: [],
+              isHidden: true,
+            },
+          },
+        ]
+      : [],
+});
+
+const perfectionLink = 'https://fake.perfezionamento.it/perfezionamento';
+
 describe('NotificationEventsTimeline', () => {
   const recipients = notificationTimelineDTO.recipients;
   const statusHistory = notificationTimelineDTO.notificationStatusHistory;
@@ -143,6 +179,74 @@ describe('NotificationEventsTimeline', () => {
     expect(container).toHaveTextContent('status.reworked-status-not-valid');
   });
 
+  it.each([true, false])(
+    'does not render the description of the DELIVERING status with new copy %s',
+    (isNewTimelineCopyEnabled) => {
+      const { container } = render(
+        <NotificationEventsTimeline
+          recipients={[]}
+          statusHistory={[
+            {
+              status: NotificationStatus.DELIVERING,
+              activeFrom: '2023-01-02T00:00:00Z',
+              steps: [],
+            },
+            {
+              status: NotificationStatus.ACCEPTED,
+              activeFrom: '2023-01-01T00:00:00Z',
+              steps: [],
+            },
+          ]}
+          clickHandler={clickHandler}
+          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+        />
+      );
+      expect(container).toHaveTextContent('status.delivering');
+      expect(container).not.toHaveTextContent('status.delivering-description');
+      expect(container).toHaveTextContent('status.accepted-description');
+    }
+  );
+
+  it.each([
+    [DigitalDomicileType.PEC, PERFECTION_ANCHORS.PEC],
+    [DigitalDomicileType.SERCQ, PERFECTION_ANCHORS.SEND],
+  ])(
+    'adds the correct perfection anchor for digital delivery type %s',
+    (digitalDomicileType, anchor) => {
+      const { getAllByTestId } = render(
+        <NotificationEventsTimeline
+          recipients={recipients}
+          statusHistory={[deliveredStatus(NotificationDeliveryMode.DIGITAL, digitalDomicileType)]}
+          clickHandler={clickHandler}
+          isNewTimelineCopyEnabled
+          perfectionLink={perfectionLink}
+        />
+      );
+
+      expect(getAllByTestId('perfection-link')[0]).toHaveAttribute(
+        'href',
+        `${perfectionLink}${anchor}`
+      );
+    }
+  );
+
+  it('adds the registered letter anchor to the perfection link for analog delivery', () => {
+    const { getByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={[deliveredStatus(NotificationDeliveryMode.ANALOG)]}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        perfectionLink={perfectionLink}
+      />
+    );
+
+    expect(getByTestId('perfection-link')).toHaveAttribute(
+      'href',
+      `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`
+    );
+  });
+
   it('renders a group for each grouped step, divided one from the other', () => {
     const { getAllByTestId } = render(
       <NotificationEventsTimeline
@@ -172,6 +276,77 @@ describe('NotificationEventsTimeline', () => {
     const groupBody = within(firstGroup).getByTestId('timeline-group-body');
 
     expect(within(groupBody).getAllByTestId('timeline-event')).toHaveLength(2);
+  });
+
+  it('expands and collapses all the groups of the delivering status with the expand all button', async () => {
+    const { getByTestId, getAllByTestId, queryAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={multiRecipientStatusHistory}
+        clickHandler={clickHandler}
+      />
+    );
+    const expandAllButton = getByTestId('timeline-expand-all');
+
+    fireEvent.click(expandAllButton);
+    expect(getAllByTestId('timeline-group-body')).toHaveLength(3);
+
+    fireEvent.click(expandAllButton);
+    await waitFor(() => expect(queryAllByTestId('timeline-group-body')).toHaveLength(0));
+  });
+
+  it('expands a group only in its own status when the same group is shown in more than one status', () => {
+    const sharedGroup = groupOfRecipient('shared-group', multiRecipients[0], 0);
+    const { getAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[
+          {
+            status: NotificationStatus.EFFECTIVE_DATE,
+            activeFrom: '2026-08-08T09:14:58.508308Z',
+            steps: [{ stepType: 'GROUP', group: sharedGroup }],
+          },
+          {
+            status: NotificationStatus.DELIVERING,
+            activeFrom: '2026-08-06T09:14:58.508308Z',
+            steps: [{ stepType: 'GROUP', group: sharedGroup }],
+          },
+        ]}
+        clickHandler={clickHandler}
+      />
+    );
+
+    const [effectiveDateGroup, deliveringGroup] = getAllByTestId('timeline-group');
+    fireEvent.click(within(deliveringGroup).getByTestId('timeline-group-header'));
+
+    expect(within(deliveringGroup).getByTestId('timeline-group-body')).toBeInTheDocument();
+    expect(within(effectiveDateGroup).queryByTestId('timeline-group-body')).toBeNull();
+  });
+
+  it('does not show the expand all button when the status is not delivering', () => {
+    const { queryByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[deliveredStatus(NotificationDeliveryMode.ANALOG)]}
+        clickHandler={clickHandler}
+      />
+    );
+
+    expect(queryByTestId('timeline-expand-all')).not.toBeInTheDocument();
+  });
+
+  it('does not show the expand all button when the delivering status has a single group', () => {
+    const [singleGroupStep] = multiRecipientStatusHistory[0].steps;
+    const { getAllByTestId, queryByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[{ ...multiRecipientStatusHistory[0], steps: [singleGroupStep] }]}
+        clickHandler={clickHandler}
+      />
+    );
+
+    expect(getAllByTestId('timeline-group')).toHaveLength(1);
+    expect(queryByTestId('timeline-expand-all')).not.toBeInTheDocument();
   });
 
   it('shows the recipient before the groups only when it changes, on multi-recipient notifications', () => {

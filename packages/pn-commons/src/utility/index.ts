@@ -48,7 +48,7 @@ export { waitForElement } from './dom.utility';
 export { APP_VERSION, IS_DEVELOP } from './environment.utility';
 export { calcUnit8Array } from './file.utility';
 export { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
-export { formatIun, IUN_regex } from './iun.utility';
+export { formatIun, INFORMAL_IUN_regex, IUN_regex, LEGAL_IUN_regex } from './iun.utility';
 export { lazyRetry } from './lazyRetry.utility';
 export { initLocalization, initLocalizationExists } from './localization.utility';
 export {

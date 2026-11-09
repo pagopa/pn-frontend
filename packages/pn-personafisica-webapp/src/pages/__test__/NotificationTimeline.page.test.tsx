@@ -4,18 +4,21 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
+  AppResponsePublisher,
   Configuration,
   NotificationDetail as NotificationDetailModel,
   ResponseEventDispatcher,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
+import notifications from '../../../public/locales/it/notifiche.json';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { NotificationTimelineResponse } from '../../__mocks__/NotificationTimeline.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
+import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import { PfConfiguration } from '../../services/configuration.service';
 import NotificationTimeline from '../NotificationTimeline.page';
 
@@ -37,6 +40,16 @@ vi.mock('../../services/configuration.service', async () => {
       IS_NEW_TIMELINE_COPY_ENABLED: mockIsNewTimelineCopyEnabledGetter() ?? false,
     }),
   };
+});
+
+describe('PEC timeline translations', () => {
+  it.each([
+    'pec-address-source-general',
+    'pec-address-source-special',
+    'pec-address-source-platform',
+  ])('has the %s key in the base translations', (key) => {
+    expect(Object.prototype.hasOwnProperty.call(notifications.detail.timeline, key)).toBe(true);
+  });
 });
 
 describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
@@ -285,8 +298,13 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
     fireEvent.click(senderAckButton);
 
-    const warning = await waitFor(() => result.getByTestId('snackBarContainer'));
-    expect(warning).toHaveTextContent('detail.document-unavailable');
+    const warning = await waitFor(() =>
+      result.getByRole('alert', {
+        name: 'detail.timeline.warnings.document-canceled',
+      })
+    );
+    expect(warning).toHaveTextContent('detail.timeline.warnings.document-canceled');
+    expect(result.queryByTestId('snackBarContainer')).not.toBeInTheDocument();
     expect(mock.history.get).toHaveLength(1);
 
     fireEvent.click(cancelledButton);
@@ -299,6 +317,134 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     await waitFor(() => {
       expect(globalThis.location.href).toBe('https://mocked-cancelled-url.com');
     });
+  });
+
+  it('unavailable legal fact with new copy - shows a warning', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(true);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'PN_DELIVERYPUSH_FILE_GONE',
+            showTechnicalData: true,
+            message: {
+              title: '',
+              content: '',
+            },
+          },
+        ],
+      });
+    });
+
+    const warning = await waitFor(() =>
+      result.getByRole('alert', {
+        name: 'detail.timeline.warnings.document-unavailable',
+      })
+    );
+
+    expect(warning).toHaveTextContent('detail.timeline.warnings.document-unavailable');
+    expect(result.queryByTestId('snackBarContainer')).not.toBeInTheDocument();
+    expect(warning).not.toHaveTextContent('PN_DELIVERYPUSH_FILE_GONE');
+  });
+
+  it('does not show the document unavailable warning for an unrelated error', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(true);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'OTHER_DOCUMENT_ERROR',
+            showTechnicalData: true,
+            message: { title: '', content: '' },
+          },
+        ],
+      });
+    });
+
+    expect(
+      result.queryByText('detail.timeline.warnings.document-unavailable')
+    ).not.toBeInTheDocument();
+
+    expect(result.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('does not show the document unavailable warning when new copy is disabled', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(false);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'PN_DELIVERYPUSH_FILE_GONE',
+            showTechnicalData: true,
+            message: { title: '', content: '' },
+          },
+        ],
+      });
+    });
+
+    expect(
+      result.queryByText('detail.timeline.warnings.document-unavailable')
+    ).not.toBeInTheDocument();
   });
 
   it('cancelled notification without new copy - disables the legal facts other than the cancellation', async () => {

@@ -214,7 +214,7 @@ const NotificationDetail = () => {
     PGEventStrategyFactory.triggerEvent(
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
       {
-        notificationType: 'LEGAL',
+        notificationType: NotificationCommunicationType.LEGAL,
         documentType: isObject(document)
           ? NotificationDocumentType.AAR
           : NotificationDocumentType.ATTACHMENT,
@@ -254,7 +254,7 @@ const NotificationDetail = () => {
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
     PGEventStrategyFactory.triggerEvent(
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
-      { notificationType: 'LEGAL', documentType: name },
+      { notificationType: NotificationCommunicationType.LEGAL, documentType: name },
       { sendImmediately: true }
     );
 
@@ -399,7 +399,7 @@ const NotificationDetail = () => {
   useEffect(() => {
     if (downtimesReady && pageReady && !hasNotificationReceivedApiError && paymentsReady) {
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
-        notificationType: 'LEGAL',
+        notificationType: NotificationCommunicationType.LEGAL,
         downtimeEvents,
         mandateId,
         notificationStatus: notification.notificationStatus,
@@ -574,6 +574,8 @@ const NotificationDetail = () => {
                   iun={notification.iun}
                   abstract={notification.abstract}
                   selfcareCdnUrl={SELFCARE_CDN_URL}
+                  isDelegate={!!mandateId}
+                  recipient={currentRecipient}
                 />
                 {banner}
                 {pecUnreachableAlert}
@@ -657,8 +659,6 @@ const NotificationDetail = () => {
                 />
               )}
               <NotificationDetailSection
-                isDelegate={!!mandateId}
-                recipient={currentRecipient}
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDowloadHandler}
                 isCancelled={isCancelled.cancellationInTimeline}

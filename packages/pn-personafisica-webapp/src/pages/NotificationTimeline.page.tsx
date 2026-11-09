@@ -76,6 +76,9 @@ const NotificationTimeline: React.FC = () => {
   const notificationTimeline = useAppSelector(
     (state: RootState) => state.notificationState.notificationTimeline
   );
+  const delegator = delegatorsFromStore.find(
+    (delegation) => delegation.mandateId === mandateId
+  )?.delegator;
 
   const isCancelled = useIsCancelled({
     notification: IS_NEW_TIMELINE_ENABLED ? notificationTimeline : notification,
@@ -111,13 +114,40 @@ const NotificationTimeline: React.FC = () => {
     }
   };
 
+  const handleDocumentDownloadError = useCallback(
+    (response: AppResponse) => {
+      const error = response.errors?.[0];
+
+      if (error?.code === ServerResponseErrorCode.PN_DELIVERYPUSH_FILE_GONE) {
+        dispatch(
+          appStateActions.addWarning({
+            title: '',
+            message: t('detail.timeline.warnings.document-unavailable', { ns: 'notifiche' }),
+          })
+        );
+
+        return false;
+      }
+
+      return true;
+    },
+    [dispatch, t]
+  );
+
+  useDismissToastOnError(
+    IS_NEW_TIMELINE_COPY_ENABLED
+      ? NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT
+      : undefined,
+    handleDocumentDownloadError
+  );
+
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       if (IS_NEW_TIMELINE_COPY_ENABLED) {
         dispatch(
           appStateActions.addWarning({
             title: '',
-            message: t('detail.document-unavailable', { ns: 'notifiche' }),
+            message: t('detail.timeline.warnings.document-canceled', { ns: 'notifiche' }),
           })
         );
       }
@@ -206,12 +236,8 @@ const NotificationTimeline: React.FC = () => {
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
-    const delegatorName = delegatorsFromStore.find(
-      (delegation) => delegation.mandateId === mandateId
-    )?.delegator?.displayName;
-
-    const breadcrumbLabel = delegatorName
-      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+    const breadcrumbLabel = delegator?.displayName
+      ? t('menu.notifiche-delegato', { delegator: delegator.displayName })
       : t('menu.notifiche-utente', { ns: 'common' });
 
     return (
@@ -311,6 +337,13 @@ const NotificationTimeline: React.FC = () => {
                   }
                   isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                   perfectionLink={NOTIFICATION_PERFECTION_LINK}
+                  mandateId={mandateId}
+                  delegator={
+                    delegator
+                      ? { displayName: delegator?.displayName, fiscalCode: delegator.fiscalCode }
+                      : undefined
+                  }
+                  userTaxId={currentUser.fiscal_number}
                 />
               ) : (
                 <MIPaper sx={{ mt: 3 }}>

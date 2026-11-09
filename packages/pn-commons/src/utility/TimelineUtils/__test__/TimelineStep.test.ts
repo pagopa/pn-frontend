@@ -1,6 +1,7 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
+import { initLocalizationExists } from '../../localization.utility';
 import { TimelineStep, TimelineStepInfo } from '../TimelineStep';
 
 class MockTimelineStep extends TimelineStep {
@@ -59,6 +60,65 @@ describe('TimelineStep', () => {
       )}`,
       label: 'notifiche - detail.timeline.mock-category',
     });
+  });
+
+  it('localizeTimelineStatus - delegate view with the delegate description', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'detail.timeline.mock-category-description-delegate'
+    );
+    expect(
+      mockTimelineStep.localizeTimelineStatus(
+        'mock-category',
+        true,
+        'mock-label',
+        'mock-description',
+        { 'mock-key': 'mock-value' },
+        'Mario Cucumber'
+      )
+    ).toStrictEqual({
+      description: `notifiche - detail.timeline.mock-category-description-delegate - ${JSON.stringify(
+        {
+          'mock-key': 'mock-value',
+          recipient: 'Mario Cucumber',
+        }
+      )}`,
+      label: 'notifiche - detail.timeline.mock-category',
+    });
+    initLocalizationForTest();
+  });
+
+  it.each([false, true])(
+    'localizeTimelineStatus - delegate view without the delegate description, multi recipient %s',
+    (isMultiRecipient) => {
+      const args = [
+        'mock-category',
+        isMultiRecipient,
+        'mock-label',
+        'mock-description',
+        { 'mock-key': 'mock-value' },
+      ] as const;
+      expect(mockTimelineStep.localizeTimelineStatus(...args, 'Mario Cucumber')).toStrictEqual(
+        mockTimelineStep.localizeTimelineStatus(...args)
+      );
+    }
+  );
+
+  it('localizeTimelineStatus - delegate description ignored outside the delegate view', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'detail.timeline.mock-category-description-delegate'
+    );
+    expect(
+      mockTimelineStep.localizeTimelineStatus(
+        'mock-category',
+        false,
+        'mock-label',
+        'mock-description'
+      )
+    ).toStrictEqual({
+      description: 'notifiche - detail.timeline.mock-category-description',
+      label: 'notifiche - detail.timeline.mock-category',
+    });
+    initLocalizationForTest();
   });
 
   it('nameAndTaxId', () => {

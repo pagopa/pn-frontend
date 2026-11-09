@@ -2,8 +2,10 @@ import {
   INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailRecipient,
+  NotificationStatus,
   NotificationStatusHistory,
 } from '../../models';
+import { Delegator } from '../../models/NotificationTimeline';
 import { getNotificationStatusInfos } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
@@ -21,6 +23,9 @@ type NotificationTimelineBoxProps = {
   clickHandler: (legalFactId: LegalFactId) => void;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
+  mandateId?: string;
+  delegator?: Delegator;
+  userTaxId?: string;
 };
 
 const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
@@ -31,6 +36,9 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   clickHandler,
   isNewTimelineCopyEnabled = false,
   perfectionLink,
+  mandateId,
+  delegator,
+  userTaxId,
 }) => {
   if (statusHistory.length === 0) {
     return null;
@@ -40,11 +48,17 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
     statusHistory,
     recipients,
     isParty,
+    mandateId,
+    delegator,
+    userTaxId,
   });
 
   const plan = isNewTimelineCopyEnabled
     ? getStatusLegalFactPlan(statusHistory[0], (event) => event.hidden)
     : emptyLegalFactPlan<INotificationDetailTimeline>();
+
+  const hideDescription =
+    isNewTimelineCopyEnabled && statusHistory[0].status === NotificationStatus.DELIVERING;
 
   return (
     <NotificationStatusBox
@@ -54,14 +68,16 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
       )}
       color={notificationStatusInfos.color}
       description={
-        <NotificationTimelineDescription
-          legalFacts={plan.legalFacts}
-          description={notificationStatusInfos.description}
-          clickHandler={clickHandler}
-          slotProps={{ typography: { variant: 'body2' } }}
-          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-          perfectionLink={perfectionLink}
-        />
+        hideDescription ? null : (
+          <NotificationTimelineDescription
+            legalFacts={plan.legalFacts}
+            description={notificationStatusInfos.description}
+            clickHandler={clickHandler}
+            slotProps={{ typography: { variant: 'body2' } }}
+            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+            perfectionLink={perfectionLink}
+          />
+        )
       }
       label={notificationStatusInfos.label}
       detailsLabel={getLocalizedOrDefaultLabel('notifications', 'go-to-detail')}

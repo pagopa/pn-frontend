@@ -64,6 +64,53 @@ describe('NotificationTimelineBox', () => {
     expect(onTimelineClick).toHaveBeenCalledTimes(1);
   });
 
+  it.each([
+    {
+      status: NotificationStatus.DELIVERING,
+      isNewTimelineCopyEnabled: true,
+      description: 'status.delivering-description',
+      shown: false,
+    },
+    {
+      status: NotificationStatus.DELIVERING,
+      isNewTimelineCopyEnabled: false,
+      description: 'status.delivering-description',
+      shown: true,
+    },
+    {
+      status: NotificationStatus.ACCEPTED,
+      isNewTimelineCopyEnabled: true,
+      description: 'status.accepted-description',
+      shown: true,
+    },
+  ])(
+    'description of $status with new copy $isNewTimelineCopyEnabled is shown: $shown',
+    ({ status, isNewTimelineCopyEnabled, description, shown }) => {
+      const { queryByText } = render(
+        <NotificationTimelineBox
+          statusHistory={[
+            {
+              status,
+              activeFrom: '2026-09-17T10:30:00Z',
+              relatedTimelineElements: [],
+              steps: [],
+            },
+          ]}
+          recipients={notificationDTO.recipients}
+          isParty={false}
+          clickHandler={clickHandler}
+          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+        />
+      );
+
+      if (shown) {
+        expect(queryByText(description)).toBeInTheDocument();
+      } else {
+        expect(queryByText(description)).not.toBeInTheDocument();
+      }
+    }
+  );
+
   it('renders a legal fact inline when the new copy is enabled', () => {
     const legalFact = {
       key: 'safestorage://recipient-access.pdf',

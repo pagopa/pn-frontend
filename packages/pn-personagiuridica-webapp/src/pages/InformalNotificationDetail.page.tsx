@@ -229,7 +229,7 @@ const InformalNotificationDetail: React.FC = () => {
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
     PGEventStrategyFactory.triggerEvent(
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
-      { notificationType: 'INFORMAL', documentType: name },
+      { notificationType: NotificationCommunicationType.INFORMAL, documentType: name },
       { sendImmediately: true }
     );
 
@@ -267,7 +267,10 @@ const InformalNotificationDetail: React.FC = () => {
 
     PGEventStrategyFactory.triggerEvent(
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
-      { notificationType: 'INFORMAL', documentType: NotificationDocumentType.ATTACHMENT },
+      {
+        notificationType: NotificationCommunicationType.INFORMAL,
+        documentType: NotificationDocumentType.ATTACHMENT,
+      },
       { sendImmediately: true }
     );
 
@@ -288,7 +291,7 @@ const InformalNotificationDetail: React.FC = () => {
     }
 
     PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
-      notificationType: 'INFORMAL',
+      notificationType: NotificationCommunicationType.INFORMAL,
       notificationStatus: informalNotification.notificationStatus as InformalNotificationStatus,
       paymentCount,
       timeline: informalNotification.timeline,

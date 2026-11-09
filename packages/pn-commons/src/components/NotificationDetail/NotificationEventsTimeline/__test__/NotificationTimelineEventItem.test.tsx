@@ -1,7 +1,8 @@
 import { vi } from 'vitest';
 
 import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimeline.mock';
-import { TimelineCategory } from '../../../../models/NotificationDetail';
+import { SERCQ_SEND_VALUE } from '../../../../models/Contacts';
+import { DigitalDomicileType, TimelineCategory } from '../../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
 import { fireEvent, initLocalizationForTest, render, within } from '../../../../test-utils';
 import { getNotificationTimelineStatusInfos } from '../../../../utility/notification.utility';
@@ -10,6 +11,7 @@ import {
   formatTimelineDate,
 } from '../../../../utility/notificationTimeline.utility';
 import NotificationTimelineEventItem from '../NotificationTimelineEventItem';
+import { PERFECTION_ANCHORS } from '../timelineItem.config';
 
 const [viewedStatus, deliveringStatus] = notificationTimelineDTO.notificationStatusHistory;
 
@@ -185,5 +187,57 @@ describe('NotificationTimelineEventItem', () => {
 
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
+  });
+
+  it.each([true, false])(
+    'renders the description of a SERCQ SEND event only when the new copy is disabled: %s',
+    (isNewTimelineCopyEnabled) => {
+      const sercqEvent: NotificationTimelineEvent = {
+        elementId: 'SEND_DIGITAL_DOMICILE.SERCQ',
+        timestamp: '2026-09-23T10:30:00Z',
+        category: TimelineCategory.SEND_DIGITAL_DOMICILE,
+        details: {
+          recIndex: 0,
+          digitalAddress: { address: SERCQ_SEND_VALUE, type: DigitalDomicileType.SERCQ },
+        },
+        legalFactsIds: [],
+        isHidden: false,
+      };
+
+      const { getByTestId } = renderEvent(sercqEvent, { isNewTimelineCopyEnabled });
+
+      const item = getByTestId('timeline-event');
+      expect(item).toHaveTextContent('detail.timeline.send-digital-domicile-SERCQ-SEND');
+      if (isNewTimelineCopyEnabled) {
+        expect(item).not.toHaveTextContent('send-digital-domicile-SERCQ-SEND-description');
+      } else {
+        expect(item).toHaveTextContent('send-digital-domicile-SERCQ-SEND-description');
+      }
+    }
+  );
+
+  it('adds the registered letter anchor to the perfection link for an analog failure', () => {
+    const analogFailureEvent: NotificationTimelineEvent = {
+      elementId: 'ANALOG_FAILURE_WORKFLOW.RECINDEX_0',
+      timestamp: '2026-09-23T10:30:00Z',
+      category: TimelineCategory.ANALOG_FAILURE_WORKFLOW,
+      details: {
+        recIndex: 0,
+      },
+      legalFactsIds: [],
+      isHidden: false,
+    };
+
+    const perfectionLink = 'https://fake.perfezionamento.it/perfezionamento';
+
+    const { getByTestId } = renderEvent(analogFailureEvent, {
+      isNewTimelineCopyEnabled: true,
+      perfectionLink,
+    });
+
+    expect(getByTestId('perfection-link')).toHaveAttribute(
+      'href',
+      `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`
+    );
   });
 });

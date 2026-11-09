@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Back",
     "breadcrumb-root": "Campaigns",
-    "breadcrumb": {
-      "back": "Back",
-      "campaigns": "Campaigns"
-    },
     "channels-label": "Selected channels",
     "channels": {
       "ANALOG": "Postal service",
@@ -15,7 +12,14 @@
     },
     "communications": {
       "empty-description": "Remove them or try another combination.",
+      "empty-state": {
+        "description": "Refused communications or those still under validation will not be displayed.",
+        "title": "Here you will see the campaign communications."
+      },
       "empty-title": "No communications found for the selected filters.",
+      "errors": {
+        "tax-id": "Enter a valid fiscal code"
+      },
       "iun": "IUN code",
       "no-communications-description": "There are no communications matching the selected filters.",
       "no-communications-title": "No communications available",
@@ -42,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Campaign title]",
       "generic-error": "Unable to retrieve campaign details.",
+      "generic-error-comunications": "Unable to retrieve the list of communications.",
       "generic-error-cta": "Try again"
     },
     "service-name": "Service",
@@ -53,6 +58,7 @@
       "documents": {
         "document-not-available": "The document is not yet available. Try again later.",
         "download-message-available": "<0>Available online for up to 180 days</0> from the communication acceptance date.",
+        "download-message-available-plural": "<0>Available online for up to 180 days</0> from the date of acceptance of the communication.",
         "download-message-expired": "The documents are no longer available online.",
         "title": "Attached documents"
       },
@@ -115,7 +121,7 @@
       },
       "completed": {
         "description": "The communication has been sent to the chosen channels.",
-        "label": "Sending successful"
+        "label": "Sending completed"
       },
       "processing": {
         "description": "The communication will try to reach the recipient on the chosen channels.",

@@ -1,0 +1,134 @@
+{
+  "api-key-copied": "Clé API copiée",
+  "banner": {
+    "description-admin": "Les clés personnelles ne peuvent pas être utilisées car l'intégration a été désactivée. Pour les utiliser, enregistre une clé publique.",
+    "description-operator": "Les clés personnelles ne peuvent pas être utilisées car l'intégration a été désactivée. Pour les utiliser, demande à un administrateur d'activer l'intégration.",
+    "title": "Intégration désactivée"
+  },
+  "block-button": "Bloquer",
+  "context-menu": {
+    "block": "Bloquer",
+    "rotate": "Renouveler",
+    "title": "Options sur l'API Key",
+    "view": "Afficher le code"
+  },
+  "dialogs": {
+    "block-subtitle": "Si tu bloques la clé, toute requête effectuée par son intermédiaire échouera.",
+    "block-title": "Bloquer la clé",
+    "delete-subtitle": "Si tu supprimes définitivement la clé, elle ne pourra plus être réactivée ni utilisée.",
+    "delete-title": "Supprimer la clé",
+    "rotate-public-key-subtitle": "En effectuant la rotation de la clé publique existante, tu devras en saisir une nouvelle et tu obtiendras les valeurs de Kid et Issuer.",
+    "rotate-title": "Renouveler la clé",
+    "rotate-virtual-key-subtitle": "En effectuant la rotation de la clé existante, tu la désactives et en génères une nouvelle avec les mêmes attributs.",
+    "rotate-warning": "Après avoir terminé cette opération, bloque et supprime la clé renouvelée."
+  },
+  "error-fecth-public-api-keys": "Erreur lors de la récupération des clés publiques",
+  "messages": {
+    "error": {
+      "accept-tos-failed": "Une erreur s'est produite. Réessaie.",
+      "key-already-registered": "Cette valeur a déjà été saisie précédemment. Saisis une clé différente.",
+      "name-allowed-charset": "Le champ nom ne peut contenir que les caractères suivants : \"{{allowedCharset}}\"",
+      "no-tos-version": "Une erreur s'est produite lors de la récupération des conditions de service. Réessaie.",
+      "rotate-invalid-kid": "La clé ne peut pas être renouvelée. Un autre administrateur a déjà effectué l'opération."
+    },
+    "success": {
+      "public-key-blocked": "Clé publique bloquée avec succès.",
+      "public-key-deleted": "Clé publique supprimée avec succès.",
+      "public-key-registered": "Clé publique enregistrée avec succès.",
+      "public-key-rotated": "Clé publique renouvelée avec succès."
+    }
+  },
+  "new-public-key": {
+    "button": {
+      "register": "Enregistrer"
+    },
+    "issuer-copied": "Issuer copié !",
+    "kid-copied": "KID copié !",
+    "prompt": {
+      "message": "Si tu quittes, tu perdras toutes les données saisies jusqu'ici.",
+      "title": "Veux-tu quitter ?"
+    },
+    "steps": {
+      "get-returned-parameters": {
+        "description": "Voici les paramètres d'intégration : utilise ces données pour configurer ta clé d'accès à SEND. Tu peux récupérer les données à tout moment dans la section « Intégration API ».",
+        "issuer": "Issuer",
+        "kid": "Kid",
+        "title": "Obtenir les paramètres"
+      },
+      "insert-data": {
+        "content": "La clé publique (JWKS) est nécessaire pour <strong>authentifier de manière sécurisée les requêtes provenant de tes systèmes de gestion.</strong> La clé expire après 355 jours.",
+        "name": {
+          "default": "Clé-",
+          "description": "Choisis un nom pour la clé ou conserve celui par défaut.",
+          "label": "Nom"
+        },
+        "publicKey": {
+          "begin": "-----BEGIN PUBLIC KEY-----",
+          "description": "Saisis la valeur de la clé",
+          "end": "-----END PUBLIC KEY-----",
+          "placeholder": "Saisis la Public Key"
+        },
+        "title": "Saisis les données",
+        "tos": "En appuyant sur « S'inscrire », tu déclares avoir lu et accepté les <0>Conditions générales de service</0>."
+      }
+    },
+    "subtitle": "Saisis les données requises pour activer l'intégration sécurisée des logiciels de gestion de ton entreprise.",
+    "title": "Enregistrer la clé publique"
+  },
+  "publicKeys": {
+    "empty-state": "Aucune clé publique pour le moment. Enregistre une clé publique pour activer l'intégration.",
+    "issuer": "Issuer",
+    "kid": "Kid",
+    "new-key-button": "Enregistrer la clé publique",
+    "personal-key": "Clé personnelle",
+    "table": {
+      "endDate": "Expiration",
+      "name": "Nom",
+      "status": "Statut",
+      "value": "Valeur"
+    },
+    "title": "Clé publique",
+    "view-subtitle": "Copie les codes dont tu as besoin.",
+    "view-title": "Afficher le code"
+  },
+  "rotate-public-key-button": "Renouveler et enregistrer une nouvelle clé",
+  "rotate-virtual-key-button": "Renouveler",
+  "status": {
+    "active": "Active",
+    "blocked": "Bloquée",
+    "disabled": "Désactivée",
+    "enabled": "Active",
+    "rotated": "Renouvelée"
+  },
+  "subTitle": "Génère et gère les clés pour activer l'intégration sécurisée entre les systèmes de gestion de ton entreprise et SEND.",
+  "title": "Intégration API",
+  "tooltip": {
+    "blocked": "Bloquée",
+    "blocked-in": "Bloquée le",
+    "created": "Créée",
+    "created-in": "Créée le",
+    "enabled": "Activée",
+    "enabled-in": "Activée le",
+    "from": "De",
+    "rotated": "Renouvelée",
+    "rotated-in": "Renouvelée le"
+  },
+  "virtualKeys": {
+    "default": "Clé-",
+    "empty-state": "Aucune clé personnelle n'a encore été générée pour ton entreprise.",
+    "new-key-button": "Générer une clé personnelle",
+    "not-enabled-empty-state": "Pour pouvoir créer une clé personnelle, un administrateur doit d'abord activer l'intégration.",
+    "personal-key": "Clé personnelle",
+    "table": {
+      "lastUpdate": "Dernière modification",
+      "name": "Nom",
+      "personal": "Tu",
+      "status": "Statut",
+      "value": "Valeur"
+    },
+    "title": "Clé personnelle",
+    "understood-button": "OK, j'ai compris",
+    "view-subtitle": "Tu peux l'utiliser pour t'authentifier sur la plateforme et intégrer SEND. Tu peux copier ta clé personnelle à tout moment dans la section « Intégration API ».",
+    "view-title": "Ta clé personnelle"
+  }
+}

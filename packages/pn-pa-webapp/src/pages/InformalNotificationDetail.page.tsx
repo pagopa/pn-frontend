@@ -6,11 +6,13 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
+  InformalNotificationMessage,
   InformalNotificationStatus,
   LoadingPage,
   NotificationCommunicationType,
   NotificationDetailDocuments,
   NotificationStatusBox,
+  RecipientType,
   appStateActions,
   downloadDocument,
   useErrors,
@@ -109,6 +111,7 @@ const InformalNotificationDetail: React.FC = () => {
   };
 
   const recipients = informalNotification.recipients;
+  const primaryMessage = recipients[0]?.message?.primaryMessage;
 
   const notificationStatusInfos = communicationStatusOptions.find((st) =>
     st.value.includes(informalNotification.notificationStatus as InformalNotificationStatus)
@@ -166,7 +169,7 @@ const InformalNotificationDetail: React.FC = () => {
     },
     {
       label: t('informal.detail.subject'),
-      value: informalNotification.subject,
+      value: primaryMessage?.subject,
     },
   ].filter((detail) => detail.value);
 
@@ -186,11 +189,26 @@ const InformalNotificationDetail: React.FC = () => {
     },
     {
       label: t('informal.detail.subject'),
-      value: informalNotification.subject,
+      value: primaryMessage?.subject,
     },
     {
       label: t('informal.detail.text'),
-      value: recipients[0]?.message?.primaryMessage.longBody,
+      value: primaryMessage?.longBody && (
+        <InformalNotificationMessage
+          message={primaryMessage.longBody}
+          recipientDenomination={recipients[0].denomination}
+          senderDenomination={informalNotification.senderDenomination}
+          hasAttachments={informalNotification.documentsAvailable != null}
+          hasPayment={!!recipients[0].payments?.length}
+          attachmentsInfoKey={
+            recipients[0].recipientType === RecipientType.PF
+              ? 'detail.informal_notification_markdown.attachments_info_pf'
+              : 'detail.informal_notification_markdown.attachments_info'
+          }
+          variant="body2"
+        />
+      ),
+      rawValue: true,
     },
   ].filter((detail) => detail.value);
 
@@ -246,7 +264,7 @@ const InformalNotificationDetail: React.FC = () => {
                       documentDownloadHandler(typeof document === 'string' ? document : undefined);
                     }}
                     titleVariant="h5"
-                    inlineDownloadFilesMessage
+                    isSender
                   />
                 </MIPaper>
               )}

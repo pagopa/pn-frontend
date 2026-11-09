@@ -1,21 +1,25 @@
 {
   "detail": {
+    "breadcrumb-back": "Zurück",
     "breadcrumb-root": "Kampagnen",
-    "breadcrumb": {
-      "back": "Zurück",
-      "campaigns": "Kampagnen"
-    },
     "channels-label": "Ausgewählte Kanäle",
     "channels": {
       "ANALOG": "Postdienst",
-      "EMAIL": "E-Mail",
+      "EMAIL": "Email",
       "IO": "IO",
       "PEC": "PEC",
       "SMS": "SMS"
     },
     "communications": {
       "empty-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+      "empty-state": {
+        "description": "Abgelehnte oder noch in der Validierung befindliche Mitteilungen werden nicht angezeigt.",
+        "title": "Hier siehst du die Mitteilungen der Kampagne."
+      },
       "empty-title": "Keine Mitteilungen für die ausgewählten Filter vorhanden.",
+      "errors": {
+        "tax-id": "Gib eine gültige Steuernummer ein"
+      },
       "iun": "IUN-Code",
       "no-communications-description": "Es gibt keine Mitteilungen, die den ausgewählten Filtern entsprechen.",
       "no-communications-title": "Keine Mitteilungen verfügbar",
@@ -42,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Kampagnentitel]",
       "generic-error": "Die Kampagnendetails konnten nicht abgerufen werden.",
+      "generic-error-comunications": "Die Mitteilungsliste konnte nicht abgerufen werden.",
       "generic-error-cta": "Versuche es erneut"
     },
     "service-name": "Dienst",
@@ -53,6 +58,7 @@
       "documents": {
         "document-not-available": "Das Dokument ist noch nicht verfügbar. Versuche es später noch einmal.",
         "download-message-available": "<0>Bis zu 180 Tage online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
+        "download-message-available-plural": "<0>Bis zu 180 Tage online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
         "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
         "title": "Angehängte Dokumente"
       },
@@ -62,7 +68,7 @@
       "send-by-channel": {
         "channel": {
           "analog": "Postdienst",
-          "email": "E-Mail",
+          "email": "Email",
           "io": "IO",
           "pec": "PEC",
           "send": "SEND",
@@ -115,7 +121,7 @@
       },
       "completed": {
         "description": "Die Mitteilung wurde über die gewählten Kanäle versendet.",
-        "label": "Versand erfolgreich"
+        "label": "Versand abgeschlossen"
       },
       "processing": {
         "description": "Die Mitteilung wird versuchen, den Empfänger über die gewählten Kanäle zu erreichen.",

@@ -1,21 +1,25 @@
 {
   "detail": {
+    "breadcrumb-back": "Retour",
     "breadcrumb-root": "Campagnes",
-    "breadcrumb": {
-      "back": "Retour",
-      "campaigns": "Campagnes"
-    },
     "channels-label": "Canaux sélectionnés",
     "channels": {
       "ANALOG": "Service postal",
-      "EMAIL": "E-mail",
+      "EMAIL": "Email",
       "IO": "IO",
       "PEC": "PEC",
       "SMS": "SMS"
     },
     "communications": {
       "empty-description": "Supprimez-les ou essayez une autre combinaison.",
+      "empty-state": {
+        "description": "Les communications refusées ou encore en cours de validation ne seront pas affichées.",
+        "title": "Ici, vous verrez les communications de la campagne."
+      },
       "empty-title": "Aucune communication pour les filtres sélectionnés.",
+      "errors": {
+        "tax-id": "Saisis un code fiscal valide"
+      },
       "iun": "Code IUN",
       "no-communications-description": "Il n'y a pas de communications correspondant aux filtres sélectionnés.",
       "no-communications-title": "Aucune communication disponible",
@@ -42,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Titre de la campagne]",
       "generic-error": "Impossible de récupérer les détails de la campagne.",
+      "generic-error-comunications": "Impossible de récupérer la liste des communications.",
       "generic-error-cta": "Réessayer"
     },
     "service-name": "Service",
@@ -53,6 +58,7 @@
       "documents": {
         "document-not-available": "Le document n'est pas encore disponible. Réessayez plus tard.",
         "download-message-available": "<0>Disponible en ligne jusqu'à 180 jours</0> à compter de la date d'acceptation de la communication.",
+        "download-message-available-plural": "<0>Disponibles en ligne jusqu'à 180 jours</0> à compter de la date d'acceptation de la communication.",
         "download-message-expired": "Les documents ne sont plus disponibles en ligne.",
         "title": "Documents joints"
       },
@@ -115,7 +121,7 @@
       },
       "completed": {
         "description": "La communication a été envoyée sur les canaux choisis.",
-        "label": "Envoi réussi"
+        "label": "Envoi terminé"
       },
       "processing": {
         "description": "La communication tentera de joindre le destinataire sur les canaux choisis.",

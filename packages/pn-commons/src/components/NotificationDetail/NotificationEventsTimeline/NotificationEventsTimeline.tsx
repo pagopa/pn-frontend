@@ -1,11 +1,20 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../../hooks/useIsMobile';
 import { NotificationStatus } from '../../../models';
-import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import {
+  DigitalDomicileType,
+  LegalFactId,
+  NotificationDeliveryMode,
+  NotificationDetailRecipient,
+  SendDigitalDetails,
+  TimelineCategory,
+} from '../../../models/NotificationDetail';
+import {
+  Delegator,
   NotificationTimelineEvent,
   NotificationTimelineStatusHistory,
 } from '../../../models/NotificationTimeline';
@@ -17,10 +26,13 @@ import {
 } from '../../../utility/notificationTimeline.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineDescription from './NotificationTimelineDescription';
-import NotificationTimelineEventItem from './NotificationTimelineEventItem';
+import NotificationTimelineEventItem, {
+  isLegalFactsOnlyEvent,
+} from './NotificationTimelineEventItem';
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
+import TimelineExpandAllButton from './TimelineExpandAllButton';
 import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
-import { getTimelineItems } from './timelineItem.config';
+import { PERFECTION_ANCHORS, getTimelineItems } from './timelineItem.config';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
@@ -31,7 +43,49 @@ type Props = {
   language?: string;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
+  mandateId?: string;
+  delegator?: Delegator;
+  userTaxId?: string;
 };
+
+const getStatusPerfectionLink = (
+  perfectionLink: string | undefined,
+  status: NotificationTimelineStatusHistory
+): string | undefined => {
+  if (!perfectionLink) {
+    return perfectionLink;
+  }
+  if (status.deliveryMode === NotificationDeliveryMode.ANALOG) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
+  }
+  if (status.deliveryMode !== NotificationDeliveryMode.DIGITAL) {
+    return perfectionLink;
+  }
+
+  const digitalSuccessWorkflow = status.steps.find(
+    (step) =>
+      !isTimelineGroupStep(step) &&
+      step.event.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+  );
+  if (!digitalSuccessWorkflow || isTimelineGroupStep(digitalSuccessWorkflow)) {
+    return perfectionLink;
+  }
+
+  const digitalAddress = (digitalSuccessWorkflow.event.details as SendDigitalDetails)
+    .digitalAddress;
+  if (digitalAddress?.type === DigitalDomicileType.PEC) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+  }
+  if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
+  }
+
+  return perfectionLink;
+};
+
+// The same group can be shown in more than one status: its expanded state is tracked per status
+const getGroupKey = (status: NotificationTimelineStatusHistory, groupId: string) =>
+  `${status.status}_${groupId}`;
 
 const NotificationEventsTimeline = ({
   recipients,
@@ -42,6 +96,9 @@ const NotificationEventsTimeline = ({
   language = 'it',
   isNewTimelineCopyEnabled = false,
   perfectionLink,
+  mandateId,
+  delegator,
+  userTaxId,
 }: Props) => {
   const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
   const multiAttemptGroupIds = useMemo(
@@ -49,9 +106,51 @@ const NotificationEventsTimeline = ({
     [statusHistory]
   );
   const timelineItems = useMemo(
-    () => getTimelineItems(statusHistory, legacyStatusHistory, recipients, isSenderTimeline),
-    [statusHistory, legacyStatusHistory, recipients, isSenderTimeline, language]
+    () =>
+      getTimelineItems(
+        statusHistory,
+        legacyStatusHistory,
+        recipients,
+        userTaxId,
+        isSenderTimeline,
+        delegator && mandateId
+          ? {
+              mandateId,
+              delegatorName: delegator?.displayName,
+              delegatorTaxId: delegator?.fiscalCode,
+            }
+          : undefined
+      ),
+    [
+      statusHistory,
+      legacyStatusHistory,
+      recipients,
+      isSenderTimeline,
+      language,
+      mandateId,
+      delegator,
+      userTaxId,
+    ]
   );
+
+  const isMobile = useIsMobile('sm');
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+
+  const toggleGroup = (groupKey: string) =>
+    setExpandedGroups((current) => {
+      const next = new Set(current);
+      if (!next.delete(groupKey)) {
+        next.add(groupKey);
+      }
+      return next;
+    });
+
+  const setGroupsExpanded = (groupKeys: Array<string>, expanded: boolean) =>
+    setExpandedGroups((current) => {
+      const next = new Set(current);
+      groupKeys.forEach((key) => (expanded ? next.add(key) : next.delete(key)));
+      return next;
+    });
 
   return (
     <Box data-testid="NotificationEventsTimeline">
@@ -75,6 +174,18 @@ const NotificationEventsTimeline = ({
                   isTimelineGroupStep(step) || !plan.hiddenEventIds.has(step.event.elementId)
               );
 
+            const groupKeys = visibleSteps.flatMap(({ step }) =>
+              isTimelineGroupStep(step) ? [getGroupKey(status, step.group.groupId)] : []
+            );
+            const allExpanded =
+              groupKeys.length > 0 && groupKeys.every((key) => expandedGroups.has(key));
+            const showExpandAll =
+              !isMobile && status.status === NotificationStatus.DELIVERING && groupKeys.length > 1;
+
+            const statusPerfectionLink = isNewTimelineCopyEnabled
+              ? getStatusPerfectionLink(perfectionLink, status)
+              : perfectionLink;
+
             return (
               <MITimelineItem
                 key={`timeline_step_${status.status}_${status.activeFrom}`}
@@ -88,9 +199,16 @@ const NotificationEventsTimeline = ({
                     alignItems={{ xs: 'flex-start', sm: 'center' }}
                     fontSize="16px"
                     gap={{ xs: 0.5, sm: 1 }}
+                    width="100%"
                   >
                     {label}
                     <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
+                    {showExpandAll && (
+                      <TimelineExpandAllButton
+                        allExpanded={allExpanded}
+                        onClick={() => setGroupsExpanded(groupKeys, !allExpanded)}
+                      />
+                    )}
                   </Stack>
                 }
               >
@@ -108,7 +226,7 @@ const NotificationEventsTimeline = ({
                       disableDownloads={disableDownloads}
                       isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                       legalFacts={plan.legalFacts.length === 1 ? plan.legalFacts : []}
-                      perfectionLink={perfectionLink}
+                      perfectionLink={statusPerfectionLink}
                     />
                   )}
 
@@ -127,19 +245,30 @@ const NotificationEventsTimeline = ({
                     );
 
                     if (!isTimelineGroupStep(step)) {
+                      const eventItem = (
+                        <NotificationTimelineEventItem
+                          event={step.event}
+                          allEvents={legacyStatus.steps}
+                          recipients={recipients}
+                          clickHandler={clickHandler}
+                          disableDownloads={disableDownloads}
+                          language={language}
+                          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+                          perfectionLink={perfectionLink}
+                          delegator={delegator}
+                        />
+                      );
+
                       return (
                         <Fragment key={step.event.elementId}>
                           {recipientHeader}
-                          <NotificationTimelineEventItem
-                            event={step.event}
-                            allEvents={legacyStatus.steps}
-                            recipients={recipients}
-                            clickHandler={clickHandler}
-                            disableDownloads={disableDownloads}
-                            language={language}
-                            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-                            perfectionLink={perfectionLink}
-                          />
+                          {isLegalFactsOnlyEvent(step.event, isNewTimelineCopyEnabled) ? (
+                            eventItem
+                          ) : (
+                            <Box component="ul" sx={{ listStyleType: 'disc', pl: 3, m: 0 }}>
+                              {eventItem}
+                            </Box>
+                          )}
                         </Fragment>
                       );
                     }
@@ -165,6 +294,9 @@ const NotificationEventsTimeline = ({
                           hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
                           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                           perfectionLink={perfectionLink}
+                          delegator={delegator}
+                          expanded={expandedGroups.has(getGroupKey(status, step.group.groupId))}
+                          onToggle={() => toggleGroup(getGroupKey(status, step.group.groupId))}
                         />
                       </Fragment>
                     );

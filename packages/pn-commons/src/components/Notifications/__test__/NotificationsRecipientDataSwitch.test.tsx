@@ -30,11 +30,11 @@ describe('NotificationsRecipientDataSwitch Component', () => {
   const originalResizeObserver = globalThis.ResizeObserver;
 
   beforeAll(() => {
-    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-      observe: vi.fn(),
-      unobserve: vi.fn(),
-      disconnect: vi.fn(),
-    }));
+    globalThis.ResizeObserver = class {
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+    };
   });
 
   afterAll(() => {
@@ -49,6 +49,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
     const { getByTestId } = render(<NotificationsRecipientDataSwitch data={data} type="sentAt" />);
     const badge = getByTestId('new-notification-badge');
     expect(badge).toBeInTheDocument();
+    expect(badge).toHaveAttribute('aria-label', 'table.to-read');
   });
 
   it('renders component - badge - already read notification', () => {

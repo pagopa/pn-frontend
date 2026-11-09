@@ -19,7 +19,7 @@ const NotificationRecipientsDetail: React.FC<Props> = ({ recipients, showAll = f
 
   const renderRecipient = (recipient: NotificationRecipient) => (
     <Box component="li" key={recipient.taxId} data-testid="recipients">
-      {recipient.denomination} - {recipient.taxId}
+      {recipient.denomination} ({recipient.taxId})
     </Box>
   );
 
@@ -35,7 +35,7 @@ const NotificationRecipientsDetail: React.FC<Props> = ({ recipients, showAll = f
     }
 
     if (recipients.length === 1) {
-      return `${recipients[0].denomination} - ${recipients[0].taxId}`;
+      return `${recipients[0].denomination} (${recipients[0].taxId})`;
     }
 
     return (

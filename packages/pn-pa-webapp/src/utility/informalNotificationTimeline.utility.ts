@@ -16,6 +16,7 @@ import {
   BffChannelStatusV1,
   BffInformalNotificationTimelineGroup,
   BffInformalNotificationTimelineItem,
+  BffInformalNotificationTimelineStatusHistoryV1,
   BffNotificationChannelType,
   DeliveredDetails,
   InformalNotificationStatusV1,
@@ -57,7 +58,7 @@ export const INFORMAL_CHANNEL_ICON: Record<
   UNKNOWN: InfoOutlined,
 };
 
-export const IO_TAG_ICON: Record<InformalTimelineEventTag, ComponentType<SvgIconProps>> = {
+export const EVENT_TAG_ICON: Record<InformalTimelineEventTag, ComponentType<SvgIconProps>> = {
   DELIVERED: MarkEmailReadOutlined,
   VIEWED: DraftsOutlined,
 };
@@ -66,35 +67,34 @@ export const getChannelLabelKey = (channel: BffNotificationChannelType) =>
   `informal.detail.send-by-channel.channel.${channel.toLowerCase()}`;
 
 /**
- * In the PROCESSING status the SEND group is always shown, since every notification is filed on SEND:
- * if the backend doesn't return it, it is created.
- * @param steps - Timeline steps
- * @param status - Status the steps belong to
+ * Every notification is filed on SEND, so the status next to the ACCEPTED one always has the SEND group:
+ * if the backend doesn't return it, it is added to that status.
+ * The history goes from the most recent status to the oldest one.
+ * @param statusHistory - Status history of the notification
  */
-export const getInformalTimelineSteps = (
-  steps: Array<BffInformalNotificationTimelineGroup>,
-  status: InformalNotificationStatusV1
-): Array<BffInformalNotificationTimelineGroup> => {
+export const getInformalTimelineStatusHistory = (
+  statusHistory: Array<BffInformalNotificationTimelineStatusHistoryV1>
+): Array<BffInformalNotificationTimelineStatusHistoryV1> => {
+  const filedStatusIndex =
+    statusHistory.findIndex((item) => item.status === InformalNotificationStatusV1.Accepted) - 1;
+  const filedStatus = statusHistory[filedStatusIndex];
+
   if (
-    status === InformalNotificationStatusV1.Processing &&
-    !steps.some((step) => step.channel === BffNotificationChannelType.Send)
+    !filedStatus ||
+    filedStatus.steps.some((step) => step.channel === BffNotificationChannelType.Send)
   ) {
-    return [...steps, { channel: BffNotificationChannelType.Send, events: [] }];
+    return statusHistory;
   }
 
-  return steps;
+  return statusHistory.map((item, index) =>
+    index === filedStatusIndex
+      ? {
+          ...item,
+          steps: [...item.steps, { channel: BffNotificationChannelType.Send, events: [] }],
+        }
+      : item
+  );
 };
-
-/**
- * On IO the delivery and the reading of the notification are highlighted with a tag.
- * @param step - Channel group
- * @param tag - Tag to show
- */
-const getIOTag = (
-  step: BffInformalNotificationTimelineGroup,
-  tag: InformalTimelineEventTag
-): InformalTimelineEventTag | undefined =>
-  step.channel === BffNotificationChannelType.Io ? tag : undefined;
 
 /**
  * Registered letters has the code, ordinary mail doesn't.
@@ -106,6 +106,13 @@ const getAnalogVariant = (
   details?.deliveryType === AnalogDeliveryType.Rs
     ? { variant: 'analog_registered', values: { code: details.registeredLetterCode || '' } }
     : { variant: 'analog_ordinary' };
+
+const SENDER_NOT_ALLOWED_CODE = 'SENDER_NOT_ALLOWED';
+
+const PROGRESS_SENT_CHANNELS: Array<BffNotificationChannelType> = [
+  BffNotificationChannelType.Email,
+  BffNotificationChannelType.Io,
+];
 
 const getEventCopy = (
   event: BffInformalNotificationTimelineItem,
@@ -124,10 +131,20 @@ const getEventCopy = (
 
   switch (event.category) {
     case InformalTimelineElementCategoryV1.SendDigitalMessageFeedback: {
-      const { responseStatus } = event.details as SendDigitalMessageFeedbackDetails;
+      const { responseStatus, deliveryDetail } = event.details as SendDigitalMessageFeedbackDetails;
+
+      if (deliveryDetail?.code === SENDER_NOT_ALLOWED_CODE) {
+        return { key: `send_digital_message_skip.${channel}` };
+      }
 
       return { key: `send_digital_message_feedback.${responseStatus.toLowerCase()}.${channel}` };
     }
+
+    // email and IO have no OK feedback: their successful sending is notified by the progress event
+    case InformalTimelineElementCategoryV1.SendDigitalMessageProgress:
+      return PROGRESS_SENT_CHANNELS.includes(step.channel)
+        ? { key: `send_digital_message_feedback.ok.${channel}` }
+        : null;
 
     case InformalTimelineElementCategoryV1.SendAnalogMessageFeedback: {
       const details = event.details as SendAnalogMessageFeedbackDetails;
@@ -141,7 +158,7 @@ const getEventCopy = (
 
     case InformalTimelineElementCategoryV1.Delivered: {
       if (step.channel !== BffNotificationChannelType.Analog) {
-        return { key: `delivered.${channel}`, tag: getIOTag(step, BffChannelStatusV1.Delivered) };
+        return { key: `delivered.${channel}`, tag: BffChannelStatusV1.Delivered };
       }
 
       // the delivery code is only on the feedback event the delivery refers to
@@ -151,7 +168,7 @@ const getEventCopy = (
         feedback?.details as SendAnalogMessageFeedbackDetails | undefined
       );
 
-      return { key: `delivered.${variant}`, values };
+      return { key: `delivered.${variant}`, values, tag: BffChannelStatusV1.Delivered };
     }
 
     case InformalTimelineElementCategoryV1.SendDigitalMessageSkip:
@@ -160,7 +177,7 @@ const getEventCopy = (
     case InformalTimelineElementCategoryV1.InformalNotificationViewed:
       return {
         key: `informal_notification_viewed.${channel}`,
-        tag: getIOTag(step, BffChannelStatusV1.Viewed),
+        tag: BffChannelStatusV1.Viewed,
       };
 
     default:
@@ -182,15 +199,14 @@ const toEventView = (
 
 /**
  * Maps the events of a channel group to the rows to show, discarding the ones without a copy.
- * In the PROCESSING status the SEND group starts with the "filed" row, since every notification is filed on SEND.
+ * When the filed date is given, the SEND group starts with the "filed" row, since every notification is filed on SEND.
+ * In the PROCESSING status the SEND group ends with the "filed" row, since every notification is filed on SEND
  * The UNKNOWN group has no copy to pick, so its events have the raw category as key.
  * @param step - Channel group
- * @param status - Status the channel group belongs to
- * @param filedDate - Date the notification was filed on SEND
+ * @param filedDate - Date the notification was filed on SEND, given only to the status next to the ACCEPTED one
  */
 export const getInformalTimelineEvents = (
   step: BffInformalNotificationTimelineGroup,
-  status: InformalNotificationStatusV1,
   filedDate?: string
 ): Array<InformalTimelineEventView> => {
   const events = step.events.flatMap((event, index) => {
@@ -199,12 +215,9 @@ export const getInformalTimelineEvents = (
     return copy ? [toEventView(copy, getEventId(event, step, index), event.eventTimestamp)] : [];
   });
 
-  if (
-    status !== InformalNotificationStatusV1.Processing ||
-    step.channel !== BffNotificationChannelType.Send
-  ) {
+  if (!filedDate || step.channel !== BffNotificationChannelType.Send) {
     return events;
   }
 
-  return [toEventView({ key: 'filed.send' }, 'filed', filedDate), ...events];
+  return [...events, toEventView({ key: 'filed.send' }, 'filed', filedDate)];
 };

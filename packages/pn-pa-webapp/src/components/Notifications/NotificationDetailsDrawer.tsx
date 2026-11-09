@@ -8,6 +8,7 @@ import { MIIconButton } from '@pagopa/mui-italia';
 export type NotificationDetailsDrawerItem = {
   label: ReactNode;
   value: ReactNode;
+  rawValue?: boolean;
 };
 
 type Props = {
@@ -53,14 +54,18 @@ const NotificationDetailsDrawer: React.FC<Props> = ({ open, title, details, onCl
               <Typography variant="body2" color="text.secondary">
                 {detail.label}
               </Typography>
-              <Typography
-                variant="body2"
-                color="text"
-                fontWeight={600}
-                sx={{ wordBreak: 'break-word' }}
-              >
-                {detail.value}
-              </Typography>
+              {detail.rawValue ? (
+                detail.value
+              ) : (
+                <Typography
+                  variant="body2"
+                  color="text"
+                  fontWeight={600}
+                  sx={{ wordBreak: 'break-word' }}
+                >
+                  {detail.value}
+                </Typography>
+              )}
             </Box>
           ))}
         </Stack>

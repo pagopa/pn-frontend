@@ -9,7 +9,7 @@ import * as routes from '../../../navigation/routes.const';
 import PecContactWizard from '../PecContactWizard';
 import { fillCodeDialog } from './test-utils';
 
-let setShowPecWizardMock: ReturnType<typeof vi.fn>;
+let setShowPecWizardMock: ReturnType<typeof vi.fn<(showPecWizard: boolean) => void>>;
 
 describe('PecContactWizard', () => {
   const labelPrefix = 'legal-contacts.sercq-send-wizard.feedback';

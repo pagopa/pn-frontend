@@ -1,5 +1,3 @@
-const scanner = require('sonarqube-scanner').default;
-
 const options = {
   'sonar.organization': 'pagopa',
   'sonar.projectKey': 'pagopa_pn-personafisica-webapp',
@@ -14,17 +12,28 @@ if (typeof process.env.PR_NUM !== 'undefined') {
   options['sonar.branch.target'] = process.env.BRANCH_TARGET;
 }
 
-scanner(
-  {
-    serverUrl: 'https://sonarcloud.io',
-    token: process.env.SONAR_TOKEN,
-    options,
-  },
-  (error) => {
-    if (error) {
-      console.error(error);
-      process.exit(1);
-    }
-    process.exit();
+async function runScanner() {
+  try {
+    const { default: scanner } = await import('sonarqube-scanner');
+
+    scanner(
+      {
+        serverUrl: 'https://sonarcloud.io',
+        token: process.env.SONAR_TOKEN,
+        options,
+      },
+      (error) => {
+        if (error) {
+          console.error(error);
+          process.exit(1);
+        }
+        process.exit();
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    process.exitCode = 1;
   }
-);
+}
+
+runScanner();
