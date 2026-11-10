@@ -5,19 +5,13 @@ import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../../hooks/useIsMobile';
 import { NotificationStatus } from '../../../models';
-import {
-  DigitalDomicileType,
-  LegalFactId,
-  NotificationDeliveryMode,
-  NotificationDetailRecipient,
-  SendDigitalDetails,
-  TimelineCategory,
-} from '../../../models/NotificationDetail';
+import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import {
   Delegator,
   NotificationTimelineEvent,
   NotificationTimelineStatusHistory,
 } from '../../../models/NotificationTimeline';
+import { getPerfectionLink } from '../../../utility/notification.utility';
 import {
   emptyLegalFactPlan,
   getStatusLegalFactPlan,
@@ -32,7 +26,7 @@ import NotificationTimelineEventItem, {
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
 import TimelineExpandAllButton from './TimelineExpandAllButton';
 import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
-import { PERFECTION_ANCHORS, getTimelineItems } from './timelineItem.config';
+import { getTimelineItems } from './timelineItem.config';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
@@ -46,41 +40,6 @@ type Props = {
   mandateId?: string;
   delegator?: Delegator;
   userTaxId?: string;
-};
-
-const getStatusPerfectionLink = (
-  perfectionLink: string | undefined,
-  status: NotificationTimelineStatusHistory
-): string | undefined => {
-  if (!perfectionLink) {
-    return perfectionLink;
-  }
-  if (status.deliveryMode === NotificationDeliveryMode.ANALOG) {
-    return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
-  }
-  if (status.deliveryMode !== NotificationDeliveryMode.DIGITAL) {
-    return perfectionLink;
-  }
-
-  const digitalSuccessWorkflow = status.steps.find(
-    (step) =>
-      !isTimelineGroupStep(step) &&
-      step.event.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
-  );
-  if (!digitalSuccessWorkflow || isTimelineGroupStep(digitalSuccessWorkflow)) {
-    return perfectionLink;
-  }
-
-  const digitalAddress = (digitalSuccessWorkflow.event.details as SendDigitalDetails)
-    .digitalAddress;
-  if (digitalAddress?.type === DigitalDomicileType.PEC) {
-    return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
-  }
-  if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
-    return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
-  }
-
-  return perfectionLink;
 };
 
 // The same group can be shown in more than one status: its expanded state is tracked per status
@@ -152,6 +111,21 @@ const NotificationEventsTimeline = ({
       return next;
     });
 
+  const statusPerfectionLink = useMemo(
+    () =>
+      isNewTimelineCopyEnabled
+        ? getPerfectionLink(
+            perfectionLink,
+            legacyStatusHistory,
+            recipients,
+            userTaxId,
+            delegator,
+            isSenderTimeline
+          )
+        : perfectionLink,
+    [legacyStatusHistory, recipients]
+  );
+
   return (
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
@@ -181,10 +155,6 @@ const NotificationEventsTimeline = ({
               groupKeys.length > 0 && groupKeys.every((key) => expandedGroups.has(key));
             const showExpandAll =
               !isMobile && status.status === NotificationStatus.DELIVERING && groupKeys.length > 1;
-
-            const statusPerfectionLink = isNewTimelineCopyEnabled
-              ? getStatusPerfectionLink(perfectionLink, status)
-              : perfectionLink;
 
             return (
               <MITimelineItem

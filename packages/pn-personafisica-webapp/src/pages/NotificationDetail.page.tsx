@@ -37,6 +37,7 @@ import {
   appStateActions,
   downloadDocument,
   getPaymentCache,
+  getPerfectionLink,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
@@ -522,6 +523,20 @@ const NotificationDetail: React.FC = () => {
     return 'not_set';
   };
 
+  const perfectionLink = useMemo(
+    () =>
+      getPerfectionLink(
+        NOTIFICATION_PERFECTION_LINK,
+        notification.notificationStatusHistory,
+        notification.recipients,
+        currentUser.fiscal_number,
+        delegator
+          ? { displayName: delegator?.displayName, fiscalCode: delegator.fiscalCode }
+          : undefined
+      ),
+    [notification.notificationStatusHistory]
+  );
+
   useEffect(() => {
     if (downtimesReady && pageReady && !isUserForbidden) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
@@ -763,7 +778,7 @@ const NotificationDetail: React.FC = () => {
                     onTimelineClick={handleGoToTimeline}
                     clickHandler={legalFactDownloadHandler}
                     isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
-                    perfectionLink={NOTIFICATION_PERFECTION_LINK}
+                    perfectionLink={perfectionLink}
                     mandateId={mandateId}
                     delegator={
                       delegator

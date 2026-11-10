@@ -1,5 +1,6 @@
 import { SERCQ_SEND_VALUE } from '../../models/Contacts';
 import { DigitalDomicileType, SendDigitalDetails } from '../../models/NotificationDetail';
+import { hasLocalizedLabel } from '../localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendDigitalFeedbackStep extends TimelineStep {
@@ -35,7 +36,17 @@ export class SendDigitalFeedbackStep extends TimelineStep {
         },
         payload.delegatorName
       );
-      return payload.isNewTimelineCopyEnabled ? { ...statusInfo, description: '' } : statusInfo;
+      if (payload.isNewTimelineCopyEnabled) {
+        const showDelegateDescription =
+          !!payload.delegatorName &&
+          hasLocalizedLabel(
+            'notifications',
+            'detail.timeline.send-digital-success-SERCQ-SEND-description-delegate'
+          );
+
+        return showDelegateDescription ? statusInfo : { ...statusInfo, description: '' };
+      }
+      return statusInfo;
     }
     return {
       ...this.localizeTimelineStatus(

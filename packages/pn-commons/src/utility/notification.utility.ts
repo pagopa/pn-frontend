@@ -34,6 +34,8 @@ import {
   Delegator,
   NotificationPaymentTimeline,
   NotificationPaymentTimelineElement,
+  NotificationTimelineEvent,
+  NotificationTimelineLegacyStatusHistory,
 } from '../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
@@ -73,6 +75,23 @@ const VIEWED_LEGAL_FACT_KEY = 'status.viewed-legal-fact-download';
 const channelMap: Partial<Record<DigitalDomicileType, string>> = {
   [DigitalDomicileType.PEC]: 'PEC',
   [DigitalDomicileType.SERCQ]: 'SEND',
+};
+
+export const PERFECTION_ANCHORS = {
+  PEC: '#pec',
+  SEND: '#send',
+  ANALOG: '#raccomandata',
+} as const;
+
+export const getRecIndex = (
+  recipients: Array<NotificationDetailRecipient | string>,
+  userTaxId?: string,
+  delegator?: Delegator
+): number | undefined => {
+  const recTaxId = delegator ? delegator.fiscalCode : userTaxId;
+  return recipients.findIndex((rec) =>
+    typeof rec === 'string' ? rec === recTaxId : rec.taxId === recTaxId
+  );
 };
 
 function viewedByVariant({
@@ -231,10 +250,7 @@ function deliveredStatusVariant(
 ): StatusInfo {
   const deliveryMode = statusObject?.deliveryMode;
   const delegatorName = options?.delegator?.displayName;
-  const userTaxId = options?.delegator ? options.delegator.fiscalCode : options?.userTaxId;
-  const recIndex = options?.recipients.findIndex((rec) =>
-    typeof rec === 'string' ? rec === userTaxId : rec.taxId === userTaxId
-  );
+  const recIndex = getRecIndex(options?.recipients || [], options?.userTaxId, options?.delegator);
   const plainStatusHistory = options?.statusHistory?.reduce<Array<INotificationDetailTimeline>>(
     (arr, status) => arr.concat(status.steps ?? []),
     []
@@ -1075,3 +1091,74 @@ export const populatePaymentsPagoPaF24 = (
 export const isNotificationDetailOtherDocument = (
   value: NotificationDetailDocument | NotificationDetailOtherDocument
 ): value is NotificationDetailOtherDocument => value.documentType === 'AAR';
+
+export const getPerfectionLink = (
+  perfectionLink: string | undefined,
+  history: Array<NotificationTimelineLegacyStatusHistory> | Array<NotificationStatusHistory>,
+  recipients: Array<NotificationDetailRecipient>,
+  userTaxId?: string,
+  delegator?: Delegator,
+  isSender?: boolean
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+): string | undefined => {
+  if (!perfectionLink) {
+    return perfectionLink;
+  }
+
+  // if notification is a multi recipient notification and we are inthe sender view, we cannot known what is the perfection link,
+  // because each recipient can recive the notification in different ways
+  if (recipients.length > 1 && isSender) {
+    return undefined;
+  }
+
+  // get the recipientIndex
+  // if we are in the sender view, we are in a single recipient notification due to the previous if,
+  // otherwise we are in recipient view and we have to get the recIndex because we can be in the multi-recipient scenario
+  const recIndex = isSender ? 0 : getRecIndex(recipients, userTaxId, delegator);
+
+  const steps = history.reduce<Array<NotificationTimelineEvent | INotificationDetailTimeline>>(
+    (arr, status) => arr.concat(status.steps ?? []),
+    []
+  );
+
+  const digitalSuccess = steps.find(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+  if (digitalSuccess) {
+    const digitalAddress = (digitalSuccess?.details as SendDigitalDetails | undefined)
+      ?.digitalAddress;
+    if (digitalAddress?.type === DigitalDomicileType.PEC) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+    }
+    if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
+    }
+  }
+
+  // if there is a digital failure, the notification is still a digital notification
+  const digitalFailure = steps.some(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+
+  if (digitalFailure) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+  }
+
+  // ANALOG_SUCCESS_WORKFLOW is not returned by the bff, so we have to check the presence of SEND_ANALOG_FEEDBACK and status OK
+  const analogDelivery = steps.some(
+    (step) =>
+      ((step.category === TimelineCategory.SEND_ANALOG_FEEDBACK &&
+        (step.details as SendPaperDetails).responseStatus === ResponseStatus.OK) ||
+        step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW) &&
+      step.details.recIndex === recIndex
+  );
+  if (analogDelivery) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
+  }
+
+  return perfectionLink;
+};
