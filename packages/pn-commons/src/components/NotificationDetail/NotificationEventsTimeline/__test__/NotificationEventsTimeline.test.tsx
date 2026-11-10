@@ -17,8 +17,8 @@ import {
   NotificationTimelineStep,
 } from '../../../../models/NotificationTimeline';
 import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../../test-utils';
+import { PERFECTION_ANCHORS } from '../../../../utility/notification.utility';
 import NotificationEventsTimeline from '../NotificationEventsTimeline';
-import { PERFECTION_ANCHORS } from '../timelineItem.config';
 
 const multiRecipients: Array<NotificationDetailRecipient> = [
   {

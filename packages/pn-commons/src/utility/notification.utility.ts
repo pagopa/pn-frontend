@@ -7,7 +7,6 @@ import { isNil } from 'lodash-es';
 
 import { MIChipProps } from '@pagopa/mui-italia';
 
-import { PERFECTION_ANCHORS } from '../components/NotificationDetail/NotificationEventsTimeline/timelineItem.config';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
@@ -69,6 +68,12 @@ const channelMap: Partial<Record<DigitalDomicileType, string>> = {
   [DigitalDomicileType.PEC]: 'PEC',
   [DigitalDomicileType.SERCQ]: 'SEND',
 };
+
+export const PERFECTION_ANCHORS = {
+  PEC: '#pec',
+  SEND: '#send',
+  ANALOG: '#raccomandata',
+} as const;
 
 export const getRecIndex = (
   recipients: Array<NotificationDetailRecipient | string>,
