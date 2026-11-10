@@ -168,6 +168,18 @@ const matchesInformalPayment = (
   payment.pagoPa?.noticeCode === info.noticeCode &&
   payment.pagoPa?.creditorTaxId === info.creditorTaxId;
 
+const findInformalPayment = (
+  payments: Array<PaymentDetails>,
+  originalPayment: {
+    pagoPa?: Partial<NonNullable<PaymentDetails['pagoPa']>>;
+  }
+): PaymentDetails | undefined =>
+  payments.find(
+    (payment) =>
+      payment.pagoPa?.noticeCode === originalPayment.pagoPa?.noticeCode &&
+      payment.pagoPa?.creditorTaxId === originalPayment.pagoPa?.creditorTaxId
+  );
+
 export const setInformalPaymentsInCache = (
   paymentInfo: Array<ExtRegistriesPaymentDetails>,
   iun: string,
@@ -193,5 +205,13 @@ export const setInformalPaymentsInCache = (
     };
   });
 
-  return setPaymentsInCache(payments, iun);
+  const orderedPayments = originalPayments.flatMap((originalPayment) => {
+    const payment =
+      findInformalPayment(payments, originalPayment) ??
+      findInformalPayment(cachedPayments, originalPayment);
+
+    return payment ? [payment] : [];
+  });
+
+  return setPaymentsInCache(originalPayments.length > 0 ? orderedPayments : payments, iun);
 };
