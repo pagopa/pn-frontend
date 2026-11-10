@@ -76,8 +76,9 @@ const NotificationTimeline: React.FC = () => {
   const notificationTimeline = useAppSelector(
     (state: RootState) => state.notificationState.notificationTimeline
   );
-  const delegatorName = delegatorsFromStore.find((delegation) => delegation.mandateId === mandateId)
-    ?.delegator?.displayName;
+  const delegator = delegatorsFromStore.find(
+    (delegation) => delegation.mandateId === mandateId
+  )?.delegator;
 
   const isCancelled = useIsCancelled({
     notification: IS_NEW_TIMELINE_ENABLED ? notificationTimeline : notification,
@@ -235,8 +236,8 @@ const NotificationTimeline: React.FC = () => {
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
-    const breadcrumbLabel = delegatorName
-      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+    const breadcrumbLabel = delegator?.displayName
+      ? t('menu.notifiche-delegato', { delegator: delegator.displayName })
       : t('menu.notifiche-utente', { ns: 'common' });
 
     return (
@@ -337,7 +338,11 @@ const NotificationTimeline: React.FC = () => {
                   isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                   perfectionLink={NOTIFICATION_PERFECTION_LINK}
                   mandateId={mandateId}
-                  delegatorName={delegatorName}
+                  delegator={
+                    delegator
+                      ? { displayName: delegator?.displayName, fiscalCode: delegator.fiscalCode }
+                      : undefined
+                  }
                   userTaxId={currentUser.fiscal_number}
                 />
               ) : (

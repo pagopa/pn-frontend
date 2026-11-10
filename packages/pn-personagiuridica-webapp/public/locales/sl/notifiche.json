@@ -141,6 +141,7 @@
     "timeline-title": "Stanje obvestila",
     "timeline": {
       "aar-document": "Potrdilo o prejemu",
+      "analog-failure-second-attempt-group-label": "Drugo pošiljanje s priporočenim pismom - Neuspešen poskus",
       "analog-failure-workflow": "Posodobitev o pošiljanju v papirni obliki",
       "analog-failure-workflow-description": "Prejemnika ni bilo mogoče izslediti. Obvestilo o prejemu se vloži in da na voljo.",
       "analog-failure-workflow-description-multirecipient": "Prejemnika {{name}} {{taxId}} ni bilo mogoče izslediti. Obvestilo o prejemu se vloži in da na voljo.",
@@ -170,8 +171,10 @@
         "M09": "iz drugih razlogov",
         "M10": "ker naslov ni čitljiv"
       },
+      "collapse-all-groups": "Strni",
       "courtesy-group-label": "Vljudnostna sporočila",
       "digital-send-fallback": "Digitalno pošiljanje",
+      "expand-all-groups": "Razširi",
       "legalfact": {
         "analog-failure-delivery": "Depozit potrdila o prejemu",
         "digital-delivery-failure": "brez digitalnega kontaktnega podatka",
@@ -186,6 +189,9 @@
         "sender-ack": "obvestilo o prevzemu"
       },
       "notification-cancelled-document": "Izjava o preklicu obvestila",
+      "pec-address-source-general": "Naslov PEC je vpisan v javnih registrih",
+      "pec-address-source-platform": "Naslov PEC je bil dodan kot kontaktni podatek na SEND",
+      "pec-address-source-special": "Naslov PEC je bil registriran kot kontaktni kanal s strani organa pošiljatelja",
       "prepare-analog-domicile-failure": "Posodobitev o pošiljanju v papirni obliki",
       "prepare-analog-domicile-failure-D00-description": "Najden ni bil noben nov naslov za ureditev drugega poskusa pošiljanja.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Za prejemnika {{name}} {{taxId}} ni bil najden nov naslov za ureditev drugega poskusa pošiljanja.",
@@ -351,6 +357,8 @@
       "send-digital-domicile-PEC-description": "Obvestilo se pošlje na PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "Obvestilo se pošlje za {{name}} {{taxId}} na PEC {{address}}.",
       "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Drugo pošiljanje prek PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Pošiljanje prek digitalnega naslova SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Pošiljanje obvestila na digitalni naslov SEND je v teku.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Pošiljanje obvestila osebi {{name}} {{taxId}} na digitalni naslov SEND je v teku",
@@ -547,7 +555,8 @@
     "mittente": "Pošiljatelj",
     "oggetto": "Zadeva",
     "open": "Odpri",
-    "status": "Stanje"
+    "status": "Stanje",
+    "to-read": "Za branje"
   },
   "title": "Prejeto za {{organization}}",
   "title-delegated-notifications": "Prejeto za pooblastitelje"

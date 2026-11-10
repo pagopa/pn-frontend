@@ -8,12 +8,6 @@ import { getNotificationStatusInfos } from '../../../utility/notification.utilit
 import { getRecipientPerStep } from '../../../utility/notificationTimeline.utility';
 import { getTimelineItemPresentation } from './notificationTimelineStatus.config';
 
-export const PERFECTION_ANCHORS = {
-  PEC: '#pec',
-  SEND: '#send',
-  ANALOG: '#raccomandata',
-} as const;
-
 export type TimelineItem = {
   status: NotificationTimelineStatusHistory;
   label: string;
@@ -29,8 +23,13 @@ export const getTimelineItems = (
   statusHistory: Array<NotificationTimelineStatusHistory>,
   legacyStatusHistory: Array<NotificationTimelineLegacyStatusHistory>,
   recipients: Array<NotificationDetailRecipient>,
+  taxId?: string,
   isSenderTimeline?: boolean,
-  delegateView?: { mandateId?: string; delegatorName?: string; taxId?: string }
+  delegateView?: {
+    mandateId: string;
+    delegatorName: string;
+    delegatorTaxId: string;
+  }
 ): Array<TimelineItem> => {
   const isMultiRecipient = recipients.length > 1;
   const hasEffectiveDate = statusHistory.some(
@@ -44,8 +43,10 @@ export const getTimelineItems = (
       recipients,
       isParty: isSenderTimeline,
       mandateId: delegateView?.mandateId,
-      delegatorName: delegateView?.delegatorName,
-      userTaxId: delegateView?.taxId,
+      delegator: delegateView
+        ? { displayName: delegateView.delegatorName, fiscalCode: delegateView.delegatorTaxId }
+        : undefined,
+      userTaxId: taxId,
     });
 
     return {

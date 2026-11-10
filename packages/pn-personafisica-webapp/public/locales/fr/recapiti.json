@@ -62,6 +62,9 @@
     "valid-email": "Adresse email invalide",
     "valid-sms": "Numéro de téléphone portable invalide"
   },
+  "digital-contact": {
+    "verified-aria-label": "Donnée vérifiée"
+  },
   "domicile-banner": {
     "add-io": "Activez SEND sur l'application IO",
     "complete-addresses": "Saisissez un email",

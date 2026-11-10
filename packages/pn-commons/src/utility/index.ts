@@ -75,6 +75,7 @@ export {
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
   getPagoPaF24Payments,
+  getPerfectionLink,
   populatePaymentsPagoPaF24,
 } from './notification.utility';
 export {
