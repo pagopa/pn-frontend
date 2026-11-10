@@ -24,27 +24,44 @@ export function selfcareMenuItems(idOrganization: string, lang: string): Array<S
 /**
  * Products shown in the header product switch
  * @param t translation function
+ * @param products products of the institution returned by the api
  * @param productId id of the current product
  * @param idOrganization id of the organization, used to build the SelfCare dashboard url
  * @param lang current language
- * @returns the list of products: SelfCare reserved area and the current product
+ * @returns the list of products: SelfCare reserved area followed by the products of the institution
+ * or, if they are not available, by the current product
  */
 export const getProductsList = (
   t: (key: string) => string,
+  products: Array<ProductEntity>,
   productId: string,
   idOrganization: string,
   lang: string
-): Array<ProductEntity> => [
-  {
+): Array<ProductEntity> => {
+  const reservedArea: ProductEntity = {
     id: 'selfcare',
     title: t('header.reserved-area'),
     productUrl: routes.DASHBOARD(idOrganization, lang),
     linkType: 'external',
-  },
-  {
-    id: productId,
-    title: t('header.notification-platform'),
-    productUrl: '',
-    linkType: 'internal',
-  },
-];
+  };
+
+  if (products.length > 0) {
+    return [
+      reservedArea,
+      ...products.map((product) => ({
+        ...product,
+        productUrl: `${product.productUrl}&lang=${lang}`,
+      })),
+    ];
+  }
+
+  return [
+    reservedArea,
+    {
+      id: productId,
+      title: t('header.notification-platform'),
+      productUrl: '',
+      linkType: 'internal',
+    },
+  ];
+};

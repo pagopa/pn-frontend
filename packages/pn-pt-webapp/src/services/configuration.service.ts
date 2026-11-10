@@ -7,6 +7,7 @@ export interface PtConfiguration {
   ACCESSIBILITY_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
   SELFCARE_BASE_URL: string;
+  SELFCARE_SEND_PROD_ID: string;
   INACTIVITY_HANDLER_MINUTES: number;
   WORK_IN_PROGRESS: boolean;
   LANDING_SITE_URL: string;
@@ -23,6 +24,7 @@ class PtConfigurationValidator extends Validator<PtConfiguration> {
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
     this.ruleFor('SELFCARE_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('SELFCARE_SEND_PROD_ID').isString().isRequired();
     this.ruleFor('INACTIVITY_HANDLER_MINUTES').isNumber().isRequired();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean().isRequired();
     this.ruleFor('LANDING_SITE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);

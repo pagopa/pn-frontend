@@ -3,12 +3,13 @@ import {
   basicInitialUserData,
   basicNoLoggedUserData,
 } from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { PNRole, PartyRole, User } from '../../models/user';
 import { userDataMatcher } from '../../utility/user.utility';
 import { RootState } from '../store';
-import { exchangeToken } from './actions';
+import { exchangeToken, getProductsOfInstitution } from './actions';
 
 const noLoggedUserData: User = {
   ...basicNoLoggedUserData,
@@ -30,6 +31,7 @@ const noLoggedUserData: User = {
 const initialState = {
   loading: false,
   user: basicInitialUserData<User>(userDataMatcher, noLoggedUserData),
+  productsOfInstitution: [] as Array<ProductEntity>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -56,6 +58,9 @@ const userSlice = createSlice({
     builder.addCase(exchangeToken.rejected, (state) => {
       state.loading = false;
     });
+    builder.addCase(getProductsOfInstitution.fulfilled, (state, action) => {
+      state.productsOfInstitution = action.payload;
+    });
   },
 });
 
@@ -69,7 +74,13 @@ const selectUser = createSelector([selectUserState], (userState) => userState.us
 
 const selectUserRole = createSelector([selectUser], (user) => user.organization.roles[0]?.role);
 
+const selectProductsOfInstitution = createSelector(
+  [selectUserState],
+  (userState) => userState.productsOfInstitution
+);
+
 export const authSelectors = {
   selectUser,
   selectUserRole,
+  selectProductsOfInstitution,
 };

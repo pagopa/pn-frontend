@@ -3,20 +3,28 @@ import { vi } from 'vitest';
 
 import App from '../App';
 import { operatorUserResponse, userResponse } from '../__mocks__/Auth.mock';
-import { authClient } from '../api/apiClients';
+import { productsDTO } from '../__mocks__/Products.mock';
+import { apiClient, authClient } from '../api/apiClients';
 import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
 import { DASHBOARD, ENTI, GROUPS, SELFCARE_LOGOUT_PATH, USERS } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 import { act, fireEvent, render, screen, waitFor, within } from './test-utils';
 
-const loggedState = (user = userResponse) => ({ userState: { user } });
+const PRODUCTS_URL = '/bff/v1/institutions/products';
+
+const loggedState = (user = userResponse) => ({
+  userState: { user, productsOfInstitution: [] },
+});
 
 describe('App', () => {
   let mock: MockAdapter;
+  let apiMock: MockAdapter;
   const mockOpenFn = vi.fn();
+  const productsCalls = () => apiMock.history.get.filter((req) => req.url === PRODUCTS_URL);
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
+    apiMock = new MockAdapter(apiClient);
   });
 
   beforeEach(() => {
@@ -25,12 +33,14 @@ describe('App', () => {
 
   afterEach(() => {
     mock.reset();
+    apiMock.reset();
     vi.clearAllMocks();
     vi.unstubAllGlobals();
   });
 
   afterAll(() => {
     mock.restore();
+    apiMock.restore();
   });
 
   it('renders header, side menu, footer and home page', async () => {
@@ -158,5 +168,48 @@ describe('App', () => {
     const productDropdown = await waitFor(() => screen.getByRole('presentation'));
     fireEvent.click(within(productDropdown).getByText('header.reserved-area'));
     expect(assignFn).toHaveBeenCalledWith(DASHBOARD(userResponse.organization.id, 'it'));
+  });
+
+  it('shows the products of the institution in the products switch', async () => {
+    apiMock.onGet(PRODUCTS_URL).reply(200, productsDTO);
+    const assignFn = vi.fn();
+    vi.stubGlobal('location', { href: '', assign: assignFn });
+    const { container, testStore } = await act(async () =>
+      render(<App />, { preloadedState: loggedState() })
+    );
+    await waitFor(() => {
+      expect(productsCalls()).toHaveLength(1);
+      expect(testStore.getState().userState.productsOfInstitution).toStrictEqual(productsDTO);
+    });
+    const headers = container.querySelectorAll('.MuiContainer-root');
+    const productButton = headers[1].querySelector('[role="button"]');
+    fireEvent.click(productButton!);
+    const productDropdown = await waitFor(() => screen.getByRole('presentation'));
+    expect(within(productDropdown).getByText('header.reserved-area')).toBeInTheDocument();
+    expect(within(productDropdown).queryByText('header.notification-platform')).not.toBeInTheDocument();
+    fireEvent.click(within(productDropdown).getByText(productsDTO[1].title));
+    expect(assignFn).toHaveBeenCalledWith(`${productsDTO[1].productUrl}&lang=it`);
+  });
+
+  it('shows the current product if the products api fails', async () => {
+    apiMock.onGet(PRODUCTS_URL).reply(500);
+    const { container, testStore } = await act(async () =>
+      render(<App />, { preloadedState: loggedState() })
+    );
+    await waitFor(() => {
+      expect(productsCalls()).toHaveLength(1);
+    });
+    expect(testStore.getState().userState.productsOfInstitution).toStrictEqual([]);
+    const headers = container.querySelectorAll('.MuiContainer-root');
+    const productButton = headers[1].querySelector('[role="button"]');
+    fireEvent.click(productButton!);
+    const productDropdown = await waitFor(() => screen.getByRole('presentation'));
+    expect(within(productDropdown).getByText('header.reserved-area')).toBeInTheDocument();
+    expect(within(productDropdown).getByText('header.notification-platform')).toBeInTheDocument();
+  });
+
+  it('does not call the products api for anonymous users', async () => {
+    await act(async () => render(<App />));
+    expect(productsCalls()).toHaveLength(0);
   });
 });
