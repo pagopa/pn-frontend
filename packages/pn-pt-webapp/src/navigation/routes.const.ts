@@ -11,6 +11,11 @@ const SELFCARE_DASHBOARD = '/dashboard';
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
 
+export {
+  PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
+  TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
+} from '@pagopa-pn/pn-commons';
+
 /** DASHBOARD navigation link to SelfCare "Area Riservata"
  * @param idOrganization
  * @param lang

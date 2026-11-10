@@ -15,6 +15,7 @@ import './index.css';
 import { initStore, store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import { loadPtConfiguration } from './services/configuration.service';
+import { initOneTrust } from './utility/onetrust';
 
 async function doTheRender() {
   const container = document.getElementById('root');
@@ -24,6 +25,7 @@ async function doTheRender() {
     await loadPtConfiguration();
 
     // init actions (previously static code) which make use of config
+    await initOneTrust();
     initStore();
     initAxiosClients();
     setUpInterceptor(store);
