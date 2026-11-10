@@ -269,7 +269,7 @@
     "viewed-description-as-delegate": "In qualità di persona delegata, hai effettuato un accesso a questa notifica a valore legale.",
     "viewed-description-as-delegate-after-effective-date": "In qualità di persona delegata, hai effettuato un accesso alla notifica di {{recipient}} su SEND dopo che questa ha assunto valore di legge.",
     "viewed-description-by-delegate": "In qualità di persona delegata, {{name}} ha effettuato un accesso a questa notifica a valore legale.",
-    "viewed-description-by-other-delegate": "In qualità di persona delegata {{name}} ha effettuato un accesso a questa notifica a valore legale.",
+    "viewed-description-by-other-delegate": "In qualità di persona delegata, {{name}} ha effettuato un accesso a questa notifica a valore legale.",
     "viewed-description-by-other-delegate-after-effective-date": "In qualità di persona delegata, {{name}} ha effettuato un accesso alla notifica di {{recipient}} su SEND dopo che questa ha assunto valore di legge.",
     "viewed-description-by-other-recipient": "Questa notifica a valore legale è stata inviata a più destinatari, e almeno una persona tra questi ha effettuato un accesso.",
     "viewed-description-by-recipient": "{{recipient}} ha effettuato un accesso alla notifica SEND.",
