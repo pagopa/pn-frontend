@@ -104,7 +104,7 @@ const NotificationDetail: React.FC = () => {
   const showInfoMessageIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',

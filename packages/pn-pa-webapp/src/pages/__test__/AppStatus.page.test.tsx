@@ -1,7 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa-pn/pn-commons';
+import {
+  AppMessage,
+  AppResponseMessage,
+  ResponseEventDispatcher,
+  formatDate,
+} from '@pagopa-pn/pn-commons';
 
 import { currentStatusDTO, downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
@@ -135,6 +140,55 @@ describe('AppStatus page', () => {
     await waitFor(() => {
       expect(globalThis.location.href).toBe('https://www.mocked-url.com');
     });
+  });
+
+  it('Desktop - shows warning when downtime legal fact is temporarily unavailable', async () => {
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    const documentUrl = `/bff/v1/downtime/legal-facts/${downtimesDTO.result[0].legalFactId}`;
+
+    mock.onGet(documentUrl).reply(200, {
+      contentLength: 999,
+      retryAfter: 1000,
+    });
+
+    let result: ReturnType<typeof render>;
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <AppStatusWithErrorHandling />
+        </>
+      );
+    });
+
+    const downtimeLogTableRows = screen.getAllByTestId('tableDowntimeLog.row');
+    const downloadButton = within(downtimeLogTableRows[0]).getByTestId('download-legal-fact');
+
+    fireEvent.click(downloadButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.get[2].url).toBe(documentUrl);
+    });
+
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
+
+    const warningAlert = await screen.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
+
+    expect(within(warningAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
+    expect(globalThis.location.href).toBe('');
   });
 
   it('Desktop - change pagination and size', async () => {

@@ -124,7 +124,7 @@ const InformalNotificationDetail: React.FC = () => {
   const showInfoMessageIfRetryAfterOrDownload = (response: BffDocumentDownloadMetadataResponse) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t('informal.detail.documents.document-not-available'),
         })

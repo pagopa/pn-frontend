@@ -264,7 +264,7 @@ const InformalNotificationDetail: React.FC = () => {
   }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',

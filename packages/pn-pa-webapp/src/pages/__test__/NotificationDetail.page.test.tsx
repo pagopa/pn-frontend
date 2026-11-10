@@ -218,9 +218,19 @@ describe('NotificationDetail Page', () => {
     fireEvent.click(documentButton);
 
     await waitFor(() => {
-      const alertMessage = result.getAllByTestId('snackBarContainer')[0];
-      expect(alertMessage).toBeInTheDocument();
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
     });
+
+    const warningAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
+
+    expect(within(warningAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
     // simulate that aar is now available
     mock
       .onGet(

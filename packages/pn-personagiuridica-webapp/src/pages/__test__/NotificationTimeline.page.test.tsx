@@ -14,7 +14,7 @@ import notifications from '../../../public/locales/it/notifiche.json';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { NotificationTimelineResponse } from '../../__mocks__/NotificationTimeline.mock';
-import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import { PgConfiguration } from '../../services/configuration.service';
@@ -169,8 +169,19 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
       expect(mock.history.get[1].url).toContain(documentUrl);
     });
 
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
+    const docNotAvailableAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
     expect(docNotAvailableAlert).toBeInTheDocument();
+    expect(within(docNotAvailableAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
 
     mock.onGet(documentUrl).reply(200, {
       filename: 'mocked-filename',
@@ -298,10 +309,7 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(
-          notificationDTO.iun,
-          mandateId
-        ),
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
         path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
       });
     });
@@ -424,8 +432,19 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
       );
     });
 
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
+    const docNotAvailableAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
     expect(docNotAvailableAlert).toBeInTheDocument();
+    expect(within(docNotAvailableAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
 
     mock
       .onGet(
@@ -516,10 +535,7 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(
-          notificationDTO.iun,
-          mandateId
-        ),
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
         path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
       });
     });
