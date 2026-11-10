@@ -7,6 +7,7 @@ import { isNil } from 'lodash-es';
 
 import { MIChipProps } from '@pagopa/mui-italia';
 
+import { PERFECTION_ANCHORS } from '../components/NotificationDetail/NotificationEventsTimeline/timelineItem.config';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
@@ -34,6 +35,8 @@ import {
   Delegator,
   NotificationPaymentTimeline,
   NotificationPaymentTimelineElement,
+  NotificationTimelineEvent,
+  NotificationTimelineLegacyStatusHistory,
 } from '../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
@@ -1041,3 +1044,74 @@ export const populatePaymentsPagoPaF24 = (
 export const isNotificationDetailOtherDocument = (
   value: NotificationDetailDocument | NotificationDetailOtherDocument
 ): value is NotificationDetailOtherDocument => value.documentType === 'AAR';
+
+export const getPerfectionLink = (
+  perfectionLink: string | undefined,
+  history: Array<NotificationTimelineLegacyStatusHistory> | Array<NotificationStatusHistory>,
+  recipients: Array<NotificationDetailRecipient>,
+  userTaxId?: string,
+  delegator?: Delegator,
+  isSender?: boolean
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+): string | undefined => {
+  if (!perfectionLink) {
+    return perfectionLink;
+  }
+
+  // if notification is a multi recipient notification and we are inthe sender view, we cannot known what is the perfection link,
+  // because each recipient can recive the notification in different ways
+  if (recipients.length > 1 && isSender) {
+    return undefined;
+  }
+
+  // get the recipientIndex
+  // if we are in the sender view, we are in a single recipient notification due to the previous if,
+  // otherwise we are in recipient view and we have to get the recIndex because we can be in the multi-recipient scenario
+  const recIndex = isSender ? 0 : getRecIndex(recipients, userTaxId, delegator);
+
+  const steps = history.reduce<Array<NotificationTimelineEvent | INotificationDetailTimeline>>(
+    (arr, status) => arr.concat(status.steps ?? []),
+    []
+  );
+
+  const digitalSuccess = steps.find(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+  if (digitalSuccess) {
+    const digitalAddress = (digitalSuccess?.details as SendDigitalDetails | undefined)
+      ?.digitalAddress;
+    if (digitalAddress?.type === DigitalDomicileType.PEC) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+    }
+    if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
+    }
+  }
+
+  // if there is a digital failure, the notification is still a digital notification
+  const digitalFailure = steps.some(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+
+  if (digitalFailure) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+  }
+
+  // ANALOG_SUCCESS_WORKFLOW is not returned by the bff, so we have to check the presence of SEND_ANALOG_FEEDBACK and status OK
+  const analogDelivery = steps.some(
+    (step) =>
+      ((step.category === TimelineCategory.SEND_ANALOG_FEEDBACK &&
+        (step.details as SendPaperDetails).responseStatus === ResponseStatus.OK) ||
+        step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW) &&
+      step.details.recIndex === recIndex
+  );
+  if (analogDelivery) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
+  }
+
+  return perfectionLink;
+};
