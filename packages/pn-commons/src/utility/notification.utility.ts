@@ -65,7 +65,7 @@ type ViewedVariantOptions = {
   isMultiRecipient?: boolean;
   mandateId?: string;
   delegator?: Delegator;
-  userTaxId?: string;
+  userTaxId: string;
 };
 
 // Sentence appended to the VIEWED description only when the access legal fact is available
@@ -84,33 +84,29 @@ function viewedByVariant({
   delegator,
   userTaxId,
 }: ViewedVariantOptions): { viewer: StatusViewer; data?: StatusLocalizationData } | undefined {
-  const viewedEvents =
-    statusObject?.steps?.filter((step) => step.category === TimelineCategory.NOTIFICATION_VIEWED) ??
-    [];
-  // In multi-recipient notifications, when the user is known, only the access of the recipient
-  // the user is acting for (the user or the delegator) is relevant.
-  const tracksRecipient = !!(isMultiRecipient && userTaxId);
+  // Only the access of the recipient the user is acting for (the user or the delegator) is relevant
   const recipientTaxId = delegator ? delegator.fiscalCode : userTaxId;
   const recIndex = recipients?.findIndex((rec) =>
     typeof rec === 'string' ? rec === recipientTaxId : rec.taxId === recipientTaxId
   );
-  const viewedEvent = tracksRecipient
-    ? viewedEvents.find((step) => step.details.recIndex === recIndex)
-    : viewedEvents[0];
+  const viewedEvent = statusObject?.steps?.find(
+    (step) =>
+      step.category === TimelineCategory.NOTIFICATION_VIEWED && step.details.recIndex === recIndex
+  );
 
-  if (tracksRecipient && !viewedEvent) {
+  if (isMultiRecipient && !viewedEvent) {
     // the access was made by another recipient
     return { viewer: 'by-other-recipient' };
   }
 
   const delegateInfo = (viewedEvent?.details as NotificationViewedDetails | undefined)
     ?.delegateInfo;
-  // statusObject.recipient refers to the first access, so it is reliable only if we don't track a specific recipient
+  // statusObject.recipient refers to the first access, so it is reliable only in mono-recipient notifications
   const delegateName =
-    delegateInfo?.denomination ?? (tracksRecipient ? undefined : statusObject?.recipient);
+    delegateInfo?.denomination ?? (isMultiRecipient ? undefined : statusObject?.recipient);
   const delegatorName = delegator?.displayName;
 
-  if (mandateId && delegatorName && userTaxId) {
+  if (mandateId && delegatorName) {
     if (delegateInfo?.taxId === userTaxId) {
       return { viewer: 'as-delegate', data: { recipient: delegatorName } };
     }
@@ -588,14 +584,17 @@ export function getNotificationStatusInfos(
           { name: statusObject.recipient }
         );
       }
-      const viewer = viewedByVariant({
-        statusObject,
-        recipients: options?.recipients,
-        isMultiRecipient,
-        mandateId: options?.mandateId,
-        delegator: options?.delegator,
-        userTaxId: options?.userTaxId,
-      });
+      // userTaxId is only provided by PF: PA and PG use the legacy content, with no viewer variants
+      const viewer = options?.userTaxId
+        ? viewedByVariant({
+            statusObject,
+            recipients: options.recipients,
+            isMultiRecipient,
+            mandateId: options.mandateId,
+            delegator: options.delegator,
+            userTaxId: options.userTaxId,
+          })
+        : undefined;
       const statusInfos = localizeStatus(
         NotificationStatus.VIEWED,
         { subject },

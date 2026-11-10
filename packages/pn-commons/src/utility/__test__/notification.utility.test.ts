@@ -824,7 +824,7 @@ describe('notification status texts', () => {
         relatedTimelineElements: [],
         recipient: notificationDTO.recipients[0].denomination,
       },
-      { recipients: notificationDTO.recipients }
+      { recipients: notificationDTO.recipients, userTaxId: notificationDTO.recipients[0].taxId }
     );
   });
 
@@ -853,7 +853,7 @@ describe('notification status texts', () => {
           }),
         ],
       },
-      { recipients: notificationDTO.recipients }
+      { recipients: notificationDTO.recipients, userTaxId: notificationDTO.recipients[0].taxId }
     );
   });
 
@@ -1098,9 +1098,20 @@ describe('notification status texts', () => {
         activeFrom: '2023-01-26T13:57:16.42843144Z',
         relatedTimelineElements: [],
         recipient: notificationDTOMultiRecipient.recipients[0].denomination,
-        steps: [],
+        steps: [
+          getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+            recIndex: 0,
+            delegateInfo: {
+              mandateId: 'mandate-1',
+              denomination: notificationDTOMultiRecipient.recipients[0].denomination,
+            },
+          }),
+        ],
       },
-      { recipients: notificationDTOMultiRecipient.recipients }
+      {
+        recipients: notificationDTOMultiRecipient.recipients,
+        userTaxId: notificationDTOMultiRecipient.recipients[0].taxId,
+      }
     );
   });
 
