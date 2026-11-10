@@ -9,7 +9,9 @@ import {
   DigitalDomicileType,
   LegalFactId,
   NotificationDetailRecipient,
+  ResponseStatus,
   SendDigitalDetails,
+  SendPaperDetails,
   TimelineCategory,
 } from '../../../models/NotificationDetail';
 import {
@@ -105,9 +107,11 @@ const getPerfectionLink = (
     return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
   }
 
+  // ANALOG_SUCCESS_WORKFLOW is not returned by the bff, so we have to check the presence of SEND_ANALOG_FEEDBACK and status OK
   const analogDelivery = steps.some(
     (step) =>
-      (step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW ||
+      ((step.category === TimelineCategory.SEND_ANALOG_FEEDBACK &&
+        (step.details as SendPaperDetails).responseStatus === ResponseStatus.OK) ||
         step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW) &&
       step.details.recIndex === recIndex
   );
