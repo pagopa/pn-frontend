@@ -30,6 +30,7 @@ import {
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
   getPagoPaF24Payments,
+  getRecIndex,
   populatePaymentsPagoPaF24,
 } from '../notification.utility';
 
@@ -1884,5 +1885,42 @@ describe('Populate pagoPA and F24 payments', () => {
     const pagoPaF24Payments = getPagoPaF24Payments(payments, recIndex);
 
     expect(pagoPaF24Payments).toStrictEqual(res);
+  });
+});
+
+describe('getRecIndex', () => {
+  const recipientTaxIds = ['synthetic-recipient-0', 'synthetic-recipient-1'];
+
+  const delegator = {
+    displayName: 'Destinatario sintetico',
+    fiscalCode: recipientTaxIds[1],
+  };
+
+  it('finds the user among string recipients', () => {
+    expect(getRecIndex(recipientTaxIds, recipientTaxIds[1])).toBe(1);
+  });
+
+  it('finds the user among object recipients', () => {
+    const recipients = recipientTaxIds.map((taxId) => ({
+      ...notificationDTO.recipients[0],
+      denomination: 'Destinatario sintetico',
+      taxId,
+    }));
+
+    expect(getRecIndex(recipients, recipientTaxIds[1])).toBe(1);
+  });
+
+  it('prefers the delegator identity over the user identity', () => {
+    expect(getRecIndex(recipientTaxIds, recipientTaxIds[0], delegator)).toBe(1);
+  });
+
+  it('finds the delegator when the user identity is missing', () => {
+    expect(getRecIndex(recipientTaxIds, undefined, delegator)).toBe(1);
+  });
+
+  it('returns -1 when the identity is missing or not found', () => {
+    expect(getRecIndex(recipientTaxIds)).toBe(-1);
+    expect(getRecIndex(recipientTaxIds, 'synthetic-unknown-recipient')).toBe(-1);
+    expect(getRecIndex([], recipientTaxIds[0])).toBe(-1);
   });
 });
