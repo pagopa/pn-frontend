@@ -835,21 +835,21 @@ describe('notification status texts', () => {
       `notifiche - status.viewed`,
       `notifiche - status.viewed-tooltip - ${JSON.stringify({
         subject: `notifiche - status.delegate - ${JSON.stringify({
-          name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+          name: 'Persona Sintetica (PRSSNT80A01H501X)',
         })}`,
       })}`,
       `notifiche - status.viewed-description-by-delegate - ${JSON.stringify({
-        name: 'Luigi Zucchini',
+        name: 'Persona Sintetica',
       })}`,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: '2023-08-25T11:38:05.392Z',
         relatedTimelineElements: [],
-        recipient: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        recipient: 'Persona Sintetica (PRSSNT80A01H501X)',
         steps: [
           getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
             recIndex: 0,
-            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+            delegateInfo: { mandateId: 'mandate-1', denomination: 'Persona Sintetica' },
           }),
         ],
       },
@@ -877,7 +877,7 @@ describe('notification status texts', () => {
             recIndex: 0,
             delegateInfo: {
               mandateId: 'mandate-1',
-              denomination: 'Luigi Zucchini',
+              denomination: 'Persona Sintetica',
               taxId: 'TSTUTN00A07A001G',
             },
           }),
@@ -903,7 +903,7 @@ describe('notification status texts', () => {
         subject: `notifiche - status.recipient`,
       })}`,
       `notifiche - status.viewed-description-by-other-delegate - ${JSON.stringify({
-        name: 'Luigi Zucchini',
+        name: 'Persona Sintetica',
         recipient: 'Mario Cucumber',
       })}`,
       {
@@ -915,7 +915,7 @@ describe('notification status texts', () => {
             recIndex: 0,
             delegateInfo: {
               mandateId: 'mandate-2',
-              denomination: 'Luigi Zucchini',
+              denomination: 'Persona Sintetica',
               taxId: 'FRMTTR76M06B715E',
             },
           }),
@@ -965,18 +965,18 @@ describe('notification status texts', () => {
       `notifiche - status.viewed`,
       `notifiche - status.viewed-tooltip - ${JSON.stringify({
         subject: `notifiche - status.delegate - ${JSON.stringify({
-          name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+          name: 'Persona Sintetica (PRSSNT80A01H501X)',
         })}`,
       })}`,
       `notifiche - status.viewed-description-by-other-delegate - ${JSON.stringify({
-        name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        name: 'Persona Sintetica (PRSSNT80A01H501X)',
         recipient: 'Mario Cucumber',
       })}`,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: '2023-08-25T11:38:05.392Z',
         relatedTimelineElements: [],
-        recipient: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        recipient: 'Persona Sintetica (PRSSNT80A01H501X)',
         steps: [getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, { recIndex: 0 })],
       },
       {
@@ -1031,7 +1031,7 @@ describe('notification status texts', () => {
         steps: [
           getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
             recIndex: 0,
-            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+            delegateInfo: { mandateId: 'mandate-1', denomination: 'Persona Sintetica' },
           }),
         ],
       },
@@ -1165,7 +1165,11 @@ describe('notification status texts', () => {
       getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
         recIndex,
         delegateInfo: delegateTaxIdOfAccess
-          ? { mandateId: 'mandate-1', denomination: 'Luigi Zucchini', taxId: delegateTaxIdOfAccess }
+          ? {
+              mandateId: 'mandate-1',
+              denomination: 'Persona Sintetica',
+              taxId: delegateTaxIdOfAccess,
+            }
           : undefined,
       });
     const withEffectiveDate = (status: NotificationStatusHistory) => [
@@ -1248,7 +1252,7 @@ describe('notification status texts', () => {
         steps: [viewedStep(0, otherRecipient.taxId)],
         options: delegateView,
         expected: `notifiche - status.viewed-description-by-other-delegate-after-effective-date - ${JSON.stringify(
-          { name: 'Luigi Zucchini', recipient: recipient.denomination }
+          { name: 'Persona Sintetica', recipient: recipient.denomination }
         )}`,
       },
       {
@@ -1264,7 +1268,7 @@ describe('notification status texts', () => {
         steps: [viewedStep(0, delegateTaxId)],
         options: { userTaxId: recipient.taxId },
         expected: `notifiche - status.viewed-description-by-delegate - ${JSON.stringify({
-          name: 'Luigi Zucchini',
+          name: 'Persona Sintetica',
         })}`,
       },
     ])('uses the after-effective-date description - $desc', ({ steps, options, expected }) => {
