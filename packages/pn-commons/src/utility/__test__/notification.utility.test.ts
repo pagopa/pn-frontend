@@ -823,6 +823,15 @@ describe('notification status texts', () => {
         activeFrom: '2023-01-26T13:57:16.42843144Z',
         relatedTimelineElements: [],
         recipient: notificationDTO.recipients[0].denomination,
+        steps: [
+          getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+            recIndex: 0,
+            delegateInfo: {
+              mandateId: 'mandate-1',
+              denomination: notificationDTO.recipients[0].denomination,
+            },
+          }),
+        ],
       },
       { recipients: notificationDTO.recipients, userTaxId: notificationDTO.recipients[0].taxId }
     );
@@ -945,38 +954,6 @@ describe('notification status texts', () => {
         status: NotificationStatus.VIEWED,
         activeFrom: '2023-08-25T11:38:05.392Z',
         relatedTimelineElements: [],
-        steps: [getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, { recIndex: 0 })],
-      },
-      {
-        recipients: notificationDTO.recipients,
-        mandateId: 'mandate-1',
-        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
-        userTaxId: 'TSTUTN00A07A001G',
-      }
-    );
-  });
-
-  it('return notification status infos - VIEWED - delegate view, no delegateInfo falls back on the delegate carried by recipient', () => {
-    initStatusLocalizationExists(
-      (_ns, path) => path === 'status.viewed-description-by-other-delegate'
-    );
-    testNotificationStatusInfos(
-      'success',
-      `notifiche - status.viewed`,
-      `notifiche - status.viewed-tooltip - ${JSON.stringify({
-        subject: `notifiche - status.delegate - ${JSON.stringify({
-          name: 'Persona Sintetica (PRSSNT80A01H501X)',
-        })}`,
-      })}`,
-      `notifiche - status.viewed-description-by-other-delegate - ${JSON.stringify({
-        name: 'Persona Sintetica (PRSSNT80A01H501X)',
-        recipient: 'Mario Cucumber',
-      })}`,
-      {
-        status: NotificationStatus.VIEWED,
-        activeFrom: '2023-08-25T11:38:05.392Z',
-        relatedTimelineElements: [],
-        recipient: 'Persona Sintetica (PRSSNT80A01H501X)',
         steps: [getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, { recIndex: 0 })],
       },
       {

@@ -62,7 +62,6 @@ type StatusLocalizationData = { [key: string]: string | undefined };
 type ViewedVariantOptions = {
   statusObject?: NotificationStatusHistory;
   recipients?: Array<NotificationDetailRecipient | string>;
-  isMultiRecipient?: boolean;
   mandateId?: string;
   delegator?: Delegator;
   userTaxId: string;
@@ -79,7 +78,6 @@ const channelMap: Partial<Record<DigitalDomicileType, string>> = {
 function viewedByVariant({
   statusObject,
   recipients,
-  isMultiRecipient,
   mandateId,
   delegator,
   userTaxId,
@@ -94,16 +92,13 @@ function viewedByVariant({
       step.category === TimelineCategory.NOTIFICATION_VIEWED && step.details.recIndex === recIndex
   );
 
-  if (isMultiRecipient && !viewedEvent) {
-    // the access was made by another recipient
+  if (!viewedEvent) {
+    // we are in the VIEWED status, so the access was made by another recipient
     return { viewer: 'by-other-recipient' };
   }
 
-  const delegateInfo = (viewedEvent?.details as NotificationViewedDetails | undefined)
-    ?.delegateInfo;
-  // statusObject.recipient refers to the first access, so it is reliable only in mono-recipient notifications
-  const delegateName =
-    delegateInfo?.denomination ?? (isMultiRecipient ? undefined : statusObject?.recipient);
+  const delegateInfo = (viewedEvent.details as NotificationViewedDetails).delegateInfo;
+  const delegateName = delegateInfo?.denomination;
   const delegatorName = delegator?.displayName;
 
   if (mandateId && delegatorName) {
@@ -589,7 +584,6 @@ export function getNotificationStatusInfos(
         ? viewedByVariant({
             statusObject,
             recipients: options.recipients,
-            isMultiRecipient,
             mandateId: options.mandateId,
             delegator: options.delegator,
             userTaxId: options.userTaxId,
