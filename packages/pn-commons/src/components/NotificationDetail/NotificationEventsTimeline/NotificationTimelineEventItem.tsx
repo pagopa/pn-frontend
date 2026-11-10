@@ -5,12 +5,14 @@ import {
   NotificationDetailRecipient,
   TimelineCategory,
 } from '../../../models/NotificationDetail';
-import { NotificationTimelineEvent } from '../../../models/NotificationTimeline';
-import { getNotificationTimelineStatusInfos } from '../../../utility/notification.utility';
+import { Delegator, NotificationTimelineEvent } from '../../../models/NotificationTimeline';
+import {
+  PERFECTION_ANCHORS,
+  getNotificationTimelineStatusInfos,
+} from '../../../utility/notification.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineDescription from './NotificationTimelineDescription';
 import TimelineLegalFacts from './TimelineLegalFacts';
-import { PERFECTION_ANCHORS } from './timelineItem.config';
 
 type Props = {
   event: NotificationTimelineEvent;
@@ -22,7 +24,7 @@ type Props = {
   insideAGroup?: boolean;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
-  delegatorName?: string;
+  delegator?: Delegator;
 };
 
 const NotificationTimelineEventItemLegalFacts: React.FC<
@@ -71,7 +73,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   insideAGroup = false,
   isNewTimelineCopyEnabled = false,
   perfectionLink,
-  delegatorName,
+  delegator,
 }) => {
   // Events absorbed into a status description are filtered out by the caller, so reaching
   // this component means the event has to be rendered.
@@ -91,7 +93,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
     recipients,
     allEvents,
     isNewTimelineCopyEnabled,
-    delegatorName
+    delegator
   );
 
   if (!statusInfo) {

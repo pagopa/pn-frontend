@@ -145,6 +145,7 @@
     "timeline-title": "État de la notification",
     "timeline": {
       "aar-document": "Accusé de réception",
+      "analog-failure-second-attempt-group-label": "Deuxième envoi par lettre recommandée - Tentative échouée",
       "analog-failure-workflow": "Mise à jour sur l’envoi papier",
       "analog-failure-workflow-description": "Le destinataire s’est avéré absolument introuvable. L’accusé de réception est déposé et mis à disposition.",
       "analog-failure-workflow-description-multirecipient": "Le destinataire {{name}} {{taxId}} s’est avéré absolument introuvable. L’accusé de réception est déposé et mis à disposition.",
@@ -174,8 +175,10 @@
         "M09": "pour d’autres raisons",
         "M10": "parce que l'adresse n'est pas lisible"
       },
+      "collapse-all-groups": "Réduire",
       "courtesy-group-label": "Messages de courtoisie",
       "digital-send-fallback": "Envoi numérique",
+      "expand-all-groups": "Développer",
       "legalfact": {
         "analog-failure-delivery": "Dépôt de l'avis de réception",
         "digital-delivery-failure": "défaut de livraison numérique",
@@ -190,6 +193,9 @@
         "sender-ack": "notification prise en charge"
       },
       "notification-cancelled-document": "Déclaration d'annulation de la notification",
+      "pec-address-source-general": "L'adresse PEC figure dans les registres publics",
+      "pec-address-source-platform": "L'adresse PEC a été ajoutée comme adresse de contact sur SEND",
+      "pec-address-source-special": "L'adresse PEC a été enregistrée comme canal de contact par l'organisme émetteur",
       "prepare-analog-domicile-failure": "Mise à jour sur l’envoi papier",
       "prepare-analog-domicile-failure-D00-description": "Aucune nouvelle adresse n’a été trouvée pour préparer une autre tentative d’envoi.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Aucune nouvelle adresse n’a été trouvée pour le destinataire {{name}} {{taxId}} afin de préparer une autre tentative d’envoi.",
@@ -355,6 +361,8 @@
       "send-digital-domicile-PEC-description": "La notification est en cours d’envoi à l’adresse PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "La notification à {{name}} {{taxId}} est en cours d’envoi à l’adresse PEC {{address}}.",
       "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Deuxième envoi via PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Envoi via une Adresse Numérique SEND",
       "send-digital-domicile-SERCQ-SEND-description": "L’envoi de la notification à l’Adresse Numérique SEND est en cours.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’Adresse Numérique SEND est en cours",
@@ -558,7 +566,8 @@
     "mittente": "Expéditeur",
     "oggetto": "Objet",
     "open": "Ouvrir",
-    "status": "État"
+    "status": "État",
+    "to-read": "À lire"
   },
   "tppLanding": {
     "access-button": "Accéder aux documents",

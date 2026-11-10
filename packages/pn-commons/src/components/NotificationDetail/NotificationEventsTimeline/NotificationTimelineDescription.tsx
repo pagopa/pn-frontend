@@ -46,7 +46,6 @@ const NotificationTimelineEventLegalFact: React.FC<
         fontSize: '14px',
         justifyContent: 'flex-start',
         display: 'flex',
-        textAlign: 'left',
       }
     : {
         textDecoration: 'underline',
@@ -61,7 +60,7 @@ const NotificationTimelineEventLegalFact: React.FC<
       variant="text"
       onClick={() => clickHandler(legalFact)}
       disabled={disableDownloads}
-      sx={buttonLayout}
+      sx={{ textAlign: 'left', ...buttonLayout }}
       data-testid={dataTestId}
     >
       {children}

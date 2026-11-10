@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import InstitutionsIcon from '@mui/icons-material/AccountBalanceOutlined';
 import { DialogTitle } from '@mui/material';
@@ -128,18 +129,24 @@ const ActualApp = () => {
     setIsDeleteModalOpen(false);
   };
 
+  const { pathname } = useLocation();
+  const rootPath = pathname.split('/')[1] ? `/${pathname.split('/')[1]}` : '/';
+  const showSideMenu =
+    !!sessionToken && ![routes.PRIVACY_POLICY, routes.TERMS_OF_SERVICE].includes(rootPath);
+
   return (
     <>
       <ResponseEventDispatcher />
       <Layout
+        showSideMenu={showSideMenu}
         onExitAction={handleLogout}
         sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfCareItems} />}
-        showSideMenu={!!sessionToken}
         productsList={productsList}
         productId={SELFCARE_SEND_PROD_ID}
         partyId={party.id}
         partyList={[party]}
         loggedUser={jwtUser}
+        enableAssistanceButton={true}
         currentLanguage={i18n.language}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}

@@ -10,11 +10,19 @@
     "delivery_description": "Die Zustellung wurde wegen technischer Empfangsprobleme nicht zugestellt",
     "delivery_title": "Übermittlungsfehler",
     "description": "Prozentsatz der technischen Fehler pro Fehlertyp an der Gesamtanzahl der technischen Fehler beim Versand",
+    "malformed_pec_address_description": "Die Zustellung wurde nicht zugestellt, da die PEC-Adresse fehlerhaft ist",
+    "malformed_pec_address_title": "Fehler bei der PEC-Adresse",
     "pec_description": "Die Zustellung wurde wegen ungültiger PEC-Domain nicht zugestellt",
     "pec_title": "PEC-Domainfehler",
     "rejected_description": "Die Zustellung wurde wegen technischer Versandprobleme nicht akzeptiert",
     "rejected_title": "Versandfehler",
-    "title": "Technische Fehler pro Typ"
+    "sending_pec_description": "Die Zustellung wurde aufgrund eines technischen Fehlers nicht zugestellt",
+    "sending_pec_title": "Fehler beim Senden der PEC",
+    "server_pec_comunication_description": "Die Zustellung wurde aufgrund eines Kommunikationsfehlers mit dem sendenden PEC-Server nicht zugestellt",
+    "server_pec_comunication_title": "Kommunikationsfehler mit dem PEC-Server",
+    "title": "Technische Fehler pro Typ",
+    "virus_detected_description": "Die Zustellung wurde nicht zugestellt, da ein Virus in der Mitteilung oder in ihren Anhängen erkannt wurde",
+    "virus_detected_title": "Virus erkannt"
   },
   "digital_mean_time": {
     "delivered": "Zugestellt",
@@ -74,6 +82,7 @@
     "delivering": "Wird gesendet",
     "description": "Anzahl der akzeptierten Zustellungen pro letztem erreichten Status während des Versandverfahrens über SEND",
     "effective_date": "Vervollständigt wegen\nAblauf der Fristen",
+    "returned_to_sender": "An den Absender zurückgesendet",
     "title": "Gesendete Zustellungen pro Status",
     "unreachable": "Empfänger\nunauffindbar",
     "viewed": "Zugriff erfolgt"

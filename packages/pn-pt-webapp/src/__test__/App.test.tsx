@@ -121,7 +121,8 @@ describe('App', () => {
   it('does not logout if the user cancels', async () => {
     const { testStore } = await act(async () => render(<App />, { preloadedState: loggedState() }));
     fireEvent.click(screen.getByRole('button', { name: 'Esci' }));
-    fireEvent.click(await screen.findByRole('button', { name: 'button.annulla' }));
+    const dialog = await screen.findByRole('dialog');
+    fireEvent.click(within(dialog).getByRole('button', { name: 'button.annulla' }));
     await waitFor(() => {
       expect(screen.queryByTestId('confirm-button')).not.toBeInTheDocument();
     });

@@ -141,6 +141,7 @@
     "timeline-title": "Notification status",
     "timeline": {
       "aar-document": "Acknowledgement of receipt",
+      "analog-failure-second-attempt-group-label": "Second sending via registered mail - Failed attempt",
       "analog-failure-workflow": "Update on sending by mail",
       "analog-failure-workflow-description": "Unable to trace recipient. The acknowledgement of receipt has been deposited and is available.",
       "analog-failure-workflow-description-multirecipient": "The recipient {{name}} {{taxId}} was untraceable. The acknowledgement of receipt has been deposited and is available.",
@@ -170,8 +171,10 @@
         "M09": "due to other reasons",
         "M10": "because the address is not legible"
       },
+      "collapse-all-groups": "Collapse",
       "courtesy-group-label": "Courtesy messages",
       "digital-send-fallback": "Digital delivery",
+      "expand-all-groups": "Expand",
       "legalfact": {
         "analog-failure-delivery": "Deposit of the notification of receipt",
         "digital-delivery-failure": "no digital delivery",
@@ -186,6 +189,9 @@
         "sender-ack": "notification accepted"
       },
       "notification-cancelled-document": "Notification cancellation declaration",
+      "pec-address-source-general": "The PEC address is listed in public registers",
+      "pec-address-source-platform": "The PEC address has been added as a contact detail on SEND",
+      "pec-address-source-special": "The PEC address has been registered as a contact channel by the issuing institution",
       "prepare-analog-domicile-failure": "Update on sending by mail",
       "prepare-analog-domicile-failure-D00-description": "No new address available for re-send.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "No new address was found for the recipient {{name}} {{taxId}} to attempt re-send.",
@@ -351,6 +357,8 @@
       "send-digital-domicile-PEC-description": "The notification is being sent to the PEC address {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the PEC address {{address}}.",
       "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Second sending via PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Sending via SEND Digital Domicile",
       "send-digital-domicile-SERCQ-SEND-description": "Sending the notification to the SEND Digital Domicile is in progress.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Sending the notification to {{name}} {{taxId}} to the SEND Digital Domicile is in progress",
@@ -547,7 +555,8 @@
     "mittente": "Sender",
     "oggetto": "Subject",
     "open": "Open",
-    "status": "Status"
+    "status": "Status",
+    "to-read": "To read"
   },
   "title": "Inbox for {{organization}}",
   "title-delegated-notifications": "Incoming from delegations"

@@ -32,6 +32,11 @@ beforeAll(() => {
     INACTIVITY_HANDLER_MINUTES: 0,
     WORK_IN_PROGRESS: false,
     LANDING_SITE_URL: 'https://test.landing.pagopa.it',
+    ONE_TRUST_DRAFT_MODE: false,
+    ONE_TRUST_PP: 'https://fake.one-trust-pp.pagopa.it',
+    ONE_TRUST_TOS: 'https://fake.one-trust-tos.pagopa.it',
+    OT_DOMAIN_ID: 'fake-ot-domain-id',
+    OT_SETTINGS_TOKEN: 'fake-ot-settings-token',
   });
   initStore(false);
   initAxiosClients();
