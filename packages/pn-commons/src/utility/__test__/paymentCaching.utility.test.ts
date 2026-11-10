@@ -4,6 +4,7 @@ import {
   PAYMENT_CACHE_KEY,
   checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
+  setInformalPaymentsInCache,
   setPaymentCache,
   setPaymentsInCache,
 } from '../paymentCaching.utility';
@@ -90,6 +91,244 @@ describe('Payment caching utility', () => {
     setPaymentsInCache(cachedPayments.payments, iun);
     paymentCache = getPaymentCache(iun);
     expect(paymentCache?.currentPayment).toBeUndefined();
+  });
+
+  it('setInformalPaymentsInCache should map and store informal payments without notification costs', () => {
+    sessionStorage.clear();
+
+    const paymentInfo = cachedPayments.payments
+      .filter((payment) => payment.pagoPa)
+      .map((payment) => payment.pagoPa!);
+
+    setInformalPaymentsInCache(paymentInfo, iun);
+
+    const paymentCache = getPaymentCache(iun);
+
+    expect(paymentCache?.payments).toEqual(
+      paymentInfo.map((payment) => ({
+        pagoPa: {
+          ...payment,
+          applyCost: false,
+        },
+      }))
+    );
+  });
+
+  it('should preserve all informal payments when refreshing only the current payment', () => {
+    sessionStorage.clear();
+
+    const paymentInfo = cachedPayments.payments
+      .filter((payment) => payment.pagoPa)
+      .slice(0, 3)
+      .map((payment) => payment.pagoPa!);
+
+    expect(paymentInfo).toHaveLength(3);
+
+    const initialCache = setInformalPaymentsInCache(paymentInfo, iun);
+
+    const currentPayment = paymentInfo[1];
+
+    setPaymentCache(
+      {
+        ...initialCache,
+        currentPayment: {
+          noticeCode: currentPayment.noticeCode,
+          creditorTaxId: currentPayment.creditorTaxId,
+        },
+      },
+      iun
+    );
+
+    const updatedCache = setInformalPaymentsInCache(
+      [{ ...currentPayment, status: PaymentStatus.SUCCEEDED }],
+      iun
+    );
+
+    expect(updatedCache.payments).toHaveLength(3);
+    expect(updatedCache.currentPayment).toBeUndefined();
+
+    paymentInfo.forEach((payment, index) => {
+      const cachedPayment = updatedCache.payments.find(
+        (item) =>
+          item.pagoPa?.noticeCode === payment.noticeCode &&
+          item.pagoPa?.creditorTaxId === payment.creditorTaxId
+      );
+
+      expect(cachedPayment).toBeDefined();
+      expect(cachedPayment?.pagoPa?.status).toBe(
+        index === 1 ? PaymentStatus.SUCCEEDED : payment.status
+      );
+      expect(cachedPayment?.pagoPa?.applyCost).toBe(false);
+    });
+  });
+
+  it('should preserve original informal payment metadata when API payments are reordered', () => {
+    sessionStorage.clear();
+
+    const paymentInfo = cachedPayments.payments
+      .filter((payment) => payment.pagoPa)
+      .slice(0, 3)
+      .map((payment) => payment.pagoPa!);
+
+    expect(paymentInfo).toHaveLength(3);
+
+    const attachment = paymentsData.pagoPaF24.find((payment) => payment.pagoPa?.attachment)?.pagoPa
+      ?.attachment;
+
+    expect(attachment).toBeDefined();
+
+    const originalPayments = paymentInfo.map((payment, index) => ({
+      pagoPa: {
+        noticeCode: payment.noticeCode,
+        creditorTaxId: payment.creditorTaxId,
+        ...(index === 0 ? { attachment } : {}),
+      },
+    }));
+
+    const reorderedPaymentInfo = [paymentInfo[2], paymentInfo[0], paymentInfo[1]];
+
+    const updatedCache = setInformalPaymentsInCache(reorderedPaymentInfo, iun, originalPayments);
+
+    expect(updatedCache.payments).toHaveLength(3);
+
+    const paymentA = updatedCache.payments.find(
+      (payment) => payment.pagoPa?.noticeCode === paymentInfo[0].noticeCode
+    );
+    const paymentB = updatedCache.payments.find(
+      (payment) => payment.pagoPa?.noticeCode === paymentInfo[1].noticeCode
+    );
+    const paymentC = updatedCache.payments.find(
+      (payment) => payment.pagoPa?.noticeCode === paymentInfo[2].noticeCode
+    );
+
+    expect(paymentA?.pagoPa?.attachment).toEqual(attachment);
+    expect(paymentB?.pagoPa?.attachment).toEqual(paymentInfo[1].attachment);
+    expect(paymentC?.pagoPa?.attachment).toEqual(paymentInfo[2].attachment);
+  });
+
+  it('should preserve original informal payment order when refreshing the second payment', () => {
+    sessionStorage.clear();
+
+    const paymentInfo = cachedPayments.payments
+      .filter((payment) => payment.pagoPa)
+      .slice(0, 3)
+      .map((payment) => payment.pagoPa!);
+
+    expect(paymentInfo).toHaveLength(3);
+
+    const originalPayments = paymentInfo.map((payment) => ({
+      pagoPa: {
+        noticeCode: payment.noticeCode,
+        creditorTaxId: payment.creditorTaxId,
+      },
+    }));
+
+    const initialCache = setInformalPaymentsInCache(
+      [paymentInfo[2], paymentInfo[0], paymentInfo[1]],
+      iun,
+      originalPayments
+    );
+
+    expect(initialCache.payments.map((payment) => payment.pagoPa?.noticeCode)).toEqual(
+      paymentInfo.map((payment) => payment.noticeCode)
+    );
+
+    const paymentB = paymentInfo[1];
+
+    setPaymentCache(
+      {
+        ...initialCache,
+        currentPayment: {
+          noticeCode: paymentB.noticeCode,
+          creditorTaxId: paymentB.creditorTaxId,
+        },
+      },
+      iun
+    );
+
+    const updatedCache = setInformalPaymentsInCache(
+      [{ ...paymentB, status: PaymentStatus.SUCCEEDED }],
+      iun,
+      originalPayments
+    );
+
+    expect(updatedCache.payments).toHaveLength(3);
+    expect(updatedCache.currentPayment).toBeUndefined();
+
+    expect(updatedCache.payments.map((payment) => payment.pagoPa?.noticeCode)).toEqual(
+      paymentInfo.map((payment) => payment.noticeCode)
+    );
+
+    expect(updatedCache.payments.map((payment) => payment.pagoPa?.status)).toEqual([
+      paymentInfo[0].status,
+      PaymentStatus.SUCCEEDED,
+      paymentInfo[2].status,
+    ]);
+
+    updatedCache.payments.forEach((payment, index) => {
+      expect(payment.pagoPa?.creditorTaxId).toBe(paymentInfo[index].creditorTaxId);
+      expect(payment.pagoPa?.amount).toBe(paymentInfo[index].amount);
+      expect(payment.pagoPa?.applyCost).toBe(false);
+    });
+  });
+
+  it('should restore original informal payment order after cache expiration', () => {
+    sessionStorage.clear();
+
+    const paymentInfo = cachedPayments.payments
+      .filter((payment) => payment.pagoPa)
+      .slice(0, 3)
+      .map((payment) => payment.pagoPa!);
+
+    expect(paymentInfo).toHaveLength(3);
+
+    const originalPayments = paymentInfo.map((payment) => ({
+      pagoPa: {
+        noticeCode: payment.noticeCode,
+        creditorTaxId: payment.creditorTaxId,
+      },
+    }));
+
+    const initialCache = setInformalPaymentsInCache(paymentInfo, iun, originalPayments);
+
+    sessionStorage.setItem(
+      PAYMENT_CACHE_KEY,
+      JSON.stringify({
+        ...initialCache,
+        timestamp: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+      })
+    );
+
+    expect(getPaymentCache(iun)).toBeNull();
+    expect(sessionStorage.getItem(PAYMENT_CACHE_KEY)).toBeNull();
+
+    const reorderedPaymentInfo = [
+      paymentInfo[2],
+      { ...paymentInfo[1], status: PaymentStatus.SUCCEEDED },
+      paymentInfo[0],
+    ];
+
+    const updatedCache = setInformalPaymentsInCache(reorderedPaymentInfo, iun, originalPayments);
+
+    expect(updatedCache.payments).toHaveLength(3);
+
+    expect(updatedCache.payments.map((payment) => payment.pagoPa?.noticeCode)).toEqual(
+      paymentInfo.map((payment) => payment.noticeCode)
+    );
+
+    expect(updatedCache.payments.map((payment) => payment.pagoPa?.status)).toEqual([
+      paymentInfo[0].status,
+      PaymentStatus.SUCCEEDED,
+      paymentInfo[2].status,
+    ]);
+
+    updatedCache.payments.forEach((payment, index) => {
+      expect(payment.pagoPa?.creditorTaxId).toBe(paymentInfo[index].creditorTaxId);
+      expect(payment.pagoPa?.amount).toBe(paymentInfo[index].amount);
+      expect(payment.pagoPa?.applyCost).toBe(false);
+    });
+
+    expect(getPaymentCache(iun)?.payments).toEqual(updatedCache.payments);
   });
 
   it('checkIfPaymentsIsAlreadyInCache should return true if payments is already in cache', () => {
