@@ -123,7 +123,8 @@ const ActualApp = () => {
 
   const { pathname } = useLocation();
   const rootPath = pathname.split('/')[1] ? `/${pathname.split('/')[1]}` : '/';
-  const showSideMenu = ![routes.PRIVACY_POLICY, routes.TERMS_OF_SERVICE].includes(rootPath);
+  const showSideMenu =
+    !!sessionToken && ![routes.PRIVACY_POLICY, routes.TERMS_OF_SERVICE].includes(rootPath);
 
   return (
     <>
