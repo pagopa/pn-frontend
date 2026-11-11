@@ -332,28 +332,36 @@ describe('Notification detail redux state tests', () => {
         : []
     );
 
-    mock.onPost('/bff/v1/payments/info', paymentInfoRequest).reply(200, paymentInfo);
+    const informalPaymentInfo = paymentInfoRequest.map((payment) => ({
+      ...payment,
+      status: PaymentStatus.REQUIRED,
+    }));
+
+    mock.onPost('/bff/v1/payments/info', paymentInfoRequest).reply(200, informalPaymentInfo);
 
     const action = await mockedStore.dispatch(
       getReceivedInformalNotificationPaymentInfo({ paymentInfoRequest })
     );
 
+    // payment info returned by the API is merged with the payment data of the notification
+    const expectedPayments = informalPaymentInfo.map((info) => ({
+      ...informalPayments.find(
+        (payment) =>
+          payment.pagoPa?.noticeCode === info.noticeCode &&
+          payment.pagoPa?.creditorTaxId === info.creditorTaxId
+      )?.pagoPa,
+      ...info,
+      applyCost: false,
+    }));
+
     expect(action.type).toBe('getReceivedInformalNotificationPaymentInfo/fulfilled');
-    expect(action.payload).toEqual(
-      paymentInfo.map((payment) => ({
-        ...payment,
-        applyCost: false,
-      }))
-    );
+    expect(action.payload).toEqual(expectedPayments);
 
     const paymentCache = getPaymentCache(informalNotificationMock.iun);
 
     expect(paymentCache?.payments).toEqual(
-      paymentInfo.map((payment) => ({
-        pagoPa: {
-          ...payment,
-          applyCost: false,
-        },
+      expectedPayments.map((payment) => ({
+        pagoPa: payment,
       }))
     );
   });
