@@ -6,11 +6,13 @@ import {
   TimelineCategory,
 } from '../../../models/NotificationDetail';
 import { Delegator, NotificationTimelineEvent } from '../../../models/NotificationTimeline';
-import { getNotificationTimelineStatusInfos } from '../../../utility/notification.utility';
+import {
+  PERFECTION_ANCHORS,
+  getNotificationTimelineStatusInfos,
+} from '../../../utility/notification.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineDescription from './NotificationTimelineDescription';
 import TimelineLegalFacts from './TimelineLegalFacts';
-import { PERFECTION_ANCHORS } from './timelineItem.config';
 
 type Props = {
   event: NotificationTimelineEvent;

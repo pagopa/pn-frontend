@@ -1,0 +1,129 @@
+{
+  "access-denied": "Vous n'avez pas les autorisations nécessaires pour accéder à cette page",
+  "button": {
+    "annulla": "Annuler",
+    "close": "Fermer",
+    "exit": "Quitter",
+    "go-to-home": "Retourner à la page d'accueil",
+    "go-to-login": "Se connecter"
+  },
+  "error-boundary": {
+    "action": "Recharger la page",
+    "description": "Nous n'avons pas pu charger la page. Rechargez-la ou réessayez plus tard.",
+    "title": "Un problème est survenu"
+  },
+  "errors": {
+    "internal_server": {
+      "message": "Le service n'est pas disponible en raison d'un problème technique. Réessayez plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informations sur l'erreur.",
+      "title": "Une erreur s'est produite"
+    },
+    "invalid_body": {
+      "message": "Une erreur s'est produite lors de l'envoi des données. Vérifiez qu'elles sont correctes, sans espaces ni caractères spéciaux, et réessayez. Si l'erreur persiste, contactez l'assistance et communiquez les informations sur l'erreur.",
+      "title": "Les données ne sont pas valides"
+    },
+    "technical-error": {
+      "copy-to-clipboard": "Copier les informations sur l'erreur",
+      "title": "Informations sur l'erreur"
+    },
+    "unhandled": {
+      "message": "Le service n'est pas disponible. Réessayez plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informations sur l'erreur.",
+      "title": "Une erreur s'est produite"
+    },
+    "unknown": {
+      "message": "Le service n'est pas disponible. Réessayez plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informations sur l'erreur.",
+      "title": "Une erreur s'est produite"
+    }
+  },
+  "footer": {
+    "321-model": "Modèle 231",
+    "accessibility": "Accessibilité",
+    "certifications": "Certifications",
+    "company": "Société transparente",
+    "cookie": "Préférences de cookies",
+    "disclosure": "Responsible Disclosure Policy",
+    "follow": "Suivez-nous sur",
+    "go-to": "Aller au lien",
+    "go-to-pagopa": "Aller sur le site de PagoPA S.p.A.",
+    "legal-part-1": "société par actions - capital social de 1 000 000 euros entièrement libéré - siège social à Rome, Piazza Colonna 370",
+    "legal-part-2": "code postal 00187 - n° d'inscription au Registre du Commerce de Rome, code fiscal et n° TVA 15376371009",
+    "personal-data": "Droit à la protection des données personnelles",
+    "privacy-info": "Politique de confidentialité",
+    "products-title": "Produits et services",
+    "resources": "Ressources",
+    "security": "Sécurité des informations",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Aller sur le site {{social}} de PagoPA S.p.A.",
+    "terms-conditions": "Conditions Générales",
+    "who": "Qui sommes-nous",
+    "work": "Rejoignez-nous"
+  },
+  "header": {
+    "assistance": "Assistance",
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
+    "logout-message": "Confirmez-vous vouloir quitter l'Espace réservé ?",
+    "notification-platform": "SEND - Servizio Notifiche Digitali",
+    "pago-pa-link": "Site de PagoPA S.p.A.",
+    "reserved-area": "Espace réservé"
+  },
+  "home": {
+    "title": "SEND - Partenaires Technologiques"
+  },
+  "inactivity": {
+    "action": "Rester connecté",
+    "body": "La déconnexion est en cours. Si vous avez changé d'avis, cliquez sur « Rester connecté » dans les prochaines secondes.",
+    "title": "Voulez-vous vraiment quitter SEND ?"
+  },
+  "leaving-app": {
+    "message": "Vous allez être redirigé",
+    "title": "Vous quittez SEND"
+  },
+  "loading": "Chargement en cours",
+  "menu": {
+    "groups": "Groupes",
+    "institutions": "Vos organismes",
+    "users": "Utilisateurs"
+  },
+  "messages": {
+    "401-message": "L'utilisateur actuel n'a pas les autorisations nécessaires",
+    "401-title": "Utilisateur non autorisé",
+    "403-message": "Entrez et connectez-vous avec SPID ou CIE.",
+    "403-title": "La session a expiré",
+    "404-message": "Une erreur s'est produite. Veuillez réessayer plus tard",
+    "404-title": "Ressource introuvable",
+    "451-message": "Impossible d'accéder à la plateforme",
+    "451-title": "Plateforme non accessible",
+    "500-message": "En raison d'un problème temporaire du service, votre demande n'a pas été envoyée. Réessayez plus tard.",
+    "500-title": "Le service n'est pas disponible",
+    "error-in-initial-info-loading": "Nous n'avons pas pu récupérer les données nécessaires au démarrage de l'application",
+    "generic-api-error-action-text": "Recharger",
+    "generic-api-error-main-text": "Nous n'avons pas pu récupérer ces données.",
+    "generic-message": "Une erreur s'est produite. Veuillez réessayer plus tard",
+    "generic-title": "Erreur générique",
+    "generic-token-exchange-problem": "Impossible de finaliser la connexion",
+    "invalid-token-title": "Vous ne pouvez pas vous connecter en raison d'un problème technique - jeton non valide",
+    "lacking-grants-for-app-title": "Vous n'êtes pas autorisé à accéder"
+  },
+  "not-accessible": {
+    "action": "visitez le site dédié",
+    "description": "SEND est actuellement en phase de test et n'est pas encore disponible. Si vous êtes un Partenaire Technologique et que vous avez finalisé votre adhésion, vous recevrez des mises à jour concernant la date d'activation de la plateforme. Pour plus d'informations sur l'initiative,",
+    "title": "Impossible d'accéder à la plateforme"
+  },
+  "not-found": {
+    "back-to-home": "Retour à l'accueil",
+    "description": "La page que vous avez tenté d'atteindre n'existe pas ou n'est plus disponible.",
+    "title": "Ce que vous cherchiez n'est pas ici."
+  },
+  "roles": {
+    "admin": "Administrateur",
+    "operator": "Référent opérationnel"
+  },
+  "toast": {
+    "aria-label": "Icône de fermeture du toast"
+  },
+  "user-validation-failed": {
+    "cta": "Contactez l'assistance",
+    "description": "Une ou plusieurs données associées à votre compte utilisateur ne sont pas valides, contactez l'assistance pour résoudre le problème.",
+    "title": "Les données saisies ne sont pas valides"
+  }
+}

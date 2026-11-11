@@ -34,6 +34,8 @@ import {
   Delegator,
   NotificationPaymentTimeline,
   NotificationPaymentTimelineElement,
+  NotificationTimelineEvent,
+  NotificationTimelineLegacyStatusHistory,
 } from '../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
@@ -50,38 +52,75 @@ type StatusInfoWithColor = StatusInfo & {
   color: MIChipProps['color'];
 };
 
-type StatusViewer = 'as-delegate' | 'by-delegate' | 'by-other-delegate' | 'by-recipient';
+type StatusViewer =
+  | 'as-delegate'
+  | 'by-delegate'
+  | 'by-other-delegate'
+  | 'by-recipient'
+  | 'by-other-recipient';
 
 type StatusLocalizationData = { [key: string]: string | undefined };
 
 type ViewedVariantOptions = {
   statusObject?: NotificationStatusHistory;
-  isMultiRecipient?: boolean;
+  recipients?: Array<NotificationDetailRecipient | string>;
   mandateId?: string;
-  delegatorName?: string;
-  userTaxId?: string;
+  delegator?: Delegator;
+  userTaxId: string;
 };
+
+// Sentence appended to the VIEWED description only when the access legal fact is available
+const VIEWED_LEGAL_FACT_KEY = 'status.viewed-legal-fact-download';
 
 const channelMap: Partial<Record<DigitalDomicileType, string>> = {
   [DigitalDomicileType.PEC]: 'PEC',
   [DigitalDomicileType.SERCQ]: 'SEND',
 };
 
+export const PERFECTION_ANCHORS = {
+  PEC: '#pec',
+  SEND: '#send',
+  ANALOG: '#raccomandata',
+} as const;
+
+export const getRecIndex = (
+  recipients: Array<NotificationDetailRecipient | string>,
+  userTaxId?: string,
+  delegator?: Delegator
+): number | undefined => {
+  const recTaxId = delegator ? delegator.fiscalCode : userTaxId;
+  return recipients.findIndex((rec) =>
+    typeof rec === 'string' ? rec === recTaxId : rec.taxId === recTaxId
+  );
+};
+
 function viewedByVariant({
   statusObject,
-  isMultiRecipient,
+  recipients,
   mandateId,
-  delegatorName,
+  delegator,
   userTaxId,
-}: ViewedVariantOptions): { viewer: StatusViewer; data: StatusLocalizationData } | undefined {
-  const viewedEvent = statusObject?.steps?.find(
-    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED
+}: ViewedVariantOptions): { viewer: StatusViewer; data?: StatusLocalizationData } | undefined {
+  // Only the access of the recipient the user is acting for (the user or the delegator) is relevant
+  const recipientTaxId = delegator ? delegator.fiscalCode : userTaxId;
+  const recIndex = recipients?.findIndex((rec) =>
+    typeof rec === 'string' ? rec === recipientTaxId : rec.taxId === recipientTaxId
   );
-  const delegateInfo = (viewedEvent?.details as NotificationViewedDetails | undefined)
-    ?.delegateInfo;
-  const delegateName = delegateInfo?.denomination ?? statusObject?.recipient;
+  const viewedEvent = statusObject?.steps?.find(
+    (step) =>
+      step.category === TimelineCategory.NOTIFICATION_VIEWED && step.details.recIndex === recIndex
+  );
 
-  if (mandateId && delegatorName && userTaxId) {
+  if (!viewedEvent) {
+    // we are in the VIEWED status, so the access was made by another recipient
+    return { viewer: 'by-other-recipient' };
+  }
+
+  const delegateInfo = (viewedEvent.details as NotificationViewedDetails).delegateInfo;
+  const delegateName = delegateInfo?.denomination;
+  const delegatorName = delegator?.displayName;
+
+  if (mandateId && delegatorName) {
     if (delegateInfo?.taxId === userTaxId) {
       return { viewer: 'as-delegate', data: { recipient: delegatorName } };
     }
@@ -91,9 +130,7 @@ function viewedByVariant({
         data: { name: delegateName, recipient: delegatorName },
       };
     }
-    return isMultiRecipient
-      ? undefined
-      : { viewer: 'by-recipient', data: { recipient: delegatorName } };
+    return { viewer: 'by-recipient', data: { recipient: delegatorName } };
   }
 
   return delegateName ? { viewer: 'by-delegate', data: { name: delegateName } } : undefined;
@@ -213,10 +250,7 @@ function deliveredStatusVariant(
 ): StatusInfo {
   const deliveryMode = statusObject?.deliveryMode;
   const delegatorName = options?.delegator?.displayName;
-  const userTaxId = options?.delegator ? options.delegator.fiscalCode : options?.userTaxId;
-  const recIndex = options?.recipients.findIndex((rec) =>
-    typeof rec === 'string' ? rec === userTaxId : rec.taxId === userTaxId
-  );
+  const recIndex = getRecIndex(options?.recipients || [], options?.userTaxId, options?.delegator);
   const plainStatusHistory = options?.statusHistory?.reduce<Array<INotificationDetailTimeline>>(
     (arr, status) => arr.concat(status.steps ?? []),
     []
@@ -311,7 +345,9 @@ type StatusLocalizationVariant = {
   isDelegate?: boolean;
   // Who performed the access recorded in the VIEWED event.
   viewer?: StatusViewer;
-  legalFact?: 'with' | 'without';
+  // The access happened after the notification had been perfected (EFFECTIVE_DATE status).
+  afterEffectiveDate?: boolean;
+  legalFact?: 'with';
 };
 
 type StatusLocalizationContext = StatusLocalizationVariant & { isMultiRecipient?: boolean };
@@ -340,12 +376,13 @@ function statusLocalizationKey(
     delegateSuffix = '-delegate';
   }
 
+  const effectiveDateSuffix = variant?.afterEffectiveDate ? '-after-effective-date' : '';
   const legalFactSuffix = variant?.legalFact ? `-${variant.legalFact}-legal-fact` : '';
 
   const statusKey =
     status === NotificationStatus.CANCELLED ? 'canceled' : status.toLowerCase().replace(/_/g, '-');
 
-  return `status.${statusKey}${partSuffix}${modeSuffix}${delegateSuffix}${legalFactSuffix}${recipientSuffix}`;
+  return `status.${statusKey}${partSuffix}${modeSuffix}${delegateSuffix}${effectiveDateSuffix}${legalFactSuffix}${recipientSuffix}`;
 }
 
 /**
@@ -390,8 +427,8 @@ function resolveStatusLocalization(
     const selection = select(variant, selected.isMultiRecipient);
     if (selection) {
       selected = selection;
-    } else if (context.legalFact === 'with' && selected.isMultiRecipient) {
-      // the with-legal-fact variant can fll back to its standalone key
+    } else if (selected.isMultiRecipient) {
+      // the with-legal-fact variant can fall back to its standalone key
       selected = select({ legalFact: context.legalFact }, false) ?? selected;
     }
   }
@@ -402,6 +439,11 @@ function resolveStatusLocalization(
       select({ ...selected.variant, ...viewer }, selected.isMultiRecipient) ??
       select({ deliveryMode: context.deliveryMode, ...viewer }, false) ??
       selected;
+  }
+  if (context.afterEffectiveDate) {
+    // when no after-effective-date variant exists for the selected one, keep the selected one
+    const variant = { ...selected.variant, afterEffectiveDate: true };
+    selected = select(variant, selected.isMultiRecipient) ?? select(variant, false) ?? selected;
   }
   return selected;
 }
@@ -553,25 +595,41 @@ export function getNotificationStatusInfos(
           { name: statusObject.recipient }
         );
       }
-      const viewer = viewedByVariant({
-        statusObject,
-        isMultiRecipient,
-        mandateId: options?.mandateId,
-        delegatorName: options?.delegator?.displayName,
-        userTaxId: options?.userTaxId,
-      });
+      // userTaxId is only provided by PF: PA and PG use the legacy content, with no viewer variants
+      const viewer = options?.userTaxId
+        ? viewedByVariant({
+            statusObject,
+            recipients: options.recipients,
+            mandateId: options.mandateId,
+            delegator: options.delegator,
+            userTaxId: options.userTaxId,
+          })
+        : undefined;
+      const statusInfos = localizeStatus(
+        NotificationStatus.VIEWED,
+        { subject },
+        {
+          isMultiRecipient,
+          viewer: viewer?.viewer,
+          // same check used for the VIEWED status icon in the timeline
+          afterEffectiveDate: options?.statusHistory?.some(
+            (s) => s.status === NotificationStatus.EFFECTIVE_DATE
+          ),
+        },
+        viewer?.data
+      );
+      // the legal fact download sentence is shown only if the legal fact is actually available
+      const legalFactSentence =
+        hasViewedLegalFact(statusObject) &&
+        hasLocalizedLabel('notifications', VIEWED_LEGAL_FACT_KEY)
+          ? getLocalizedOrDefaultLabel('notifications', VIEWED_LEGAL_FACT_KEY)
+          : undefined;
       return {
         color: 'success',
-        ...localizeStatus(
-          NotificationStatus.VIEWED,
-          { subject },
-          {
-            isMultiRecipient,
-            viewer: viewer?.viewer,
-            legalFact: !hasViewedLegalFact(statusObject) ? 'without' : undefined,
-          },
-          viewer?.data
-        ),
+        ...statusInfos,
+        description: legalFactSentence
+          ? `${statusInfos.description} ${legalFactSentence}`
+          : statusInfos.description,
       };
     }
     case NotificationStatus.CANCELLED:
@@ -1033,3 +1091,74 @@ export const populatePaymentsPagoPaF24 = (
 export const isNotificationDetailOtherDocument = (
   value: NotificationDetailDocument | NotificationDetailOtherDocument
 ): value is NotificationDetailOtherDocument => value.documentType === 'AAR';
+
+export const getPerfectionLink = (
+  perfectionLink: string | undefined,
+  history: Array<NotificationTimelineLegacyStatusHistory> | Array<NotificationStatusHistory>,
+  recipients: Array<NotificationDetailRecipient>,
+  userTaxId?: string,
+  delegator?: Delegator,
+  isSender?: boolean
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+): string | undefined => {
+  if (!perfectionLink) {
+    return perfectionLink;
+  }
+
+  // if notification is a multi recipient notification and we are inthe sender view, we cannot known what is the perfection link,
+  // because each recipient can recive the notification in different ways
+  if (recipients.length > 1 && isSender) {
+    return undefined;
+  }
+
+  // get the recipientIndex
+  // if we are in the sender view, we are in a single recipient notification due to the previous if,
+  // otherwise we are in recipient view and we have to get the recIndex because we can be in the multi-recipient scenario
+  const recIndex = isSender ? 0 : getRecIndex(recipients, userTaxId, delegator);
+
+  const steps = history.reduce<Array<NotificationTimelineEvent | INotificationDetailTimeline>>(
+    (arr, status) => arr.concat(status.steps ?? []),
+    []
+  );
+
+  const digitalSuccess = steps.find(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+  if (digitalSuccess) {
+    const digitalAddress = (digitalSuccess?.details as SendDigitalDetails | undefined)
+      ?.digitalAddress;
+    if (digitalAddress?.type === DigitalDomicileType.PEC) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+    }
+    if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
+      return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
+    }
+  }
+
+  // if there is a digital failure, the notification is still a digital notification
+  const digitalFailure = steps.some(
+    (step) =>
+      step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW &&
+      step.details.recIndex === recIndex
+  );
+
+  if (digitalFailure) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+  }
+
+  // ANALOG_SUCCESS_WORKFLOW is not returned by the bff, so we have to check the presence of SEND_ANALOG_FEEDBACK and status OK
+  const analogDelivery = steps.some(
+    (step) =>
+      ((step.category === TimelineCategory.SEND_ANALOG_FEEDBACK &&
+        (step.details as SendPaperDetails).responseStatus === ResponseStatus.OK) ||
+        step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW) &&
+      step.details.recIndex === recIndex
+  );
+  if (analogDelivery) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
+  }
+
+  return perfectionLink;
+};
