@@ -37,7 +37,7 @@
     "remove-email-button-dod-enabled": "Disattiva email aziendale",
     "remove-email-no-domicile-message": "Se confermi, non riceverai più l’email su {{value}} quando c’è una notifica SEND da leggere.",
     "remove-email-no-domicile-title": "Disattiva email",
-    "remove-email-pec-enabled-message": "<0>Se disattivi l’indirizzo email aziendale <strong>non possiamo avvisarti quando c’è una notifica a valore legale per la tua impresa</strong>.</0><1>Ricorda che, se la notifica non viene letta in tempo, l’impresa potrebbe non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
+    "remove-email-pec-enabled-message": "<0>Se disattivi l’indirizzo email aziendale <strong>non possiamo avvisarti quando c’è una notifica a valore legale per la tua impresa</strong>.</0><1>Ricorda che se l’impresa non legge in tempo una notifica SEND, potrebbe non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
     "remove-email-pec-enabled-title": "Vuoi disattivare la tua email aziendale?",
     "remove-email-preconfirm-message": "<0>Se disattivi l’indirizzo email non possiamo <strong>avvisarti quando c’è una notifica a valore legale per la tua impresa.</strong></0>",
     "remove-email-preconfirm-title": "Vuoi disattivare gli avvisi via email?",
@@ -99,7 +99,7 @@
       "sercq_send-active": "La piattaforma SEND è il domicilio digitale della tua impresa",
       "special_contacts": {
         "action": "Personalizza per ente",
-        "content": "Scegli dove ricevere le notifiche inviate alla tua impresa da un ente specifico.",
+        "content": "Scegli dove ricevere le notifiche SEND inviate alla tua impresa da un ente specifico.",
         "title": "Personalizza il domicilio digitale per ente mittente"
       },
       "title": "Gestisci domicilio digitale",
@@ -107,7 +107,7 @@
         "action-pec": "Trasferisci su SEND",
         "action-sercq_send": "Trasferisci su una PEC",
         "content-pec": "La piattaforma SEND garantisce consegne sicure e con valore legale. Il servizio è gratuito e non richiede strumenti aggiuntivi.",
-        "content-sercq_send": "Se hai una PEC, puoi usarla come domicilio digitale per le notifiche SEND.",
+        "content-sercq_send": "Se l'impresa ha una PEC, puoi usarla come domicilio digitale per le notifiche SEND.",
         "title-pec": "Trasferisci il domicilio digitale sulla piattaforma SEND",
         "title-sercq_send": "Trasferisci il domicilio digitale su una PEC aziendale"
       }
@@ -124,7 +124,7 @@
       "title-transfer": "Trasferisci il domicilio digitale su una PEC aziendale"
     },
     "pec-description": "Quando un ente invia alla tua impresa una notifica SEND, viene recapitata in modo sicuro e con valore legale sulla PEC che hai scelto.",
-    "pec-disclaimer": "Questo è l'indirizzo principale che verrà utilizzato per inviare le notifiche dell'impresa in digitale. Inserendolo, l'impresa non riceverà più raccomandate cartacee.",
+    "pec-disclaimer": "Questo è l'indirizzo principale che verrà utilizzato per inviare le notifiche a valore legale dell'impresa in digitale. Inserendolo, l'impresa non riceverà più raccomandate cartacee.",
     "pec-new-code": "Non l’hai ricevuto? Controlla di aver inserito la PEC corretta o <0>generane uno nuovo</0>.",
     "pec-removed-successfully": "PEC rimossa correttamente",
     "pec-to-add": "Indirizzo PEC",
@@ -138,7 +138,7 @@
     "pec-verify": "Verifica PEC {{value}}",
     "pec-verify-descr": "Abbiamo inviato un codice all’indirizzo PEC indicato. Il codice è valido per <strong>15 minuti</strong>.",
     "remove-pec-confirm": "Disattiva PEC",
-    "remove-pec-message": "<0>La tua impresa non avrà più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potrebbe riceverle su carta, con eventuali costi a suo carico.</0><1>L’impresa continuerà a ricevere gli avvisi sui canali che ha attivato.</1>",
+    "remove-pec-message": "<0>La tua impresa non avrà più un recapito digitale a valore legale per le notifiche SEND della Pubblica Amministrazione e potrebbe riceverle su carta, con eventuali costi a suo carico.</0><1>L’impresa continuerà a ricevere gli avvisi sui canali che ha attivato.</1>",
     "remove-pec-title": "Confermi di voler disattivare la PEC?",
     "remove-sercq_send-confirm": "Disattiva domicilio digitale",
     "remove-sercq_send-message": "<0>Se scegli di disattivare il domicilio digitale SEND la tua impresa potrebbe ricevere le notifiche a valore legale via raccomandata e <strong>pagare i relativi costi.</strong></0><1>L’impresa continuerà a ricevere gli avvisi via email, puoi disattivarli nella sezione I tuoi recapiti.</1>",
@@ -179,7 +179,7 @@
       },
       "step_1": {
         "delivered-dialog-description": "Se scegli SEND come domicilio digitale, <strong>dopo 7 giorni dalla consegna</strong> la notifica a valore legale risulterà legalmente recapitata, anche se non l’hai consultata.",
-        "delivered-dialog-title": "Valore giuridico della notifica sul domicilio digitale SEND",
+        "delivered-dialog-title": "Valore giuridico della notifica SEND sul domicilio digitale",
         "have-pec": "Preferisci usare la PEC aziendale?",
         "have-pec-description": "In alternativa, puoi usare una PEC come domicilio digitale per le notifiche SEND.",
         "info-list": [
@@ -193,7 +193,7 @@
             "title": "Ricevi un messaggio"
           },
           {
-            "description": "Apri il dettaglio della notifica digitale sulla piattaforma SEND",
+            "description": "Apri il dettaglio della notifica a valore legale su SEND",
             "title": "Accedi alla notifica SEND"
           }
         ],
