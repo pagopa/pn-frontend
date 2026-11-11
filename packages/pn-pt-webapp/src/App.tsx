@@ -22,14 +22,11 @@ import { PNRole } from './models/user';
 import { goToSelfcareLogout } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
-import { apiLogout } from './redux/auth/actions';
+import { apiLogout, getProductsOfInstitution } from './redux/auth/actions';
 import { authSelectors, resetState } from './redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getConfiguration } from './services/configuration.service';
 import { getProductsList, selfcareMenuItems } from './utility/menu.utility';
-
-// TODO - Read this from /products API
-const PRODUCT_ID = 'prod-pn-pt';
 
 const App = () => {
   const { t, i18n } = useTranslation(['common']);
@@ -52,8 +49,13 @@ const ActualApp = () => {
   const dispatch = useAppDispatch();
   const loggedUser = useAppSelector(authSelectors.selectUser);
   const role = useAppSelector(authSelectors.selectUserRole);
-  const { ACCESSIBILITY_LINK, SERCQ_SERVICE_STATEMENT_LINK, PAGOPA_HELP_EMAIL } =
-    getConfiguration();
+  const products = useAppSelector(authSelectors.selectProductsOfInstitution);
+  const {
+    ACCESSIBILITY_LINK,
+    SERCQ_SERVICE_STATEMENT_LINK,
+    PAGOPA_HELP_EMAIL,
+    SELFCARE_SEND_PROD_ID,
+  } = getConfiguration();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { sessionToken, organization } = loggedUser;
@@ -97,9 +99,17 @@ const ActualApp = () => {
   );
 
   const productsList = useMemo(
-    () => getProductsList(t, PRODUCT_ID, organization.id, i18n.language),
-    [organization.id, i18n.language]
+    () => getProductsList(t, products, organization.id, i18n.language),
+    [products, organization.id, i18n.language]
   );
+
+  const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
+
+  useEffect(() => {
+    if (sessionToken && organization.id) {
+      void dispatch(getProductsOfInstitution());
+    }
+  }, [sessionToken, organization.id]);
 
   const handleAssistanceClick = () => {
     /* eslint-disable-next-line functional/immutable-data */
@@ -134,7 +144,7 @@ const ActualApp = () => {
         onExitAction={handleLogout}
         sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfCareItems} />}
         productsList={productsList}
-        productId={PRODUCT_ID}
+        productId={productId}
         partyId={party.id}
         partyList={[party]}
         loggedUser={jwtUser}

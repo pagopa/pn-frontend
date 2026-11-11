@@ -1,7 +1,10 @@
 import { parseError } from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
+import { InfoPaApiFactory } from '../../generated-client/info-pa';
 import { User } from '../../models/user';
 import { userDataMatcher } from '../../utility/user.utility';
 
@@ -38,3 +41,19 @@ export const apiLogout = createAsyncThunk<void, string>('apiLogout', async (toke
     console.log('Error during logout', e);
   }
 });
+
+/**
+ * Get the list of products of the institution
+ */
+export const getProductsOfInstitution = createAsyncThunk(
+  'getProductsOfInstitution',
+  async (_, { rejectWithValue }) => {
+    try {
+      const institutionAndProductFactory = InfoPaApiFactory(undefined, undefined, apiClient);
+      const response = await institutionAndProductFactory.getInstitutionProductsV1();
+      return response.data.map((d) => ({ ...d, linkType: 'external' })) as Array<ProductEntity>;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
