@@ -84,18 +84,11 @@ beforeAll(() => {
         changeLanguage: () => new Promise(() => {}),
       },
     }),
-    Trans: (props: {
-      i18nKey: string;
-      components?: Array<ReactNode> | Record<string, ReactNode>;
-    }) => {
-      const components = props.components ? Object.values(props.components) : [];
-
-      return (
-        <>
-          {props.i18nKey} {components}
-        </>
-      );
-    },
+    Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+      <>
+        {props.i18nKey} {props.components?.map((c) => c)}
+      </>
+    ),
     initReactI18next: {
       type: '3rdParty',
       init: () => {},
