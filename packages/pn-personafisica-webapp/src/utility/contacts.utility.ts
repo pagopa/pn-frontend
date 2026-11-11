@@ -160,7 +160,7 @@ export const getSemanticTextFieldProps = (channelType: ChannelType): Partial<Tex
       autoComplete: 'email',
     };
   }
-  if (channelType === ChannelType.SMS) {
+  if (channelType === ChannelType.SMS || channelType === ChannelType.WHATSAPP) {
     return {
       type: 'tel',
       autoComplete: 'tel-national',
@@ -194,7 +194,10 @@ export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
  */
 export const hasCourtesyContacts = (addresses: Array<DigitalAddress>): boolean => {
   const hasEmail = addresses.some((address) => address.channelType === ChannelType.EMAIL);
-  const hasSMS = addresses.some((address) => address.channelType === ChannelType.SMS);
+  const hasSMS = addresses.some(
+    (address) =>
+      address.channelType === ChannelType.SMS || address.channelType === ChannelType.WHATSAPP
+  );
   const hasIo = addresses.some(
     (address) =>
       address.channelType === ChannelType.IOMSG && address.value === IOAllowedValues.ENABLED
@@ -238,4 +241,18 @@ export const groupDigitalAddresses = (digitalAddresses: Array<DigitalAddress>) =
     }
     return obj;
   }, initialValue);
+};
+
+/**
+ * SMS e WhatsApp usano lo stesso numero di cellulare e sono alternativi: restituisce il recapito
+ * di default attivo (SMS o WhatsApp) e il canale su cui è attivo.
+ * @param addresses - The user addresses grouped by channel
+ */
+export const getDefaultMobileAddress = (
+  addresses: SelectedAddresses
+): { address: DigitalAddress | undefined; channelType: ChannelType.SMS | ChannelType.WHATSAPP } => {
+  if (addresses.defaultWHATSAPPAddress) {
+    return { address: addresses.defaultWHATSAPPAddress, channelType: ChannelType.WHATSAPP };
+  }
+  return { address: addresses.defaultSMSAddress, channelType: ChannelType.SMS };
 };
