@@ -184,6 +184,7 @@ describe('App', () => {
     });
     const headers = container.querySelectorAll('.MuiContainer-root');
     const productButton = headers[1].querySelector('[role="button"]');
+    await waitFor(() => expect(productButton).toHaveTextContent(productsDTO[0].title));
     fireEvent.click(productButton!);
     const productDropdown = await waitFor(() => screen.getByRole('presentation'));
     expect(within(productDropdown).getByText('header.reserved-area')).toBeInTheDocument();
@@ -203,6 +204,7 @@ describe('App', () => {
     expect(testStore.getState().userState.productsOfInstitution).toStrictEqual([]);
     const headers = container.querySelectorAll('.MuiContainer-root');
     const productButton = headers[1].querySelector('[role="button"]');
+    expect(productButton).toHaveTextContent('header.notification-platform');
     fireEvent.click(productButton!);
     const productDropdown = await waitFor(() => screen.getByRole('presentation'));
     expect(within(productDropdown).getByText('header.reserved-area')).toBeInTheDocument();

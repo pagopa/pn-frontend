@@ -99,9 +99,11 @@ const ActualApp = () => {
   );
 
   const productsList = useMemo(
-    () => getProductsList(t, products, SELFCARE_SEND_PROD_ID, organization.id, i18n.language),
+    () => getProductsList(t, products, organization.id, i18n.language),
     [products, organization.id, i18n.language]
   );
+
+  const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
 
   useEffect(() => {
     if (sessionToken && organization.id) {
@@ -142,7 +144,7 @@ const ActualApp = () => {
         onExitAction={handleLogout}
         sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfCareItems} />}
         productsList={productsList}
-        productId={SELFCARE_SEND_PROD_ID}
+        productId={productId}
         partyId={party.id}
         partyList={[party]}
         loggedUser={jwtUser}
