@@ -1,6 +1,10 @@
 import { uniqWith } from 'lodash-es';
 
-import { PaymentDetails, PaymentStatus } from '../models/NotificationDetail';
+import {
+  ExtRegistriesPaymentDetails,
+  PaymentDetails,
+  PaymentStatus,
+} from '../models/NotificationDetail';
 import { PaymentCache, paymentCacheSchema } from '../models/PaymentCache';
 
 export const PAYMENT_CACHE_KEY = 'payments';
@@ -155,4 +159,59 @@ export const checkIfPaymentsIsAlreadyInCache = (
         cachedPayment.pagoPa?.creditorTaxId === paymentInfo.creditorTaxId
     )
   );
+};
+
+const matchesInformalPayment = (
+  payment: { pagoPa?: Partial<NonNullable<PaymentDetails['pagoPa']>> },
+  info: ExtRegistriesPaymentDetails
+): boolean =>
+  payment.pagoPa?.noticeCode === info.noticeCode &&
+  payment.pagoPa?.creditorTaxId === info.creditorTaxId;
+
+const findInformalPayment = (
+  payments: Array<PaymentDetails>,
+  originalPayment: {
+    pagoPa?: Partial<NonNullable<PaymentDetails['pagoPa']>>;
+  }
+): PaymentDetails | undefined =>
+  payments.find(
+    (payment) =>
+      payment.pagoPa?.noticeCode === originalPayment.pagoPa?.noticeCode &&
+      payment.pagoPa?.creditorTaxId === originalPayment.pagoPa?.creditorTaxId
+  );
+
+export const setInformalPaymentsInCache = (
+  paymentInfo: Array<ExtRegistriesPaymentDetails>,
+  iun: string,
+  originalPayments: Array<{
+    pagoPa?: Partial<NonNullable<PaymentDetails['pagoPa']>>;
+  }> = []
+): PaymentCache => {
+  const cachedPayments = getPaymentCache(iun)?.payments ?? [];
+
+  const payments: Array<PaymentDetails> = paymentInfo.map((info) => {
+    const cachedPayment = cachedPayments.find((payment) => matchesInformalPayment(payment, info));
+    const originalPayment = originalPayments.find((payment) =>
+      matchesInformalPayment(payment, info)
+    );
+
+    return {
+      pagoPa: {
+        ...cachedPayment?.pagoPa,
+        ...originalPayment?.pagoPa,
+        ...info,
+        applyCost: false,
+      },
+    };
+  });
+
+  const orderedPayments = originalPayments.flatMap((originalPayment) => {
+    const payment =
+      findInformalPayment(payments, originalPayment) ??
+      findInformalPayment(cachedPayments, originalPayment);
+
+    return payment ? [payment] : [];
+  });
+
+  return setPaymentsInCache(originalPayments.length > 0 ? orderedPayments : payments, iun);
 };
