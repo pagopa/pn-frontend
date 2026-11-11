@@ -130,7 +130,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('onboarding.courtesy.email-added-successfully', { ns: 'recapiti' }),
+            message: t('courtesy-contacts.email-added-successfully', { ns: 'recapiti' }),
           })
         );
 
@@ -292,7 +292,6 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
         addressType={AddressType.COURTESY}
         channelType={ChannelType.EMAIL}
         open={codeDialogOpen}
-        variant="onboarding-email"
         onConfirm={(code) => void handleCodeVerification(code)}
         onDiscard={() => void handleDiscardCodeDialog()}
       />
