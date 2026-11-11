@@ -22,7 +22,7 @@
     "email-add": "Aggiungi email",
     "email-added-successfully": "Indirizzo email aggiunto correttamente",
     "email-and-sercq-removed-successfully": "Email e domicilio digitale SEND disattivati",
-    "email-empty-description": "Aggiungi un indirizzo email su cui possiamo avvisarti quando c’è una notifica da leggere su SEND.",
+    "email-empty-description": "Aggiungi un indirizzo email su cui possiamo avvisarti quando c’è una notifica SEND da leggere.",
     "email-filled-description": "Quando c’è una notifica SEND per te, ti avvisiamo con una email all’indirizzo che hai scelto.",
     "email-new-code": "Non l’hai ricevuto? Controlla di aver inserito l’email corretta oppure <0>genera un nuovo codice</0>.",
     "email-removed-successfully": "Indirizzo email rimosso correttamente",
@@ -38,7 +38,7 @@
     "link-sms-placeholder": "Il tuo cellulare",
     "remove-email": "Disattiva email",
     "remove-email-and-sercq": "Disattiva email e domicilio",
-    "remove-email-and-sercq-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le notifiche via raccomandata e <strong>pagare i relativi costi.</strong></0>",
+    "remove-email-and-sercq-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le notifiche a valore legale via raccomandata e <strong>pagare i relativi costi.</strong></0>",
     "remove-email-and-sercq-title": "Con l’email si disattiva anche il domicilio digitale SEND",
     "remove-email-no-domicile-message": "Se confermi, non riceverai più l’email su {{value}} quando c’è una notifica SEND da leggere.",
     "remove-email-no-domicile-title": "Disattiva email",
@@ -173,7 +173,7 @@
     "remove-pec-message": "<0>Non avrai più un recapito per le notifiche a valore legale della Pubblica Amministrazione e potresti riceverle su carta, con eventuali costi a tuo carico.</0><1>Continuerai però a ricevere avvisi sui canali che hai attivato.</1>",
     "remove-pec-title": "Confermi di voler disattivare la PEC?",
     "remove-sercq_send-confirm": "Disattiva domicilio digitale",
-    "remove-sercq_send-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le notifiche via raccomandata e <strong>pagare i relativi costi.</strong></0><1>Continuerai a ricevere gli avvisi via email, puoi disattivarli nella sezione I tuoi recapiti.</1>",
+    "remove-sercq_send-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le notifiche a valore legale via raccomandata e <strong>pagare i relativi costi.</strong></0><1>Continuerai a ricevere gli avvisi via email, puoi disattivarli nella sezione I tuoi recapiti.</1>",
     "remove-sercq_send-title": "Confermi di voler disattivare il domicilio digitale su SEND?",
     "sercq-send-active": "Attiva",
     "sercq-send-active-pec-enabled": "Attiva domicilio digitale",
@@ -242,9 +242,9 @@
         "content": "Collegare SEND a IO è il modo più pratico per ricevere e gestire notifiche a valore legale.",
         "disable": "Scollega SEND da IO",
         "io-list": [
-          "Ricevi le notifiche in tempo reale, appena l’ente le carica su SEND",
-          "Puoi aprire e leggere i documenti allegati alla notifica",
-          "Puoi pagare gli importi dovuti se la notifica prevede un pagamento"
+          "Le ricevi in tempo reale, appena l’ente le carica su SEND",
+          "Puoi aprire e leggere i documenti allegati",
+          "Puoi pagare gli importi dovuti se sono previsti dei pagamenti"
         ],
         "skip-io": "Continua senza collegare IO",
         "title": "Collega SEND all’app IO"
@@ -513,7 +513,7 @@
     "link-sercq-label": "Il tuo domicilio digitale SEND",
     "pec": "Indirizzo PEC",
     "pec-disclaimer": "Accetto che questo indirizzo sia utilizzato da SEND in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri.",
-    "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
+    "remove-special-description": "Gli avvisi relativi alle notifiche SEND degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "select-address": "Tipologia",
     "sercq-disclaimer": "Premendo <strong>“Conferma”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND dell'ente non ti verranno inoltrate su altri domicili digitali.",

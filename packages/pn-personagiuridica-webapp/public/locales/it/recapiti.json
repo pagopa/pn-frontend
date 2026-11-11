@@ -260,7 +260,7 @@
     "link-sercq-label": "Il tuo domicilio digitale SEND",
     "pec": "Indirizzo PEC",
     "pec-disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche di questo specifico ente mittente, in via prioritaria rispetto al  domicilio digitale di piattaforma, a un eventuale domicilio digitale eletto presso lo stesso ente mittente o presente nei pubblici registri",
-    "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
+    "remove-special-description": "Gli avvisi relativi alle notifiche SEND degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "select-address": "Tipologia",
     "sercq-disclaimer": "Premendo <strong>“Conferma”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND dell'ente non verranno inoltrate su altri domicili digitali.",
