@@ -1,11 +1,14 @@
 version: 0.2
 env:
+  variables:
+    NODE_VERSION: "22"
   shell: bash
 phases:
   install:
     runtime-versions:
-      nodejs: 22
+      nodejs: ${NODE_VERSION}
     commands:
+      - node --version
       #install yarn
       - echo installing yarn
       - npm install --global yarn
