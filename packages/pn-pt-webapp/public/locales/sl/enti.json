@@ -1,0 +1,33 @@
+{
+  "subtitle": "Oglejte si upravljane ustanove za izdelek SEND.",
+  "title": "Vaše ustanove",
+  "work-in-progress": "Portal je v fazi razvoja, trenutno od tu ni mogoče upravljati SEND v imenu vaših ustanov.",
+  "search": {
+    "label": "Išči po imenu ali davčni številki",
+    "button": "Išči",
+    "min-length": "Vnesite vsaj tri znake"
+  },
+  "table": {
+    "error": {
+      "title": "Seznama upravljanih ustanov ni bilo mogoče pridobiti.",
+      "action": "Poskusite znova"
+    },
+    "columns": {
+      "institution-name": "Ime ustanove",
+      "tax-code": "Davčna številka",
+      "delegation": "Pooblastilo"
+    },
+    "delegation-status": {
+      "active": "Aktivno od {{date}}",
+      "revoked": "Preklicano dne {{date}}"
+    },
+    "empty": {
+      "title": "Tukaj boste videli svoje ustanove",
+      "description": "Da bi vam omogočili upravljanje SEND v imenu ustanove, mora ustanova aktivirati pooblastilo na vaše ime."
+    },
+    "no-results": {
+      "title": "Ni zadetkov za »{{search}}«.",
+      "description": "Poskusite z drugačnim iskanjem."
+    }
+  }
+}
