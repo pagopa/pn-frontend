@@ -60,7 +60,9 @@ describe('testing EmailContactItem', () => {
     const form = container.querySelector('form');
     const phoneValue = getById(form!, 'default_email-typography');
     expect(phoneValue).toHaveTextContent(defaultAddress?.value!);
-    const editButton = getByRole('button', { name: 'button.modifica' });
+    const editButton = getByRole('button', {
+      name: 'button.modifica',
+    });
     fireEvent.click(editButton);
     const input = container.querySelector(`[name="default_email"]`);
     const saveButton = getByRole('button', { name: 'button.conferma' });
@@ -164,7 +166,9 @@ describe('testing EmailContactItem', () => {
     const form = result.container.querySelector('form');
     let mailValue = getById(form!, 'default_email-typography');
     expect(mailValue).toHaveTextContent(defaultAddress!.value);
-    let editButton = result.getByRole('button', { name: 'button.modifica' });
+    let editButton = result.getByRole('button', {
+      name: 'button.modifica',
+    });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="default_email"]`);
     const saveButton = result.getByRole('button', { name: 'button.conferma' });

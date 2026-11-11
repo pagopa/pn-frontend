@@ -350,7 +350,12 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 {value}
               </Typography>
               {showVerifiedIcon && (
-                <CheckCircleRoundedIcon sx={{ ml: 1 }} fontSize="small" color="success" />
+                <CheckCircleRoundedIcon
+                  sx={{ ml: 1 }}
+                  fontSize="small"
+                  color="success"
+                  titleAccess={t('digital-contact.verified-aria-label', { ns: 'recapiti' })}
+                />
               )}
             </Stack>
             <Stack

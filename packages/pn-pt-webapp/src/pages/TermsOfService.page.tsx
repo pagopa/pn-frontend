@@ -1,0 +1,53 @@
+import { useEffect } from 'react';
+
+import {
+  compileOneTrustPath,
+  getSessionLanguage,
+  rewriteLinks,
+  waitForElement,
+} from '@pagopa-pn/pn-commons';
+
+import * as routes from '../navigation/routes.const';
+import { getConfiguration } from '../services/configuration.service';
+
+declare const OneTrust: {
+  NoticeApi: {
+    Initialized: {
+      then: (cbk: () => void) => void;
+    };
+    LoadNotices: (noticesUrls: Array<string>, flag: boolean) => void;
+  };
+};
+
+const TermsOfServicePage = () => {
+  const { ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE } = getConfiguration();
+  const lang = getSessionLanguage();
+
+  useEffect(() => {
+    if (ONE_TRUST_TOS) {
+      OneTrust.NoticeApi.Initialized.then(function () {
+        OneTrust.NoticeApi.LoadNotices(
+          [compileOneTrustPath(ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE)],
+          false
+        );
+
+        void waitForElement('.otnotice-content').then(() => {
+          rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
+        });
+      });
+    }
+  }, [lang]);
+
+  return (
+    <>
+      <div
+        key={`otnotice-${lang}`}
+        role="article"
+        id={`otnotice-${ONE_TRUST_TOS}`}
+        className="otnotice"
+      ></div>
+    </>
+  );
+};
+
+export default TermsOfServicePage;

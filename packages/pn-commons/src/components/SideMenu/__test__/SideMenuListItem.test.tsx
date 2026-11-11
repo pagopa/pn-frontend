@@ -113,6 +113,7 @@ describe('SideMenuListItem', () => {
     const link = getByRole('button');
     const dot = within(link).getByTestId('new-notification-badge');
     expect(dot).toBeInTheDocument();
+    expect(dot).toHaveAttribute('aria-label', 'menu.new-notifications');
   });
 
   it('does not render new notification dot when dotNotification is false', () => {
