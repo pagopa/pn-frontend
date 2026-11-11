@@ -2,9 +2,9 @@ import { ProductEntity } from '@pagopa/mui-italia';
 
 export const productsDTO: Array<ProductEntity> = [
   {
-    id: 'prod-pn-pt',
+    id: 'prod-pn-mock',
     title: 'SEND - Partner Tecnologico',
-    productUrl: 'https://test.selfcare.pagopa.it/token-exchange?productId=prod-pn-pt',
+    productUrl: 'https://test.selfcare.pagopa.it/token-exchange?productId=prod-pn-mock',
     linkType: 'external',
   },
   {

@@ -28,7 +28,7 @@ beforeAll(() => {
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
-    SELFCARE_SEND_PROD_ID: 'prod-pn-pt',
+    SELFCARE_SEND_PROD_ID: 'prod-pn-mock',
     INACTIVITY_HANDLER_MINUTES: 0,
     WORK_IN_PROGRESS: false,
     LANDING_SITE_URL: 'https://test.landing.pagopa.it',
