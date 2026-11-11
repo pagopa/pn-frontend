@@ -300,7 +300,7 @@
     "cards": {
       "contacts": {
         "cta": "Attiva solo gli avvisi",
-        "item_1": "Ricevi avvisi via email, SMS e sull’app IO, così hai più possibilità di leggere in tempo la comunicazione ed evitare i costi di notifica legati alle raccomandate.",
+        "item_1": "Ricevi avvisi via email, SMS e sull’app IO, così hai più possibilità di leggere in tempo la notifica SEND ed evitare i costi legati alle raccomandate.",
         "item_2": "Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi.",
         "title": "Voglio solo gli avvisi"
       },
@@ -320,7 +320,7 @@
       }
     },
     "courtesy": {
-      "banner-description": "Più avvisi attivi, più possibilità hai di leggere la notifica digitale in tempo ed evitare la raccomandata!",
+      "banner-description": "Più avvisi attivi, più possibilità hai di leggere la notifica SEND in tempo ed evitare la raccomandata!",
       "email": {
         "collapsed": {
           "button-label": "Attiva gli avvisi via email",
@@ -474,7 +474,7 @@
       },
       "title": "Il meglio di SEND"
     },
-    "exit-flow": "Salta e vai alle tue notifiche",
+    "exit-flow": "Salta e vai alle notifiche SEND",
     "exit-flow-dialog": {
       "cancel": "Torna alla configurazione",
       "description": "Rischi di non leggere le notifiche SEND in tempo e di dover pagare i costi per l’invio della raccomandata.",
