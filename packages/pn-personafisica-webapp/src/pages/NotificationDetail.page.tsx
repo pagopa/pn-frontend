@@ -37,6 +37,7 @@ import {
   appStateActions,
   downloadDocument,
   getPaymentCache,
+  getPerfectionLink,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
@@ -128,8 +129,9 @@ const NotificationDetail: React.FC = () => {
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
-  const delegatorName = delegatorsFromStore.find((delegation) => delegation.mandateId === mandateId)
-    ?.delegator?.displayName;
+  const delegator = delegatorsFromStore.find(
+    (delegation) => delegation.mandateId === mandateId
+  )?.delegator;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
@@ -437,8 +439,8 @@ const NotificationDetail: React.FC = () => {
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
 
-    const breadcrumbLabel = delegatorName
-      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+    const breadcrumbLabel = delegator?.displayName
+      ? t('menu.notifiche-delegato', { delegator: delegator.displayName })
       : t('menu.notifiche-utente', { ns: 'common' });
 
     return (
@@ -520,6 +522,20 @@ const NotificationDetail: React.FC = () => {
     }
     return 'not_set';
   };
+
+  const perfectionLink = useMemo(
+    () =>
+      getPerfectionLink(
+        NOTIFICATION_PERFECTION_LINK,
+        notification.notificationStatusHistory,
+        notification.recipients,
+        currentUser.fiscal_number,
+        delegator
+          ? { displayName: delegator?.displayName, fiscalCode: delegator.fiscalCode }
+          : undefined
+      ),
+    [notification.notificationStatusHistory]
+  );
 
   useEffect(() => {
     if (downtimesReady && pageReady && !isUserForbidden) {
@@ -674,6 +690,8 @@ const NotificationDetail: React.FC = () => {
                     iun={notification.iun}
                     abstract={notification.abstract}
                     selfcareCdnUrl={SELFCARE_CDN_URL}
+                    isDelegate={!!mandateId}
+                    recipient={currentRecipient}
                   />
                   {banner}
                   {pecUnreachableAlert}
@@ -760,15 +778,17 @@ const NotificationDetail: React.FC = () => {
                     onTimelineClick={handleGoToTimeline}
                     clickHandler={legalFactDownloadHandler}
                     isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
-                    perfectionLink={NOTIFICATION_PERFECTION_LINK}
+                    perfectionLink={perfectionLink}
                     mandateId={mandateId}
-                    delegatorName={delegatorName}
+                    delegator={
+                      delegator
+                        ? { displayName: delegator?.displayName, fiscalCode: delegator.fiscalCode }
+                        : undefined
+                    }
                     userTaxId={currentUser.fiscal_number}
                   />
                 )}
                 <NotificationDetailSection
-                  isDelegate={!!mandateId}
-                  recipient={currentRecipient}
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
                   isCancelled={isCancelled.cancellationInTimeline}

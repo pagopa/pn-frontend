@@ -1,5 +1,6 @@
 import { vi } from 'vitest';
 
+import { NotificationDetailRecipient, RecipientType } from '../../../models';
 import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import AbstractPaper from '../AbstractPaper';
@@ -103,5 +104,46 @@ describe('AbstractPaper Component - layout', () => {
     );
 
     expect(mobileContainer.querySelectorAll('hr')).toHaveLength(desktopDividers + 1);
+  });
+});
+
+describe('AbstractPaper Component - delegated recipient', () => {
+  const recipient: NotificationDetailRecipient = {
+    recipientType: RecipientType.PF,
+    denomination: 'DESTINATARIO_FITTIZIO_001',
+    taxId: 'CODICE_FISCALE_FITTIZIO_001',
+  };
+
+  const recipientLabel = getLocalizedOrDefaultLabel(
+    'notifications',
+    'detail.notification-detail-section.recipient'
+  );
+
+  const originalMatchMedia = window.matchMedia;
+
+  afterEach(() => {
+    window.matchMedia = originalMatchMedia;
+  });
+
+  it('shows the delegated recipient in the summary', () => {
+    const { getByText } = render(
+      <AbstractPaper {...defaultProps} isDelegate recipient={recipient} />
+    );
+
+    expect(getByText(recipientLabel)).toBeInTheDocument();
+    expect(getByText(`${recipient.denomination} - ${recipient.taxId}`)).toBeInTheDocument();
+  });
+
+  it('does not show recipient details without a delegation', () => {
+    const { queryByText } = render(<AbstractPaper {...defaultProps} recipient={recipient} />);
+
+    expect(queryByText(recipientLabel)).not.toBeInTheDocument();
+    expect(queryByText(`${recipient.denomination} - ${recipient.taxId}`)).not.toBeInTheDocument();
+  });
+
+  it('does not show the recipient block when recipient data is missing', () => {
+    const { queryByText } = render(<AbstractPaper {...defaultProps} isDelegate />);
+
+    expect(queryByText(recipientLabel)).not.toBeInTheDocument();
   });
 });

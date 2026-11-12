@@ -1,4 +1,5 @@
 import { NotificationDetailRecipient } from '../../../models/NotificationDetail';
+import { NotificationStatus } from '../../../models/NotificationStatus';
 import {
   NotificationTimelineLegacyStatusHistory,
   NotificationTimelineStatusHistory,
@@ -6,12 +7,6 @@ import {
 import { getNotificationStatusInfos } from '../../../utility/notification.utility';
 import { getRecipientPerStep } from '../../../utility/notificationTimeline.utility';
 import { getTimelineItemPresentation } from './notificationTimelineStatus.config';
-
-export const PERFECTION_ANCHORS = {
-  PEC: '#pec',
-  SEND: '#send',
-  ANALOG: '#raccomandata',
-} as const;
 
 export type TimelineItem = {
   status: NotificationTimelineStatusHistory;
@@ -28,10 +23,18 @@ export const getTimelineItems = (
   statusHistory: Array<NotificationTimelineStatusHistory>,
   legacyStatusHistory: Array<NotificationTimelineLegacyStatusHistory>,
   recipients: Array<NotificationDetailRecipient>,
+  taxId?: string,
   isSenderTimeline?: boolean,
-  delegateView?: { mandateId?: string; delegatorName?: string; taxId?: string }
+  delegateView?: {
+    mandateId: string;
+    delegatorName: string;
+    delegatorTaxId: string;
+  }
 ): Array<TimelineItem> => {
   const isMultiRecipient = recipients.length > 1;
+  const hasEffectiveDate = statusHistory.some(
+    ({ status }) => status === NotificationStatus.EFFECTIVE_DATE
+  );
 
   return statusHistory.map((status, index) => {
     const legacyStatus = legacyStatusHistory[index];
@@ -40,8 +43,10 @@ export const getTimelineItems = (
       recipients,
       isParty: isSenderTimeline,
       mandateId: delegateView?.mandateId,
-      delegatorName: delegateView?.delegatorName,
-      userTaxId: delegateView?.taxId,
+      delegator: delegateView
+        ? { displayName: delegateView.delegatorName, fiscalCode: delegateView.delegatorTaxId }
+        : undefined,
+      userTaxId: taxId,
     });
 
     return {
@@ -51,7 +56,7 @@ export const getTimelineItems = (
       legacyStatus,
       recipientPerStep:
         isMultiRecipient && isSenderTimeline ? getRecipientPerStep(status.steps, recipients) : [],
-      ...getTimelineItemPresentation(status.status, index === 0),
+      ...getTimelineItemPresentation(status.status, index === 0, hasEffectiveDate),
     };
   });
 };

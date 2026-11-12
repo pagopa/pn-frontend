@@ -58,6 +58,7 @@
       "documents": {
         "document-not-available": "Dokument še ni na voljo. Poskusite znova pozneje.",
         "download-message-available": "<0>Na spletu na voljo do 180 dni</0> od datuma sprejetja sporočila.",
+        "download-message-available-plural": "<0>Na spletu na voljo do 180 dni</0> od datuma sprejema obvestila.",
         "download-message-expired": "Dokumenti niso več na voljo na spletu.",
         "title": "Priloženi dokumenti"
       },
@@ -67,7 +68,7 @@
       "send-by-channel": {
         "channel": {
           "analog": "Poštna storitev",
-          "email": "E-pošta",
+          "email": "Email",
           "io": "IO",
           "pec": "PEC",
           "send": "SEND",

@@ -574,6 +574,8 @@ const NotificationDetail = () => {
                   iun={notification.iun}
                   abstract={notification.abstract}
                   selfcareCdnUrl={SELFCARE_CDN_URL}
+                  isDelegate={!!mandateId}
+                  recipient={currentRecipient}
                 />
                 {banner}
                 {pecUnreachableAlert}
@@ -657,8 +659,6 @@ const NotificationDetail = () => {
                 />
               )}
               <NotificationDetailSection
-                isDelegate={!!mandateId}
-                recipient={currentRecipient}
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDowloadHandler}
                 isCancelled={isCancelled.cancellationInTimeline}

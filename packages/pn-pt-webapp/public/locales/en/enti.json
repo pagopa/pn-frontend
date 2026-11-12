@@ -1,0 +1,33 @@
+{
+  "subtitle": "View managed institutions for the SEND product.",
+  "title": "Your institutions",
+  "work-in-progress": "The portal is under development, at the moment it is not possible to manage SEND on behalf of your institutions from here.",
+  "search": {
+    "label": "Search by Name or Fiscal Code",
+    "button": "Search",
+    "min-length": "Enter at least three characters"
+  },
+  "table": {
+    "error": {
+      "title": "It was not possible to retrieve the list of managed institutions.",
+      "action": "Try again"
+    },
+    "columns": {
+      "institution-name": "Institution name",
+      "tax-code": "Fiscal Code",
+      "delegation": "Delegation"
+    },
+    "delegation-status": {
+      "active": "Active from {{date}}",
+      "revoked": "Revoked on {{date}}"
+    },
+    "empty": {
+      "title": "Here you will see your institutions",
+      "description": "To allow you to manage SEND on behalf of the institution, the institution must activate a delegation in your name."
+    },
+    "no-results": {
+      "title": "No matches for “{{search}}”.",
+      "description": "Try a different search."
+    }
+  }
+}

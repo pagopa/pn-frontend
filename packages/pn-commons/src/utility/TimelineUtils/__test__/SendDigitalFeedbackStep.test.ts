@@ -6,6 +6,7 @@ import {
   TimelineCategory,
 } from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
+import { initLocalizationExists } from '../../localization.utility';
 import { SendDigitalFeedbackStep } from '../SendDigitalFeedbackStep';
 
 describe('SendDigitalFeedbackStep', () => {
@@ -144,5 +145,66 @@ describe('SendDigitalFeedbackStep', () => {
       label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
       description: '',
     });
+  });
+
+  it('test getTimelineStepInfo with digitalAddress data - SERCQ SEND, new copy and delegate', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_FEEDBACK, {
+      digitalAddress: {
+        address: SERCQ_SEND_VALUE,
+        type: DigitalDomicileType.SERCQ,
+      },
+      responseStatus: ResponseStatus.OK,
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationDTO.recipients[0],
+      isMultiRecipient: false,
+      isNewTimelineCopyEnabled: true,
+      delegatorName: 'Test Delegator',
+    };
+    const sendDigitalFeedbackStep = new SendDigitalFeedbackStep();
+
+    // delegate description not available (e.g. other apps)
+    expect(sendDigitalFeedbackStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+      description: '',
+    });
+
+    try {
+      initLocalizationExists(
+        (_ns, path) =>
+          path === 'detail.timeline.send-digital-success-SERCQ-SEND-description-delegate'
+      );
+      // delegate
+      expect(sendDigitalFeedbackStep.getTimelineStepInfo(payload)).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+        description: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND-description-delegate - ${JSON.stringify(
+          {
+            ...sendDigitalFeedbackStep.nameAndTaxId(payload),
+            address: SERCQ_SEND_VALUE,
+            recipient: 'Test Delegator',
+          }
+        )}`,
+      });
+      // direct access, mono and multi recipient
+      expect(
+        sendDigitalFeedbackStep.getTimelineStepInfo({ ...payload, delegatorName: undefined })
+      ).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+        description: '',
+      });
+      expect(
+        sendDigitalFeedbackStep.getTimelineStepInfo({
+          ...payload,
+          delegatorName: undefined,
+          isMultiRecipient: true,
+        })
+      ).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+        description: '',
+      });
+    } finally {
+      initLocalizationExists(() => false);
+    }
   });
 });
