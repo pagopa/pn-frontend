@@ -32,7 +32,7 @@
     "creditor-tax-id": "Codice Fiscale Ente",
     "date": "Data di invio",
     "disclaimer-link": "Scopri di più",
-    "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
+    "document-not-available": "Documento in fase di recupero. Riprova a effettuare il download più tardi",
     "downtimes": {
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica.",
       "datePrefix": "il ",

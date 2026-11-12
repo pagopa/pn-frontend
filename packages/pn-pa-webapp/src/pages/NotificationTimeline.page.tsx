@@ -72,7 +72,7 @@ const NotificationTimeline: React.FC = () => {
     return () => void dispatch(resetState());
   }, [fetchSentNotification]);
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
+  const showWarningIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
     if (response.retryAfter) {
       dispatch(
         appStateActions.addWarning({
@@ -96,7 +96,7 @@ const NotificationTimeline: React.FC = () => {
 
     dispatch(getSentNotificationDocument({ iun: notificationIUN, documentType, documentId }))
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 

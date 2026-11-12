@@ -101,7 +101,7 @@ const NotificationDetail: React.FC = () => {
     (recipient) => recipient.payments && recipient.payments.length > 0
   );
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
+  const showWarningIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
     if (response.retryAfter) {
       dispatch(
         appStateActions.addWarning({
@@ -133,7 +133,7 @@ const NotificationDetail: React.FC = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
     } else {
       // Attachment case
@@ -145,7 +145,7 @@ const NotificationDetail: React.FC = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
     }
   };
@@ -253,7 +253,7 @@ const NotificationDetail: React.FC = () => {
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     dispatch(getDowntimeLegalFact(legalFactId))
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch((e) => console.log(e));
   }, []);
 
@@ -359,7 +359,7 @@ const NotificationDetail: React.FC = () => {
 
     dispatch(getSentNotificationDocument({ iun: notification.iun, documentType, documentId }))
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 

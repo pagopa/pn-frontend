@@ -121,7 +121,7 @@ const InformalNotificationDetail: React.FC = () => {
     description: `informal.status.unknown.description`,
   };
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: BffDocumentDownloadMetadataResponse) => {
+  const showWarningIfRetryAfterOrDownload = (response: BffDocumentDownloadMetadataResponse) => {
     if (response.retryAfter) {
       dispatch(
         appStateActions.addWarning({
@@ -146,7 +146,7 @@ const InformalNotificationDetail: React.FC = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 

@@ -77,7 +77,7 @@ const NotificationTimeline: React.FC = () => {
     ? notificationTimeline.subject
     : notification.subject;
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
+  const showWarningIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
   }) => {
@@ -118,7 +118,7 @@ const NotificationTimeline: React.FC = () => {
       getReceivedNotificationDocument({ iun: notificationIUN, documentType, documentId, mandateId })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 
