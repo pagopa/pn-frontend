@@ -300,7 +300,7 @@
     "cards": {
       "contacts": {
         "cta": "Activate only notifications",
-        "item_1": "Receive notifications via email, SMS, and on the IO app, so you have a better chance of reading the communication in time and avoiding delivery costs associated with registered mail.",
+        "item_1": "Receive notifications via email, SMS, and on the IO app, so you have a better chance of reading the SEND notification in time and avoiding costs associated with registered mail.",
         "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs.",
         "title": "I only want notifications"
       },
@@ -320,7 +320,7 @@
       }
     },
     "courtesy": {
-      "banner-description": "The more notices are active, the more chances you have to read the digital notification in time and avoid the registered post!",
+      "banner-description": "The more notices are active, the more chances you have to read the SEND notification in time and avoid the registered post!",
       "email": {
         "collapsed": {
           "button-label": "Activate email notices",
@@ -474,7 +474,7 @@
       },
       "title": "The best of SEND"
     },
-    "exit-flow": "Skip and go to your notifications",
+    "exit-flow": "Skip and go to SEND notifications",
     "exit-flow-dialog": {
       "cancel": "Back to configuration",
       "description": "You risk not reading SEND notifications in time and having to pay the mailing costs for the registered mail.",

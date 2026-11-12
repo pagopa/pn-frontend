@@ -300,7 +300,7 @@
     "cards": {
       "contacts": {
         "cta": "Nur Mitteilungen aktivieren",
-        "item_1": "Erhalten Sie Mitteilungen per E-Mail, SMS und über die IO-App, damit Sie die Mitteilung rechtzeitig lesen und die Versandkosten für das Papier-Einschreiben vermeiden können.",
+        "item_1": "Erhalten Sie Mitteilungen per E-Mail, SMS und über die IO-App, damit Sie die SEND-Benachrichtigung rechtzeitig lesen und die Kosten für das Papier-Einschreiben vermeiden können.",
         "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten.",
         "title": "Ich möchte nur die Mitteilungen"
       },
@@ -320,7 +320,7 @@
       }
     },
     "courtesy": {
-      "banner-description": "Je mehr Benachrichtigungen aktiv sind, desto größer ist die Chance, die digitale Zustellung rechtzeitig zu lesen und das Einschreiben zu vermeiden!",
+      "banner-description": "Je mehr Benachrichtigungen aktiv sind, desto größer ist die Chance, die SEND-Zustellung rechtzeitig zu lesen und das Einschreiben zu vermeiden!",
       "email": {
         "collapsed": {
           "button-label": "E-Mail-Benachrichtigungen aktivieren",
@@ -474,7 +474,7 @@
       },
       "title": "Das Beste von SEND"
     },
-    "exit-flow": "Überspringen und zu deinen Zustellungen gehen",
+    "exit-flow": "Überspringen und zu den SEND-Zustellungen gehen",
     "exit-flow-dialog": {
       "cancel": "Zurück zur Konfiguration",
       "description": "Du riskierst, die SEND-Zustellungen nicht rechtzeitig zu lesen und die Kosten für den Versand des Einschreibens tragen zu müssen.",

@@ -300,7 +300,7 @@
     "cards": {
       "contacts": {
         "cta": "Aktivirajte samo obvestila",
-        "item_1": "Prejemajte obvestila prek e-pošte, SMS-ov in v aplikaciji IO, da boste imeli več možnosti za pravočasno branje sporočila in se izognili stroškom pošiljanja priporočene pošte.",
+        "item_1": "Prejemajte obvestila prek e-pošte, SMS-ov in v aplikaciji IO, da boste imeli več možnosti za pravočasno branje obvestila SEND in se izognili stroškom priporočene pošte.",
         "item_2": "Če obvestila SEND ne odprete v 5 dneh po prejemu, boste vseeno prejeli priporočeno pošto z ustreznimi dodatnimi stroški.",
         "title": "Želim samo obvestila"
       },
@@ -320,7 +320,7 @@
       }
     },
     "courtesy": {
-      "banner-description": "Več ko je aktivnih obvestil, večja je možnost, da digitalno uradno obvestilo prebereš pravočasno in se izogneš priporočeni pošti!",
+      "banner-description": "Več ko je aktivnih obvestil, večja je možnost, da uradno obvestilo SEND prebereš pravočasno in se izogneš priporočeni pošti!",
       "email": {
         "collapsed": {
           "button-label": "Aktiviraj obvestila po e-pošti",
@@ -474,7 +474,7 @@
       },
       "title": "Najboljše od SEND"
     },
-    "exit-flow": "Preskoči in pojdi na svoja obvestila",
+    "exit-flow": "Preskoči in pojdi na obvestila SEND",
     "exit-flow-dialog": {
       "cancel": "Nazaj na konfiguracijo",
       "description": "Tvegaš, da obvestil SEND ne boš prebral pravočasno in boš moral plačati stroške pošiljanja priporočene pošte.",
