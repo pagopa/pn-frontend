@@ -121,10 +121,10 @@ const InformalNotificationDetail: React.FC = () => {
     description: `informal.status.unknown.description`,
   };
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: BffDocumentDownloadMetadataResponse) => {
+  const showWarningIfRetryAfterOrDownload = (response: BffDocumentDownloadMetadataResponse) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t('informal.detail.documents.document-not-available'),
         })
@@ -146,7 +146,7 @@ const InformalNotificationDetail: React.FC = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 

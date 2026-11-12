@@ -15,7 +15,15 @@ import userEvent from '@testing-library/user-event';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { informalNotificationMock } from '../../__mocks__/InformalNotification.mock';
-import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { BffFullInformalNotificationV1 } from '../../generated-client/informal-notifications';
 import * as routes from '../../navigation/routes.const';
@@ -221,7 +229,7 @@ describe('InformalNotificationDetail Page', () => {
     });
   });
 
-  it('shows info message when the document is not available yet', async () => {
+  it('shows warning message when the document is not available yet', async () => {
     const docIdx = documents[0].docIdx;
     mock
       .onGet(`/bff/v1/notifications/informal/received/${iun}`)
@@ -229,6 +237,7 @@ describe('InformalNotificationDetail Page', () => {
     mock
       .onGet(`/bff/v1/notifications/informal/received/${iun}/attachments/documents/${docIdx}`)
       .reply(200, { retryAfter: 1000 });
+
     await act(async () => {
       result = render(
         <>
@@ -240,11 +249,27 @@ describe('InformalNotificationDetail Page', () => {
         }
       );
     });
+
     fireEvent.click(result.getByTestId('documentButton'));
+
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
     });
-    expect(await result.findByText('detail.document-not-available')).toBeInTheDocument();
+
+    const warningAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
+
+    expect(within(warningAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
+
     expect(globalThis.location.href).toBe('');
   });
 

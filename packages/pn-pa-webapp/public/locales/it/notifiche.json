@@ -16,7 +16,7 @@
     },
     "cancelled-iun": "Codice IUN annullato",
     "date": "Data di invio",
-    "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
+    "document-not-available": "Documento in fase di recupero. Riprova a effettuare il download più tardi",
     "download-aar-available": "<0>Disponibile online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge per il destinatario.",
     "download-aar-available-plural": "Gli avvisi di avvenuta ricezione sono <0>disponibili online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge per il destinatario.",
     "download-aar-expired": "L’avviso di avvenuta ricezione non è più disponibile online.",

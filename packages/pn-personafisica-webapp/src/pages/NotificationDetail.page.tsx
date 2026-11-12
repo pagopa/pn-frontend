@@ -174,13 +174,13 @@ const NotificationDetail: React.FC = () => {
     notification.notificationCostDetails,
   ]);
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
+  const showWarningIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
   }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',
@@ -210,7 +210,7 @@ const NotificationDetail: React.FC = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE);
     } else {
@@ -224,7 +224,7 @@ const NotificationDetail: React.FC = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
         notification_type: EventNotificationTypes.NOTIFICATION,
@@ -426,7 +426,7 @@ const NotificationDetail: React.FC = () => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch((e) => console.log(e));
     }
   }, []);
@@ -629,7 +629,7 @@ const NotificationDetail: React.FC = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
 
     if (!isAAR) {

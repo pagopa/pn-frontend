@@ -235,7 +235,7 @@ describe('InformalNotificationDetail Page', () => {
     });
   });
 
-  it('shows info message when the document is not available yet', async () => {
+  it('shows warning message when the document is not available yet', async () => {
     mock.onGet(detailUrl).reply(200, INFORMAL_NOTIFICATION_DETAIL_MOCK);
     mock.onGet(documentUrl).reply(200, { retryAfter: 1000 });
 
@@ -245,9 +245,20 @@ describe('InformalNotificationDetail Page', () => {
 
     fireEvent.click(result.getByTestId('documentButton'));
 
-    expect(
-      await result.findByText('informal.detail.documents.document-not-available')
-    ).toBeInTheDocument();
+    const warningAlert = await result.findByRole('alert', {
+      name: 'informal.detail.documents.document-not-available',
+    });
+
+    expect(within(warningAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('informal.detail.documents.document-not-available');
+      expect(info).toHaveLength(0);
+    });
+
     expect(globalThis.location.href).toBe('');
   });
 

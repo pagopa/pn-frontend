@@ -262,13 +262,10 @@ const InformalNotificationDetail: React.FC = () => {
     );
   };
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
-    url: string;
-    retryAfter?: number;
-  }) => {
+  const showWarningIfRetryAfterOrDownload = (response: { url: string; retryAfter?: number }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',
@@ -292,7 +289,7 @@ const InformalNotificationDetail: React.FC = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {

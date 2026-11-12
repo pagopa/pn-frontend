@@ -186,13 +186,13 @@ const NotificationDetail = () => {
     return 'not_set';
   };
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
+  const showWarningIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
   }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',
@@ -233,7 +233,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
     } else {
       // Attachment case
@@ -246,7 +246,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
     }
   };
@@ -428,7 +428,7 @@ const NotificationDetail = () => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch((e) => console.log(e));
     }
   }, []);
@@ -527,7 +527,7 @@ const NotificationDetail = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 
