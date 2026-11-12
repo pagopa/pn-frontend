@@ -397,12 +397,12 @@
     "clean-filters-cta": "Filter entfernen",
     "delegate": "Hier siehst du die rechtsgültigen Zustellungen von {{name}}",
     "description": "Aktualisiere jetzt deine Kontaktdaten, damit du sofort erfährst, wenn du eine erhältst.",
-    "description-onboarding": "Wusstest du, dass du Geld sparen kannst, wenn du dich dafür entscheidest, rechtliche Mitteilungen nur digital zu erhalten?",
+    "description-onboarding": "Wusstest du, dass du Geld sparen kannst, wenn du dich dafür entscheidest, rechtsgültige Zustellungen nur digital zu erhalten?",
     "filtered": "Keine rechtsgültigen Zustellungen oder Mitteilungen für die ausgewählten Filter",
     "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
     "go-to-contacts-cta": "Zu deinen Kontaktdaten",
     "go-to-onboarding-cta": "SEND konfigurieren",
-    "title": "Hier siehst du deine rechtlichen Benachrichtigungen und andere Mitteilungen"
+    "title": "Hier siehst du deine SEND-Zustellungen"
   },
   "filters": {
     "communication-type": "Typ",

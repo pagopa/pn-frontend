@@ -300,7 +300,7 @@
     "cards": {
       "contacts": {
         "cta": "Activer uniquement les avis",
-        "item_1": "Recevez des avis par e-mail, SMS et sur l'application IO, afin d'avoir plus de chances de lire la communication à temps et d'éviter les frais d'envoi liés aux lettres recommandées.",
+        "item_1": "Recevez des avis par e-mail, SMS et sur l'application IO, afin d'avoir plus de chances de lire la notification SEND à temps et d'éviter les frais liés aux lettres recommandées.",
         "item_2": "Si vous n'ouvrez pas la notification SEND dans les 5 jours suivant sa réception, vous recevrez tout de même une lettre recommandée avec les frais supplémentaires afférents.",
         "title": "Je veux seulement les avis"
       },
@@ -320,7 +320,7 @@
       }
     },
     "courtesy": {
-      "banner-description": "Plus il y a d'avis actifs, plus tu as de chances de lire la notification numérique à temps et d'éviter la lettre recommandée !",
+      "banner-description": "Plus il y a d'avis actifs, plus tu as de chances de lire la notification SEND à temps et d'éviter la lettre recommandée !",
       "email": {
         "collapsed": {
           "button-label": "Activer les avis par e-mail",
@@ -474,7 +474,7 @@
       },
       "title": "Le meilleur de SEND"
     },
-    "exit-flow": "Passez et accédez à vos notifications",
+    "exit-flow": "Passez et accédez aux notifications SEND",
     "exit-flow-dialog": {
       "cancel": "Retour à la configuration",
       "description": "Tu risques di ne pas lire les notifications SEND à temps et de devoir payer i frais d'envoi de la lettre recommandée.",
