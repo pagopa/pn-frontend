@@ -1,13 +1,16 @@
 version: 0.2
 env:
+  variables:
+    NODE_VERSION: "22"
   shell: bash
   secrets-manager:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
 phases:
   install:
     runtime-versions:
-      nodejs: 22
+      nodejs: ${NODE_VERSION}
     commands:
+      - node --version
       #install yarn
       - echo installing yarn
       - npm install --global yarn

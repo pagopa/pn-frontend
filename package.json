@@ -29,6 +29,7 @@
     ]
   },
   "resolutions": {
-    "**/tsconfig-paths": "^4.1.2"
+    "**/tsconfig-paths": "^4.1.2",
+    "**/nx/undici": "^7.30.1"
   }
 }
