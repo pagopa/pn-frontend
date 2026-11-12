@@ -160,6 +160,11 @@ const NotificationTimelineGroupItem = ({
           justifyContent: 'space-between',
           textAlign: 'left',
           borderRadius: 1,
+          '&.Mui-focusVisible': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: '2px',
+          },
         }}
       >
         <Stack

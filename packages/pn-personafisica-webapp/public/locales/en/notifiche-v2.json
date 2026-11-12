@@ -270,7 +270,6 @@
     "viewed-description-by-other-delegate": "As a delegate, {{name}} has accessed the SEND notification for {{recipient}}. You can download the <0>certificate of access</0>.",
     "viewed-description-by-recipient": "{{recipient}} has accessed the SEND notification. You can download the <0>certificate of access</0>.",
     "viewed-description-multirecipient": "This SEND notification was sent to multiple recipients, and at least one person among them has accessed the notification. You can download the <0>certificate of access</0>.",
-    "viewed-description-without-legal-fact-multirecipient": "This SEND notification was sent to multiple recipients, and at least one person among them has accessed the notification.",
     "viewed-multirecipient": "Notification read"
   }
 }

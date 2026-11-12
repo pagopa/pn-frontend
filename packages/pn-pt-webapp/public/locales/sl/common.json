@@ -1,0 +1,129 @@
+{
+  "access-denied": "Nimate potrebnih dovoljenj za dostop do te strani",
+  "button": {
+    "annulla": "Prekliči",
+    "close": "Zapri",
+    "exit": "Izhod",
+    "go-to-home": "Nazaj na domačo stran",
+    "go-to-login": "Prijava"
+  },
+  "error-boundary": {
+    "action": "Znova naloži stran",
+    "description": "Strani ni bilo mogoče naložiti. Znova jo naložite ali poskusite znova pozneje.",
+    "title": "Nekaj je šlo narobe"
+  },
+  "errors": {
+    "internal_server": {
+      "message": "Storitev zaradi tehnične težave ni na voljo. Poskusite znova pozneje. Če se napaka ponovi, se obrnite na podporo in posredujte podatke o napaki.",
+      "title": "Prišlo je do napake"
+    },
+    "invalid_body": {
+      "message": "Pri pošiljanju podatkov je prišlo do napake. Preverite, ali so podatki pravilni, brez presledkov ali posebnih znakov, in poskusite znova. Če se napaka ponovi, se obrnite na podporo in posredujte podatke o napaki.",
+      "title": "Podatki niso veljavni"
+    },
+    "technical-error": {
+      "copy-to-clipboard": "Kopiraj podatke o napaki",
+      "title": "Podatki o napaki"
+    },
+    "unhandled": {
+      "message": "Storitev ni na voljo. Poskusite znova pozneje. Če se napaka ponovi, se obrnite na podporo in posredujte podatke o napaki.",
+      "title": "Prišlo je do napake"
+    },
+    "unknown": {
+      "message": "Storitev ni na voljo. Poskusite znova pozneje. Če se napaka ponovi, se obrnite na podporo in posredujte podatke o napaki.",
+      "title": "Prišlo je do napake"
+    }
+  },
+  "footer": {
+    "321-model": "Model 231",
+    "accessibility": "Dostopnost",
+    "certifications": "Certifikati",
+    "company": "Pregledno podjetje",
+    "cookie": "Nastavitve piškotkov",
+    "disclosure": "Responsible Disclosure Policy",
+    "follow": "Sledite nam na",
+    "go-to": "Pojdi na povezavo",
+    "go-to-pagopa": "Pojdite na spletno mesto družbe PagoPA S.p.A.",
+    "legal-part-1": "delniška družba - osnovni kapital v višini 1.000.000 evrov v celoti vplačan - sedež v Rimu, Piazza Colonna 370",
+    "legal-part-2": "poštna številka 00187 - št. vpisa v register podjetij v Rimu, davčna številka in ID za DDV 15376371009",
+    "personal-data": "Pravica do varstva osebnih podatkov",
+    "privacy-info": "Informacije o zasebnosti",
+    "products-title": "Izdelki in storitve",
+    "resources": "Viri",
+    "security": "Varnost informacij",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Pojdite na spletno mesto {{social}} družbe PagoPA S.p.A.",
+    "terms-conditions": "Pogoji uporabe",
+    "who": "O nas",
+    "work": "Zaposlite se pri nas"
+  },
+  "header": {
+    "assistance": "Podpora",
+    "login": "Prijava",
+    "logout": "Odjava",
+    "logout-message": "Ali potrjujete, da želite zapustiti rezervirano območje?",
+    "notification-platform": "SEND - Servizio Notifiche Digitali",
+    "pago-pa-link": "Spletno mesto družbe PagoPA S.p.A.",
+    "reserved-area": "Rezervirano območje"
+  },
+  "home": {
+    "title": "SEND - Tehnološki partnerji"
+  },
+  "inactivity": {
+    "action": "Ostani prijavljen",
+    "body": "Odjava poteka. Če ste si premislili, v nekaj sekundah pritisnite »Ostani prijavljen«.",
+    "title": "Ali res želite zapustiti SEND?"
+  },
+  "leaving-app": {
+    "message": "Preusmerjeni boste",
+    "title": "Zapuščate SEND"
+  },
+  "loading": "Nalaganje",
+  "menu": {
+    "groups": "Skupine",
+    "institutions": "Vaše ustanove",
+    "users": "Uporabniki"
+  },
+  "messages": {
+    "401-message": "Trenutni uporabnik nima dovoljenj",
+    "401-title": "Nepooblaščen uporabnik",
+    "403-message": "Vstopite in se prijavite s SPID ali CIE.",
+    "403-title": "Seja je potekla",
+    "404-message": "Prišlo je do napake. Poskusite znova pozneje",
+    "404-title": "Vira ni mogoče najti",
+    "451-message": "Dostop do platforme ni mogoč",
+    "451-title": "Platforma ni dostopna",
+    "500-message": "Zaradi začasne težave s storitvijo vaša zahteva ni bila poslana. Poskusite znova pozneje.",
+    "500-title": "Storitev ni na voljo",
+    "error-in-initial-info-loading": "Ni nam uspelo pridobiti podatkov, potrebnih za zagon aplikacije",
+    "generic-api-error-action-text": "Znova naloži",
+    "generic-api-error-main-text": "Teh podatkov ni bilo mogoče pridobiti.",
+    "generic-message": "Prišlo je do napake. Poskusite znova pozneje",
+    "generic-title": "Splošna napaka",
+    "generic-token-exchange-problem": "Prijave ni bilo mogoče dokončati",
+    "invalid-token-title": "Zaradi tehnične težave se ne morete prijaviti - neveljaven žeton",
+    "lacking-grants-for-app-title": "Niste pooblaščeni za dostop"
+  },
+  "not-accessible": {
+    "action": "obiščite namensko spletno mesto",
+    "description": "SEND je trenutno v fazi testiranja in še ni na voljo. Če ste tehnološki partner in ste zaključili pristop, boste prejeli posodobitve glede datuma aktivacije platforme. Za več informacij o pobudi,",
+    "title": "Dostop do platforme ni mogoč"
+  },
+  "not-found": {
+    "back-to-home": "Nazaj na domačo stran",
+    "description": "Stran, ki ste jo poskušali doseči, ne obstaja ali ni več na voljo.",
+    "title": "Tisto, kar ste iskali, ni tukaj."
+  },
+  "roles": {
+    "admin": "Skrbnik",
+    "operator": "Operativni kontakt"
+  },
+  "toast": {
+    "aria-label": "Ikona za zapiranje obvestila"
+  },
+  "user-validation-failed": {
+    "cta": "Obrnite se na podporo",
+    "description": "Eden ali več podatkov, povezanih z vašim uporabniškim računom, ni veljavnih, obrnite se na podporo za odpravo težave.",
+    "title": "Vneseni podatki niso veljavni"
+  }
+}
