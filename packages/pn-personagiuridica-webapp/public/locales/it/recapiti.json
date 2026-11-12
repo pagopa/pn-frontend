@@ -32,7 +32,7 @@
     "link-sms-placeholder": "Cellulare aziendale",
     "remove-email": "Disattiva email",
     "remove-email-and-sercq": "Disattiva email e domicilio",
-    "remove-email-and-sercq-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le notifiche a valore legale via raccomandata e <strong>pagare i relativi costi.</strong></0>",
+    "remove-email-and-sercq-message": "<0>Se scegli di disattivare il domicilio digitale SEND la tua impresa potrebbe ricevere le notifiche a valore legale via raccomandata e <strong>pagare i relativi costi.</strong></0>",
     "remove-email-and-sercq-title": "Con l’email si disattiva anche il domicilio digitale SEND",
     "remove-email-button-dod-enabled": "Disattiva email aziendale",
     "remove-email-no-domicile-message": "Se confermi, non riceverai più l’email su {{value}} quando c’è una notifica SEND da leggere.",
