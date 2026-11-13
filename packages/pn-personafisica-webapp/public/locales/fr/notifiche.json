@@ -31,7 +31,7 @@
     "creditor-tax-id": "Code fiscal de l’organisme",
     "date": "Date d’envoi",
     "disclaimer-link": "En savoir plus",
-    "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",
+    "document-not-available": "Document en cours de récupération. Réessaie de le télécharger plus tard",
     "downtimes": {
       "apiErrorMessage": "Nous n’avons pas pu charger les éventuels dysfonctionnements qui ont affecté cette notification.",
       "datePrefix": "le ",
@@ -225,13 +225,13 @@
       "send-analog-domicile-890": "Envoi par recommandé 890",
       "send-analog-domicile-890-description": "L’envoi de la notification à l’adresse {{address}} par lettre recommandée 890 a commencé.",
       "send-analog-domicile-890-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse {{address}} par lettre recommandée 890 a commencé.",
-      "send-analog-domicile-890-group-label": "Lettre recommandée 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Deuxième lettre recommandée 890",
+      "send-analog-domicile-890-group-label": "Envoi par lettre recommandée 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Deuxième envoi par lettre recommandée 890",
       "send-analog-domicile-ar": "Envoi par lettre recommandée A/R",
       "send-analog-domicile-ar-description": "L’envoi de la notification à l’adresse {{address}}  par lettre recommandée A/R a commencé.",
       "send-analog-domicile-ar-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse {{address}} par lettre recommandée A/R a commencé.",
-      "send-analog-domicile-ar-group-label": "Lettre recommandée avec accusé de réception",
-      "send-analog-domicile-ar-second-attempt-group-label": "Deuxième lettre recommandée avec accusé de réception",
+      "send-analog-domicile-ar-group-label": "Envoi par lettre recommandée avec AR",
+      "send-analog-domicile-ar-second-attempt-group-label": "Deuxième envoi par lettre recommandée avec AR",
       "send-analog-error": "L’envoi par papier n’a pas donné lieu à une remise",
       "send-analog-flow-CON020-description": "Original de l’AAR (document numérique natif) mis à disposition par le Consolidateur et signé numériquement par PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "Original de l’AAR (document numérique natif) mis à disposition par le Consolidateur et signé numériquement par PagoPA.",
@@ -360,7 +360,7 @@
       "send-digital-domicile-PEC": "Envoi via PEC",
       "send-digital-domicile-PEC-description": "La notification est en cours d’envoi à l’adresse PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "La notification à {{name}} {{taxId}} est en cours d’envoi à l’adresse PEC {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-group-label": "Envoi par PEC",
       "send-digital-domicile-PEC-second-attempt-group-label": "Deuxième envoi via PEC",
       "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Envoi via une Adresse Numérique SEND",
@@ -571,18 +571,18 @@
   },
   "tppLanding": {
     "access-button": "Accéder aux documents",
-    "description": "Pour la lire, <strong>accédez à SEND - Servizio Notifiche Digitali.</strong> Vous y trouverez des documents importants vous concernant.\n\nMême si vous ne l'ouvrez pas ou ne la lisez pas, <strong>la communication produit des effets juridiques.</strong>",
+    "description": "Pour la lire, <strong>connecte-toi à SEND - Servizio Notifiche Digitali.</strong> Tu y trouveras les documents importants qui te concernent.\n\nMême si tu ne l’ouvres pas ou ne la lis pas, <strong>la notification produit des effets juridiques.</strong>",
     "faq": {
       "title": "Foire aux questions",
       "what-are-notifications": {
-        "answer": "Cela signifie que l'envoi et la réception de ces communications produisent des effets juridiques tant pour l'expéditeur que pour le destinataire. Par exemple, si vous recevez une amende pour infraction au code de la route, la date de réception a une incidence sur le montant que vous devrez payer ou sur votre droit de la contester.",
-        "question": "Qu'est-ce que les communications à valeur légale ?"
+        "answer": "Cela signifie que l’envoi et la réception de ces notifications produisent des effets juridiques tant pour l’expéditeur que pour le destinataire. Par exemple, si tu reçois une amende pour infraction au code de la route, la date à laquelle tu la reçois a une incidence sur le montant que tu devras payer ou sur ta faculté de la contester.",
+        "question": "Que sont les notifications à valeur juridique"
       },
       "what-is-send": {
-        "answer": "SEND - Servizio Notifiche Digitali est une plateforme qui numérise et simplifie la gestion des notifications : elle permet de les recevoir, de télécharger les actes notifiés et de payer les éventuels montants directement en ligne.\nSEND peut envoyer des notifications pour le compte des institutions aussi bien aux citoyens, aux professions libérales et aux entreprises individuelles (c'est-à-dire les « personnes physiques ») qu'aux sociétés (c'est-à-dire les « personnes morales »).",
+        "answer": "SEND - Servizio Notifiche Digitali est une plateforme qui numérise et simplifie la gestion des notifications : elle permet en effet de les recevoir, de télécharger les documents notifiés et de payer d’éventuels montants directement en ligne.\nSEND peut envoyer des notifications pour le compte des organismes aussi bien aux citoyens, aux professionnels indépendants et aux entreprises individuelles, c’est-à-dire les \"personnes physiques\", qu’aux entreprises, c’est-à-dire les \"personnes morales\".",
         "question": "Qu'est-ce que SEND et comment ça marche"
       }
     },
-    "title": "Bonjour,\nvous avez reçu une communication à valeur légale"
+    "title": "Bonjour,\ntu as reçu une notification à valeur juridique"
   }
 }
