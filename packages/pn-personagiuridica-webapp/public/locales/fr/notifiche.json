@@ -22,9 +22,14 @@
       "message": "Cette notification a été annulée par l'organisme expéditeur, les documents ne sont donc plus disponibles."
     },
     "contact_sender": {
+      "copied_email": "Adresse e-mail copiée",
+      "copied_pec": "Adresse PEC copiée",
       "copied_phone": "Numéro de téléphone copié",
+      "copy_email": "Copier l'adresse e-mail",
+      "copy_pec": "Copier l'adresse PEC",
       "copy_phone": "Copier le numéro de téléphone",
-      "email": "E-mail de l'organisme",
+      "email": "Adresse e-mail de l'entité",
+      "pec": "Adresse PEC de l'entité",
       "phone": "Numéro de téléphone de l'organisme",
       "title": "Contactez l'organisme émetteur",
       "website": "Site web de l'organisme"
