@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.27.0...v2.28.0-RC.0) (2026-11-13)
+
+### Bug Fixes
+
+* **PN-21746:** remediate Dependabot security vulnerabilities ([#2168](https://github.com/pagopa/pn-frontend/issues/2168)) ([409444d](https://github.com/pagopa/pn-frontend/commit/409444d071cbb4af3e9f82d00385c4d3fa17e266))
+* **PN-21746:** resolve undici and node-forge security vulnerabilities ([#2180](https://github.com/pagopa/pn-frontend/issues/2180)) ([1696af2](https://github.com/pagopa/pn-frontend/commit/1696af201b8f09a567e3ee0eaaf7ef4a3cef3367))
+* **PN-21746:** update vulnerable dependencies ([#2163](https://github.com/pagopa/pn-frontend/issues/2163)) ([044ba40](https://github.com/pagopa/pn-frontend/commit/044ba40cf60be5e0c058eca3e8e5b509860656c2))
+* **PN-21746:** upgrade Vitest to v3.2.6 to address security vulnerabilities ([#2157](https://github.com/pagopa/pn-frontend/issues/2157)) ([3e3f8c5](https://github.com/pagopa/pn-frontend/commit/3e3f8c56352c4f0b06ab5f9d9e3c946c44da7f93))
+
+
 # [2.27.0](https://github.com/pagopa/pn-frontend/compare/v2.26.2...v2.27.0) (2026-10-14)
 
 ## [2.26.2](https://github.com/pagopa/pn-frontend/compare/v2.26.2-RC.0...v2.26.2) (2026-10-13)
