@@ -132,6 +132,9 @@ describe('InformalNotificationDetail Page', () => {
     // check sender contacts box
     expect(result.container).toHaveTextContent('detail.contact_sender.title');
     expect(result.container).toHaveTextContent(informalNotificationMock.senderContacts!.phone!);
+    expect(result.container).toHaveTextContent(informalNotificationMock.senderContacts!.site!);
+    expect(result.container).toHaveTextContent(informalNotificationMock.senderContacts!.email!);
+    expect(result.container).toHaveTextContent(informalNotificationMock.senderContacts!.pec!);
   });
 
   it('API error', async () => {
