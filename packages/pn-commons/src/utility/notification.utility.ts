@@ -635,7 +635,9 @@ export function getNotificationStatusInfos(
     case NotificationStatus.CANCELLED:
       return {
         color: 'warning',
-        ...localizeStatus(NotificationStatus.CANCELLED),
+        ...localizeStatus(NotificationStatus.CANCELLED, undefined, {
+          isDelegate: !!options?.delegator?.displayName,
+        }),
       };
     case NotificationStatus.CANCELLATION_IN_PROGRESS:
       return {
