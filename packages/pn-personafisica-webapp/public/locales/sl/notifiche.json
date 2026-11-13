@@ -21,9 +21,14 @@
       "message": "To obvestilo je preklical organ pošiljatelj, zato dokumenti niso več na voljo."
     },
     "contact_sender": {
+      "copied_email": "Kopiran e-poštni naslov",
+      "copied_pec": "Kopiran naslov PEC",
       "copied_phone": "Telefonska številka je kopirana",
+      "copy_email": "Kopiraj e-poštni naslov",
+      "copy_pec": "Kopiraj naslov PEC",
       "copy_phone": "Kopiraj telefonsko številko",
-      "email": "E-pošta organa",
+      "email": "E-poštni naslov organa",
+      "pec": "Naslov PEC organa",
       "phone": "Telefonska številka organa",
       "title": "Stopite in stik z izdajateljem",
       "website": "Spletno mesto organa"

@@ -21,9 +21,14 @@
       "message": "Diese Zustellung wurde von der Absenderbehörde annulliert, daher sind die Dokumente nicht mehr verfügbar."
     },
     "contact_sender": {
+      "copied_email": "E-Mail-Adresse kopiert",
+      "copied_pec": "PEC-Adresse kopiert",
       "copied_phone": "Telefonnummer kopiert",
+      "copy_email": "E-Mail-Adresse kopieren",
+      "copy_pec": "PEC-Adresse kopieren",
       "copy_phone": "Telefonnummer kopieren",
-      "email": "E-Mail der Körperschaft",
+      "email": "E-Mail-Adresse der Körperschaft",
+      "pec": "PEC-Adresse der Körperschaft",
       "phone": "Telefonnummer der Körperschaft",
       "title": "Kontaktiere die sendende Körperschaft",
       "website": "Website der Körperschaft"
