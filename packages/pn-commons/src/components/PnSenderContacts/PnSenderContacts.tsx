@@ -105,7 +105,11 @@ const PnSenderContacts = ({ phone, site, email, pec, handleTrackEventFn }: Sende
           {t('detail.contact_sender.title', { ns: 'notifiche' })}
         </Typography>
 
-        <Stack component={List} disablePadding divider={<Divider component="li" />}>
+        <Stack
+          component={List}
+          disablePadding
+          divider={<Divider component="li" aria-hidden="true" />}
+        >
           {site && (
             <SenderContactItem type="website" Icon={LanguageRoundedIcon}>
               <ContactLink
