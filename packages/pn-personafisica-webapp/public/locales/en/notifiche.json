@@ -31,7 +31,7 @@
     "creditor-tax-id": "Institution Tax Code",
     "date": "Date sent",
     "disclaimer-link": "Discover more",
-    "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
+    "document-not-available": "Document is being retrieved. Try downloading again later",
     "downtimes": {
       "apiErrorMessage": "We were unable to load any disruptions that affected this notification.",
       "datePrefix": "the ",
@@ -225,13 +225,13 @@
       "send-analog-domicile-890": "Sending by 890 registered letter",
       "send-analog-domicile-890-description": "The sending of the notification to the address {{address}} by 890 registered letter has started.",
       "send-analog-domicile-890-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via 890 registered letter has started.",
-      "send-analog-domicile-890-group-label": "Registered mail 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Second registered mail 890",
+      "send-analog-domicile-890-group-label": "Sending via registered mail 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Second sending via registered mail 890",
       "send-analog-domicile-ar": "Sending by registered letter with acknowledgment of receipt",
       "send-analog-domicile-ar-description": "The sending of the notification to the address {{address}} by registered letter with acknowledgment of receipt has started.",
       "send-analog-domicile-ar-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via registered letter with acknowledgment of receipt has started.",
-      "send-analog-domicile-ar-group-label": "Registered mail with advice of receipt",
-      "send-analog-domicile-ar-second-attempt-group-label": "Second registered mail with advice of receipt",
+      "send-analog-domicile-ar-group-label": "Sending via registered mail with return receipt",
+      "send-analog-domicile-ar-second-attempt-group-label": "Second sending via registered mail with return receipt",
       "send-analog-error": "Sending by mail did not result in delivery",
       "send-analog-flow-CON020-description": "The original of the AAR (native digital document) made available by the consolidator and signed digitally by PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "The original of the AAR (native digital document) made available by the consolidator and signed digitally by PagoPA.",
@@ -360,7 +360,7 @@
       "send-digital-domicile-PEC": "Sent via PEC",
       "send-digital-domicile-PEC-description": "The notification is being sent to the PEC address {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the PEC address {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-group-label": "Sending via PEC",
       "send-digital-domicile-PEC-second-attempt-group-label": "Second sending via PEC",
       "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Send via SEND digital domicile",
@@ -571,18 +571,18 @@
   },
   "tppLanding": {
     "access-button": "Access documents",
-    "description": "To read it, <strong>log in to SEND - Servizio Notifiche Digitali.</strong> You will find important documents concerning you.\n\nEven if you do not open or read it, <strong>the communication produces legal effects.</strong>",
+    "description": "To read it, <strong>log in to SEND - Servizio Notifiche Digitali.</strong> You will find the important documents concerning you.\n\nEven if you do not open or read it, <strong>the notification produces legal effects.</strong>",
     "faq": {
       "title": "Frequently Asked Questions",
       "what-are-notifications": {
-        "answer": "It means that the sending and receiving of these communications produce legal effects for both the sender and the recipient. For example, if you receive a traffic fine, the date you receive it affects the amount you must pay or your right to contest it.",
-        "question": "What are legally binding communications?"
+        "answer": "This means that sending and receiving these notifications produces legal effects both for those who send them and for those who receive them. For example, if you receive a fine for a traffic violation, the date you receive it affects the amount you will have to pay or your right to contest it.",
+        "question": "What are legally binding notifications"
       },
       "what-is-send": {
-        "answer": "SEND - Servizio Notifiche Digitali is a platform that digitizes and simplifies the management of notifications: it allows you to receive them, download notified documents, and pay any amounts directly online.\nSEND can send notifications on behalf of institutions to citizens, freelancers, and sole traders (i.e., \"natural persons\") as well as to companies (i.e., \"legal persons\").",
+        "answer": "SEND - Servizio Notifiche Digitali is a platform that digitizes and simplifies notification management: it allows you to receive them, download notified documents, and pay any amounts due directly online.\nSEND can send notifications on behalf of institutions both to citizens, freelancers, and sole proprietors—i.e., \"natural persons\"—and to companies, i.e., \"legal persons\".",
         "question": "What is SEND and how it works"
       }
     },
-    "title": "Hi,\nYou have received a legally binding communication"
+    "title": "Hello,\nyou have received a legally binding notification"
   }
 }

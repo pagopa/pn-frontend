@@ -31,7 +31,7 @@
     "creditor-tax-id": "Davčna številka organizacije",
     "date": "Datum pošiljanja",
     "disclaimer-link": "Izvedite več",
-    "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
+    "document-not-available": "Dokument se pridobiva. Poskusi ga znova prenesti pozneje",
     "downtimes": {
       "apiErrorMessage": "Ni bilo mogoče naložiti morebitnih motenj, ki so vplivale na to obvestilo.",
       "datePrefix": "dne ",
@@ -225,13 +225,13 @@
       "send-analog-domicile-890": "Pošiljanje po priporočeni pošti 890",
       "send-analog-domicile-890-description": "Obvestilo se pošlje na naslov {{address}} po priporočeni pošti 890.",
       "send-analog-domicile-890-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} po priporočeni pošti 890.",
-      "send-analog-domicile-890-group-label": "Priporočeno pismo 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Drugo priporočeno pismo 890",
+      "send-analog-domicile-890-group-label": "Pošiljanje s priporočeno pošiljko 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Drugo pošiljanje s priporočeno pošiljko 890",
       "send-analog-domicile-ar": "Pošiljanje s priporočenim pismom s povratnico",
       "send-analog-domicile-ar-description": "Obvestilo se pošlje na naslov {{address}} s priporočenim pismom s povratnico.",
       "send-analog-domicile-ar-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} s priporočenim pismom s povratnico.",
-      "send-analog-domicile-ar-group-label": "Priporočeno pismo s povratnico",
-      "send-analog-domicile-ar-second-attempt-group-label": "Drugo priporočeno pismo s povratnico",
+      "send-analog-domicile-ar-group-label": "Pošiljanje s priporočeno pošiljko s povratnico",
+      "send-analog-domicile-ar-second-attempt-group-label": "Drugo pošiljanje s priporočeno pošiljko s povratnico",
       "send-analog-error": "Pošiljanje v papirni obliki ni določilo dostave",
       "send-analog-flow-CON020-description": "Izvirnik AAR (domači digitalni dokument), ki ga je dal na voljo združevalec in digitalno podpisal PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "Izvirnik AAR (domači digitalni dokument), ki ga je dal na voljo združevalec in digitalno podpisal PagoPA.",
@@ -360,7 +360,7 @@
       "send-digital-domicile-PEC": "Pošiljanje prek potrjenega e-poštnega naslova",
       "send-digital-domicile-PEC-description": "Obvestilo se pošlje na potrjeni e-poštni naslov {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na potrjeni e-poštni naslov {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-group-label": "Pošiljanje prek PEC",
       "send-digital-domicile-PEC-second-attempt-group-label": "Drugo pošiljanje prek PEC",
       "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Pošiljanje preko digitalnega prebivališča SEND",
@@ -571,18 +571,18 @@
   },
   "tppLanding": {
     "access-button": "Dostop do dokumentov",
-    "description": "Če ga želite prebrati, <strong>vstopite v SEND - Servizio Notifiche Digitali.</strong> Tam boste našli pomembne dokumente, ki zadevajo vas.\n\nTudi če sporočila ne odprete ali preberete, <strong>ima to pravne učinke.</strong>",
+    "description": "Za branje se <strong>prijavi v SEND - Servizio Notifiche Digitali.</strong> Tam boš našel pomembne dokumente, ki se nanašajo nate.\n\nTudi če ga ne odpreš ali ne prebereš, <strong>obvestilo povzroča pravne učinke.</strong>",
     "faq": {
       "title": "Pogosta vprašanja",
       "what-are-notifications": {
-        "answer": "To pomeni, da pošiljanje in prejemanje teh sporočil ustvarja pravne učinke tako za pošiljatelja kot za prejemnika. Če na primer prejmete globo za prometni prekršek, datum prejema vpliva na znesek, ki ga boste morali plačati, ali na vašo pravico do pritožbe.",
-        "question": "Kaj so pravno veljavna sporočila?"
+        "answer": "To pomeni, da pošiljanje in prejemanje teh obvestil povzroča pravne učinke tako za pošiljatelja kot za prejemnika. Če na primer prejmeš globo zaradi kršitve cestnoprometnih predpisov, datum prejema vpliva na znesek, ki ga boš moral plačati, ali na tvojo pravico do ugovora.",
+        "question": "Kaj so obvestila s pravno veljavo"
       },
       "what-is-send": {
-        "answer": "SEND - Servizio Notifiche Digitali je platforma, ki digitalizira in poenostavlja upravljanje obvestil: omogoča njihovo prejemanje, prenos vročenih dokumentov in plačilo morebitnih zneskov neposredno na spletu.\nSEND lahko pošilja obvestila v imenu organov tako državljanom, samostojnim poklicem in samostojnim podjetnikom (tj. „fizičnim osebam“) kot tudi podjetjem (tj. „pravnim osebam“).",
+        "answer": "SEND - Servizio Notifiche Digitali je platforma, ki digitalizira in poenostavlja upravljanje obvestil: omogoča namreč njihovo prejemanje, prenos vročenih dokumentov in plačilo morebitnih zneskov neposredno prek spleta.\nSEND lahko v imenu organov pošilja obvestila tako državljanom, osebam, ki opravljajo svobodni poklic, in samostojnim podjetnikom, tj. \"fizičnim osebam\", kot tudi podjetjem, tj. \"pravnim osebam\".",
         "question": "Kaj je SEND in kako deluje"
       }
     },
-    "title": "Pozdravljeni,\nprejeli ste pravno veljavno sporočilo"
+    "title": "Živijo,\nprejel si obvestilo s pravno veljavo"
   }
 }

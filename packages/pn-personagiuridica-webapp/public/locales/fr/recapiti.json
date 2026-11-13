@@ -13,13 +13,13 @@
     "block-remove-email-title": "Impossible de désactiver le courriel",
     "block-remove-sms-message": "Pour procéder, vous devez d'abord supprimer les numéros de portable personnalisés par entité.",
     "block-remove-sms-title": "Impossible de désactiver le numéro de portable",
-    "confirmation-modal-email-content": "<0>Pour activer le Domicile numérique SEND, nous avons besoin d'une adresse courriel d'entreprise, afin de pouvoir <strong>envoyer une alerte lorsqu'il y a une communication à valeur légale pour votre entreprise.</strong></0>",
+    "confirmation-modal-email-content": "<0>Pour activer le domicile numérique SEND, nous avons besoin d’une adresse e-mail professionnelle afin de pouvoir <strong>envoyer un avis lorsqu’il y a une notification à valeur juridique pour ton entreprise.</strong></0>",
     "confirmation-modal-title": "Ajoutez une adresse courriel d'entreprise pour les alertes !",
     "email-add": "Ajouter un courriel",
     "email-added-successfully": "Adresse courriel ajoutée avec succès",
     "email-and-sercq-removed-successfully": "Courriel et Domicile numérique SEND désactivés",
     "email-empty-description": "Ajoutez une adresse courriel de l'entreprise sur laquelle nous pouvons vous avertir lorsqu'il y a une notification SEND pour votre entreprise.",
-    "email-filled-description": "Lorsqu'il y a une notification pour votre entreprise, nous vous informons par courriel à l'adresse que vous avez choisie.",
+    "email-filled-description": "Lorsqu’il y a une notification SEND pour ton entreprise, nous t’informons par e-mail à l’adresse que tu as choisie.",
     "email-new-code": "Vous ne l'avez pas reçu ? Vérifiez que vous avez saisi le bon courriel ou <0>générez-en un nouveau</0>.",
     "email-removed-successfully": "Adresse courriel retirée avec succès",
     "email-sms-add": "Ajouter un numéro de portable",
@@ -32,23 +32,23 @@
     "link-sms-placeholder": "Portable de l'entreprise",
     "remove-email": "Désactiver le courriel",
     "remove-email-and-sercq": "Désactiver le courriel et le domicile",
-    "remove-email-and-sercq-message": "<0>Si vous choisissez de désactiver le Domicile numérique SEND, votre entreprise pourrait recevoir les communications par lettre recommandée et <strong>payer les coûts y afférents.</strong></0>",
+    "remove-email-and-sercq-message": "<0>Si tu choisis de désactiver le domicile numérique SEND, ton entreprise risque de recevoir les notifications à valeur juridique par lettre recommandée et de <strong>payer les frais correspondants.</strong></0>",
     "remove-email-and-sercq-title": "Le Domicile numérique SEND est également désactivé avec le courriel",
     "remove-email-button-dod-enabled": "Désactiver le courriel d'entreprise",
     "remove-email-no-domicile-message": "Si vous confirmez, vous ne recevrez plus le courriel sur {{value}} lorsqu'il y aura une notification SEND à lire.",
     "remove-email-no-domicile-title": "Désactiver le courriel",
-    "remove-email-pec-enabled-message": "<0>Si vous désactivez l'adresse courriel de l'entreprise, <strong>nous ne pourrons pas vous avertir lorsqu'il y a une communication à valeur légale pour votre entreprise</strong>.</0><1>N'oubliez pas que, si la notification n'est pas lue à temps, l'entreprise pourrait ne pas être au courant d'éventuelles échéances et encourir des pénalités.</1>",
+    "remove-email-pec-enabled-message": "<0>Si tu désactives l’adresse e-mail professionnelle, <strong>nous ne pourrons pas t’avertir lorsqu’il y a une notification à valeur juridique pour ton entreprise</strong>.</0><1>N’oublie pas que si l’entreprise ne lit pas une notification SEND à temps, elle risque de ne pas avoir connaissance d’éventuelles échéances et d’encourir des sanctions.</1>",
     "remove-email-pec-enabled-title": "Voulez-vous désactiver votre courriel d'entreprise ?",
-    "remove-email-preconfirm-message": "<0>Si vous désactivez l'adresse courriel, nous ne pouvons pas <strong>vous avertir lorsqu'il y a une communication à valeur légale pour votre entreprise.</strong></0>",
+    "remove-email-preconfirm-message": "<0>Si tu désactives l’adresse e-mail, nous ne pourrons pas <strong>t’avertir lorsqu’il y a une notification à valeur juridique pour ton entreprise.</strong></0>",
     "remove-email-preconfirm-title": "Voulez-vous désactiver les alertes par courriel ?",
     "remove-sms": "Désactiver le portable",
     "remove-sms-button-dod-enabled": "Désactiver les SMS",
     "remove-sms-message": "Si vous confirmez, vous ne recevrez plus le SMS sur {{value}} lorsqu'il y aura une notification SEND à lire.",
-    "remove-sms-message-dod-enabled": "<0>Si vous désactivez le numéro de téléphone de l'entreprise, vous ne <strong>recevrez pas d'alertes par SMS lorsqu'il y a une communication à valeur légale pour votre entreprise sur SEND.</strong></0><1>N'oubliez pas que si l'entreprise ne lit pas une notification SEND à temps, elle pourrait ne pas être au courant d'éventuelles échéances et encourir des pénalités.</1>",
+    "remove-sms-message-dod-enabled": "<0>Si tu désactives le numéro de téléphone professionnel, <strong>tu ne recevras pas d’avis par SMS lorsqu’il y a une notification à valeur juridique pour ton entreprise sur SEND.</strong></0><1>N’oublie pas que si l’entreprise ne lit pas une notification SEND à temps, elle risque de ne pas avoir connaissance d’éventuelles échéances et d’encourir des sanctions.</1>",
     "remove-sms-title-dod-enabled": "Voulez-vous désactiver les alertes par SMS ?",
     "sms-add": "Ajouter un numéro",
     "sms-added-successfully": "Numéro de portable ajouté avec succès",
-    "sms-description": "Lorsqu'il y a une notification pour votre entreprise, nous vous avertissons par SMS.",
+    "sms-description": "Lorsqu’il y a une notification SEND pour ton entreprise, nous t’avertissons par SMS.",
     "sms-new-code": "Vous ne l'avez pas reçu ? Vérifiez que vous avez saisi le bon numéro de portable ou <0>générez-en un nouveau</0>.",
     "sms-removed-successfully": "Numéro de portable retiré avec succès",
     "sms-title": "Portable de l'entreprise",
@@ -64,13 +64,13 @@
   "domicile-banner": {
     "complete-addresses": "Insérer un courriel",
     "complete-configuration": "Terminer la configuration",
-    "no-courtesy-description": "Sans coordonnées de courtoisie, nous ne pouvons pas vous avertir lorsqu'il y a une communication à valeur légale à lire sur SEND.",
+    "no-courtesy-description": "Sans coordonnée de courtoisie, nous ne pouvons pas t’avertir lorsqu’il y a une notification à valeur juridique à lire sur SEND.",
     "no-courtesy-no-sercq-send-cta": "Confirmer votre courriel",
-    "no-courtesy-no-sercq-send-description": "Ajoutez une adresse courriel pour recevoir une alerte lorsque vous avez une nouvelle notification sur SEND.",
+    "no-courtesy-no-sercq-send-description": "Ajoute une adresse e-mail pour recevoir un avis lorsque tu as une nouvelle notification SEND.",
     "no-courtesy-no-sercq-send-title": "Ne manquez pas les communications importantes",
     "no-courtesy-sercq-send-description": "Activez SEND comme Domicile numérique et ne vous souciez plus des lettres recommandées papier.",
     "no-courtesy-sercq-send-title": "Voulez-vous recevoir les prochaines notifications uniquement numériquement ?",
-    "no-courtesy-title": "Ne manquez pas les communications importantes",
+    "no-courtesy-title": "Complète les coordonnées",
     "no-sercq-cta": "Activer le domicile numérique",
     "no-sercq-send-description": "Activez une adresse numérique pour recevoir les prochaines notifications uniquement par voie numérique et faire des économies.",
     "no-sercq-send-title": "Plus de documents papier"
@@ -99,7 +99,7 @@
       "sercq_send-active": "La plateforme SEND est le Domicile numérique de votre entreprise",
       "special_contacts": {
         "action": "Personnaliser par entité",
-        "content": "Choisissez où recevoir les notifications envoyées à votre entreprise par une entité spécifique.",
+        "content": "Choisis où recevoir les notifications SEND envoyées à ton entreprise par un organisme spécifique.",
         "title": "Personnaliser le Domicile numérique par entité expéditrice"
       },
       "title": "Gérer le Domicile numérique",
@@ -107,7 +107,7 @@
         "action-pec": "Transférer sur SEND",
         "action-sercq_send": "Transférer sur une PEC",
         "content-pec": "La plateforme SEND garantit des livraisons sécurisées et à valeur légale. Le service est gratuit et ne nécessite pas d'outils supplémentaires.",
-        "content-sercq_send": "Si vous avez une PEC, vous pouvez l'utiliser comme Domicile numérique pour les notifications de SEND.",
+        "content-sercq_send": "Si l’entreprise a une PEC, tu peux l’utiliser comme domicile numérique pour les notifications SEND.",
         "title-pec": "Transférer le Domicile numérique sur la plateforme SEND",
         "title-sercq_send": "Transférer le Domicile numérique sur une PEC d'entreprise"
       }
@@ -115,16 +115,16 @@
     "link-pec-placeholder": "Adresse PEC",
     "pec-added-successfully": "PEC associée avec succès",
     "pec-contact-wizard": {
-      "content-description": "Lorsqu'une entité envoie une notification SEND à votre entreprise, vous recevez la communication à valeur légale sur la PEC que vous avez choisie.",
+      "content-description": "Lorsqu’un organisme envoie une notification SEND à ton entreprise, tu la reçois sur la PEC que tu as choisie.",
       "content-title": "Insérer la PEC de votre entreprise",
-      "disclaimer": "J'accepte que cette adresse soit utilisée par SEND en priorité par rapport à toute PEC enregistrée auprès d'une entité expéditrice ou présente dans les registres publics.",
+      "disclaimer": "J’accepte que l’adresse PEC indiquée soit utilisée en priorité par rapport à d’éventuelles PEC enregistrées auprès d’un organisme émetteur ou présentes dans les registres publics.",
       "input-label": "Adresse PEC",
       "sercq-info-alert": "La PEC de l'entreprise remplacera la plateforme SEND comme Domicile numérique de l'entreprise.",
       "title": "Utiliser une PEC comme Domicile numérique",
       "title-transfer": "Transférer le Domicile numérique sur une PEC d'entreprise"
     },
     "pec-description": "Lorsqu'une entité envoie une notification SEND à votre entreprise, elle est délivrée de manière sécurisée et avec valeur légale sur la PEC que vous avez choisie.",
-    "pec-disclaimer": "Ceci est l'adresse principale qui sera utilisée pour envoyer les notifications numériques à l'entreprise. En l'insérant, l'entreprise ne recevra plus de lettres recommandées papier.",
+    "pec-disclaimer": "C’est l’adresse principale qui sera utilisée pour envoyer les notifications à valeur juridique de l’entreprise au format numérique. En la renseignant, l’entreprise ne recevra plus de lettres recommandées papier.",
     "pec-new-code": "Vous ne l'avez pas reçu ? Vérifiez que vous avez saisi la bonne PEC ou <0>générez-en un nouveau</0>.",
     "pec-removed-successfully": "PEC retirée avec succès",
     "pec-to-add": "Adresse PEC",
@@ -138,28 +138,28 @@
     "pec-verify": "Vérifier la PEC {{value}}",
     "pec-verify-descr": "Nous avons envoyé un code à l'adresse PEC indiquée. Le code est valable pendant <strong>15 minutes</strong>.",
     "remove-pec-confirm": "Désactiver la PEC",
-    "remove-pec-message": "<0>Votre entreprise n'aura plus d'adresse numérique à valeur légale pour les communications de l'Administration Publique et pourrait les recevoir par voie papier, avec d'éventuels frais à sa charge.</0> <1>L'entreprise continuera de recevoir les avis sur les canaux qu'elle a activés.</1>",
+    "remove-pec-message": "<0>Ton entreprise n’aura plus de coordonnée numérique à valeur juridique pour les notifications SEND de l’administration publique et pourrait les recevoir sur papier, avec d’éventuels frais à sa charge.</0><1>L’entreprise continuera à recevoir les avis sur les canaux qu’elle a activés.</1>",
     "remove-pec-title": "Confirmez-vous vouloir désactiver la PEC ?",
     "remove-sercq_send-confirm": "Désactiver le Domicile numérique",
-    "remove-sercq_send-message": "<0>Si vous choisissez de désactiver le Domicile numérique SEND, votre entreprise pourrait recevoir les communications par lettre recommandée et <strong>payer les coûts y afférents.</strong></0><1>L'entreprise continuera à recevoir les alertes par courriel, vous pouvez les désactiver dans la section Vos coordonnées.</1>",
+    "remove-sercq_send-message": "<0>Si tu choisis de désactiver le domicile numérique SEND, ton entreprise risque de recevoir les notifications à valeur juridique par lettre recommandée et de <strong>payer les frais correspondants.</strong></0><1>L’entreprise continuera à recevoir les avis par e-mail ; tu peux les désactiver dans la section Tes coordonnées.</1>",
     "remove-sercq_send-title": "Confirmez-vous vouloir désactiver le Domicile numérique sur SEND ?",
     "sercq-send-active": "Activer",
     "sercq-send-active-pec-enabled": "Activer le Domicile numérique",
     "sercq-send-active-pec-transfer": "Transférer le Domicile numérique",
     "sercq-send-description-pec-enabled": "Utilisez SEND comme Domicile numérique pour gérer vos notifications SEND en un seul endroit, sans vous soucier des lettres recommandées papier et des coûts associés.",
     "sercq-send-info-advantages": "Pourquoi est-ce utile ?",
-    "sercq-send-info-description": "En activant le Domicile numérique, SEND devient <strong>les coordonnées à valeur légale de votre entreprise</strong> pour les communications de l'AP.",
+    "sercq-send-info-description": "En activant le domicile numérique, SEND devient <strong>la coordonnée à valeur juridique de ton entreprise</strong> pour les notifications de l’administration publique.",
     "sercq-send-info-list": [
       {
-        "description": "Les notifications SEND ne vous parviendront plus sous forme papier.",
-        "title": "Notifications 100% numériques"
+        "description": "Les notifications SEND ne te parviendront plus sous forme papier.",
+        "title": "Notifications à valeur juridique 100 % numériques"
       },
       {
-        "description": "Vous n'aurez pas à vous soucier de retirer les documents papier et de payer les coûts y afférents.",
-        "title": "Économie sur les frais de postalisation"
+        "description": "Tu n’auras plus à te soucier de retirer les documents papier et de payer les frais correspondants.",
+        "title": "Économies sur les frais d’envoi postal"
       },
       {
-        "description": "Les notifications SEND seront délivrées de manière sécurisée et seront toutes disponibles dans l'espace réservé SEND de votre entreprise.",
+        "description": "Les notifications SEND seront remises en toute sécurité et seront toutes disponibles dans l’espace réservé SEND de ton entreprise.",
         "title": "Tout dans un seul espace"
       }
     ],
@@ -167,9 +167,9 @@
     "sercq-send-info-tos": "En sélectionnant « Activer », vous déclarez avoir lu et accepter les <0>Conditions d'utilisation</0>.",
     "sercq-send-wizard": {
       "feedback": {
-        "content-pec": "La PEC que vous avez insérée est en cours de validation. Une fois confirmée, le Domicile numérique sera activé et l'entreprise recevra toutes les communications à valeur légale à l'adresse que vous avez choisie.",
+        "content-pec": "La PEC que tu as saisie est en cours de validation. Une fois confirmée, le domicile numérique s’activera et l’entreprise recevra toutes les notifications à valeur juridique à l’adresse que tu as choisie.",
         "content-pec-transfer": "La PEC est en cours de validation. Une fois confirmée, le Domicile numérique de l'entreprise sera transféré à l'adresse que vous avez choisie. Jusque-là, le Domicile numérique SEND restera actif.",
-        "content-sercq_send": "L'entreprise recevra les communications à valeur légale au Domicile numérique sur SEND et un message aux coordonnées que vous avez choisies.",
+        "content-sercq_send": "L’entreprise recevra les notifications à valeur juridique au domicile numérique sur SEND et un avis aux coordonnées que tu as choisies.",
         "go-to-contacts": "Retourner aux coordonnées",
         "title-pec-activation": "Activation du Domicile numérique en cours",
         "title-pec-transfer": "Transfert du Domicile numérique en cours",
@@ -178,23 +178,23 @@
         "title-transfer": "Vous avez mis à jour le Domicile numérique de votre entreprise"
       },
       "step_1": {
-        "delivered-dialog-description": "Si vous choisissez SEND comme Domicile numérique, <strong>7 jours après la livraison</strong> la notification sera considérée comme légalement délivrée, même si vous ne l'avez pas consultée.",
-        "delivered-dialog-title": "Valeur juridique de la notification sur le Domicile numérique SEND",
+        "delivered-dialog-description": "Si tu choisis SEND comme domicile numérique, <strong>7 jours après la remise</strong>, la notification à valeur juridique sera légalement délivrée, même si tu ne l’as pas consultée.",
+        "delivered-dialog-title": "Valeur juridique de la notification SEND sur le domicile numérique",
         "have-pec": "Préférez-vous utiliser la PEC de l'entreprise ?",
-        "have-pec-description": "Alternativement, vous pouvez utiliser une PEC comme Domicile numérique pour les notifications de SEND.",
+        "have-pec-description": "Sinon, tu peux utiliser une PEC comme domicile numérique pour les notifications SEND.",
         "info-list": [
           {
-            "aria-description": "Activer pour lire l'explication du terme",
-            "description": "La notification est <0>délivrée</0> de manière sécurisée et avec valeur légale par la plateforme",
-            "title": "Une entité envoie une notification SEND pour l'entreprise"
+            "aria-description": "Active pour lire l’explication du terme",
+            "description": "La notification SEND est <0>remise</0> en toute sécurité et avec valeur juridique via la plateforme",
+            "title": "Un organisme envoie une notification à valeur juridique pour l’entreprise"
           },
           {
-            "description": "Lorsqu'une notification arrive sur SEND pour votre entreprise, nous vous avertissons par courriel et, si vous le souhaitez, également par SMS",
-            "title": "Vous recevez un message"
+            "description": "Lorsqu’une notification SEND arrive pour ton entreprise, nous t’avertissons par e-mail et, si tu le souhaites, également par SMS",
+            "title": "Reçois un message"
           },
           {
-            "description": "Ouvrez le détail de la notification numérique sur la plateforme SEND",
-            "title": "Accéder à la notification"
+            "description": "Ouvre le détail de la notification à valeur juridique sur SEND",
+            "title": "Accède à la notification SEND"
           }
         ],
         "info-tos": "En appuyant sur « Activer », vous déclarez avoir lu et accepter les <0>Conditions d'utilisation</0>.",
@@ -203,7 +203,7 @@
         "title": "Comment ça marche"
       },
       "step_2": {
-        "content": "Le courriel de l'entreprise où nous informerons l'entreprise lorsqu'il y aura une nouvelle communication à valeur légale sur SEND.",
+        "content": "L’adresse e-mail professionnelle à laquelle nous avertirons l’entreprise lorsqu’il y a une nouvelle notification à valeur juridique sur SEND.",
         "sms-disclaimer": "Si vous appuyez sur <strong>Ajouter numéro</strong>, vous enregistrez ces coordonnées pour recevoir des alertes sur les notifications SEND pour l'entreprise. Vous pouvez les gérer dans la section <strong>Coordonnées.</strong>",
         "step-title": "Insérer le courriel de l'entreprise",
         "title": "Le courriel pour recevoir des alertes sur les notifications SEND"
@@ -219,14 +219,14 @@
             "title": "Numéro de portable"
           }
         },
-        "content": "Les communications à valeur juridique pour l'entreprise seront envoyées uniquement sur :",
+        "content": "Les notifications à valeur juridique pour l’entreprise seront remises uniquement sur :",
         "courtesy-content": "Vous recevrez un avis via :",
         "digital-domicile": "Domicile numérique",
         "disclaimer-enable": "En cliquant sur <strong>« Activer le Domicile numérique »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne seront pas transférées sur d'autres domiciles numériques.",
         "disclaimer-transfer": "En cliquant sur <strong>« Confirmer »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne seront pas transférées sur d'autres domiciles numériques.",
         "enable": "Activer le Domicile numérique",
         "send": "SEND",
-        "sercq-send-contacts-alert": "Surveillez les coordonnées que vous avez choisies : une notification numérique SEND commence à produire des effets juridiques même si vous ne l'avez pas consultée.",
+        "sercq-send-contacts-alert": "Surveille les coordonnées que tu as choisies : une notification SEND commence à produire des effets juridiques même si tu ne l’as pas consultée.",
         "step-title": "Résumé",
         "title": "Votre récapitulatif"
       },
@@ -254,13 +254,13 @@
       "description": "Vous ne pouvez plus insérer de coordonnées de courtoisie personnalisées par entité ou modifier des coordonnées existantes. Si vous supprimez des coordonnées personnalisées, vous ne pourrez plus les récupérer ni les insérer à nouveau.",
       "title": "Fonctionnalité abandonnée"
     },
-    "email-description": "Le courriel où nous informerons votre entreprise lorsqu'elle recevra une communication à valeur légale sur SEND.",
+    "email-description": "L’adresse e-mail à laquelle nous avertirons ton entreprise lorsqu’elle reçoit une notification à valeur juridique sur SEND.",
     "fetch-party-error": "Nous n'avons pas pu récupérer les données nécessaires pour créer de nouvelles coordonnées.",
     "link-pec-label": "Adresse PEC",
     "link-sercq-label": "Votre Domicile numérique SEND",
     "pec": "Adresse PEC",
     "pec-disclaimer": "En remplissant le champ et en appuyant sur <strong>Confirmer</strong>, vous acceptez que l'adresse PEC que vous avez choisie soit utilisée par SEND pour l'envoi des notifications de cette entité expéditrice spécifique, en priorité par rapport au domicile numérique de la plateforme, à un éventuel domicile numérique élu auprès de la même entité expéditrice ou présent dans les registres publics",
-    "remove-special-description": "Les alertes relatives aux notifications des entités associées ne seront plus envoyées à ces coordonnées, mais à celles principales.",
+    "remove-special-description": "Les avis relatifs aux notifications SEND des organismes associés ne seront plus envoyés à cette coordonnée, mais à la coordonnée principale.",
     "remove-special-title": "Voulez-vous supprimer {{contactValue}} ?",
     "select-address": "Type",
     "sercq-disclaimer": "En cliquant sur <strong>« Confirmer »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND de l'organisme ne seront pas transférées sur d'autres domiciles numériques.",
@@ -273,6 +273,6 @@
     "inactive": "À activer",
     "pec-validation": "Validation PEC en cours"
   },
-  "subtitle": "Gérez les coordonnées numériques sur lesquelles recevoir les communications à valeur légale de SEND et/ou les messages de courtoisie y afférents pour <0>votre entreprise</0>.",
+  "subtitle": "Gère les adresses numériques sur lesquelles recevoir les notifications à valeur juridique de SEND et/ou les messages de courtoisie associés pour <0>ton entreprise</0>.",
   "title": "Coordonnées"
 }
