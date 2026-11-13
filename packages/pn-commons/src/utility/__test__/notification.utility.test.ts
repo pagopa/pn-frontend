@@ -1341,7 +1341,7 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
+        delegator: { displayName: 'DELEGATOR_TEST_ONLY', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
   });
@@ -1358,7 +1358,7 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
+        delegator: { displayName: 'DELEGATOR_TEST_ONLY', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
   });
