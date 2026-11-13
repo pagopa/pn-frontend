@@ -6,8 +6,8 @@ import PnSenderContacts from '../PnSenderContacts';
 
 const phone = '0123456789';
 const site = 'www.ente-test.it';
-const email = 'info@ente-test.it';
-const pec = 'ente-test@pec.it';
+const email = 'info@ente-test.invalid';
+const pec = 'ente-test@pec.invalid';
 
 describe('PnSenderContacts Component', () => {
   const originalMatchMedia = window.matchMedia;
