@@ -1,4 +1,5 @@
 import { Formik } from 'formik';
+import { vi } from 'vitest';
 
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import { fireEvent, getById, render, testFormElements } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -26,7 +27,7 @@ describe('PreliminaryInformationsContent', () => {
     de: 'Tedesco',
   };
 
-  const mockOnChangeTouched = jest.fn();
+  const mockOnChangeTouched = vi.fn();
 
   it('renders the component', () => {
     const { container } = render(

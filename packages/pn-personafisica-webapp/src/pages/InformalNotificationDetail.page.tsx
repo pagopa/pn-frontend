@@ -33,13 +33,13 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
-const { SELFCARE_CDN_URL } = getConfiguration();
-
 const InformalNotificationDetail: React.FC = () => {
+  const { SELFCARE_CDN_URL } = getConfiguration();
   const { id } = useParams();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const dispatch = useAppDispatch();
@@ -81,6 +81,10 @@ const InformalNotificationDetail: React.FC = () => {
 
   useEffect(() => {
     fetchReceivedInformalNotification();
+
+    return () => {
+      dispatch(resetState());
+    };
   }, []);
 
   const currentRecipient = informalNotification?.recipients?.[0];
@@ -105,9 +109,6 @@ const InformalNotificationDetail: React.FC = () => {
     });
   };
 
-  const phone = informalNotification?.senderContacts?.phone;
-  const site = informalNotification?.senderContacts?.site;
-
   const fetchPaymentsInfo = (payments: Array<NotificationDetailPayment>) => {
     const paymentInfoRequest = payments.reduce((acc, payment) => {
       if (payment.pagoPa && Object.keys(payment.pagoPa).length > 0) {
@@ -128,13 +129,12 @@ const InformalNotificationDetail: React.FC = () => {
 
     void dispatch(getReceivedInformalNotificationPaymentInfo({ paymentInfoRequest }))
       .unwrap()
+
       .then((paymentInfo) => {
         setPaymentsData({
-          pagoPaF24: paymentInfo.map((info, index) => ({
+          pagoPaF24: paymentInfo.map((info) => ({
             pagoPa: {
-              ...payments[index]?.pagoPa,
               ...info,
-              // applyCost is false because informal notifications do not have notification costs.
               applyCost: false,
             },
           })),
@@ -259,13 +259,10 @@ const InformalNotificationDetail: React.FC = () => {
     );
   };
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
-    url: string;
-    retryAfter?: number;
-  }) => {
+  const showWarningIfRetryAfterOrDownload = (response: { url: string; retryAfter?: number }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',
@@ -289,7 +286,7 @@ const InformalNotificationDetail: React.FC = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
@@ -364,8 +361,7 @@ const InformalNotificationDetail: React.FC = () => {
             </Stack>
 
             <PnSenderContacts
-              phone={phone}
-              site={site}
+              {...informalNotification?.senderContacts}
               handleTrackEventFn={handleExternalLinkEvent}
             />
           </Stack>

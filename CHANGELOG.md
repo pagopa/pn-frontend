@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.27.0...v2.28.0-RC.0) (2026-11-13)
+
+### Bug Fixes
+
+* **A2-2303:** improve accessibility of contact status icons and edit buttons ([#2156](https://github.com/pagopa/pn-frontend/issues/2156)) ([b44ed45](https://github.com/pagopa/pn-frontend/commit/b44ed45b3defbe6a77b3a863e49305c271e69448))
+* **A2-6004:** replace new notification dot with an accessible icon and aria-label ([#2161](https://github.com/pagopa/pn-frontend/issues/2161)) ([e079718](https://github.com/pagopa/pn-frontend/commit/e079718b0ac894676c8738404ee51ff1c947d4f3))
+* **A2-6028:** add focus-visible outline to notification timeline accordion header ([#2152](https://github.com/pagopa/pn-frontend/issues/2152)) ([ca48baa](https://github.com/pagopa/pn-frontend/commit/ca48baa01abcb991829430aa0c025190e0778987))
+* **PN-21624:** handle informal notification payment cache (PF and PG) ([#2101](https://github.com/pagopa/pn-frontend/issues/2101)) ([a55b730](https://github.com/pagopa/pn-frontend/commit/a55b730a364cf580d337785b75d0fcd3d6ccc31c))
+* **PN-21695:** correct download link text in notification statuses ([#2138](https://github.com/pagopa/pn-frontend/issues/2138)) ([b51b61a](https://github.com/pagopa/pn-frontend/commit/b51b61af2178e0e84eb5e9f98b4fa86a7da788c4))
+* **PN-21746:** remediate Dependabot security vulnerabilities ([#2168](https://github.com/pagopa/pn-frontend/issues/2168)) ([409444d](https://github.com/pagopa/pn-frontend/commit/409444d071cbb4af3e9f82d00385c4d3fa17e266))
+* **PN-21746:** remediate vulnerable dependencies ([#2173](https://github.com/pagopa/pn-frontend/issues/2173)) ([74aa8a5](https://github.com/pagopa/pn-frontend/commit/74aa8a53a660e41225d7bc5f231d0076a19fa17b))
+* **PN-21746:** resolve undici and node-forge security vulnerabilities ([#2180](https://github.com/pagopa/pn-frontend/issues/2180)) ([1696af2](https://github.com/pagopa/pn-frontend/commit/1696af201b8f09a567e3ee0eaaf7ef4a3cef3367))
+* **PN-21746:** update vulnerable dependencies ([#2163](https://github.com/pagopa/pn-frontend/issues/2163)) ([044ba40](https://github.com/pagopa/pn-frontend/commit/044ba40cf60be5e0c058eca3e8e5b509860656c2))
+* **PN-21746:** upgrade Vitest to v3.2.6 to address security vulnerabilities ([#2157](https://github.com/pagopa/pn-frontend/issues/2157)) ([3e3f8c5](https://github.com/pagopa/pn-frontend/commit/3e3f8c56352c4f0b06ab5f9d9e3c946c44da7f93))
+* **PN-21773:** align RECRS010 timeline content ([#2200](https://github.com/pagopa/pn-frontend/issues/2200)) ([8703226](https://github.com/pagopa/pn-frontend/commit/870322663972580b38613cc4630ff31896cdb60e))
+* **PN-21873:** solved button alignment in notification timeline ([#2195](https://github.com/pagopa/pn-frontend/issues/2195)) ([c093b71](https://github.com/pagopa/pn-frontend/commit/c093b711a76ce3851609fde10865e355c6454285))
+* **PN-21913:** show sender email and PEC in informal notification detail ([#2205](https://github.com/pagopa/pn-frontend/issues/2205)) ([249527d](https://github.com/pagopa/pn-frontend/commit/249527ddfd99733cb34e212cbede683eb9db3bc8))
+* **PN-21915:** create processing step with SEND event when doesn't exists on informal timeline PA ([#2148](https://github.com/pagopa/pn-frontend/issues/2148)) ([fac746f](https://github.com/pagopa/pn-frontend/commit/fac746f0f1585dfeb69270b76785a25df38d19b4))
+* **PN-21940:** change toast severity to warning for document downloads with retryAfter ([#2198](https://github.com/pagopa/pn-frontend/issues/2198)) ([04186e3](https://github.com/pagopa/pn-frontend/commit/04186e342d717dfb2a6581ee2070805930d34f52))
+* **PN-21950:** update content for combo ([#2174](https://github.com/pagopa/pn-frontend/issues/2174)) ([bcbacbb](https://github.com/pagopa/pn-frontend/commit/bcbacbbcf4e89e369365991b272a74c71e926a78))
+* **PN-21951:** align PF onboarding copy with new Figma ([#2189](https://github.com/pagopa/pn-frontend/issues/2189)) ([9523679](https://github.com/pagopa/pn-frontend/commit/9523679cec3b803b3eba00c52b68e7d31427b946))
+* **PN-21978:** setup Sonar for pn-pt-webapp ([#2177](https://github.com/pagopa/pn-frontend/issues/2177)) ([28a869b](https://github.com/pagopa/pn-frontend/commit/28a869be1ffddf6d6b3b4741b23c50cb5ca28531))
+* **PN-21984:** implement basic layout of PT webapp ([#2167](https://github.com/pagopa/pn-frontend/issues/2167)) ([919e508](https://github.com/pagopa/pn-frontend/commit/919e50869ae343ead26d369daa74694074232f0a))
+* **PN-21991:** show SEND filed event as the oldest in the timeline ([#2159](https://github.com/pagopa/pn-frontend/issues/2159)) ([6786282](https://github.com/pagopa/pn-frontend/commit/6786282d0b63ae565c3ae6ae6a407393efb60b26))
+* **PN-22004:** fix content PF ([#2162](https://github.com/pagopa/pn-frontend/issues/2162)) ([2bd6c00](https://github.com/pagopa/pn-frontend/commit/2bd6c00feed36c877a58d3a8673f160d851d887c))
+* **PN-22004:** show recipient copy for cancelled status and update unreachable legal fact copy in PF ([#2209](https://github.com/pagopa/pn-frontend/issues/2209)) ([ce82277](https://github.com/pagopa/pn-frontend/commit/ce82277e98b3be293511b8401b3ae8ab68b152ea))
+* **PN-22005:** update content timeline ([#2169](https://github.com/pagopa/pn-frontend/issues/2169)) ([1806f22](https://github.com/pagopa/pn-frontend/commit/1806f224d13a97730c666cfeb37c8d13f66e3aba))
+* **PN-22009:** add expand/collapse all groups button on delivering status ([#2172](https://github.com/pagopa/pn-frontend/issues/2172)) ([dd65202](https://github.com/pagopa/pn-frontend/commit/dd6520246d2c5a8f3ab74bf3a9cbc3bf26a4a0cf))
+* **PN-22152:** align analog delivery timeline content ([#2197](https://github.com/pagopa/pn-frontend/issues/2197)) ([9928120](https://github.com/pagopa/pn-frontend/commit/9928120aed19b9eb706f33c375ca34d4ad1227f0))
+
+### Features
+
+* **PN-21947:** project pt for lokalise ([#2190](https://github.com/pagopa/pn-frontend/issues/2190)) ([785b20c](https://github.com/pagopa/pn-frontend/commit/785b20cdb904a88d164423a9d2e08bd71898b7b0))
+* **PN-21974:** adjusted delivered localization ([#2186](https://github.com/pagopa/pn-frontend/issues/2186)) ([155ea2d](https://github.com/pagopa/pn-frontend/commit/155ea2da28ce71394b8e6a8b19de2d45fdeb14fb))
+* **PN-21978:** create new PT webapp ([#2158](https://github.com/pagopa/pn-frontend/issues/2158)) ([a08acea](https://github.com/pagopa/pn-frontend/commit/a08aceaa639a50ac818cde7cb96c22571e9fcc88))
+* **PN-21980:** adjusted viewed localization ([#2193](https://github.com/pagopa/pn-frontend/issues/2193)) ([f72f37f](https://github.com/pagopa/pn-frontend/commit/f72f37f70ef768fa940296b7c538600f34a60427))
+* **PN-21982:** implement PT token exchange ([#2171](https://github.com/pagopa/pn-frontend/issues/2171)) ([68c9fd1](https://github.com/pagopa/pn-frontend/commit/68c9fd1fdc2bc347301fa674d6cf6c55fcb421ad))
+* **PN-22007:** adjusted notification detail page ([#2182](https://github.com/pagopa/pn-frontend/issues/2182)) ([0406fc1](https://github.com/pagopa/pn-frontend/commit/0406fc13fd2a8880c112b3c0a0b119084b75e157))
+* **PN-22008:** group PEC timeline events by address ([#2166](https://github.com/pagopa/pn-frontend/issues/2166)) ([51fa991](https://github.com/pagopa/pn-frontend/commit/51fa991c622f6597e364bfcbb393b604f8e7befd))
+* **PN-22037:** redirect PT users to the partner portal after token exchange ([#2164](https://github.com/pagopa/pn-frontend/issues/2164)) ([63bc39e](https://github.com/pagopa/pn-frontend/commit/63bc39e083ba96befa8fd3d8bd6ea056edcf9376))
+* **PN-22037:** redirect PT users to the partner portal after token exchange ([#2176](https://github.com/pagopa/pn-frontend/issues/2176)) ([e7105b2](https://github.com/pagopa/pn-frontend/commit/e7105b2845b7128fe0293bf03a2e927a345f4f61))
+* **PN-22150:** align timeline perfection links with delivery history and refine copy ([#2191](https://github.com/pagopa/pn-frontend/issues/2191)) ([d18be56](https://github.com/pagopa/pn-frontend/commit/d18be5677b7e0b50434e8125156b57e43687da72))
+* **PN-22235:** implement tos and pp pages ([#2192](https://github.com/pagopa/pn-frontend/issues/2192)) ([477b5da](https://github.com/pagopa/pn-frontend/commit/477b5dafa07ddb046480543ec5eaaa5ad4822358))
+* **PN-22300:** read products from /products API in PT webapp ([#2196](https://github.com/pagopa/pn-frontend/issues/2196)) ([ccb4d11](https://github.com/pagopa/pn-frontend/commit/ccb4d11b3af7da60387759829962f99267bc77e3))
+
+
 # [2.27.0](https://github.com/pagopa/pn-frontend/compare/v2.26.2...v2.27.0) (2026-10-14)
 
 ### Bug Fixes

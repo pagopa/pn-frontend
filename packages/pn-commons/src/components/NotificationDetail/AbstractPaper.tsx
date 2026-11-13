@@ -2,12 +2,14 @@ import { ReactNode, useState } from 'react';
 
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
 import { Avatar, Box, Divider, Grid, Stack, Typography } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { MIButton, MIPaper, Tag, theme } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
+import { NotificationDetailRecipient } from '../../models';
 import { formatDate } from '../../utility';
 import { getAccessibleIun } from '../../utility/accessibility.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -36,6 +38,8 @@ interface AbstractPaperProps {
   hasAttachments?: boolean;
   hasPayment?: boolean;
   onExternalLinkClick?: (href: string) => void;
+  isDelegate?: boolean;
+  recipient?: NotificationDetailRecipient;
 }
 
 interface InstitutionLogoProps {
@@ -70,6 +74,25 @@ const InstitutionLogo: React.FC<InstitutionLogoProps> = ({ id, name, selfcareCdn
     </Avatar>
   );
 };
+
+const AbstractMandate: React.FC<Pick<Required<AbstractPaperProps>, 'recipient'>> = ({
+  recipient,
+}) => (
+  <Stack direction="row" alignItems="center" spacing={2}>
+    <PermIdentityOutlinedIcon sx={{ color: (theme) => theme.colors.neutral.grey[300] }} />
+    <Box>
+      <Typography variant="body2" color="text.secondary">
+        {getLocalizedOrDefaultLabel(
+          'notifications',
+          'detail.notification-detail-section.recipient'
+        )}
+      </Typography>
+      <Typography variant="body2" color="text.primary" fontWeight={600}>
+        {recipient.denomination} - {recipient.taxId}
+      </Typography>
+    </Box>
+  </Stack>
+);
 
 const AbstractSection: React.FC<
   Pick<
@@ -133,6 +156,8 @@ const AbstractPaper = ({
   hasAttachments = false,
   hasPayment = false,
   onExternalLinkClick,
+  isDelegate = false,
+  recipient,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
 
@@ -237,6 +262,18 @@ const AbstractPaper = ({
                 </Typography>
               </Box>
             </Grid>
+            {isDelegate && recipient && (
+              <>
+                {isMobile && (
+                  <Grid item xs={12}>
+                    <Divider aria-hidden sx={{ my: 2 }} />
+                  </Grid>
+                )}
+                <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
+                  <AbstractMandate recipient={recipient} />
+                </Grid>
+              </>
+            )}
           </Grid>
           <AbstractSection
             isLegal={isLegal}

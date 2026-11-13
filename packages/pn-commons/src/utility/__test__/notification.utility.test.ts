@@ -23,15 +23,31 @@ import {
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { initLocalizationForTest } from '../../test-utils';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
-import { initLocalizationExists } from '../localization.utility';
+import { hasLocalizedLabel, initLocalizationExists } from '../localization.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
   getPagoPaF24Payments,
+  getRecIndex,
   populatePaymentsPagoPaF24,
 } from '../notification.utility';
+
+// Defines the base multi-recipient keys. Individual tests control optional variants.
+const baseMultiLocalizationKeys = new Set(
+  ['delivered', 'viewed', 'unreachable', 'effective-date', 'returned-to-sender'].flatMap((status) =>
+    ['', '-tooltip', '-description'].map((suffix) => `status.${status}${suffix}-multirecipient`)
+  )
+);
+
+function initStatusLocalizationExists(
+  exists?: NonNullable<Parameters<typeof initLocalizationExists>[0]>
+) {
+  initLocalizationExists(
+    (namespace, path) => baseMultiLocalizationKeys.has(path) || !!exists?.(namespace, path)
+  );
+}
 
 function testNotificationStatusInfos(
   expectedColor:
@@ -52,7 +68,7 @@ function testNotificationStatusInfos(
     statusHistory?: Array<NotificationStatusHistory>;
     isParty?: boolean;
     mandateId?: string;
-    delegatorName?: string;
+    delegator?: { displayName: string; fiscalCode: string };
     userTaxId?: string;
   }
 ) {
@@ -63,9 +79,17 @@ function testNotificationStatusInfos(
   expect(description).toStrictEqual(expectedDescription);
 }
 
+beforeEach(() => {
+  initLocalizationForTest();
+});
+
+// afterEach(() => {
+//   initLocalizationForTest();
+// });
+
 describe('notification status texts', () => {
-  beforeAll(() => {
-    initLocalizationForTest();
+  beforeEach(() => {
+    initStatusLocalizationExists();
   });
 
   it('return notification status infos - DELIVERED - single recipient - analog shipment', () => {
@@ -345,7 +369,7 @@ describe('notification status texts', () => {
     'uses the new DELIVERED description for $deliveryMode$suffix',
     ({ deliveryMode, recipients, suffix }) => {
       const localizationKey = `status.delivered-description-${deliveryMode}${suffix}`;
-      initLocalizationExists((_namespace, path) => path === localizationKey);
+      initStatusLocalizationExists((_namespace, path) => path === localizationKey);
 
       testNotificationStatusInfos(
         'default',
@@ -360,13 +384,11 @@ describe('notification status texts', () => {
         },
         { recipients }
       );
-
-      initLocalizationForTest();
     }
   );
 
   it('keeps the legacy DELIVERED description when the new content is unavailable', () => {
-    initLocalizationExists(() => false);
+    initStatusLocalizationExists(() => false);
 
     testNotificationStatusInfos(
       'default',
@@ -383,15 +405,13 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTO.recipients }
     );
-
-    initLocalizationForTest();
   });
 
   it.each([NotificationDeliveryMode.DIGITAL, NotificationDeliveryMode.ANALOG])(
     'uses the delegate DELIVERED description for %s in the delegate view',
     (deliveryMode) => {
       const delegateKey = `status.delivered-description-${deliveryMode}-delegate`;
-      initLocalizationExists((_namespace, path) => path === delegateKey);
+      initStatusLocalizationExists((_namespace, path) => path === delegateKey);
 
       testNotificationStatusInfos(
         'default',
@@ -407,17 +427,79 @@ describe('notification status texts', () => {
         {
           recipients: notificationDTO.recipients,
           mandateId: 'mandate-1',
-          delegatorName: 'Mario Cucumber',
+          delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
         }
       );
+    }
+  );
 
-      initLocalizationForTest();
+  it.each([NotificationDeliveryMode.DIGITAL, NotificationDeliveryMode.ANALOG])(
+    'uses the by-recipient DELIVERED description for %s when the recipient is different from the one to whom the notification was delivered',
+    (deliveryMode) => {
+      const recipientKey = `status.delivered-description-${deliveryMode}-by-recipient`;
+      initStatusLocalizationExists((_namespace, path) => path === recipientKey);
+
+      testNotificationStatusInfos(
+        'default',
+        'notifiche - status.delivered-multirecipient',
+        'notifiche - status.delivered-tooltip-multirecipient',
+        `notifiche - ${recipientKey}`,
+        {
+          status: NotificationStatus.DELIVERED,
+          activeFrom: '2023-01-26T13:57:16.42843144Z',
+          relatedTimelineElements: [],
+          deliveryMode,
+        },
+        {
+          recipients: notificationDTOMultiRecipient.recipients,
+        }
+      );
+    }
+  );
+
+  it.each([NotificationDeliveryMode.DIGITAL, NotificationDeliveryMode.ANALOG])(
+    'uses the default DELIVERED description for %s when the recipient is the same from the one to whom the notification was delivered',
+    (deliveryMode) => {
+      const recipientKey = `status.delivered-description-${deliveryMode}-multirecipient`;
+      const category =
+        deliveryMode === NotificationDeliveryMode.DIGITAL
+          ? TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+          : TimelineCategory.ANALOG_SUCCESS_WORKFLOW;
+      initStatusLocalizationExists((_namespace, path) => path === recipientKey);
+
+      const status = {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: `${category}.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0`,
+            timestamp: '2023-01-26T13:57:16.42843144Z',
+            category,
+            details: { recIndex: 0 },
+          },
+        ],
+        deliveryMode,
+      };
+
+      testNotificationStatusInfos(
+        'default',
+        'notifiche - status.delivered-multirecipient',
+        'notifiche - status.delivered-tooltip-multirecipient',
+        `notifiche - ${recipientKey}`,
+        status,
+        {
+          recipients: notificationDTOMultiRecipient.recipients,
+          userTaxId: notificationDTOMultiRecipient.recipients[0].taxId,
+          statusHistory: [status],
+        }
+      );
     }
   );
 
   it('keeps the DELIVERED description of the recipient view when the delegate one is unavailable', () => {
     const localizationKey = `status.delivered-description-${NotificationDeliveryMode.DIGITAL}`;
-    initLocalizationExists((_namespace, path) => path === localizationKey);
+    initStatusLocalizationExists((_namespace, path) => path === localizationKey);
 
     testNotificationStatusInfos(
       'default',
@@ -433,15 +515,37 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
+  });
 
-    initLocalizationForTest();
+  it('keeps the multi-recipient delivery-mode description when the delegate variant is unavailable', () => {
+    const localizationKey = `status.delivered-description-${NotificationDeliveryMode.DIGITAL}-multirecipient`;
+
+    initStatusLocalizationExists((_ns, path) => path === localizationKey);
+
+    testNotificationStatusInfos(
+      'default',
+      'notifiche - status.delivered-multirecipient',
+      'notifiche - status.delivered-tooltip-multirecipient',
+      `notifiche - ${localizationKey}`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.DIGITAL,
+      },
+      {
+        recipients: notificationDTOMultiRecipient.recipients,
+        mandateId: 'mandate-1',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
+      }
+    );
   });
 
   it('keeps the legacy DELIVERED description in the delegate view when the new content is unavailable', () => {
-    initLocalizationExists(() => false);
+    initStatusLocalizationExists(() => false);
 
     testNotificationStatusInfos(
       'default',
@@ -459,11 +563,9 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
-
-    initLocalizationForTest();
   });
 
   it('return notification status infos - DELIVERING', () => {
@@ -515,7 +617,7 @@ describe('notification status texts', () => {
 
   it('uses the delegate UNREACHABLE description when the revised copy is available', () => {
     const delegateKey = 'status.unreachable-description-delegate';
-    initLocalizationExists((_namespace, path) => path === delegateKey);
+    initStatusLocalizationExists((_namespace, path) => path === delegateKey);
 
     testNotificationStatusInfos(
       'error',
@@ -526,15 +628,13 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
-
-    initLocalizationForTest();
   });
 
   it('keeps the legacy UNREACHABLE description when the revised copy is unavailable', () => {
-    initLocalizationExists(() => false);
+    initStatusLocalizationExists(() => false);
 
     testNotificationStatusInfos(
       'error',
@@ -545,11 +645,9 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
-
-    initLocalizationForTest();
   });
 
   it('return notification status infos - PAID - passing the status only', () => {
@@ -658,7 +756,9 @@ describe('notification status texts', () => {
   });
 
   it('return notification status infos - EFFECTIVE_DATE - delegate view, with the revised copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.effective-date-description-delegate');
+    initStatusLocalizationExists(
+      (_ns, path) => path === 'status.effective-date-description-delegate'
+    );
     testNotificationStatusInfos(
       'info',
       `notifiche - status.effective-date`,
@@ -677,14 +777,13 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - EFFECTIVE_DATE - delegate view, without the revised copy', () => {
-    initLocalizationExists(() => false);
+    initStatusLocalizationExists(() => false);
     testNotificationStatusInfos(
       'info',
       `notifiche - status.effective-date`,
@@ -702,14 +801,13 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - by delegate, with the revised copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-description-by-delegate');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -718,7 +816,7 @@ describe('notification status texts', () => {
           name: notificationDTO.recipients[0].denomination,
         })}`,
       })}`,
-      `notifiche - status.viewed-by-delegate-description - ${JSON.stringify({
+      `notifiche - status.viewed-description-by-delegate - ${JSON.stringify({
         name: notificationDTO.recipients[0].denomination,
       })}`,
       {
@@ -726,51 +824,58 @@ describe('notification status texts', () => {
         activeFrom: '2023-01-26T13:57:16.42843144Z',
         relatedTimelineElements: [],
         recipient: notificationDTO.recipients[0].denomination,
+        steps: [
+          getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+            recIndex: 0,
+            delegateInfo: {
+              mandateId: 'mandate-1',
+              denomination: notificationDTO.recipients[0].denomination,
+            },
+          }),
+        ],
       },
-      { recipients: notificationDTO.recipients }
+      { recipients: notificationDTO.recipients, userTaxId: notificationDTO.recipients[0].taxId }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - by delegate, the viewed event wins over the tax id carried by recipient', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-description-by-delegate');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
       `notifiche - status.viewed-tooltip - ${JSON.stringify({
         subject: `notifiche - status.delegate - ${JSON.stringify({
-          name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+          name: 'Persona Sintetica (PRSSNT80A01H501X)',
         })}`,
       })}`,
-      `notifiche - status.viewed-by-delegate-description - ${JSON.stringify({
-        name: 'Luigi Zucchini',
+      `notifiche - status.viewed-description-by-delegate - ${JSON.stringify({
+        name: 'Persona Sintetica',
       })}`,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: '2023-08-25T11:38:05.392Z',
         relatedTimelineElements: [],
-        recipient: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        recipient: 'Persona Sintetica (PRSSNT80A01H501X)',
         steps: [
           getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
             recIndex: 0,
-            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+            delegateInfo: { mandateId: 'mandate-1', denomination: 'Persona Sintetica' },
           }),
         ],
       },
-      { recipients: notificationDTO.recipients }
+      { recipients: notificationDTO.recipients, userTaxId: notificationDTO.recipients[0].taxId }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, access made by the reading delegate', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-description-as-delegate');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
       `notifiche - status.viewed-tooltip - ${JSON.stringify({
         subject: `notifiche - status.recipient`,
       })}`,
-      `notifiche - status.viewed-as-delegate-description - ${JSON.stringify({
+      `notifiche - status.viewed-description-as-delegate - ${JSON.stringify({
         recipient: 'Mario Cucumber',
       })}`,
       {
@@ -782,7 +887,7 @@ describe('notification status texts', () => {
             recIndex: 0,
             delegateInfo: {
               mandateId: 'mandate-1',
-              denomination: 'Luigi Zucchini',
+              denomination: 'Persona Sintetica',
               taxId: 'TSTUTN00A07A001G',
             },
           }),
@@ -791,23 +896,24 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-2',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
         userTaxId: 'TSTUTN00A07A001G',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, access made by another delegate', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-other-delegate-description');
+    initStatusLocalizationExists(
+      (_ns, path) => path === 'status.viewed-description-by-other-delegate'
+    );
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
       `notifiche - status.viewed-tooltip - ${JSON.stringify({
         subject: `notifiche - status.recipient`,
       })}`,
-      `notifiche - status.viewed-by-other-delegate-description - ${JSON.stringify({
-        name: 'Luigi Zucchini',
+      `notifiche - status.viewed-description-by-other-delegate - ${JSON.stringify({
+        name: 'Persona Sintetica',
         recipient: 'Mario Cucumber',
       })}`,
       {
@@ -819,7 +925,7 @@ describe('notification status texts', () => {
             recIndex: 0,
             delegateInfo: {
               mandateId: 'mandate-2',
-              denomination: 'Luigi Zucchini',
+              denomination: 'Persona Sintetica',
               taxId: 'FRMTTR76M06B715E',
             },
           }),
@@ -828,22 +934,21 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
         userTaxId: 'TSTUTN00A07A001G',
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, access made by the recipient', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-description-by-recipient');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
       `notifiche - status.viewed-tooltip - ${JSON.stringify({
         subject: `notifiche - status.recipient`,
       })}`,
-      `notifiche - status.viewed-by-recipient-description - ${JSON.stringify({
+      `notifiche - status.viewed-description-by-recipient - ${JSON.stringify({
         recipient: 'Mario Cucumber',
       })}`,
       {
@@ -855,46 +960,14 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
         userTaxId: 'TSTUTN00A07A001G',
       }
     );
-    initLocalizationForTest();
-  });
-
-  it('return notification status infos - VIEWED - delegate view, no delegateInfo falls back on the delegate carried by recipient', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-other-delegate-description');
-    testNotificationStatusInfos(
-      'success',
-      `notifiche - status.viewed`,
-      `notifiche - status.viewed-tooltip - ${JSON.stringify({
-        subject: `notifiche - status.delegate - ${JSON.stringify({
-          name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
-        })}`,
-      })}`,
-      `notifiche - status.viewed-by-other-delegate-description - ${JSON.stringify({
-        name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
-        recipient: 'Mario Cucumber',
-      })}`,
-      {
-        status: NotificationStatus.VIEWED,
-        activeFrom: '2023-08-25T11:38:05.392Z',
-        relatedTimelineElements: [],
-        recipient: 'Luigi Zucchini (ZCCLGU80A01H501X)',
-        steps: [getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, { recIndex: 0 })],
-      },
-      {
-        recipients: notificationDTO.recipients,
-        mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
-        userTaxId: 'TSTUTN00A07A001G',
-      }
-    );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view, multi recipient access without delegate keeps the multi recipient copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed-multirecipient`,
@@ -913,14 +986,13 @@ describe('notification status texts', () => {
       {
         recipients: notificationDTOMultiRecipient.recipients,
         mandateId: 'mandate-1',
-        delegatorName: 'Mario Cucumber',
+        delegator: { displayName: 'Mario Cucumber', fiscalCode: 'TSTUTN00A07A001G' },
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - delegate view without the delegator name keeps the standard copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed`,
@@ -937,13 +1009,12 @@ describe('notification status texts', () => {
         steps: [
           getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
             recIndex: 0,
-            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+            delegateInfo: { mandateId: 'mandate-1', denomination: 'Persona Sintetica' },
           }),
         ],
       },
       { recipients: notificationDTO.recipients, mandateId: 'mandate-1' }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - multi recipient - no delegate', () => {
@@ -966,31 +1037,7 @@ describe('notification status texts', () => {
   });
 
   it('return notification status infos - VIEWED - multi recipient - without legal fact, with the revised copy', () => {
-    initLocalizationExists(
-      (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
-    );
-    testNotificationStatusInfos(
-      'success',
-      `notifiche - status.viewed-multirecipient`,
-      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
-        subject: `notifiche - status.recipient`,
-      })}`,
-      `notifiche - status.viewed-without-legal-fact-description-multirecipient`,
-      {
-        status: NotificationStatus.VIEWED,
-        activeFrom: '2023-01-26T13:57:16.42843144Z',
-        relatedTimelineElements: [],
-        steps: [],
-      },
-      { recipients: notificationDTOMultiRecipient.recipients }
-    );
-    initLocalizationForTest();
-  });
-
-  it('return notification status infos - VIEWED - multi recipient - with legal fact, with the revised copy', () => {
-    initLocalizationExists(
-      (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
-    );
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-legal-fact-download');
     testNotificationStatusInfos(
       'success',
       `notifiche - status.viewed-multirecipient`,
@@ -1000,6 +1047,63 @@ describe('notification status texts', () => {
       `notifiche - status.viewed-description-multirecipient - ${JSON.stringify({
         subject: `notifiche - status.recipient`,
       })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
+  });
+
+  it('uses the delegate VIEWED description for multi-recipient notifications', () => {
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-description-by-delegate');
+
+    testNotificationStatusInfos(
+      'success',
+      'notifiche - status.viewed-multirecipient',
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.delegate - ${JSON.stringify({
+          name: notificationDTOMultiRecipient.recipients[0].denomination,
+        })}`,
+      })}`,
+      `notifiche - status.viewed-description-by-delegate - ${JSON.stringify({
+        name: notificationDTOMultiRecipient.recipients[0].denomination,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        recipient: notificationDTOMultiRecipient.recipients[0].denomination,
+        steps: [
+          getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+            recIndex: 0,
+            delegateInfo: {
+              mandateId: 'mandate-1',
+              denomination: notificationDTOMultiRecipient.recipients[0].denomination,
+            },
+          }),
+        ],
+      },
+      {
+        recipients: notificationDTOMultiRecipient.recipients,
+        userTaxId: notificationDTOMultiRecipient.recipients[0].taxId,
+      }
+    );
+  });
+
+  it('return notification status infos - VIEWED - multi recipient - with legal fact, with the revised copy', () => {
+    initStatusLocalizationExists((_ns, path) => path === 'status.viewed-legal-fact-download');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-multirecipient`,
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-description-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })} notifiche - status.viewed-legal-fact-download`,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: '2023-01-26T13:57:16.42843144Z',
@@ -1021,7 +1125,197 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTOMultiRecipient.recipients }
     );
-    initLocalizationForTest();
+  });
+
+  describe('VIEWED - revised copy', () => {
+    const [recipient, otherRecipient] = notificationDTOMultiRecipient.recipients;
+    const delegateTaxId = 'LVLDAA85T50G702B';
+    const subjectData = JSON.stringify({ subject: 'notifiche - status.recipient' });
+    const viewedStatus = (
+      steps: Array<INotificationDetailTimeline>
+    ): NotificationStatusHistory => ({
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2023-08-25T11:38:05.392Z',
+      relatedTimelineElements: [],
+      steps,
+    });
+    const viewedStep = (recIndex: number, delegateTaxIdOfAccess?: string) =>
+      getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+        recIndex,
+        delegateInfo: delegateTaxIdOfAccess
+          ? {
+              mandateId: 'mandate-1',
+              denomination: 'Persona Sintetica',
+              taxId: delegateTaxIdOfAccess,
+            }
+          : undefined,
+      });
+    const withEffectiveDate = (status: NotificationStatusHistory) => [
+      status,
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom: '2023-08-20T11:38:05.392Z',
+        relatedTimelineElements: [],
+      },
+    ];
+    const delegateView = {
+      mandateId: 'mandate-1',
+      delegator: { displayName: recipient.denomination, fiscalCode: recipient.taxId },
+      userTaxId: delegateTaxId,
+    };
+
+    it('uses the recipient description when the user has accessed a multi-recipient notification', () => {
+      initStatusLocalizationExists(
+        (_ns, path) => path === 'status.viewed-description-by-other-recipient'
+      );
+      const { description } = getNotificationStatusInfos(viewedStatus([viewedStep(0)]), {
+        recipients: notificationDTOMultiRecipient.recipients,
+        userTaxId: recipient.taxId,
+      });
+      expect(description).toBe(
+        `notifiche - status.viewed-description-multirecipient - ${subjectData}`
+      );
+    });
+
+    it.each([
+      ['the recipient', {}],
+      ['a delegate of the recipient', delegateView],
+    ])(
+      'uses the other-recipient description when only another recipient has accessed - %s',
+      (_desc, options) => {
+        initStatusLocalizationExists(
+          (_ns, path) => path === 'status.viewed-description-by-other-recipient'
+        );
+        const { description } = getNotificationStatusInfos(viewedStatus([viewedStep(1)]), {
+          recipients: notificationDTOMultiRecipient.recipients,
+          userTaxId: recipient.taxId,
+          ...options,
+        });
+        expect(description).toBe('notifiche - status.viewed-description-by-other-recipient');
+      }
+    );
+
+    it('uses the by-recipient description when the delegator has accessed a multi-recipient notification', () => {
+      initStatusLocalizationExists(
+        (_ns, path) => path === 'status.viewed-description-by-recipient'
+      );
+      const { description } = getNotificationStatusInfos(
+        viewedStatus([viewedStep(1), viewedStep(0)]),
+        { recipients: notificationDTOMultiRecipient.recipients, ...delegateView }
+      );
+      expect(description).toBe(
+        `notifiche - status.viewed-description-by-recipient - ${JSON.stringify({
+          recipient: recipient.denomination,
+        })}`
+      );
+    });
+
+    it.each([
+      {
+        desc: 'recipient access',
+        steps: [viewedStep(0)],
+        options: { userTaxId: recipient.taxId },
+        expected: `notifiche - status.viewed-description-after-effective-date - ${subjectData}`,
+      },
+      {
+        desc: 'access made by the reading delegate',
+        steps: [viewedStep(0, delegateTaxId)],
+        options: delegateView,
+        expected: `notifiche - status.viewed-description-as-delegate-after-effective-date - ${JSON.stringify(
+          { recipient: recipient.denomination }
+        )}`,
+      },
+      {
+        desc: 'access made by another delegate',
+        steps: [viewedStep(0, otherRecipient.taxId)],
+        options: delegateView,
+        expected: `notifiche - status.viewed-description-by-other-delegate-after-effective-date - ${JSON.stringify(
+          { name: 'Persona Sintetica', recipient: recipient.denomination }
+        )}`,
+      },
+      {
+        desc: 'access made by the delegator',
+        steps: [viewedStep(0)],
+        options: delegateView,
+        expected: `notifiche - status.viewed-description-by-recipient-after-effective-date - ${JSON.stringify(
+          { recipient: recipient.denomination }
+        )}`,
+      },
+      {
+        desc: 'access made by a delegate, without a dedicated variant',
+        steps: [viewedStep(0, delegateTaxId)],
+        options: { userTaxId: recipient.taxId },
+        expected: `notifiche - status.viewed-description-by-delegate - ${JSON.stringify({
+          name: 'Persona Sintetica',
+        })}`,
+      },
+    ])('uses the after-effective-date description - $desc', ({ steps, options, expected }) => {
+      initStatusLocalizationExists(
+        (_ns, path) =>
+          path.startsWith('status.viewed-description-') &&
+          !path.endsWith('-multirecipient') &&
+          path !== 'status.viewed-description-by-delegate-after-effective-date'
+      );
+      const status = viewedStatus(steps);
+      const { description } = getNotificationStatusInfos(status, {
+        recipients: [recipient],
+        statusHistory: withEffectiveDate(status),
+        ...options,
+      });
+      expect(description).toBe(expected);
+    });
+
+    it.each([
+      [0, `notifiche - status.viewed-description-after-effective-date - ${subjectData}`],
+      [1, 'notifiche - status.viewed-description-by-other-recipient'],
+    ])(
+      'uses the after-effective-date description only for the own access in multi-recipient notifications - access by recIndex %s',
+      (recIndex, expected) => {
+        initStatusLocalizationExists(
+          (_ns, path) =>
+            path === 'status.viewed-description-after-effective-date' ||
+            path === 'status.viewed-description-by-other-recipient'
+        );
+        const status = viewedStatus([viewedStep(recIndex)]);
+        const { description } = getNotificationStatusInfos(status, {
+          recipients: notificationDTOMultiRecipient.recipients,
+          statusHistory: withEffectiveDate(status),
+          userTaxId: recipient.taxId,
+        });
+        expect(description).toBe(expected);
+      }
+    );
+
+    it.each([
+      [true, true, ' notifiche - status.viewed-legal-fact-download'],
+      [true, false, ''],
+      [false, true, ''],
+    ])(
+      'appends the legal fact sentence only when available - legal fact %s, sentence localized %s',
+      (hasLegalFact, isSentenceLocalized, expectedSuffix) => {
+        initStatusLocalizationExists(
+          (_ns, path) => isSentenceLocalized && path === 'status.viewed-legal-fact-download'
+        );
+        const step = {
+          ...viewedStep(0),
+          legalFactsIds: hasLegalFact
+            ? [
+                {
+                  key: 'safestorage://PN_LEGAL_FACTS-viewed.pdf',
+                  category: LegalFactType.RECIPIENT_ACCESS,
+                },
+              ]
+            : undefined,
+        };
+        const { description } = getNotificationStatusInfos(viewedStatus([step]), {
+          recipients: [recipient],
+          userTaxId: recipient.taxId,
+        });
+        expect(description).toBe(
+          `notifiche - status.viewed-description - ${subjectData}${expectedSuffix}`
+        );
+      }
+    );
   });
 
   it('return notification status infos - CANCELLED - passing status only', () => {
@@ -1034,8 +1328,43 @@ describe('notification status texts', () => {
     );
   });
 
+  it('uses the delegate CANCELLED description when the revised copy is available', () => {
+    const delegateKey = 'status.canceled-description-delegate';
+    initStatusLocalizationExists((_namespace, path) => path === delegateKey);
+
+    testNotificationStatusInfos(
+      'warning',
+      'notifiche - status.canceled',
+      'notifiche - status.canceled-tooltip',
+      `notifiche - ${delegateKey}`,
+      NotificationStatus.CANCELLED,
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegator: { displayName: 'DELEGATOR_TEST_ONLY', fiscalCode: 'TSTUTN00A07A001G' },
+      }
+    );
+  });
+
+  it('keeps the standard CANCELLED description for the delegate when the revised copy is unavailable', () => {
+    initStatusLocalizationExists(() => false);
+
+    testNotificationStatusInfos(
+      'warning',
+      'notifiche - status.canceled',
+      'notifiche - status.canceled-tooltip',
+      'notifiche - status.canceled-description',
+      NotificationStatus.CANCELLED,
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegator: { displayName: 'DELEGATOR_TEST_ONLY', fiscalCode: 'TSTUTN00A07A001G' },
+      }
+    );
+  });
+
   it('return notification status infos - RETURNED_TO_SENDER - without legal fact', () => {
-    initLocalizationExists(
+    initStatusLocalizationExists(
       (_ns, path) => path === 'status.returned-to-sender-with-legal-fact-description'
     );
     testNotificationStatusInfos(
@@ -1050,18 +1379,17 @@ describe('notification status texts', () => {
         steps: [],
       }
     );
-    initLocalizationForTest();
   });
 
   it('return notification status infos - RETURNED_TO_SENDER - with legal fact, with the revised copy', () => {
-    initLocalizationExists(
-      (_ns, path) => path === 'status.returned-to-sender-with-legal-fact-description'
+    initStatusLocalizationExists(
+      (_ns, path) => path === 'status.returned-to-sender-description-with-legal-fact'
     );
     testNotificationStatusInfos(
       'warning',
       `notifiche - status.returned-to-sender`,
       `notifiche - status.returned-to-sender-tooltip`,
-      `notifiche - status.returned-to-sender-with-legal-fact-description`,
+      `notifiche - status.returned-to-sender-description-with-legal-fact`,
       {
         status: NotificationStatus.RETURNED_TO_SENDER,
         activeFrom: '2023-01-26T13:57:16.42843144Z',
@@ -1083,7 +1411,39 @@ describe('notification status texts', () => {
         ],
       }
     );
-    initLocalizationForTest();
+  });
+
+  it('falls back to the standalone RETURNED_TO_SENDER legal-fact description for multiple recipients', () => {
+    initStatusLocalizationExists(
+      (_ns, path) => path === 'status.returned-to-sender-description-with-legal-fact'
+    );
+
+    testNotificationStatusInfos(
+      'warning',
+      'notifiche - status.returned-to-sender-multirecipient',
+      'notifiche - status.returned-to-sender-tooltip-multirecipient',
+      'notifiche - status.returned-to-sender-description-with-legal-fact',
+      {
+        status: NotificationStatus.RETURNED_TO_SENDER,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: 'NOTIFICATION_VIEWED.IUN_ABCD-EFGH-IJKL-202601-M-1.RECINDEX_0',
+            timestamp: '2026-01-15T10:20:30.123456789Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            details: { recIndex: 0 },
+            legalFactsIds: [
+              {
+                key: 'safestorage://PN_LEGAL_FACTS-viewed.pdf',
+                category: LegalFactType.RECIPIENT_ACCESS,
+              },
+            ],
+          },
+        ],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
   });
 
   it('return notification status infos - RETURNED_TO_SENDER - with legal fact, without the revised copy', () => {
@@ -1124,13 +1484,59 @@ describe('notification status texts', () => {
       NotificationStatus.CANCELLATION_IN_PROGRESS
     );
   });
+
+  it.each(['label', 'tooltip', 'description'] as const)(
+    'falls back only the unavailable multi %s without the base catalog fixture',
+    (missingPart) => {
+      const parts = {
+        label: 'status.unreachable',
+        tooltip: 'status.unreachable-tooltip',
+        description: 'status.unreachable-description',
+      };
+      const available = new Set(
+        Object.entries(parts)
+          .filter(([part]) => part !== missingPart)
+          .map(([, key]) => `${key}-multirecipient`)
+      );
+      initLocalizationExists((_namespace, key) => available.has(key));
+      const result = getNotificationStatusInfos(NotificationStatus.UNREACHABLE, {
+        recipients: ['A', 'B'],
+      });
+      for (const part of ['label', 'tooltip', 'description'] as const) {
+        expect(result[part]).toBe(
+          `notifiche - ${parts[part]}${part === missingPart ? '' : '-multirecipient'}`
+        );
+      }
+    }
+  );
+
+  it('allows all multi localizations to be unavailable', () => {
+    initLocalizationExists(() => false);
+    testNotificationStatusInfos(
+      'error',
+      'notifiche - status.unreachable',
+      'notifiche - status.unreachable-tooltip',
+      'notifiche - status.unreachable-description',
+      NotificationStatus.UNREACHABLE,
+      { recipients: ['A', 'B'] }
+    );
+  });
+
+  it('starts with base multi keys and without optional viewer keys for every test', () => {
+    expect(hasLocalizedLabel('notifications', 'status.viewed-description-multirecipient')).toBe(
+      true
+    );
+    expect(hasLocalizedLabel('notifications', 'status.viewed-by-delegate-description')).toBe(false);
+    expect(
+      hasLocalizedLabel(
+        'notifications',
+        'detail.timeline.completely-unreachable-description-delegate'
+      )
+    ).toBe(false);
+  });
 });
 
 describe('timeline legal fact link text', () => {
-  beforeAll(() => {
-    initLocalizationForTest();
-  });
-
   it('return legalFact label - default', () => {
     const timelineElem = {
       elementId: 'GET_ADDRESS.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1.SOURCE_SPECIAL.ATTEMPT_0',
@@ -1436,7 +1842,7 @@ describe('timeline event description', () => {
       notificationDTO.recipients,
       undefined,
       undefined,
-      'Mario Cucumber'
+      { displayName: 'Mario Cucumber', fiscalCode: 'MRTMTT91D08F205J' }
     );
     expect(result?.description).toBe(
       `notifiche - detail.timeline.completely-unreachable-description-delegate - ${JSON.stringify({
@@ -1445,7 +1851,6 @@ describe('timeline event description', () => {
         recipient: 'Mario Cucumber',
       })}`
     );
-    initLocalizationForTest();
   });
 });
 
@@ -1688,5 +2093,42 @@ describe('Populate pagoPA and F24 payments', () => {
     const pagoPaF24Payments = getPagoPaF24Payments(payments, recIndex);
 
     expect(pagoPaF24Payments).toStrictEqual(res);
+  });
+});
+
+describe('getRecIndex', () => {
+  const recipientTaxIds = ['synthetic-recipient-0', 'synthetic-recipient-1'];
+
+  const delegator = {
+    displayName: 'Destinatario sintetico',
+    fiscalCode: recipientTaxIds[1],
+  };
+
+  it('finds the user among string recipients', () => {
+    expect(getRecIndex(recipientTaxIds, recipientTaxIds[1])).toBe(1);
+  });
+
+  it('finds the user among object recipients', () => {
+    const recipients = recipientTaxIds.map((taxId) => ({
+      ...notificationDTO.recipients[0],
+      denomination: 'Destinatario sintetico',
+      taxId,
+    }));
+
+    expect(getRecIndex(recipients, recipientTaxIds[1])).toBe(1);
+  });
+
+  it('prefers the delegator identity over the user identity', () => {
+    expect(getRecIndex(recipientTaxIds, recipientTaxIds[0], delegator)).toBe(1);
+  });
+
+  it('finds the delegator when the user identity is missing', () => {
+    expect(getRecIndex(recipientTaxIds, undefined, delegator)).toBe(1);
+  });
+
+  it('returns -1 when the identity is missing or not found', () => {
+    expect(getRecIndex(recipientTaxIds)).toBe(-1);
+    expect(getRecIndex(recipientTaxIds, 'synthetic-unknown-recipient')).toBe(-1);
+    expect(getRecIndex([], recipientTaxIds[0])).toBe(-1);
   });
 });

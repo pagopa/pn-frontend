@@ -52,6 +52,10 @@
     },
     "today-uppercase-initial": "Heute"
   },
+  "downtime_language_banner": {
+    "link": "Übersetzungen konsultieren",
+    "message": "Der Originaltext dieser Dokumente ist auf Italienisch. Bei Abweichungen zwischen der italienischen Fassung und den Übersetzungen in andere Sprachen sind die Bedeutung und die Bestimmungen der italienischen Sprache maßgebend."
+  },
   "error-boundary": {
     "action": "Seite neu laden",
     "description": "Die Seite konnte nicht geladen werden. Seite neu laden oder später erneut versuchen.",
@@ -87,16 +91,23 @@
     "assistance": "Hilfe",
     "login": "Anmelden",
     "logout": "Beenden",
+    "logout-message": "Bestätigst du, dass du den reservierten Bereich verlassen möchtest?",
     "notification-platform": "SEND - Servizio Notifiche Digitali",
     "pago-pa-link": "Website von PagoPA S.p.A.",
     "reserved-area": "Reservierten Bereich",
     "support": "Support"
+  },
+  "inactivity": {
+    "action": "Angemeldet bleiben",
+    "body": "Abmeldung im Gange. Wenn du es dir anders überlegt hast, drücke innerhalb von wenigen Sekunden auf „Angemeldet bleiben“.",
+    "title": "Willst du SEND wirklich verlassen?"
   },
   "invalid": "Ungültig",
   "leaving-app": {
     "message": "Du wirst weitergeleitet",
     "title": "Du verlässt SEND"
   },
+  "loading": "Wird geladen",
   "menu": {
     "api-key": "API-Schlüssel",
     "app-status": "Plattformstatus",
@@ -136,6 +147,7 @@
   },
   "not-available": "Nicht verfügbar",
   "not-found": {
+    "back-to-home": "Zurück zur Startseite",
     "description": "Du bist versehentlich hier gelandet, benutze die Navigation.",
     "title": "404: Die gesuchte Seite existiert nicht"
   },
@@ -182,5 +194,10 @@
     "or": "oder",
     "select-file": "lade die Datei",
     "sending": "Sendevorgang läuft..."
+  },
+  "user-validation-failed": {
+    "cta": "Kontaktiere den Support",
+    "description": "Eine oder mehrere mit deinem Konto verknüpfte Daten sind ungültig. Kontaktiere den Support, um das Problem zu beheben.",
+    "title": "Die eingegebenen Daten sind ungültig"
   }
 }

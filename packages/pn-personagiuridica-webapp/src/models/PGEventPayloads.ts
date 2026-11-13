@@ -67,7 +67,7 @@ export type PGNotificationsListEventData = {
 
 export type PGNotificationDetailEventData =
   | {
-      notificationType: 'LEGAL';
+      notificationType: NotificationCommunicationType.LEGAL;
       downtimeEvents: Array<Downtime>;
       mandateId: string | undefined;
       notificationStatus: NotificationStatus;
@@ -79,7 +79,7 @@ export type PGNotificationDetailEventData =
       deliveryMode: EventDeliveryModeType;
     }
   | {
-      notificationType: 'INFORMAL';
+      notificationType: NotificationCommunicationType.INFORMAL;
       notificationStatus: InformalNotificationStatus;
       paymentCount: number;
       timeline: BffFullInformalNotificationV1['timeline'];
@@ -91,11 +91,11 @@ type PGInformalNotificationAttachmentType =
 
 export type PGNotificationAttachmentEventData =
   | {
-      notificationType: 'LEGAL';
+      notificationType: NotificationCommunicationType.LEGAL;
       documentType: PGInformalNotificationAttachmentType | NotificationDocumentType.AAR;
     }
   | {
-      notificationType: 'INFORMAL';
+      notificationType: NotificationCommunicationType.INFORMAL;
       documentType: PGInformalNotificationAttachmentType;
     };
 

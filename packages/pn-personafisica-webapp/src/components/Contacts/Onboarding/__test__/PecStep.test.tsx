@@ -154,7 +154,7 @@ describe('PecStep', () => {
   });
 
   it('registers a continue handler that returns true when a PEC flow state already exists', async () => {
-    const registerContinueHandler = vi.fn();
+    const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
     render(
       <PecStep
@@ -170,7 +170,10 @@ describe('PecStep', () => {
 
     expect(registerContinueHandler).toHaveBeenCalled();
 
-    const continueHandler = registerContinueHandler.mock.calls.at(-1)[0];
+    const continueHandler = registerContinueHandler.mock.calls.at(-1)?.[0];
+    if (continueHandler === undefined) {
+      throw new Error('Continue handler was not registered');
+    }
     await expect(continueHandler()).resolves.toBe(true);
   });
 
@@ -207,7 +210,7 @@ describe('PecStep', () => {
   });
 
   it('returns false and shows the verification modal when continue is triggered with a formally valid PEC and accepted disclaimer', async () => {
-    const registerContinueHandler = vi.fn();
+    const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
     const { getByLabelText, getByRole, findByText } = render(
       <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
@@ -223,7 +226,10 @@ describe('PecStep', () => {
       fireEvent.click(getByRole('checkbox'));
     });
 
-    const continueHandler = registerContinueHandler.mock.calls.at(-1)[0];
+    const continueHandler = registerContinueHandler.mock.calls.at(-1)?.[0];
+    if (continueHandler === undefined) {
+      throw new Error('Continue handler was not registered');
+    }
 
     let canContinue: boolean | undefined;
     await act(async () => {
@@ -236,7 +242,7 @@ describe('PecStep', () => {
   });
 
   it('returns false and does not show the verification modal when continue is triggered with an invalid PEC', async () => {
-    const registerContinueHandler = vi.fn();
+    const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
     const { getByLabelText, findByText, queryByText } = render(
       <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
@@ -248,7 +254,10 @@ describe('PecStep', () => {
       });
     });
 
-    const continueHandler = registerContinueHandler.mock.calls.at(-1)[0];
+    const continueHandler = registerContinueHandler.mock.calls.at(-1)?.[0];
+    if (continueHandler === undefined) {
+      throw new Error('Continue handler was not registered');
+    }
 
     let canContinue: boolean | undefined;
     await act(async () => {
@@ -261,7 +270,7 @@ describe('PecStep', () => {
   });
 
   it('returns false and does not show the verification modal when continue is triggered without accepting the disclaimer', async () => {
-    const registerContinueHandler = vi.fn();
+    const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
     const { getByLabelText, findByText, queryByText } = render(
       <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
@@ -273,7 +282,10 @@ describe('PecStep', () => {
       });
     });
 
-    const continueHandler = registerContinueHandler.mock.calls.at(-1)[0];
+    const continueHandler = registerContinueHandler.mock.calls.at(-1)?.[0];
+    if (continueHandler === undefined) {
+      throw new Error('Continue handler was not registered');
+    }
 
     let canContinue: boolean | undefined;
     await act(async () => {

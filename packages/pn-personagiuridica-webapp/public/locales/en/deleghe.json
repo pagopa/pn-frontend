@@ -86,6 +86,10 @@
       "message": "You cannot authorise yourself",
       "title": "Data entry error"
     },
+    "fiscal_code": {
+      "message": "The Fiscal Code entered is not valid.",
+      "title": "Invalid Fiscal Code"
+    },
     "invalid_verification_code": {
       "message": "Please check and re-enter",
       "title": "Wrong code"
@@ -109,6 +113,7 @@
       "businessName": "Company name",
       "date-duration": "Period of validity of the authority",
       "endDate": "End of authority",
+      "endDate-input-aria-label": "Enter the end date of the delegation.",
       "firstName": "First name",
       "fiscalCode": "Fiscal code",
       "lastName": "Surname",
@@ -118,11 +123,13 @@
       "onlySelected": "Selected organisations only",
       "party-not-found": "No organisations found",
       "personType": "Legal entity:",
+      "personType-content-subtitle": "Select the type of legal entity",
       "selectEntities": "Select organisations",
       "submit": "Send request",
       "verificationCode": "Verification code",
       "verificationCodeDescr": "Share this code with the authorised representative: they will have to enter it when accepting the authority.",
-      "viewFrom": "The person will be able to view notifications from:"
+      "viewFrom": "The person will be able to view notifications from:",
+      "viewFrom-content-subtitle": "Select an option"
     },
     "subtitle": "Enter the details of the natural or legal person you want to delegate to read the notifications of {{organizationName}}.",
     "title": "Add an authority",
@@ -139,7 +146,8 @@
       },
       "fiscalCode": {
         "required": "The fiscal code is required",
-        "wrong": "The fiscal code entered is incorrect"
+        "wrong": "The fiscal code entered is incorrect",
+        "wrong-pg": "Enter only numbers. If the Fiscal Code of the person you want to delegate also contains letters, select “Natural person”."
       },
       "name": {
         "required": "First name is required"

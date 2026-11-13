@@ -56,8 +56,9 @@
     "detail": {
       "aria-label": "Go to communication details",
       "documents": {
-        "document-not-available": "The document is not yet available. Try again later.",
+        "document-not-available": "Document is being retrieved. Try downloading again later",
         "download-message-available": "<0>Available online for up to 180 days</0> from the communication acceptance date.",
+        "download-message-available-plural": "<0>Available online for up to 180 days</0> from the date of acceptance of the communication.",
         "download-message-expired": "The documents are no longer available online.",
         "title": "Attached documents"
       },

@@ -21,9 +21,14 @@
       "message": "Questa notifica è stata annullata dall’ente mittente per cui i documenti non sono più disponibili."
     },
     "contact_sender": {
+      "copied_email": "Indirizzo email copiato",
+      "copied_pec": "Indirizzo PEC copiato",
       "copied_phone": "Numero di telefono copiato",
+      "copy_email": "Copia indirizzo email",
+      "copy_pec": "Copia indirizzo PEC",
       "copy_phone": "Copia numero di telefono",
-      "email": "Email dell'ente",
+      "email": "Indirizzo email dell'ente",
+      "pec": "Indirizzo PEC dell'ente",
       "phone": "Numero di telefono dell'ente",
       "title": "Contatta il mittente",
       "website": "Sito web dell'ente"
@@ -31,7 +36,7 @@
     "creditor-tax-id": "Codice Fiscale Ente",
     "date": "Data di invio",
     "disclaimer-link": "Scopri di più",
-    "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
+    "document-not-available": "Documento in fase di recupero. Riprova a effettuare il download più tardi",
     "downtimes": {
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica.",
       "datePrefix": "il ",
@@ -145,6 +150,7 @@
     "timeline-title": "Stato della notifica",
     "timeline": {
       "aar-document": "Avviso di avvenuta ricezione",
+      "analog-failure-second-attempt-group-label": "Secondo invio via raccomandata - Tentativo fallito",
       "analog-failure-workflow": "Aggiornamento sull'invio cartaceo",
       "analog-failure-workflow-description": "Il destinatario è risultato irreperibile assoluto. Si deposita e mette a disposizione l'avviso di avvenuta ricezione.",
       "analog-failure-workflow-description-multirecipient": "Il destinatario {{name}} {{taxId}} è risultato irreperibile assoluto. Si deposita e mette a disposizione l'avviso di avvenuta ricezione.",
@@ -174,8 +180,10 @@
         "M09": "per altre motivazioni",
         "M10": "perché l'indirizzo non è leggibile"
       },
+      "collapse-all-groups": "Comprimi",
       "courtesy-group-label": "Messaggi di cortesia",
       "digital-send-fallback": "Invio digitale",
+      "expand-all-groups": "Espandi",
       "legalfact": {
         "analog-failure-delivery": "Deposito avviso di avvenuta ricezione",
         "digital-delivery-failure": "mancato recapito digitale",
@@ -190,6 +198,9 @@
         "sender-ack": "notifica presa in carico"
       },
       "notification-cancelled-document": "Dichiarazione annullamento notifica",
+      "pec-address-source-general": "L’indirizzo PEC figura nei registri pubblici",
+      "pec-address-source-platform": "L’indirizzo PEC è stato inserito come recapito su SEND",
+      "pec-address-source-special": "L’indirizzo PEC è stato registrato come canale di contatto dall’ente mittente",
       "prepare-analog-domicile-failure": "Aggiornamento sull'invio cartaceo",
       "prepare-analog-domicile-failure-D00-description": "Non è stato trovato nessun nuovo indirizzo per predisporre un altro tentativo di invio.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Non è stato trovato nessun nuovo indirizzo per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio.",
@@ -219,15 +230,13 @@
       "send-analog-domicile-890": "Invio via raccomandata 890",
       "send-analog-domicile-890-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata 890.",
       "send-analog-domicile-890-description-multirecipient": "È iniziato l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata 890.",
-      "send-analog-domicile-890-first-attempt-group-label": "Prima raccomandata 890",
-      "send-analog-domicile-890-group-label": "Raccomandata 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Seconda raccomandata 890",
+      "send-analog-domicile-890-group-label": "Invio via raccomandata 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Secondo invio via raccomandata 890",
       "send-analog-domicile-ar": "Invio via raccomandata A/R",
       "send-analog-domicile-ar-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata A/R.",
       "send-analog-domicile-ar-description-multirecipient": "È iniziato l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata A/R.",
-      "send-analog-domicile-ar-first-attempt-group-label": "Prima raccomandata A/R",
-      "send-analog-domicile-ar-group-label": "Raccomandata A/R",
-      "send-analog-domicile-ar-second-attempt-group-label": "Seconda raccomandata A/R",
+      "send-analog-domicile-ar-group-label": "Invio via raccomandata A/R",
+      "send-analog-domicile-ar-second-attempt-group-label": "Secondo invio via raccomandata A/R",
       "send-analog-error": "L'invio per via cartacea non ha determinato la consegna",
       "send-analog-flow-CON020-description": "Originale dell’AAR (documento nativo digitale) reso disponibile dal Consolidatore e firmato digitalmente da PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "Originale dell’AAR (documento nativo digitale) reso disponibile dal Consolidatore e firmato digitalmente da PagoPA.",
@@ -356,7 +365,9 @@
       "send-digital-domicile-PEC": "Invio via PEC",
       "send-digital-domicile-PEC-description": "È in corso l'invio della notifica all'indirizzo PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "È in corso l'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-group-label": "Invio via PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Secondo invio via PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Invio via Domicilio Digitale SEND",
       "send-digital-domicile-SERCQ-SEND-description": "L'invio della notifica al Domicilio Digitale SEND è in corso.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} al Domicilio Digitale SEND è in corso",
@@ -391,12 +402,12 @@
     "clean-filters-cta": "Rimuovi filtri",
     "delegate": "Qui vedrai le notifiche a valore legale di {{name}}",
     "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
-    "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le comunicazioni a valore legale solo in digitale?",
-    "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
+    "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le notifiche a valore legale solo in digitale?",
+    "filtered": "Nessuna notifica a valore legale o comunicazione per i filtri selezionati",
     "filtered-description": "Rimuovili o prova con un’altra combinazione.",
     "go-to-contacts-cta": "Vai ai tuoi recapiti",
     "go-to-onboarding-cta": "Configura SEND",
-    "title": "Qui vedrai le tue notifiche a valore legale e le altre comunicazioni"
+    "title": "Qui troverai le tue notifiche SEND"
   },
   "filters": {
     "communication-type": "Tipologia",
@@ -560,22 +571,23 @@
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "open": "Apri",
-    "status": "Stato"
+    "status": "Stato",
+    "to-read": "Da leggere"
   },
   "tppLanding": {
     "access-button": "Accedi ai documenti",
-    "description": "Per leggerla, <strong>accedi a SEND - Servizio Notifiche Digitali.</strong> Troverai i documenti importanti che ti riguardano.\n\nAnche se non la apri o non la leggi, <strong>la comunicazione produce effetti giuridici.</strong>",
+    "description": "Per leggerla, <strong>accedi a SEND - Servizio Notifiche Digitali.</strong> Troverai i documenti importanti che ti riguardano.\n\nAnche se non la apri o non la leggi, <strong>la notifica produce effetti giuridici.</strong>",
     "faq": {
       "title": "Domande frequenti",
       "what-are-notifications": {
-        "answer": "Significa che l'invio e la ricezione di queste comunicazioni producono degli effetti giuridici sia nei confronti di chi le invia sia di chi le riceve. Per esempio, se ricevi una multa per violazione del codice stradale, la data in cui la ricevi incide sull'importo che dovrai pagare o sulla tua facoltà di contestarla.",
-        "question": "Che cosa sono le comunicazioni a valore legale"
+        "answer": "Significa che l'invio e la ricezione di queste notifiche producono degli effetti giuridici sia nei confronti di chi le invia sia di chi le riceve. Per esempio, se ricevi una multa per violazione del codice stradale, la data in cui la ricevi incide sull'importo che dovrai pagare o sulla tua facoltà di contestarla.",
+        "question": "Che cosa sono le notifiche a valore legale"
       },
       "what-is-send": {
-        "answer": "SEND - Servizio Notifiche Digitali è una piattaforma che digitalizza e semplifica la gestione delle notifiche: permette infatti di riceverle, scaricare i documenti notificati e pagare eventuali importi direttamente online.\nSEND può inviare notifiche per conto degli enti sia ai cittadini, ai liberi professionisti e alle ditte individuali, cioè le \"persone fisiche\", che alle imprese, cioè le \"persone giuridiche\".",
+        "answer": "SEND - Servizio Notifiche Digitali è una piattaforma che digitalizza e semplifica la gestione delle notifiche: permette infatti di riceverle, scaricare i documenti notificati e pagare eventuali importi direttamente online.\nSEND può inviare notifiche per conto degli enti sia ai cittadini, ai liberi professionisti e alle ditte individuali, cioè le \"persone fisiche\", che alle imprese, cioè le \"persone giuridiche\".",
         "question": "Cos’è SEND e come funziona"
       }
     },
-    "title": "Ciao,\nhai ricevuto una comunicazione a valore legale"
+    "title": "Ciao,\nhai ricevuto una notifica a valore legale"
   }
 }

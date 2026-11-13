@@ -86,6 +86,10 @@
       "message": "Ne morete prenesti pooblastila nase",
       "title": "Napaka pri vnosu prenosa pooblastila"
     },
+    "fiscal_code": {
+      "message": "Vnesena davčna številka ni veljavna.",
+      "title": "Neveljavna davčna številka"
+    },
     "invalid_verification_code": {
       "message": "Preverite in jo ponovno vnesite",
       "title": "Koda je napačna"
@@ -109,6 +113,7 @@
       "businessName": "Ime podjetja",
       "date-duration": "Obdobje veljavnosti prenosa pooblastila",
       "endDate": "Konec prenosa pooblastila",
+      "endDate-input-aria-label": "Vnesi datum poteka pooblastila.",
       "firstName": "Ime",
       "fiscalCode": "Davčna številka",
       "lastName": "Priimek",
@@ -118,11 +123,13 @@
       "onlySelected": "Samo izbranih organizacij",
       "party-not-found": "Najdena ni bila nobena organizacija",
       "personType": "Pravni subjekt:",
+      "personType-content-subtitle": "Izberi vrsto pravnega subjekta",
       "selectEntities": "Izberite organizacije",
       "submit": "Pošlji zahtevo",
       "verificationCode": "Koda za preverjanje",
       "verificationCodeDescr": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila.",
-      "viewFrom": "Ogledali si boste laho obvestila s strani:"
+      "viewFrom": "Ogledali si boste laho obvestila s strani:",
+      "viewFrom-content-subtitle": "Izberi možnost"
     },
     "subtitle": "Vnesi podatke fizične ali pravne osebe, ki jo želiš pooblastiti za branje obvestil {{organizationName}}.",
     "title": "Dodajte prenos pooblastila",
@@ -139,7 +146,8 @@
       },
       "fiscalCode": {
         "required": "Davčna številka je obvezna",
-        "wrong": "Vnesena davčna številka ni pravilna"
+        "wrong": "Vnesena davčna številka ni pravilna",
+        "wrong-pg": "Vnesi samo številke. Če je davčna številka osebe, ki jo želiš pooblastiti, sestavljena tudi iz črk, izberi »Fizična oseba«."
       },
       "name": {
         "required": "Ime je obvezno"

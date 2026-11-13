@@ -72,10 +72,10 @@ const NotificationTimeline: React.FC = () => {
     return () => void dispatch(resetState());
   }, [fetchSentNotification]);
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
+  const showWarningIfRetryAfterOrDownload = (response: NotificationDocumentResponse) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t('detail.document-not-available', { ns: 'notifiche' }),
         })
@@ -96,7 +96,7 @@ const NotificationTimeline: React.FC = () => {
 
     dispatch(getSentNotificationDocument({ iun: notificationIUN, documentType, documentId }))
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 

@@ -44,7 +44,11 @@ describe('CourtesyContactHandler - Mixpanel events', () => {
     const { getByRole } = render(<CourtesyContactHandler {...createProps(ChannelType.EMAIL)} />);
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'button.modifica',
+        })
+      );
     });
 
     expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -57,7 +61,11 @@ describe('CourtesyContactHandler - Mixpanel events', () => {
     const { getByRole } = render(<CourtesyContactHandler {...createProps(ChannelType.SMS)} />);
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'button.modifica',
+        })
+      );
     });
 
     expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -71,9 +79,12 @@ describe('CourtesyContactHandler - Mixpanel events', () => {
 
     // Enter edit mode first
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'button.modifica',
+        })
+      );
     });
-
     // Confirm (same value → no API call)
     await act(async () => {
       fireEvent.click(getByRole('button', { name: 'button.conferma' }));
@@ -89,7 +100,11 @@ describe('CourtesyContactHandler - Mixpanel events', () => {
     const { getByRole } = render(<CourtesyContactHandler {...createProps(ChannelType.SMS)} />);
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'button.modifica',
+        })
+      );
     });
 
     await act(async () => {

@@ -10,10 +10,11 @@ import {
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
+import notifications from '../../../public/locales/it/notifiche.json';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { NotificationTimelineResponse } from '../../__mocks__/NotificationTimeline.mock';
-import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import { PaConfiguration } from '../../services/configuration.service';
@@ -162,8 +163,19 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
       expect(mock.history.get[1].url).toContain(documentUrl);
     });
 
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
-    expect(docNotAvailableAlert).toBeInTheDocument();
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
+
+    const warningAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
+
+    expect(within(warningAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
 
     mock.onGet(documentUrl).reply(200, {
       filename: 'mocked-filename',
@@ -244,7 +256,8 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   });
 
   it('navigates to the notification detail when clicking the subject breadcrumb', async () => {
-    mock.onGet(`/bff/v1/notifications/sent/${timelineIun}/timeline`)
+    mock
+      .onGet(`/bff/v1/notifications/sent/${timelineIun}/timeline`)
       .reply(200, NotificationTimelineResponse);
 
     await act(async () => {
@@ -262,6 +275,16 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
         routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun)
       );
     });
+  });
+});
+
+describe('PEC timeline translations', () => {
+  it.each([
+    'pec-address-source-general',
+    'pec-address-source-special',
+    'pec-address-source-platform',
+  ])('has the %s key in the base translations', (key) => {
+    expect(Object.prototype.hasOwnProperty.call(notifications.detail.timeline, key)).toBe(true);
   });
 });
 
@@ -342,8 +365,19 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
       );
     });
 
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
-    expect(docNotAvailableAlert).toBeInTheDocument();
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
+
+    const warningAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
+
+    expect(within(warningAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
 
     mock
       .onGet(

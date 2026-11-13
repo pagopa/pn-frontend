@@ -50,7 +50,7 @@ const notificationListPayload = {
 describe('notificationTrackingConfigs', () => {
   it('should build SEND_PG_NOTIFICATION_DETAIL event - legal notification', () => {
     const result = notificationTrackingConfigs[PGEventsType.SEND_PG_NOTIFICATION_DETAIL]({
-      notificationType: 'LEGAL',
+      notificationType: NotificationCommunicationType.LEGAL,
       downtimeEvents: [],
       mandateId: undefined,
       notificationStatus: notificationToFe.notificationStatus,
@@ -85,7 +85,7 @@ describe('notificationTrackingConfigs', () => {
 
   it('should build SEND_PG_NOTIFICATION_DETAIL event - informal notification', () => {
     const eventData = {
-      notificationType: 'INFORMAL' as const,
+      notificationType: NotificationCommunicationType.INFORMAL as const,
       notificationStatus: InformalNotificationStatus.ACCEPTED,
       paymentCount: 1,
       timeline: [],
@@ -137,7 +137,7 @@ describe('notificationTrackingConfigs', () => {
     const result = notificationTrackingConfigs[
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT
     ]({
-      notificationType: 'LEGAL',
+      notificationType: NotificationCommunicationType.LEGAL,
       documentType: NotificationDocumentType.ATTACHMENT,
     });
 
@@ -155,7 +155,7 @@ describe('notificationTrackingConfigs', () => {
     const result = notificationTrackingConfigs[
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT
     ]({
-      notificationType: 'INFORMAL',
+      notificationType: NotificationCommunicationType.INFORMAL,
       documentType: PaymentAttachmentSName.PAGOPA,
     });
 
