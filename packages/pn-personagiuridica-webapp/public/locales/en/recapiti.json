@@ -13,13 +13,13 @@
     "block-remove-email-title": "Cannot deactivate email",
     "block-remove-sms-message": "To proceed, you must first delete the personalized mobile numbers per entity.",
     "block-remove-sms-title": "Cannot deactivate mobile number",
-    "confirmation-modal-email-content": "<0>To activate the SEND Digital Domicile, we need a company email address, so we can <strong>send an alert when there is a legal value communication for your business.</strong></0>",
+    "confirmation-modal-email-content": "<0>To activate the SEND digital domicile, we need a company email address so we can <strong>send a notification when there is a legally binding notification for your company.</strong></0>",
     "confirmation-modal-title": "Add a company email address for alerts!",
     "email-add": "Add email",
     "email-added-successfully": "Email address successfully added",
     "email-and-sercq-removed-successfully": "Email and SEND Digital Domicile deactivated",
     "email-empty-description": "Add a company email address where we can notify you when there is a SEND notification for your business.",
-    "email-filled-description": "When there is a notification for your business, we inform you with an email at the address you chose.",
+    "email-filled-description": "When there is a SEND notification for your company, we inform you by email at the address you have chosen.",
     "email-new-code": "Didn't receive it? Check that you have entered the correct email or <0>generate a new one</0>.",
     "email-removed-successfully": "Email address successfully removed",
     "email-sms-add": "Add mobile number",
@@ -32,23 +32,23 @@
     "link-sms-placeholder": "Company mobile number",
     "remove-email": "Remove email",
     "remove-email-and-sercq": "Deactivate email and domicile",
-    "remove-email-and-sercq-message": "<0>If you choose to deactivate the SEND Digital Domicile, your business may receive communications via registered letter and <strong>pay the related costs.</strong></0>",
+    "remove-email-and-sercq-message": "<0>If you choose to deactivate the SEND digital domicile, your company may receive legally binding notifications by registered mail and <strong>pay the related costs.</strong></0>",
     "remove-email-and-sercq-title": "The SEND Digital Domicile is also deactivated with the email",
     "remove-email-button-dod-enabled": "Deactivate company email",
     "remove-email-no-domicile-message": "If you confirm, you will no longer receive the email on {{value}} when there is a SEND notification to read.",
     "remove-email-no-domicile-title": "Deactivate email",
-    "remove-email-pec-enabled-message": "<0>If you deactivate the company email address, <strong>we cannot notify you when there is a legal value communication for your business</strong>.</0><1>Remember that, if the notification is not read in time, the business might not be aware of any deadlines and incur penalties.</1>",
+    "remove-email-pec-enabled-message": "<0>If you deactivate the company email address, <strong>we cannot notify you when there is a legally binding notification for your company</strong>.</0><1>Remember that if the company does not read a SEND notification in time, it may miss deadlines and incur penalties.</1>",
     "remove-email-pec-enabled-title": "Do you want to deactivate your company email?",
-    "remove-email-preconfirm-message": "<0>If you deactivate the email address, we cannot <strong>notify you when there is a legal value communication for your business.</strong></0",
+    "remove-email-preconfirm-message": "<0>If you deactivate the email address, we cannot <strong>notify you when there is a legally binding notification for your company.</strong></0>",
     "remove-email-preconfirm-title": "Do you want to deactivate email alerts?",
     "remove-sms": "Remove mobile number",
     "remove-sms-button-dod-enabled": "Deactivate SMS",
     "remove-sms-message": "If you confirm, you will no longer receive the SMS on {{value}} when there is a SEND notification to read.",
-    "remove-sms-message-dod-enabled": "<0>If you deactivate the company phone number, you will <strong>not receive SMS alerts when there is a legal value communication for your business on SEND.</strong></0><1>Remember that if the business does not read a SEND notification in time, it might not be aware of any deadlines and incur penalties.</1>",
+    "remove-sms-message-dod-enabled": "<0>If you deactivate the company phone number, <strong>you will not receive SMS notifications when there is a legally binding notification for your company on SEND.</strong></0><1>Remember that if the company does not read a SEND notification in time, it may miss deadlines and incur penalties.</1>",
     "remove-sms-title-dod-enabled": "Do you want to deactivate SMS alerts?",
     "sms-add": "Add number",
     "sms-added-successfully": "Mobile number successfully added",
-    "sms-description": "When there is a notification for your business, we notify you with an SMS.",
+    "sms-description": "When there is a SEND notification for your company, we notify you by SMS.",
     "sms-new-code": "Didn't receive it? Check that you have entered the correct mobile number or <0>generate a new one</0>.",
     "sms-removed-successfully": "Mobile number successfully removed",
     "sms-title": "Company mobile number",
@@ -64,13 +64,13 @@
   "domicile-banner": {
     "complete-addresses": "Enter an email",
     "complete-configuration": "Complete configuration",
-    "no-courtesy-description": "Without a courtesy contact, we cannot notify you when there is a legal value communication to read on SEND.",
+    "no-courtesy-description": "Without a courtesy contact, we cannot notify you when there is a legally binding notification to read on SEND.",
     "no-courtesy-no-sercq-send-cta": "Confirm your email",
-    "no-courtesy-no-sercq-send-description": "Add an email address to receive an alert when you have a new notification on SEND.",
+    "no-courtesy-no-sercq-send-description": "Add an email address to receive a notification when you have a new SEND notification.",
     "no-courtesy-no-sercq-send-title": "Don't miss important communications",
     "no-courtesy-sercq-send-description": "Activate SEND as your Digital Domicile and stop worrying about paper registered letters.",
     "no-courtesy-sercq-send-title": "Do you want to receive the next notifications only digitally?",
-    "no-courtesy-title": "Don't miss important communications",
+    "no-courtesy-title": "Complete your contact details",
     "no-sercq-cta": "Activate digital address",
     "no-sercq-send-description": "Activate a digital address to receive future notifications digitally only and save on costs.",
     "no-sercq-send-title": "No more paper documents"
@@ -99,7 +99,7 @@
       "sercq_send-active": "The SEND platform is your business's Digital Domicile",
       "special_contacts": {
         "action": "Customize per entity",
-        "content": "Choose where to receive notifications sent to your business by a specific entity.",
+        "content": "Choose where to receive SEND notifications sent to your company by a specific institution.",
         "title": "Customize the Digital Domicile per sending entity"
       },
       "title": "Manage Digital Domicile",
@@ -107,7 +107,7 @@
         "action-pec": "Transfer to SEND",
         "action-sercq_send": "Transfer to a PEC",
         "content-pec": "The SEND platform ensures secure deliveries with legal value. The service is free and does not require additional tools.",
-        "content-sercq_send": "If you have a PEC, you can use it as your Digital Domicile for SEND notifications.",
+        "content-sercq_send": "If the company has a PEC, you can use it as a digital domicile for SEND notifications.",
         "title-pec": "Transfer the Digital Domicile to the SEND platform",
         "title-sercq_send": "Transfer the Digital Domicile to a company PEC"
       }
@@ -115,16 +115,16 @@
     "link-pec-placeholder": "PEC address",
     "pec-added-successfully": "PEC successfully associated",
     "pec-contact-wizard": {
-      "content-description": "When an entity sends a SEND notification to your business, you receive the legal value communication on the PEC you chose.",
+      "content-description": "When an institution sends a SEND notification to your company, you receive it at the PEC you have chosen.",
       "content-title": "Insert your business's PEC",
-      "disclaimer": "I accept that this address be used by SEND in priority over any PEC registered with a sending entity or present in public registers.",
+      "disclaimer": "I agree that the indicated PEC address be used with priority over any PEC registered with an issuing institution or present in public registers.",
       "input-label": "PEC address",
       "sercq-info-alert": "The company PEC will replace the SEND platform as the business's Digital Domicile.",
       "title": "Use a PEC as Digital Domicile",
       "title-transfer": "Transfer the Digital Domicile to a company PEC"
     },
     "pec-description": "When an entity sends a SEND notification to your business, it is delivered securely and with legal value to the PEC you have chosen.",
-    "pec-disclaimer": "This is the main address that will be used to send digital notifications for the business. By entering it, the business will no longer receive paper registered letters.",
+    "pec-disclaimer": "This is the primary address that will be used to send the company's legally binding notifications digitally. By entering it, the company will no longer receive paper registered mail.",
     "pec-new-code": "Didn't receive it? Check that you have entered the correct PEC or <0>generate a new one</0>.",
     "pec-removed-successfully": "PEC successfully removed",
     "pec-to-add": "PEC address",
@@ -138,28 +138,28 @@
     "pec-verify": "Verify PEC {{value}}",
     "pec-verify-descr": "We have sent a code to the indicated PEC address. The code is valid for <strong>15 minutes</strong>.",
     "remove-pec-confirm": "Deactivate PEC",
-    "remove-pec-message": "<0>Your business will no longer have a digital legal address for Public Administration communications and might receive them on paper, potentially incurring costs.</0> <1>The company will continue to receive notices on the channels it has activated.</1>",
+    "remove-pec-message": "<0>Your company will no longer have a legally valid digital contact address for SEND notifications from the Public Administration and may receive them on paper, with any costs charged to it.</0><1>The company will continue to receive notifications on the channels it has activated.</1>",
     "remove-pec-title": "Confirm you want to deactivate the PEC?",
     "remove-sercq_send-confirm": "Deactivate Digital Domicile",
-    "remove-sercq_send-message": "<0>If you choose to deactivate the SEND Digital Domicile, your business may receive communications via registered letter and <strong>pay the related costs.</strong></0><1>The business will continue to receive alerts via email, you can deactivate them in the Your Contacts section.</1>",
+    "remove-sercq_send-message": "<0>If you choose to deactivate the SEND digital domicile, your company may receive legally binding notifications by registered mail and <strong>pay the related costs.</strong></0><1>The company will continue to receive notifications by email; you can deactivate them in the Your contact details section.</1>",
     "remove-sercq_send-title": "Confirm you want to deactivate the Digital Domicile on SEND?",
     "sercq-send-active": "Activate",
     "sercq-send-active-pec-enabled": "Activate Digital Domicile",
     "sercq-send-active-pec-transfer": "Transfer Digital Domicile",
     "sercq-send-description-pec-enabled": "Use SEND as your Digital Domicile to manage your SEND notifications in one place, without worrying about paper registered letters and associated costs anymore.",
     "sercq-send-info-advantages": "Why is it useful?",
-    "sercq-send-info-description": "By activating the Digital Domicile, SEND becomes <strong>your business's legal value contact</strong> for PA communications.",
+    "sercq-send-info-description": "By activating the digital domicile, SEND becomes <strong>your company's legally valid contact address</strong> for Public Administration notifications.",
     "sercq-send-info-list": [
       {
-        "description": "SEND notifications will no longer reach you in paper format.",
-        "title": "100% digital notifications"
+        "description": "SEND notifications will no longer arrive in paper form.",
+        "title": "100% digital legally binding notifications"
       },
       {
-        "description": "You won't have to worry about picking up paper documents and paying the related costs.",
-        "title": "Savings on postalization costs"
+        "description": "You won't have to worry about collecting paper documents and paying the related costs.",
+        "title": "Savings on mailing costs"
       },
       {
-        "description": "SEND notifications will be delivered securely and will all be available in your business's reserved SEND area.",
+        "description": "SEND notifications will be delivered securely and will all be available in your company's SEND reserved area.",
         "title": "Everything in one place"
       }
     ],
@@ -167,9 +167,9 @@
     "sercq-send-info-tos": "By selecting “Activate” you declare that you have read and accept the <0>Terms of Service</0>.",
     "sercq-send-wizard": {
       "feedback": {
-        "content-pec": "The PEC you entered is being validated. Once confirmed, the Digital Domicile will be activated and the business will receive all legal value communications at the address you chose.",
+        "content-pec": "The PEC you entered is being validated. Once confirmed, the digital domicile will be activated and the company will receive all legally binding notifications at the address you have chosen.",
         "content-pec-transfer": "The PEC is being validated. Once confirmed, the business's Digital Domicile will be transferred to the address you chose. Until then, the SEND Digital Domicile will remain active.",
-        "content-sercq_send": "The business will receive legal value communications at the Digital Domicile on SEND and a message to the contacts you chose.",
+        "content-sercq_send": "The company will receive legally binding notifications at its digital domicile on SEND and a notification at the contact details you have chosen.",
         "go-to-contacts": "Go back to contacts",
         "title-pec-activation": "Digital Domicile activation in progress",
         "title-pec-transfer": "Digital Domicile transfer in progress",
@@ -178,23 +178,23 @@
         "title-transfer": "You have updated your business's Digital Domicile"
       },
       "step_1": {
-        "delivered-dialog-description": "If you choose SEND as your Digital Domicile, <strong>7 days after delivery</strong> the notification will be legally deemed delivered, even if you haven't consulted it.",
-        "delivered-dialog-title": "Legal value of the notification on the SEND Digital Domicile",
+        "delivered-dialog-description": "If you choose SEND as your digital domicile, <strong>7 days after delivery</strong> the legally binding notification will be legally delivered, even if you have not viewed it.",
+        "delivered-dialog-title": "Legal validity of the SEND notification on the digital domicile",
         "have-pec": "Do you prefer to use the company PEC?",
-        "have-pec-description": "Alternatively, you can use a PEC as your Digital Domicile for SEND notifications.",
+        "have-pec-description": "Alternatively, you can use a PEC as your digital domicile for SEND notifications.",
         "info-list": [
           {
             "aria-description": "Activate to read the explanation of the term",
-            "description": "The notification is <0>delivered</0> securely and with legal value through the platform",
-            "title": "An entity sends a SEND notification for the business"
+            "description": "The SEND notification is securely <0>delivered</0> with legal validity via the platform",
+            "title": "An institution sends a legally binding notification for the company"
           },
           {
-            "description": "When a notification arrives on SEND for your business, we notify you via email and, if you wish, also via SMS",
-            "title": "You receive a message"
+            "description": "When a SEND notification arrives for your company, we notify you by email and, if you wish, also by SMS",
+            "title": "Receive a message"
           },
           {
-            "description": "Open the details of the digital notification on the SEND platform",
-            "title": "Access the notification"
+            "description": "Open the details of the legally binding notification on SEND",
+            "title": "Access the SEND notification"
           }
         ],
         "info-tos": "By pressing “Activate” you declare that you have read and accept the <0>Terms of Service</0>.",
@@ -203,7 +203,7 @@
         "title": "How it works"
       },
       "step_2": {
-        "content": "The company email where we will notify the business when there is a new legal value communication on SEND.",
+        "content": "The company email where we will notify the company when there is a new legally binding notification on SEND.",
         "sms-disclaimer": "If you press <strong>Add number</strong> you save this contact to receive alerts about SEND notifications for the business. You can manage it in the <strong>Contacts</strong> section.",
         "step-title": "Insert company email",
         "title": "The email to receive alerts about SEND notifications"
@@ -219,14 +219,14 @@
             "title": "Mobile number"
           }
         },
-        "content": "Legally-binding communications for the business will only be delivered to:",
+        "content": "Legally binding notifications for the company will be delivered only to:",
         "courtesy-content": "You will receive a notice via:",
         "digital-domicile": "Digital Domicile",
         "disclaimer-enable": "By pressing <strong>“Activate digital domicile”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
         "disclaimer-transfer": "By pressing <strong>“Confirm”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
         "enable": "Activate digital domicile",
         "send": "SEND",
-        "sercq-send-contacts-alert": "Monitor the contact details you have chosen: a SEND digital notification begins to produce legal effects even if you have not viewed it.",
+        "sercq-send-contacts-alert": "Monitor the contact details you have chosen: a SEND notification starts producing legal effects even if you have not viewed it.",
         "step-title": "Summary",
         "title": "Your summary"
       },
@@ -254,13 +254,13 @@
       "description": "You can no longer insert personalized courtesy contacts per entity or modify existing contacts. If you delete a personalized contact you will not be able to recover it or insert it again.",
       "title": "Feature discontinued"
     },
-    "email-description": "The email where we will notify your business when it receives a legal value communication on SEND.",
+    "email-description": "The email where we will notify your company when it receives a legally binding notification on SEND.",
     "fetch-party-error": "We were unable to retrieve the data needed to create a new contact.",
     "link-pec-label": "PEC address",
     "link-sercq-label": "Your SEND Digital Domicile",
     "pec": "PEC address",
     "pec-disclaimer": "By filling in the field and pressing <strong>Confirm</strong> you accept that the PEC address you chose is used by SEND for sending notifications from this specific sending entity, in priority over the platform's Digital Domicile, an eventual Digital Domicile elected at the same sending entity, or one present in public registers",
-    "remove-special-description": "Alerts related to notifications from the associated entities will no longer be sent to this contact, but to the main one.",
+    "remove-special-description": "Notifications regarding SEND notifications from associated institutions will no longer be sent to this contact address, but to your primary one.",
     "remove-special-title": "Do you want to delete {{contactValue}}?",
     "select-address": "Type",
     "sercq-disclaimer": "By pressing <strong>“Confirm”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that the institution's SEND notifications will not be forwarded to other digital domiciles.",
@@ -273,6 +273,6 @@
     "inactive": "To be activated",
     "pec-validation": "PEC validation in progress"
   },
-  "subtitle": "Manage the digital contacts where you can receive legal value communications from SEND and/or courtesy messages for <0>your business</0>.",
+  "subtitle": "Manage the digital addresses on which to receive legally binding notifications from SEND and/or related courtesy messages for <0>your company</0>.",
   "title": "Contacts"
 }
