@@ -56,7 +56,7 @@
     "detail": {
       "aria-label": "Pojdite na podrobnosti sporočila",
       "documents": {
-        "document-not-available": "Dokument še ni na voljo. Poskusite znova pozneje.",
+        "document-not-available": "Dokument se pridobiva. Poskusi ga znova prenesti pozneje",
         "download-message-available": "<0>Na spletu na voljo do 180 dni</0> od datuma sprejetja sporočila.",
         "download-message-available-plural": "<0>Na spletu na voljo do 180 dni</0> od datuma sprejema obvestila.",
         "download-message-expired": "Dokumenti niso več na voljo na spletu.",
