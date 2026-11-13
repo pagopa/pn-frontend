@@ -1328,6 +1328,41 @@ describe('notification status texts', () => {
     );
   });
 
+  it('uses the delegate CANCELLED description when the revised copy is available', () => {
+    const delegateKey = 'status.canceled-description-delegate';
+    initStatusLocalizationExists((_namespace, path) => path === delegateKey);
+
+    testNotificationStatusInfos(
+      'warning',
+      'notifiche - status.canceled',
+      'notifiche - status.canceled-tooltip',
+      `notifiche - ${delegateKey}`,
+      NotificationStatus.CANCELLED,
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegator: { displayName: 'DELEGATOR_TEST_ONLY', fiscalCode: 'TSTUTN00A07A001G' },
+      }
+    );
+  });
+
+  it('keeps the standard CANCELLED description for the delegate when the revised copy is unavailable', () => {
+    initStatusLocalizationExists(() => false);
+
+    testNotificationStatusInfos(
+      'warning',
+      'notifiche - status.canceled',
+      'notifiche - status.canceled-tooltip',
+      'notifiche - status.canceled-description',
+      NotificationStatus.CANCELLED,
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegator: { displayName: 'DELEGATOR_TEST_ONLY', fiscalCode: 'TSTUTN00A07A001G' },
+      }
+    );
+  });
+
   it('return notification status infos - RETURNED_TO_SENDER - without legal fact', () => {
     initStatusLocalizationExists(
       (_ns, path) => path === 'status.returned-to-sender-with-legal-fact-description'
