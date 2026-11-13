@@ -101,9 +101,6 @@ const InformalNotificationDetail: React.FC = () => {
     INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION
   );
 
-  const phone = informalNotification?.senderContacts?.phone;
-  const site = informalNotification?.senderContacts?.site;
-
   const fetchPaymentsInfo = (payments: Array<NotificationDetailPayment>) => {
     const paymentInfoRequest = payments.reduce((acc, payment) => {
       if (payment.pagoPa && Object.keys(payment.pagoPa).length > 0) {
@@ -358,7 +355,7 @@ const InformalNotificationDetail: React.FC = () => {
               )}
             </Stack>
 
-            <PnSenderContacts phone={phone} site={site} />
+            <PnSenderContacts {...informalNotification?.senderContacts} />
           </Stack>
         </Box>
       )}

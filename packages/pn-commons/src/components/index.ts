@@ -60,6 +60,7 @@ export { default as NotificationDetailBilingualFacsimileDocuments } from './Noti
 export { default as NotificationDetailDocuments } from './NotificationDetail/NotificationDetailDocuments';
 // TODO: rimuovere quando IS_NEW_TIMELINE_ENABLED sarà a rollout completato e resterà solo NotificationEventsTimeline
 export { default as IOIcon } from './Icons/IOIcon';
+export { default as MailCertificateRounded } from './Icons/MailCertificateRounded';
 export { default as MailOffRounded } from './Icons/MailOffRounded';
 export { default as MailShieldRounded } from './Icons/MailShieldRounded';
 export { default as OutgoingEmailRounded } from './Icons/OutgoingEmailRounded';
