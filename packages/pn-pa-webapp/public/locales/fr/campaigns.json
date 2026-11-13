@@ -56,7 +56,7 @@
     "detail": {
       "aria-label": "Aller aux détails de la communication",
       "documents": {
-        "document-not-available": "Le document n'est pas encore disponible. Réessayez plus tard.",
+        "document-not-available": "Document en cours de récupération. Réessaie de le télécharger plus tard",
         "download-message-available": "<0>Disponible en ligne jusqu'à 180 jours</0> à compter de la date d'acceptation de la communication.",
         "download-message-available-plural": "<0>Disponibles en ligne jusqu'à 180 jours</0> à compter de la date d'acceptation de la communication.",
         "download-message-expired": "Les documents ne sont plus disponibles en ligne.",
