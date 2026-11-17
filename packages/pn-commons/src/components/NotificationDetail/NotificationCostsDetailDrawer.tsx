@@ -112,7 +112,11 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
               {getLocalizedOrDefaultLabel('notifications', 'notification-alert.details.title')}
             </Typography>
             <MIIconButton
-              aria-label="close"
+              aria-label={getLocalizedOrDefaultLabel(
+                'notifications',
+                'notification-alert.details.close-aria-label',
+                'Chiudi'
+              )}
               onClick={handleCloseDrawer}
               data-testid="cost-details-drawer-close"
             >
