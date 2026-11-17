@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { act, fireEvent, render } from '../../../../__test__/test-utils';
+import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import PecStep from '../PecStep';
 
 describe('PecStep', () => {
@@ -180,7 +180,7 @@ describe('PecStep', () => {
   it('shows the field error when the PEC format is invalid', async () => {
     const props = createProps();
 
-    const { getByLabelText, getByRole, findByText } = render(<PecStep {...props} />);
+    const { getByLabelText, getByRole } = render(<PecStep {...props} />);
 
     await act(async () => {
       fireEvent.change(getByLabelText(`${labelPrefix}.input-label`), {
@@ -192,20 +192,32 @@ describe('PecStep', () => {
       fireEvent.click(getByRole('button', { name: `${labelPrefix}.verify-cta` }));
     });
 
-    expect(await findByText('legal-contacts.valid-pec')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByRole('alert')).toHaveTextContent('legal-contacts.valid-pec');
+    });
+
+    expect(
+      getByLabelText('onboarding.digital-domicile.pec.input-label')
+    ).toHaveAccessibleDescription('legal-contacts.valid-pec');
     expect(props.onPecChange).not.toHaveBeenCalled();
   });
 
   it('shows the field error when the PEC is empty', async () => {
     const props = createProps();
 
-    const { getByRole, findByText } = render(<PecStep {...props} />);
+    const { getByRole, getByLabelText } = render(<PecStep {...props} />);
 
     await act(async () => {
       fireEvent.click(getByRole('button', { name: `${labelPrefix}.verify-cta` }));
     });
 
-    expect(await findByText('legal-contacts.valid-pec')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByRole('alert')).toHaveTextContent('legal-contacts.valid-pec');
+    });
+
+    expect(
+      getByLabelText('onboarding.digital-domicile.pec.input-label')
+    ).toHaveAccessibleDescription('legal-contacts.valid-pec');
     expect(props.onPecChange).not.toHaveBeenCalled();
   });
 
@@ -244,7 +256,7 @@ describe('PecStep', () => {
   it('returns false and does not show the verification modal when continue is triggered with an invalid PEC', async () => {
     const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
-    const { getByLabelText, findByText, queryByText } = render(
+    const { getByLabelText, getByRole, queryByText } = render(
       <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
     );
 
@@ -265,7 +277,13 @@ describe('PecStep', () => {
     });
 
     expect(canContinue).toBe(false);
-    expect(await findByText('legal-contacts.valid-pec')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByRole('alert')).toHaveTextContent('legal-contacts.valid-pec');
+    });
+
+    expect(
+      getByLabelText('onboarding.digital-domicile.pec.input-label')
+    ).toHaveAccessibleDescription('legal-contacts.valid-pec');
     expect(queryByText(`${labelPrefix}.verify-before-continue-title`)).not.toBeInTheDocument();
   });
 

@@ -52,6 +52,9 @@ type ViewModeProps = {
 
 type Props = EntryModeProps | ViewModeProps;
 
+const getDisplayedError = (touched?: boolean, error?: string): string | undefined =>
+  touched ? error : undefined;
+
 const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
   title,
   label,
@@ -73,6 +76,7 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
   const isMobile = useIsMobile();
 
   const inlineButton = !isMobile && buttonPlacement === 'inline';
+  const displayedError = getDisplayedError(touched, error);
 
   const submitButton = (
     <MIButton
@@ -115,6 +119,23 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
           error={touched && Boolean(error)}
           helperText={touched && error}
         />
+        <Box
+          role="alert"
+          aria-atomic="true"
+          sx={{
+            position: 'absolute',
+            width: '1px',
+            height: '1px',
+            padding: 0,
+            margin: '-1px',
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            border: 0,
+          }}
+        >
+          {displayedError}
+        </Box>
         {inlineButton && submitButton}
       </Stack>
 

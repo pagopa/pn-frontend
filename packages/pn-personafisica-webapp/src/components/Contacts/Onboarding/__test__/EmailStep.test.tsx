@@ -50,7 +50,7 @@ describe('EmailStep', () => {
   it('shows a validation error when the email is invalid', async () => {
     const props = createProps();
 
-    const { getByLabelText, getByRole, findByText } = render(<EmailStep {...props} />);
+    const { getByLabelText, getByRole } = render(<EmailStep {...props} />);
 
     await act(async () => {
       fireEvent.change(getByLabelText(`${labelPrefix}.input-label`), {
@@ -62,7 +62,13 @@ describe('EmailStep', () => {
       fireEvent.click(getByRole('button', { name: `${labelPrefix}.verify-cta` }));
     });
 
-    expect(await findByText('courtesy-contacts.valid-email')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByRole('alert')).toHaveTextContent('courtesy-contacts.valid-email');
+    });
+
+    expect(
+      getByLabelText('onboarding.digital-domicile.email.input-label')
+    ).toHaveAccessibleDescription('courtesy-contacts.valid-email');
     expect(props.onChange).not.toHaveBeenCalled();
     expect(props.onVerified).not.toHaveBeenCalled();
   });

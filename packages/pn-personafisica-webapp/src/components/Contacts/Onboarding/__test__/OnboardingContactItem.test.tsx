@@ -40,7 +40,7 @@ describe('OnboardingContactItem', () => {
       expect(getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
       expect(getByText('mock-footer')).toBeInTheDocument();
       expect(getByRole('button', { name: 'mock-collapse' })).toBeInTheDocument();
-      expect(getByText('mock-error')).toBeInTheDocument();
+      expect(getByRole('alert')).toHaveTextContent('mock-error');
 
       fireEvent.change(getByLabelText('mock-input-label'), {
         target: { value: 'a' },
@@ -121,6 +121,45 @@ describe('OnboardingContactItem', () => {
         footer.compareDocumentPosition(submitButton) & Node.DOCUMENT_POSITION_FOLLOWING
       ).toBeTruthy();
     });
+  });
+
+  it('keeps the alert mounted when the validation error changes', () => {
+    const props = {
+      mode: 'entry' as const,
+      inputLabel: 'mock-input-label',
+      value: '',
+      buttonLabel: 'mock-submit',
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    };
+
+    const { getByRole, getByLabelText, rerender } = render(<OnboardingContactItem {...props} />);
+
+    const alert = getByRole('alert');
+    const input = getByLabelText('mock-input-label');
+
+    // The live region exists before any validation error.
+    expect(alert).toBeEmptyDOMElement();
+
+    // An error appears after the field is touched.
+    rerender(<OnboardingContactItem {...props} touched error="mock-error" />);
+
+    expect(getByRole('alert')).toBe(alert);
+    expect(alert).toHaveTextContent('mock-error');
+    expect(input).toHaveAccessibleDescription('mock-error');
+
+    // The error is cleared after validation succeeds.
+    rerender(<OnboardingContactItem {...props} touched />);
+
+    expect(getByRole('alert')).toBe(alert);
+    expect(alert).toBeEmptyDOMElement();
+
+    // The same error appears again.
+    rerender(<OnboardingContactItem {...props} touched error="mock-error" />);
+
+    expect(getByRole('alert')).toBe(alert);
+    expect(alert).toHaveTextContent('mock-error');
+    expect(input).toHaveAccessibleDescription('mock-error');
   });
 
   describe('view mode', () => {
