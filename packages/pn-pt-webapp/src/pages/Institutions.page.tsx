@@ -96,7 +96,7 @@ const InstitutionsPage: React.FC = () => {
     search: yup
       .string()
       .trim()
-      .test('min-length', t('search.min-length'), (value) => !value || value.length >= 3),
+      .test('min-length', 'search.min-length', (value) => !value || value.length >= 3),
   });
 
   const formik = useFormik({
@@ -264,7 +264,7 @@ const InstitutionsPage: React.FC = () => {
             value={formik.values.search}
             onChange={formik.handleChange}
             error={Boolean(formik.errors.search)}
-            helperText={formik.errors.search}
+            helperText={formik.errors.search && t(formik.errors.search)}
             onDelete={isSearchFocused && formik.values.search ? handleClearSearch : undefined}
           />
         </Box>
