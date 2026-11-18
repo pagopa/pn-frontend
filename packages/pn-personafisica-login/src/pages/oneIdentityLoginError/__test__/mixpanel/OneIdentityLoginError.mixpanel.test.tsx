@@ -1,6 +1,7 @@
 import { vi } from 'vitest';
 
 import { PFLoginTriggerEventSpy, act, render } from '../../../../__test__/test-utils';
+import { OneIdentityErrorCode } from '../../../../models/OneIdentity';
 import { PFLoginEventsType } from '../../../../models/PFLoginEventsType';
 import PFLoginEventStrategyFactory from '../../../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import OneIdentityLoginError from '../../OneIdentityLoginError';
@@ -18,9 +19,22 @@ describe('One Identity Login Error page - Mixpanel events', () => {
   });
 
   it('fires SEND_LOGIN_FAILURE on mount with a known error code', async () => {
-    await act(async () => render(<OneIdentityLoginError />, { route: '/?error=server_error' }));
+    await act(async () =>
+      render(<OneIdentityLoginError />, { route: `/?error=${OneIdentityErrorCode.SERVER_ERROR}` })
+    );
     expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_LOGIN_FAILURE, {
-      reason: 'server_error',
+      reason: OneIdentityErrorCode.SERVER_ERROR,
+    });
+  });
+
+  it('fires SEND_LOGIN_FAILURE on mount when authorize fails', async () => {
+    await act(async () =>
+      render(<OneIdentityLoginError />, {
+        route: `/?error=${OneIdentityErrorCode.AUTHORIZE_ERROR}`,
+      })
+    );
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_LOGIN_FAILURE, {
+      reason: OneIdentityErrorCode.AUTHORIZE_ERROR,
     });
   });
 
@@ -34,7 +48,7 @@ describe('One Identity Login Error page - Mixpanel events', () => {
   it('fires SEND_LOGIN_FAILURE with the error description as reason when error is access_denied', async () => {
     await act(async () =>
       render(<OneIdentityLoginError />, {
-        route: '/?error=access_denied&error_description=21',
+        route: `/?error=${OneIdentityErrorCode.ACCESS_DENIED}&error_description=21`,
       })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_LOGIN_FAILURE, {
@@ -43,9 +57,11 @@ describe('One Identity Login Error page - Mixpanel events', () => {
   });
 
   it('fires SEND_LOGIN_FAILURE with the error code as reason when access_denied has no description', async () => {
-    await act(async () => render(<OneIdentityLoginError />, { route: '/?error=access_denied' }));
+    await act(async () =>
+      render(<OneIdentityLoginError />, { route: `/?error=${OneIdentityErrorCode.ACCESS_DENIED}` })
+    );
     expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_LOGIN_FAILURE, {
-      reason: 'access_denied',
+      reason: OneIdentityErrorCode.ACCESS_DENIED,
     });
   });
 
