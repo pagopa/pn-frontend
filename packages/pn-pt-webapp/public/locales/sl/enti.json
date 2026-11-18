@@ -1,34 +1,34 @@
 {
-  "subtitle": "Oglejte si upravljane ustanove za izdelek SEND.",
-  "title": "Vaše ustanove",
-  "work-in-progress": "Portal je v fazi razvoja, trenutno od tu ni mogoče upravljati SEND v imenu vaših ustanov.",
   "search": {
-    "label": "Išči po imenu ali davčni številki",
     "button": "Išči",
-    "min-length": "Vnesite vsaj tri znake",
-    "max-length": "Vnesite največ {{maxLength}} znakov"
+    "label": "Išči po imenu ali davčni številki",
+    "max-length": "Vnesite največ {{maxLength}} znakov",
+    "min-length": "Vnesite vsaj tri znake"
   },
+  "subtitle": "Oglejte si upravljane ustanove za izdelek SEND.",
   "table": {
-    "error": {
-      "title": "Seznama upravljanih ustanov ni bilo mogoče pridobiti.",
-      "action": "Poskusite znova"
-    },
     "columns": {
+      "delegation": "Pooblastilo",
       "institution-name": "Ime ustanove",
-      "tax-code": "Davčna številka",
-      "delegation": "Pooblastilo"
+      "tax-code": "Davčna številka"
     },
     "delegation-status": {
       "active": "Aktivno od {{date}}",
       "revoked": "Preklicano dne {{date}}"
     },
     "empty": {
-      "title": "Tukaj boste videli svoje ustanove",
-      "description": "Da bi vam omogočili upravljanje SEND v imenu ustanove, mora ustanova aktivirati pooblastilo na vaše ime."
+      "description": "Da bi vam omogočili upravljanje SEND v imenu ustanove, mora ustanova aktivirati pooblastilo na vaše ime.",
+      "title": "Tukaj boste videli svoje ustanove"
+    },
+    "error": {
+      "action": "Poskusite znova",
+      "title": "Seznama upravljanih ustanov ni bilo mogoče pridobiti."
     },
     "no-results": {
-      "title": "Ni zadetkov za »{{search}}«.",
-      "description": "Poskusite z drugačnim iskanjem."
+      "description": "Poskusite z drugačnim iskanjem.",
+      "title": "Ni zadetkov za »{{search}}«."
     }
-  }
+  },
+  "title": "Vaše ustanove",
+  "work-in-progress": "Portal je v fazi razvoja, trenutno od tu ni mogoče upravljati SEND v imenu vaših ustanov."
 }
