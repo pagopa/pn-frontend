@@ -5,7 +5,8 @@
   "search": {
     "label": "Search by Name or Fiscal Code",
     "button": "Search",
-    "min-length": "Enter at least three characters"
+    "min-length": "Enter at least three characters",
+    "max-length": "Enter a maximum of {{maxLength}} characters"
   },
   "table": {
     "error": {

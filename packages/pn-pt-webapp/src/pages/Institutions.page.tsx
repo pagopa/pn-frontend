@@ -21,7 +21,7 @@ import {
   calculatePages,
   formatDate,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIButton, MIChip, MITextField, IllusMIDataSecurity } from '@pagopa/mui-italia';
+import { IllusMIDataSecurity, MIAlert, MIButton, MIChip, MITextField } from '@pagopa/mui-italia';
 
 import { DelegationStatus, InstitutionRow } from '../models/Institutions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -50,6 +50,7 @@ const visuallyHidden = {
 } as const;
 
 const PAGE_SIZES = [10, 20, 50];
+const SEARCH_MAX_LENGTH = 250;
 
 const InstitutionsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -98,7 +99,8 @@ const InstitutionsPage: React.FC = () => {
     search: yup
       .string()
       .trim()
-      .test('min-length', 'search.min-length', (value) => !value || value.length >= 3),
+      .test('min-length', 'search.min-length', (value) => !value || value.length >= 3)
+      .max(SEARCH_MAX_LENGTH, 'search.max-length'),
   });
 
   const formik = useFormik({
@@ -170,7 +172,7 @@ const InstitutionsPage: React.FC = () => {
   const data: Array<Row<InstitutionRow>> = loading
     ? Array.from(
         { length: pagination.size },
-        (_, index) => ({ id: `skeleton-${index}` }) as Row<InstitutionRow>
+        (_, index) => ({ id: `skeleton-${index}` } as Row<InstitutionRow>)
       )
     : institutions.items.map((institution) => ({
         ...institution,
@@ -271,7 +273,9 @@ const InstitutionsPage: React.FC = () => {
             value={formik.values.search}
             onChange={formik.handleChange}
             error={Boolean(formik.errors.search)}
-            helperText={formik.errors.search && t(formik.errors.search)}
+            helperText={
+              formik.errors.search && t(formik.errors.search, { maxLength: SEARCH_MAX_LENGTH })
+            }
             onDelete={isSearchFocused && formik.values.search ? handleClearSearch : undefined}
           />
         </Box>

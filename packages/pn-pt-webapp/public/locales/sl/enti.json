@@ -5,7 +5,8 @@
   "search": {
     "label": "Išči po imenu ali davčni številki",
     "button": "Išči",
-    "min-length": "Vnesite vsaj tri znake"
+    "min-length": "Vnesite vsaj tri znake",
+    "max-length": "Vnesite največ {{maxLength}} znakov"
   },
   "table": {
     "error": {
