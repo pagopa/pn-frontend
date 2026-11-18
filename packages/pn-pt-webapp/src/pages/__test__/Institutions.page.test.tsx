@@ -148,6 +148,25 @@ describe('Institutions page', () => {
     expect(screen.getAllByTestId('institutionsBodyRowDesktop')).toHaveLength(10);
   });
 
+  it('limits the search input to 250 characters', async () => {
+    await renderPage();
+    expect(screen.getByRole('textbox', { name: /search.label/ })).toHaveAttribute(
+      'maxlength',
+      '250'
+    );
+  });
+
+  it('shows a validation error and does not search when exceeding 250 characters', async () => {
+    await renderPage();
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: 'a'.repeat(251) },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    expect(await screen.findByText('search.max-length')).toBeInTheDocument();
+    expect(getInstitutionsSpy).toHaveBeenCalledTimes(1);
+    expect(screen.getAllByTestId('institutionsBodyRowDesktop')).toHaveLength(10);
+  });
+
   it('searches institutions by name or tax code', async () => {
     await renderPage();
     fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {

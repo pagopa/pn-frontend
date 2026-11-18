@@ -5,7 +5,8 @@
   "search": {
     "label": "Nach Name oder Steuernummer suchen",
     "button": "Suchen",
-    "min-length": "Gib mindestens drei Zeichen ein"
+    "min-length": "Gib mindestens drei Zeichen ein",
+    "max-length": "Gib maximal {{maxLength}} Zeichen ein"
   },
   "table": {
     "error": {

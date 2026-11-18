@@ -5,7 +5,8 @@
   "search": {
     "label": "Rechercher par nom ou code fiscal",
     "button": "Rechercher",
-    "min-length": "Saisissez au moins trois caractères"
+    "min-length": "Saisissez au moins trois caractères",
+    "max-length": "Saisissez au maximum {{maxLength}} caractères"
   },
   "table": {
     "error": {

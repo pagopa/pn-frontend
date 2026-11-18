@@ -50,6 +50,7 @@ const visuallyHidden = {
 } as const;
 
 const PAGE_SIZES = [10, 20, 50];
+const SEARCH_MAX_LENGTH = 250;
 
 const InstitutionsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -98,7 +99,12 @@ const InstitutionsPage: React.FC = () => {
     search: yup
       .string()
       .trim()
-      .test('min-length', 'search.min-length', (value) => !value || value.length >= 3),
+      .test('min-length', 'search.min-length', (value) => !value || value.length >= 3)
+      .test(
+        'max-length',
+        'search.max-length',
+        (value) => !value || value.length <= SEARCH_MAX_LENGTH
+      ),
   });
 
   const formik = useFormik({
@@ -271,7 +277,10 @@ const InstitutionsPage: React.FC = () => {
             value={formik.values.search}
             onChange={formik.handleChange}
             error={Boolean(formik.errors.search)}
-            helperText={formik.errors.search && t(formik.errors.search)}
+            helperText={
+              formik.errors.search && t(formik.errors.search, { maxLength: SEARCH_MAX_LENGTH })
+            }
+            inputProps={{ maxLength: SEARCH_MAX_LENGTH }}
             onDelete={isSearchFocused && formik.values.search ? handleClearSearch : undefined}
           />
         </Box>
