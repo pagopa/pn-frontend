@@ -35,36 +35,36 @@
     }
   },
   "footer": {
-    "321-model": "Modell 231",
+    "321-model": "Vordruck 231",
     "accessibility": "Barrierefreiheit",
     "certifications": "Zertifizierungen",
     "company": "Transparente Gesellschaft",
-    "cookie": "Cookie-Einstellungen",
+    "cookie": "Cookie-Präferenzen",
     "disclosure": "Responsible Disclosure Policy",
-    "follow": "Folge uns auf",
-    "go-to": "Zum Link gehen",
-    "go-to-pagopa": "Zur Website von PagoPA S.p.A. gehen",
-    "legal-part-1": "Aktiengesellschaft - voll eingezahltes Stammkapital von 1.000.000 Euro - Rechtssitz in Rom, Piazza Colonna 370",
-    "legal-part-2": "PLZ 00187 - Eintragungsnummer im Handelsregister Rom, Steuernummer und USt-IdNr. 15376371009",
+    "follow": "Folgen Sie uns auf",
+    "go-to": "Zum Link",
+    "go-to-pagopa": "Gehe auf die Website von PagoPA S.p.A.",
+    "legal-part-1": "Aktiengesellschaft - voll eingezahltes Grundkapital von 1,000,000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
+    "legal-part-2": "PLZ 00187 – Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009",
     "personal-data": "Recht auf Schutz personenbezogener Daten",
     "privacy-info": "Datenschutzerklärung",
     "products-title": "Produkte und Dienste",
     "resources": "Ressourcen",
     "security": "Informationssicherheit",
     "sercq-service-statement": "Service practice statement - SERCQ",
-    "social": "Zur {{social}}-Seite von PagoPA S.p.A. gehen",
+    "social": "Gehe auf die Website {{social}} von PagoPA S.p.A.",
     "terms-conditions": "Allgemeine Geschäftsbedingungen",
     "who": "Über uns",
-    "work": "Arbeite mit uns"
+    "work": "Karriere"
   },
   "header": {
-    "assistance": "Support",
+    "assistance": "Hilfe",
     "login": "Anmelden",
-    "logout": "Abmelden",
-    "logout-message": "Möchtest du den geschützten Bereich wirklich verlassen?",
+    "logout": "Beenden",
+    "logout-message": "Bestätigst du, dass du den reservierten Bereich verlassen möchtest?",
     "notification-platform": "SEND - Servizio Notifiche Digitali",
     "pago-pa-link": "Website von PagoPA S.p.A.",
-    "reserved-area": "Geschützter Bereich"
+    "reserved-area": "Reservierten Bereich"
   },
   "home": {
     "title": "SEND - Technologiepartner"
