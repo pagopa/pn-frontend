@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.0...v2.28.0-RC.1) (2026-11-18)
+
+### Bug Fixes
+
+* **PN-22355:** limit PT institutions search to 250 characters ([#2220](https://github.com/pagopa/pn-frontend/issues/2220)) ([91b1de0](https://github.com/pagopa/pn-frontend/commit/91b1de08d5b13df9d98f91cef64378c765c3fc4f))
+* **PN-22389:** hide page size selector in PT institutions list when results fit the smallest page size ([#2215](https://github.com/pagopa/pn-frontend/issues/2215)) ([24ce034](https://github.com/pagopa/pn-frontend/commit/24ce0348024a58721e5a531dad508a62b808ad71))
+* **PN-22393:** translate PT institutions search error on language change ([#2216](https://github.com/pagopa/pn-frontend/issues/2216)) ([ffac08f](https://github.com/pagopa/pn-frontend/commit/ffac08f8152643bb780a904c2e2c9142606a138c))
+* **PN-22394:** inherit selfcare language in PT back office ([#2219](https://github.com/pagopa/pn-frontend/issues/2219)) ([08ab339](https://github.com/pagopa/pn-frontend/commit/08ab339a0fdfcaf3ad339b967d7439e5553d22c7))
+* **PN-22413:** align PT header and footer translations with PA ([#2221](https://github.com/pagopa/pn-frontend/issues/2221)) ([bab2f49](https://github.com/pagopa/pn-frontend/commit/bab2f49ba94d30de6af1d49a3dced542438545d0))
+
+
 # [2.28.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.27.0...v2.28.0-RC.0) (2026-11-13)
 
 ### Bug Fixes
