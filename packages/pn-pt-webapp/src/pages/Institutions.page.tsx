@@ -21,7 +21,7 @@ import {
   calculatePages,
   formatDate,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIButton, MIChip, MITextField, IllusMIDataSecurity } from '@pagopa/mui-italia';
+import { IllusMIDataSecurity, MIAlert, MIButton, MIChip, MITextField } from '@pagopa/mui-italia';
 
 import { DelegationStatus, InstitutionRow } from '../models/Institutions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -100,11 +100,7 @@ const InstitutionsPage: React.FC = () => {
       .string()
       .trim()
       .test('min-length', 'search.min-length', (value) => !value || value.length >= 3)
-      .test(
-        'max-length',
-        'search.max-length',
-        (value) => !value || value.length <= SEARCH_MAX_LENGTH
-      ),
+      .max(SEARCH_MAX_LENGTH, 'search.max-length'),
   });
 
   const formik = useFormik({
@@ -176,7 +172,7 @@ const InstitutionsPage: React.FC = () => {
   const data: Array<Row<InstitutionRow>> = loading
     ? Array.from(
         { length: pagination.size },
-        (_, index) => ({ id: `skeleton-${index}` }) as Row<InstitutionRow>
+        (_, index) => ({ id: `skeleton-${index}` } as Row<InstitutionRow>)
       )
     : institutions.items.map((institution) => ({
         ...institution,
@@ -280,7 +276,6 @@ const InstitutionsPage: React.FC = () => {
             helperText={
               formik.errors.search && t(formik.errors.search, { maxLength: SEARCH_MAX_LENGTH })
             }
-            inputProps={{ maxLength: SEARCH_MAX_LENGTH }}
             onDelete={isSearchFocused && formik.values.search ? handleClearSearch : undefined}
           />
         </Box>

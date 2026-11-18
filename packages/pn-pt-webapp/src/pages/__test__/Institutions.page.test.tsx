@@ -148,15 +148,7 @@ describe('Institutions page', () => {
     expect(screen.getAllByTestId('institutionsBodyRowDesktop')).toHaveLength(10);
   });
 
-  it('limits the search input to 250 characters', async () => {
-    await renderPage();
-    expect(screen.getByRole('textbox', { name: /search.label/ })).toHaveAttribute(
-      'maxlength',
-      '250'
-    );
-  });
-
-  it('shows a validation error and does not search when exceeding 250 characters', async () => {
+  it('shows a validation error when searching with more than 250 characters', async () => {
     await renderPage();
     fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
       target: { value: 'a'.repeat(251) },
