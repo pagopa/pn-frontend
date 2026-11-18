@@ -166,6 +166,23 @@ describe('Institutions page', () => {
       expect(rows).toHaveLength(1);
       expect(rows[0]).toHaveTextContent('Ente Fittizio 02');
     });
+    expect(screen.queryByTestId('itemsPerPageSelector')).not.toBeInTheDocument();
+  });
+
+  it('shows the page size selector when there are more pages', async () => {
+    await renderPage();
+    expect(await screen.findByTestId('itemsPerPageSelector')).toBeInTheDocument();
+  });
+
+  it('keeps the page size selector when a bigger size fits all the results', async () => {
+    await renderPage();
+    fireEvent.click(within(await screen.findByTestId('itemsPerPageSelector')).getByRole('button'));
+    fireEvent.click(await screen.findByTestId('pageSize-50'));
+
+    await waitFor(() =>
+      expect(screen.getAllByTestId('institutionsBodyRowDesktop')).toHaveLength(25)
+    );
+    expect(screen.getByTestId('itemsPerPageSelector')).toBeInTheDocument();
   });
 
   it('shows the no-results state when the search has no matches', async () => {
