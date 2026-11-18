@@ -167,7 +167,7 @@ describe('SessionGuard Component', () => {
     await waitFor(() => {
       expect(mockReplaceFn).toHaveBeenCalledTimes(1);
       expect(mockReplaceFn).toHaveBeenCalledWith(
-        `${getConfiguration().PARTNER_PORTAL_URL}#selfCareToken=pt_token`
+        `${getConfiguration().PARTNER_PORTAL_URL}#selfCareToken=pt_token&lang=it`
       );
     });
     expect(screen.queryByText('Generic Page')).toBeNull();
