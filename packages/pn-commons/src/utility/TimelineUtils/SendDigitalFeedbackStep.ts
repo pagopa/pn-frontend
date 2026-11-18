@@ -1,5 +1,9 @@
 import { SERCQ_SEND_VALUE } from '../../models/Contacts';
-import { DigitalDomicileType, SendDigitalDetails } from '../../models/NotificationDetail';
+import {
+  DigitalDomicileType,
+  LegalFactType,
+  SendDigitalDetails,
+} from '../../models/NotificationDetail';
 import { hasLocalizedLabel } from '../localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
@@ -7,19 +11,40 @@ export class SendDigitalFeedbackStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
     const details = payload.step.details as SendDigitalDetails;
     if (details.responseStatus === 'KO') {
-      return {
-        ...this.localizeTimelineStatus(
-          'send-digital-error',
-          payload.isMultiRecipient,
-          'Invio via PEC non riuscito',
-          `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${details.digitalAddress?.address} non è riuscito perché la casella è satura, non valida o inattiva.`,
-          {
-            ...this.nameAndTaxId(payload),
-            address: details.digitalAddress?.address,
-          },
-          payload.delegatorName
-        ),
+      const translationData = {
+        ...this.nameAndTaxId(payload),
+        address: details.digitalAddress?.address,
       };
+
+      const noReceiptDescriptionKey = 'detail.timeline.send-digital-error-description-no-receipt';
+
+      const useNoReceiptDescription =
+        hasLocalizedLabel('notifications', noReceiptDescriptionKey) &&
+        !payload.step.legalFactsIds?.some(
+          (legalFact) => legalFact.category === LegalFactType.PEC_RECEIPT
+        );
+
+      const stepInfo = this.localizeTimelineStatus(
+        'send-digital-error',
+        payload.isMultiRecipient,
+        'Invio via PEC non riuscito',
+        `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${details.digitalAddress?.address} non è riuscito perché la casella è satura, non valida o inattiva.`,
+        translationData,
+        payload.delegatorName
+      );
+
+      return useNoReceiptDescription
+        ? {
+            ...stepInfo,
+            description: this.localizeDescription(
+              noReceiptDescriptionKey,
+              payload.isMultiRecipient,
+              stepInfo.description,
+              translationData,
+              payload.delegatorName
+            ),
+          }
+        : stepInfo;
     }
     if (
       details.digitalAddress?.type === DigitalDomicileType.SERCQ &&
