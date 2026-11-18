@@ -49,6 +49,8 @@ const visuallyHidden = {
   width: '1px',
 } as const;
 
+const PAGE_SIZES = [10, 20, 50];
+
 const InstitutionsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const institutions = useAppSelector((state: RootState) => state.institutionsState.institutions);
@@ -159,6 +161,11 @@ const InstitutionsPage: React.FC = () => {
     Math.min(pagination.nextPagesKey.length + 1, 3),
     pagination.page + 1
   );
+
+  const hideSizeSelector =
+    pagination.page === 0 &&
+    pagination.nextPagesKey.length === 0 &&
+    institutions.items.length <= PAGE_SIZES[0];
 
   const data: Array<Row<InstitutionRow>> = loading
     ? Array.from(
@@ -357,6 +364,8 @@ const InstitutionsPage: React.FC = () => {
               }}
               onPageRequest={handleChangePage}
               pagesToShow={pagesToShow}
+              elementsPerPage={PAGE_SIZES}
+              hideSizeSelector={hideSizeSelector}
             />
           )}
         </Box>
