@@ -1,34 +1,34 @@
 {
-  "subtitle": "View managed institutions for the SEND product.",
-  "title": "Your institutions",
-  "work-in-progress": "The portal is under development, at the moment it is not possible to manage SEND on behalf of your institutions from here.",
   "search": {
-    "label": "Search by Name or Fiscal Code",
     "button": "Search",
-    "min-length": "Enter at least three characters",
-    "max-length": "Enter a maximum of {{maxLength}} characters"
+    "label": "Search by Name or Fiscal Code",
+    "max-length": "Enter a maximum of {{maxLength}} characters",
+    "min-length": "Enter at least three characters"
   },
+  "subtitle": "View managed institutions for the SEND product.",
   "table": {
-    "error": {
-      "title": "It was not possible to retrieve the list of managed institutions.",
-      "action": "Try again"
-    },
     "columns": {
+      "delegation": "Delegation",
       "institution-name": "Institution name",
-      "tax-code": "Fiscal Code",
-      "delegation": "Delegation"
+      "tax-code": "Fiscal Code"
     },
     "delegation-status": {
       "active": "Active from {{date}}",
       "revoked": "Revoked on {{date}}"
     },
     "empty": {
-      "title": "Here you will see your institutions",
-      "description": "To allow you to manage SEND on behalf of the institution, the institution must activate a delegation in your name."
+      "description": "To allow you to manage SEND on behalf of the institution, the institution must activate a delegation in your name.",
+      "title": "Here you will see your institutions"
+    },
+    "error": {
+      "action": "Try again",
+      "title": "It was not possible to retrieve the list of managed institutions."
     },
     "no-results": {
-      "title": "No matches for “{{search}}”.",
-      "description": "Try a different search."
+      "description": "Try a different search.",
+      "title": "No matches for “{{search}}”."
     }
-  }
+  },
+  "title": "Your institutions",
+  "work-in-progress": "The portal is under development, at the moment it is not possible to manage SEND on behalf of your institutions from here."
 }
