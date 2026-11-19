@@ -49,8 +49,16 @@ const OneIdentityLoginError: React.FC = () => {
       <Stack
         id="oneIdentityLoginError"
         alignItems="center"
+        justifyContent="center"
         spacing={3}
-        sx={{ maxWidth: '368px', mx: 'auto', px: { xs: 3, sm: 0 }, py: 8, textAlign: 'center' }}
+        sx={{
+          height: '100%',
+          maxWidth: '368px',
+          mx: 'auto',
+          px: { xs: 3, sm: 0 },
+          py: 8,
+          textAlign: 'center',
+        }}
       >
         <IllusMIError size={56} />
         <Stack spacing={1}>
