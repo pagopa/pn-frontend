@@ -115,8 +115,8 @@
     "title": "Tisto, kar ste iskali, ni tukaj."
   },
   "roles": {
-    "admin": "Skrbnik",
-    "operator": "Operativni kontakt"
+    "admin": "Upravitelj",
+    "operator": "Operativna kontaktna oseba"
   },
   "toast": {
     "aria-label": "Ikona za zapiranje obvestila"
