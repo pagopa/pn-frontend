@@ -437,6 +437,7 @@
         "total": "Costo invio cartaceo"
       },
       "base-cost": "Costo di gestione",
+      "close-aria-label": "Chiudi",
       "description": "Sono le spese correlate all’invio della comunicazione, che variano a seconda della modalità con cui viene ricevuta dalla tua impresa.",
       "error": "Non siamo riusciti a recuperare il dettaglio dei costi, riprova più tardi.",
       "how-they-work": "Come funzionano i costi di notifica?",
