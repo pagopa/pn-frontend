@@ -222,6 +222,8 @@
       "send-digital-domicile-SERCQ-SEND-description-delegate": "Der Versand der SEND-Zustellung an {{recipient}} {{taxId}} läuft.",
       "send-digital-error-description": "Dein PEC-Postfach {{address}} ist voll, ungültig oder inaktiv, wie durch die <0>Benachrichtigung über Unzustellbarkeit</0> bescheinigt.",
       "send-digital-error-description-delegate": "Das PEC-Postfach {{address}} von {{recipient}} ist voll, ungültig oder inaktiv, wie durch die <0>Benachrichtigung über Unzustellbarkeit</0> bescheinigt.",
+      "send-digital-error-description-no-receipt": "Dein PEC-Postfach {{address}} ist voll, ungültig oder inaktiv.",
+      "send-digital-error-description-no-receipt-delegate": "Das PEC-Postfach {{address}} von {{recipient}} ist voll, ungültig oder inaktiv.",
       "send-digital-progress-error": "PEC vom Anbieter nicht akzeptiert",
       "send-digital-progress-error-description": "Dein PEC-Dienstanbieter hat den Versand der SEND-Zustellung an die Adresse {{address}} nicht angenommen, wie durch die <0>Nichtannahmebestätigung</0> belegt.",
       "send-digital-progress-error-description-delegate": "Der PEC-Dienstanbieter hat den Versand der SEND-Zustellung an die Adresse {{address}} von {{recipient}} nicht angenommen, wie durch die <0>Nichtannahmebestätigung</0> belegt.",

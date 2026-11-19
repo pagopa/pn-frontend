@@ -222,6 +222,8 @@
       "send-digital-domicile-SERCQ-SEND-description-delegate": "L’envoi de la notification SEND à {{recipient}} {{taxId}} est en cours.",
       "send-digital-error-description": "Votre boîte PEC {{address}} est saturée, invalide ou inactive, comme l'atteste l'<0>avis de non-livraison</0>.",
       "send-digital-error-description-delegate": "La boîte PEC {{address}} de {{recipient}} est saturée, invalide ou inactive, comme l'atteste l'<0>avis de non-livraison</0>.",
+      "send-digital-error-description-no-receipt": "Ta boîte PEC {{address}} est saturée, invalide ou inactive.",
+      "send-digital-error-description-no-receipt-delegate": "La boîte PEC {{address}} de {{recipient}} est saturée, invalide ou inactive.",
       "send-digital-progress-error": "PEC non acceptée par le fournisseur",
       "send-digital-progress-error-description": "Ton fournisseur de service PEC n’a pas pris en charge l’envoi de la notification SEND à l’adresse {{address}}, comme l’atteste le <0>reçu de non-acceptation</0>.",
       "send-digital-progress-error-description-delegate": "Le fournisseur de service PEC n’a pas pris en charge l’envoi de la notification SEND à l’adresse {{address}} de {{recipient}}, comme l’atteste le <0>reçu de non-acceptation</0>.",

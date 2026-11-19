@@ -245,7 +245,7 @@
     "next": "Aller à la page suivante",
     "page": "page",
     "previous": "Aller à la page précédente",
-    "rows-per-page": "Lignes par page",
+    "rows-per-page": "Lignes par page: {{size}}",
     "selected": "élément sélectionné"
   },
   "required-field": "Champ obligatoire",
