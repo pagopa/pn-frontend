@@ -5,9 +5,9 @@
     "acts": "Documenti allegati",
     "acts_files": {
       "downloadable_aar": "<0>Disponibile online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge.",
-      "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
+      "downloadable_acts": "<0>I documenti saranno disponibili online per 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
       "effected_faq": "Quando si perfeziona una notifica?",
-      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online fino a <0>180 giorni dalla data di deposito</0> che trovi in alto!",
+      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online per <0>180 giorni dalla data di deposito</0> che trovi in alto!",
       "not_downloadable_aar": "L’avviso di avvenuta ricezione non è più disponibile. Per richiederlo, rivolgiti all’ente che te lo ha inviato.",
       "not_downloadable_acts": "I documenti non sono più disponibili online. Per richiederli, rivolgiti all’ente che te li ha inviati."
     },
@@ -74,8 +74,8 @@
       "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
     },
     "iun": "Codice IUN",
-    "legal-date": "Notifica depositata il giorno",
-    "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L. 76/2020",
+    "legal-date": "Notifica SEND depositata il giorno",
+    "legal-disclaimer": "Notifica a valore legale inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L. 76/2020",
     "legal-value": "Notifica a valore legale",
     "legalfact": "Attestazione opponibile a terzi",
     "notice-code": "Codice Avviso",
