@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
+
+### Bug Fixes
+
+* **A2-6010:** improve rows per page accessibility ([#2212](https://github.com/pagopa/pn-frontend/issues/2212)) ([12afd4e](https://github.com/pagopa/pn-frontend/commit/12afd4e244a54fed8b70629ead2c57ed8eaf6515))
+* **A2-6025:** localize notification costs drawer close button ([#2213](https://github.com/pagopa/pn-frontend/issues/2213)) ([2bdb88f](https://github.com/pagopa/pn-frontend/commit/2bdb88f9e647cfdf47b0c396f1bae0134beb9b9e))
+
+
 # [2.28.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.27.0...v2.28.0-RC.0) (2026-11-13)
 
 ### Bug Fixes

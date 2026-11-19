@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
+
+### Bug Fixes
+
+* **A2-6010:** improve rows per page accessibility ([#2212](https://github.com/pagopa/pn-frontend/issues/2212)) ([12afd4e](https://github.com/pagopa/pn-frontend/commit/12afd4e244a54fed8b70629ead2c57ed8eaf6515))
+* **A2-6025:** localize notification costs drawer close button ([#2213](https://github.com/pagopa/pn-frontend/issues/2213)) ([2bdb88f](https://github.com/pagopa/pn-frontend/commit/2bdb88f9e647cfdf47b0c396f1bae0134beb9b9e))
+* **PN-21872:** handle missing PEC receipt in SendDigitalFeedbackStep (PF) ([#2218](https://github.com/pagopa/pn-frontend/issues/2218)) ([71a2f2e](https://github.com/pagopa/pn-frontend/commit/71a2f2e1601793f3b557409c737113ffafc3d53c))
+* **PN-22028:** fix payment error alerts not updating on language change ([#2223](https://github.com/pagopa/pn-frontend/issues/2223)) ([9215fcd](https://github.com/pagopa/pn-frontend/commit/9215fcd58cc325f446599fea244f48c71986056c))
+* **PN-22398:** align One Identity login error page layout with design ([#2226](https://github.com/pagopa/pn-frontend/issues/2226)) ([baf445a](https://github.com/pagopa/pn-frontend/commit/baf445a891555b4dfc7711fa15a3476f1e76d191))
+* **PN-22398:** show One Identity error page when authorize call fails ([#2217](https://github.com/pagopa/pn-frontend/issues/2217)) ([7a6c754](https://github.com/pagopa/pn-frontend/commit/7a6c75419311fad3fb69325f97f0828386b054a9))
+* **PN-22420, PN-22434:** align timeline content with Figma (PF) ([#2229](https://github.com/pagopa/pn-frontend/issues/2229)) ([90bf0dc](https://github.com/pagopa/pn-frontend/commit/90bf0dc811659d831596500335e3294ed42acc97))
+
+
 # [2.28.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.0...v2.28.0-RC.1) (2026-11-18)
 
 ### Bug Fixes

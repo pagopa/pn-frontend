@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
+
+### Bug Fixes
+
+* **PN-22398:** align One Identity login error page layout with design ([#2226](https://github.com/pagopa/pn-frontend/issues/2226)) ([baf445a](https://github.com/pagopa/pn-frontend/commit/baf445a891555b4dfc7711fa15a3476f1e76d191))
+* **PN-22398:** show One Identity error page when authorize call fails ([#2217](https://github.com/pagopa/pn-frontend/issues/2217)) ([7a6c754](https://github.com/pagopa/pn-frontend/commit/7a6c75419311fad3fb69325f97f0828386b054a9))
+
+
 # [2.28.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.27.0...v2.28.0-RC.0) (2026-11-13)
 
 ### Bug Fixes
