@@ -8,7 +8,9 @@ import NotificationCostsDetailDrawer from '../../NotificationCostsDetailDrawer';
 const costDetailsAssistanceLink = 'https://www.example.com/';
 
 describe('NotificationCostsDetailDrawer - Mixpanel events', () => {
-  let handleTrackEventFn: ReturnType<typeof vi.fn>;
+  let handleTrackEventFn: ReturnType<
+    typeof vi.fn<(event: EventPaymentRecipientType, param?: object) => void>
+  >;
 
   beforeAll(() => {
     initLocalizationForTest();

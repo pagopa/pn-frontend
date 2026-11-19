@@ -1,146 +1,147 @@
+import { ComponentType, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CallRoundedIcon from '@mui/icons-material/CallRounded';
 import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
 import {
   Divider,
   Link,
+  LinkProps,
   List,
   ListItem,
-  ListItemAvatar,
-  ListItemIcon,
-  ListItemText,
   Stack,
+  SvgIconProps,
   Typography,
-  useTheme,
 } from '@mui/material';
 import { CopyToClipboard, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIPaper } from '@pagopa/mui-italia';
 
 import { EventNotificationTypes, EventPaymentRecipientType } from '../../models';
+import MailCertificateRounded from '../Icons/MailCertificateRounded';
 
 type SenderContactsProps = {
   phone?: string;
   site?: string;
+  email?: string;
+  pec?: string;
   handleTrackEventFn?: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
-const PnSenderContacts = ({ phone, site, handleTrackEventFn }: SenderContactsProps) => {
+type SenderContactItemProps = {
+  type: 'website' | 'phone' | 'email' | 'pec';
+  Icon: ComponentType<SvgIconProps>;
+  /** value shown in bold with a copy button; ignored when children are provided */
+  copyableValue?: string;
+  children?: ReactNode;
+};
+
+const SenderContactItem = ({ type, Icon, copyableValue, children }: SenderContactItemProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <ListItem
+      disableGutters
+      sx={{ py: 1.5 }}
+      data-testid={`sender-contact-${type}`}
+      secondaryAction={
+        copyableValue && (
+          <CopyToClipboard
+            getValue={() => copyableValue}
+            tooltipMode
+            tooltip={t(`detail.contact_sender.copied_${type}`, { ns: 'notifiche' })}
+            tooltipBefore={t(`detail.contact_sender.copy_${type}`, { ns: 'notifiche' })}
+          />
+        )
+      }
+    >
+      <Icon sx={{ color: 'grey.400', mr: 1.5 }} />
+
+      <Stack minWidth={0}>
+        <Typography variant="body2" color="text.secondary">
+          {t(`detail.contact_sender.${type}`, { ns: 'notifiche' })}
+        </Typography>
+
+        {children ?? (
+          <Typography variant="body2" fontWeight={600} sx={{ overflowWrap: 'anywhere' }}>
+            {copyableValue}
+          </Typography>
+        )}
+      </Stack>
+    </ListItem>
+  );
+};
+
+const ContactLink = (props: LinkProps) => (
+  <Link
+    variant="body2"
+    underline="always"
+    // mui-italia adds a vertical margin to every link, not foreseen by the design
+    sx={{ overflowWrap: 'anywhere', '&.MuiTypography-root': { my: 0 } }}
+    {...props}
+  />
+);
+
+const PnSenderContacts = ({ phone, site, email, pec, handleTrackEventFn }: SenderContactsProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-  const theme = useTheme();
 
-  if (!phone && !site) {
+  if (!phone && !site && !email && !pec) {
     return null;
   }
+
   const websiteUrl = site && /^https?:\/\//i.test(site) ? site : `https://${site}`;
 
-  const trackWebsiteClick = () => {
+  const trackExternalLinkClick = (link: string) => () =>
     handleTrackEventFn?.(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
-      link: websiteUrl,
+      link,
       notification_type: EventNotificationTypes.INFORMAL,
     });
-  };
-  const trackPhoneClick = () => {
-    handleTrackEventFn?.(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
-      link: `tel:${phone}`,
-      notification_type: EventNotificationTypes.INFORMAL,
-    });
-  };
 
   return (
     <MIPaper sx={{ width: { xs: '100%', md: '42%' } }} padding={24}>
-      <Stack>
+      <Stack spacing={1}>
         <Typography component="h2" variant="h5">
           {t('detail.contact_sender.title', { ns: 'notifiche' })}
         </Typography>
 
-        <List>
-          {phone && (
-            <>
-              <ListItem disableGutters>
-                <ListItemAvatar>
-                  <ListItemIcon sx={{ minWidth: 40 }}>
-                    <CallRoundedIcon sx={{ color: theme.palette.grey[400] }} />
-                  </ListItemIcon>
-                </ListItemAvatar>
-
-                <ListItemText
-                  sx={{
-                    p: 0,
-                    flex: 1,
-                    minWidth: 0,
-                  }}
-                >
-                  <Typography variant="body2" color="text.secondary">
-                    {t('detail.contact_sender.phone', { ns: 'notifiche' })}
-                  </Typography>
-
-                  {isMobile ? (
-                    <Link
-                      onClick={trackPhoneClick}
-                      href={`tel:${phone}`}
-                      underline="always"
-                      color="primary"
-                    >
-                      {phone}
-                    </Link>
-                  ) : (
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="space-between"
-                      sx={{ width: '100%' }}
-                    >
-                      <Typography variant="body2" color="text.primary" fontWeight={600}>
-                        {phone}
-                      </Typography>
-
-                      <CopyToClipboard
-                        getValue={() => phone}
-                        tooltipMode
-                        tooltip={t('detail.contact_sender.copied_phone', {
-                          ns: 'notifiche',
-                        })}
-                        tooltipBefore={t('detail.contact_sender.copy_phone', {
-                          ns: 'notifiche',
-                        })}
-                      />
-                    </Stack>
-                  )}
-                </ListItemText>
-              </ListItem>
-
-              {site && <Divider />}
-            </>
-          )}
-
+        <Stack
+          component={List}
+          disablePadding
+          divider={<Divider component="li" aria-hidden="true" />}
+        >
           {site && (
-            <ListItem disableGutters>
-              <ListItemAvatar>
-                <ListItemIcon sx={{ minWidth: 40 }}>
-                  <LanguageRoundedIcon sx={{ color: theme.palette.grey[400] }} />
-                </ListItemIcon>
-              </ListItemAvatar>
-
-              <ListItemText sx={{ p: 0 }}>
-                <Typography variant="body2" color="text.secondary">
-                  {t('detail.contact_sender.website', { ns: 'notifiche' })}
-                </Typography>
-
-                <Link
-                  href={websiteUrl}
-                  onClick={trackWebsiteClick}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="always"
-                >
-                  {site}
-                </Link>
-              </ListItemText>
-            </ListItem>
+            <SenderContactItem type="website" Icon={LanguageRoundedIcon}>
+              <ContactLink
+                href={websiteUrl}
+                onClick={trackExternalLinkClick(websiteUrl)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {site}
+              </ContactLink>
+            </SenderContactItem>
           )}
-        </List>
+
+          {phone &&
+            (isMobile ? (
+              <SenderContactItem type="phone" Icon={CallRoundedIcon}>
+                <ContactLink href={`tel:${phone}`} onClick={trackExternalLinkClick(`tel:${phone}`)}>
+                  {phone}
+                </ContactLink>
+              </SenderContactItem>
+            ) : (
+              <SenderContactItem type="phone" Icon={CallRoundedIcon} copyableValue={phone} />
+            ))}
+
+          {email && (
+            <SenderContactItem type="email" Icon={MailOutlineRoundedIcon} copyableValue={email} />
+          )}
+
+          {pec && (
+            <SenderContactItem type="pec" Icon={MailCertificateRounded} copyableValue={pec} />
+          )}
+        </Stack>
       </Stack>
     </MIPaper>
   );

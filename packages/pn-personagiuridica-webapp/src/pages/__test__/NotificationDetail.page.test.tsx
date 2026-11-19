@@ -725,8 +725,20 @@ describe('NotificationDetail Page', () => {
       );
     });
 
-    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('snackBarContainer'));
+    const docNotAvailableAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
     expect(docNotAvailableAlert).toBeInTheDocument();
+    expect(within(docNotAvailableAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
+
     mock
       .onGet(
         `/bff/v1/notifications/received/${notificationToFe.iun}/documents/AAR?documentId=${otherDocument.documentId}`

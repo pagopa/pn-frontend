@@ -35,6 +35,10 @@
     "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
     "title": "Accedi a SEND per le tue comunicazioni a valore legale"
   },
+  "one-identity-login-error": {
+    "message": "Il sito non è al momento disponibile. Riprova più tardi oppure utilizza un metodo diverso.",
+    "title": "Qualcosa non va"
+  },
   "one-identity-spid-select": {
     "close-button-aria-label": "Chiudi",
     "error": {

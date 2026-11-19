@@ -77,13 +77,13 @@ const NotificationTimeline: React.FC = () => {
     ? notificationTimeline.subject
     : notification.subject;
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
+  const showWarningIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
   }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',
@@ -118,7 +118,7 @@ const NotificationTimeline: React.FC = () => {
       getReceivedNotificationDocument({ iun: notificationIUN, documentType, documentId, mandateId })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 

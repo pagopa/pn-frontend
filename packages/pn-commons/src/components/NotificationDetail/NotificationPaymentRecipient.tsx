@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, memo, useCallback, useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
 import SaveAltRoundedIcon from '@mui/icons-material/SaveAltRounded';
@@ -63,9 +63,7 @@ type Props = {
 };
 
 type PaymentError = {
-  title?: string;
-  description: React.ReactNode;
-  source?: 'tpp' | 'default';
+  source: 'tpp' | 'default';
 } | null;
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
@@ -117,7 +115,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const handleDeselectPayment = () => {
     setSelectedPayment({ pagoPa: null });
-    setErrorOnPayment({ description: getErrorMessage() });
+    setErrorOnPayment({ source: 'default' });
   };
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
@@ -185,7 +183,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         selectedPayment.pagoPa.amount
       );
     } else {
-      setErrorOnPayment({ description: getErrorMessage() });
+      setErrorOnPayment({ source: 'default' });
     }
   };
 
@@ -209,23 +207,32 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     return getLocalizedOrDefaultLabel('notifications', 'detail.payment.error-payment');
   };
 
+  const getPaymentErrorTitle = (): string | undefined => {
+    if (errorOnPayment?.source !== 'tpp') {
+      return undefined;
+    }
+
+    return getLocalizedOrDefaultLabel('notifications', 'detail.payment.tpp-expired-error-title');
+  };
+
+  const getPaymentErrorDescription = (): ReactNode => {
+    if (errorOnPayment?.source === 'tpp') {
+      return getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.payment.tpp-expired-error-description'
+      );
+    }
+
+    return getErrorMessage();
+  };
+
   const handleGetTppPaymentUrlError = useCallback((e: AppResponse) => {
     const isRetrievalExpiredError =
       e.errors?.[0]?.code ===
       ServerResponseErrorCode.PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED;
 
     if (isRetrievalExpiredError) {
-      setErrorOnPayment({
-        title: getLocalizedOrDefaultLabel(
-          'notifications',
-          'detail.payment.tpp-expired-error-title'
-        ),
-        description: getLocalizedOrDefaultLabel(
-          'notifications',
-          'detail.payment.tpp-expired-error-description'
-        ),
-        source: 'tpp',
-      });
+      setErrorOnPayment({ source: 'tpp' });
     }
 
     return !isRetrievalExpiredError;
@@ -297,8 +304,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             </Box>
           )}
           {errorOnPayment && (
-            <MIAlert severity="error" data-testid="payment-error" title={errorOnPayment.title}>
-              {errorOnPayment.description}
+            <MIAlert severity="error" data-testid="payment-error" title={getPaymentErrorTitle()}>
+              {getPaymentErrorDescription()}
             </MIAlert>
           )}
           {!allPaymentsIsPaid && (

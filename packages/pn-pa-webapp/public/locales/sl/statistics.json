@@ -10,11 +10,19 @@
     "delivery_description": "Obvestilo ni bilo dostavljeno zaradi tehničnih težav pri sprejemu",
     "delivery_title": "Napaka pri dostavi",
     "description": "Delež tehničnih napak glede na vrsto napake od vseh tehničnih napak v fazi pošiljanja",
+    "malformed_pec_address_description": "Obvestilo ni bilo vročeno, ker je naslov PEC napačno oblikovan",
+    "malformed_pec_address_title": "Napaka v naslovu PEC",
     "pec_description": "Obvestilo ni bilo dostavljeno zaradi neveljavne domene PEC",
     "pec_title": "Napaka domene PEC",
     "rejected_description": "Obvestilo ni bilo sprejeto zaradi tehničnih težav pri pošiljanju",
     "rejected_title": "Napaka pri pošiljanju",
-    "title": "Tehnične napake glede na vrsto"
+    "sending_pec_description": "Obvestilo ni bilo vročeno zaradi tehnične napake",
+    "sending_pec_title": "Napaka pri pošiljanju PEC",
+    "server_pec_comunication_description": "Obvestilo ni bilo vročeno zaradi napake v komunikaciji z odpremnim strežnikom PEC",
+    "server_pec_comunication_title": "Napaka pri komunikaciji s strežnikom PEC",
+    "title": "Tehnične napake glede na vrsto",
+    "virus_detected_description": "Obvestilo ni bilo vročeno zaradi zaznave virusa v komunikaciji ali njenih prilogah",
+    "virus_detected_title": "Zaznan virus"
   },
   "digital_mean_time": {
     "delivered": "Dostavljeno",
@@ -74,6 +82,7 @@
     "delivering": "Pošiljanje v teku",
     "description": "Število sprejetih obvestil, zadnje stanje, doseženo med postopkom pošiljanja prek SEND",
     "effective_date": "Zaključeno\ndatum začetka veljavnosti",
+    "returned_to_sender": "Vrnjeno pošiljatelju",
     "title": "Obvestila, ki jih pošilja država",
     "unreachable": "Prejemnik\nneizsledljivo",
     "viewed": "Prišlo je do dostopa"

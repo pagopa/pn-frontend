@@ -184,7 +184,11 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
                   )}
                 </ListItemText>
                 {item.value ? (
-                  <CheckCircleRoundedIcon fontSize="small" color="success" aria-hidden="true" />
+                  <CheckCircleRoundedIcon
+                    fontSize="small"
+                    color="success"
+                    titleAccess={t('digital-contact.verified-aria-label', { ns: 'recapiti' })}
+                  />
                 ) : (
                   <ErrorRoundedIcon fontSize="small" color="warning" aria-hidden="true" />
                 )}

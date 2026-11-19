@@ -16,7 +16,7 @@ describe('useDismissToastOnError', () => {
 
   it('should subscribe to AppResponsePublisher.error on mount', () => {
     const actionId = 'test-action';
-    const handler = vi.fn<[AppResponse], boolean>().mockReturnValue(true);
+    const handler = vi.fn<(e: AppResponse) => boolean>().mockReturnValue(true);
 
     renderHook(() => useDismissToastOnError(actionId, handler));
 
@@ -26,7 +26,7 @@ describe('useDismissToastOnError', () => {
 
   it('should unsubscribe from AppResponsePublisher.error on unmount', () => {
     const actionId = 'test-action';
-    const handler = vi.fn<[AppResponse], boolean>().mockReturnValue(true);
+    const handler = vi.fn<(e: AppResponse) => boolean>().mockReturnValue(true);
 
     const { unmount } = renderHook(() => useDismissToastOnError(actionId, handler));
 

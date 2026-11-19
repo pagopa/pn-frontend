@@ -186,13 +186,13 @@ const NotificationDetail = () => {
     return 'not_set';
   };
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
+  const showWarningIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
   }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',
@@ -214,7 +214,7 @@ const NotificationDetail = () => {
     PGEventStrategyFactory.triggerEvent(
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
       {
-        notificationType: 'LEGAL',
+        notificationType: NotificationCommunicationType.LEGAL,
         documentType: isObject(document)
           ? NotificationDocumentType.AAR
           : NotificationDocumentType.ATTACHMENT,
@@ -233,7 +233,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
     } else {
       // Attachment case
@@ -246,7 +246,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
     }
   };
@@ -254,7 +254,7 @@ const NotificationDetail = () => {
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
     PGEventStrategyFactory.triggerEvent(
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
-      { notificationType: 'LEGAL', documentType: name },
+      { notificationType: NotificationCommunicationType.LEGAL, documentType: name },
       { sendImmediately: true }
     );
 
@@ -399,7 +399,7 @@ const NotificationDetail = () => {
   useEffect(() => {
     if (downtimesReady && pageReady && !hasNotificationReceivedApiError && paymentsReady) {
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
-        notificationType: 'LEGAL',
+        notificationType: NotificationCommunicationType.LEGAL,
         downtimeEvents,
         mandateId,
         notificationStatus: notification.notificationStatus,
@@ -428,7 +428,7 @@ const NotificationDetail = () => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch((e) => console.log(e));
     }
   }, []);
@@ -527,7 +527,7 @@ const NotificationDetail = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 
@@ -574,6 +574,8 @@ const NotificationDetail = () => {
                   iun={notification.iun}
                   abstract={notification.abstract}
                   selfcareCdnUrl={SELFCARE_CDN_URL}
+                  isDelegate={!!mandateId}
+                  recipient={currentRecipient}
                 />
                 {banner}
                 {pecUnreachableAlert}
@@ -657,8 +659,6 @@ const NotificationDetail = () => {
                 />
               )}
               <NotificationDetailSection
-                isDelegate={!!mandateId}
-                recipient={currentRecipient}
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDowloadHandler}
                 isCancelled={isCancelled.cancellationInTimeline}

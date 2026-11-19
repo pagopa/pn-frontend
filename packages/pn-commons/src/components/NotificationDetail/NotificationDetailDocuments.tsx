@@ -41,7 +41,7 @@ interface Props extends DocumentsProps {
   documentsAvailable?: boolean;
   downloadFilesLink?: string;
   titleVariant?: TypographyProps['variant'];
-  inlineDownloadFilesMessage?: boolean;
+  isSender?: boolean;
 }
 
 type DocumentButtonContentProps = {
@@ -174,7 +174,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
     downloadFilesMessage,
     disableDownloads = false,
     titleVariant = 'overline',
-    inlineDownloadFilesMessage = false,
+    isSender = false,
   } // TODO: remove comment when link ready downloadFilesLink
 ) => (
   <Stack spacing={3}>
@@ -194,8 +194,8 @@ const NotificationDetailDocuments: React.FC<Props> = (
       </MIAlert>
     )}
 
-    {/* Notification sent before expiration date (120 legal and 180 combo) */}
-    {documentsAvailable && downloadFilesMessage && !inlineDownloadFilesMessage && (
+    {/* Notification sent before expiration date (120 legal and 180 combo) for recipients */}
+    {documentsAvailable && downloadFilesMessage && !isSender && (
       <MIPaper
         data-testid="documentsMessage"
         key="detail-documents-message"
@@ -216,13 +216,26 @@ const NotificationDetailDocuments: React.FC<Props> = (
       </MIPaper>
     )}
 
+    {/* Notification sent before expiration date (120 legal and 180 combo) for sender */}
+    {documentsAvailable && downloadFilesMessage && isSender && documents.length > 1 && (
+      <Typography variant="caption" color="text.secondary" component="div">
+        <Trans
+          i18nKey={`${downloadFilesMessage.key}-plural`}
+          ns={downloadFilesMessage.ns}
+          {...(downloadFilesMessage.components
+            ? { components: downloadFilesMessage.components }
+            : {})}
+        />
+      </Typography>
+    )}
+
     {/* Documents must be shown if the are documents and document is available or is not available but is cancelled */}
     {documents && (documentsAvailable || (!documentsAvailable && disableDownloads)) && (
       <Documents
         documents={documents}
         recipients={recipients}
         disableDownloads={disableDownloads}
-        downloadFilesMessage={inlineDownloadFilesMessage ? downloadFilesMessage : undefined}
+        downloadFilesMessage={isSender && documents.length === 1 ? downloadFilesMessage : undefined}
         clickHandler={clickHandler}
       />
     )}

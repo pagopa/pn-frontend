@@ -199,6 +199,7 @@
     "deleghe": "Vollmachten",
     "fallback-communication": "Mitteilungsdetails",
     "fallback-notification": "Zustellungsdetails",
+    "new-notifications": "Neue Zustellungen zu lesen",
     "notifiche": "Posteingang",
     "notifiche-delegato": "Posteingang für {{delegator}}",
     "notifiche-utente": "Dein Posteingang",
@@ -244,7 +245,7 @@
     "next": "Zur nächsten Seite",
     "page": "Seite",
     "previous": "Zur vorherigen Seite",
-    "rows-per-page": "Zeilen pro Seite",
+    "rows-per-page": "Zeilen pro Seite: {{size}}",
     "selected": "ausgewähltes Element"
   },
   "required-field": "Pflichtfeld",

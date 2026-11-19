@@ -1,21 +1,36 @@
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 import { waitFor } from '@testing-library/react';
 
-import { fireEvent, render } from '../../../__test__/test-utils';
+import { act, fireEvent, render } from '../../../__test__/test-utils';
+import { OneIdentityErrorCode } from '../../../models/OneIdentity';
 import { ROUTE_LOGIN } from '../../../navigation/routes.const';
 import OneIdentityLoginError from '../OneIdentityLoginError';
 
 describe('OneIdentityLoginError component', () => {
-  it('renders the error dialog with title and default message', () => {
-    render(<OneIdentityLoginError />, { route: '/?error=server_error' });
-    const errorDialog = getById(document.body, 'oneIdentityErrorDialog');
-    expect(errorDialog).toHaveTextContent('loginError.title');
-    expect(getById(errorDialog, 'message')).toHaveTextContent('loginError.message');
+  it('renders the error page with title, message and close button', () => {
+    render(<OneIdentityLoginError />, { route: `/?error=${OneIdentityErrorCode.SERVER_ERROR}` });
+    const errorPage = getById(document.body, 'oneIdentityLoginError');
+    expect(getById(errorPage, 'title')).toHaveTextContent('one-identity-login-error.title');
+    expect(getById(errorPage, 'message')).toHaveTextContent('one-identity-login-error.message');
+    expect(getById(errorPage, 'close-button')).toHaveTextContent('button.close');
   });
 
-  it('navigates to login on button click', async () => {
-    const { router } = render(<OneIdentityLoginError />, { route: '/?error=server_error' });
-    fireEvent.click(getById(document.body, 'login-button'));
+  it('shows the error page without redirecting when authorize fails', async () => {
+    // act async flushes any pending navigation triggered by the mount effect
+    const { router } = await act(async () =>
+      render(<OneIdentityLoginError />, {
+        route: `/?error=${OneIdentityErrorCode.AUTHORIZE_ERROR}`,
+      })
+    );
+    expect(getById(document.body, 'oneIdentityLoginError')).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe('/');
+  });
+
+  it('navigates to login on close button click', async () => {
+    const { router } = render(<OneIdentityLoginError />, {
+      route: `/?error=${OneIdentityErrorCode.SERVER_ERROR}`,
+    });
+    fireEvent.click(getById(document.body, 'close-button'));
     await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_LOGIN));
     expect(router.state.location.search).toBe('');
   });

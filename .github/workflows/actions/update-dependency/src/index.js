@@ -9,6 +9,7 @@ const DIRECTORY_TO_UPLOAD = [
   "packages/pn-pa-webapp",
   "packages/pn-personafisica-webapp",
   "packages/pn-personagiuridica-webapp",
+  "packages/pn-pt-webapp",
 ];
 
 async function run() {
@@ -26,7 +27,7 @@ async function run() {
       const result = await fileHelper.updateOpenApiToolsFile(
         branchName,
         directory,
-        bffVersion
+        bffVersion,
       );
       updatedFiles.push(...result);
     }

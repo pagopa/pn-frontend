@@ -1,0 +1,5 @@
+# https://www.robotstxt.org/robotstxt.html
+# Crawling is allowed on purpose: crawlers must be able to read the noindex meta tag in index.html.
+# Blocking them here would prevent them from seeing it, and the urls could still be indexed.
+User-agent: *
+Disallow:

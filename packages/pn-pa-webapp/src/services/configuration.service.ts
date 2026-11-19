@@ -31,6 +31,7 @@ export interface PaConfiguration {
   STATISTICS_MAINTENANCE_DATES?: string;
   IS_NEW_TIMELINE_ENABLED: boolean;
   IS_NEW_TIMELINE_COPY_ENABLED: boolean;
+  PARTNER_PORTAL_URL: string;
 }
 
 function statisticsMaintenanceDatesValidator(value: string): ValidationResult<string> {
@@ -95,6 +96,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .customValidator(statisticsMaintenanceDatesValidator);
     this.ruleFor('IS_NEW_TIMELINE_ENABLED').isBoolean();
     this.ruleFor('IS_NEW_TIMELINE_COPY_ENABLED').isBoolean();
+    this.ruleFor('PARTNER_PORTAL_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
   }
 }
 

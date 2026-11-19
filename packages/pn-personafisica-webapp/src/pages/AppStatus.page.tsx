@@ -46,7 +46,7 @@ const AppStatus = () => {
         .then((response) => {
           if (response.retryAfter) {
             dispatch(
-              appStateActions.addInfo({
+              appStateActions.addWarning({
                 title: '',
                 message: t(`detail.document-not-available`, {
                   ns: 'notifiche',

@@ -1,5 +1,6 @@
 import {
   ConsentType,
+  InstitutionType,
   PartyEntityWithUrl,
   TosPrivacyConsent,
   parseError,
@@ -34,7 +35,9 @@ export const exchangeToken = createAsyncThunk<User, string>(
   async (selfCareToken, { rejectWithValue }) => {
     try {
       const result = await AuthApi.exchangeToken(selfCareToken);
-      userDataMatcher.validateSync(result, { stripUnknown: false });
+      if (result.organization?.institutionType !== InstitutionType.PT) {
+        userDataMatcher.validateSync(result, { stripUnknown: false });
+      }
       return result;
     } catch (e: any) {
       if (e?.name === 'ValidationError') {

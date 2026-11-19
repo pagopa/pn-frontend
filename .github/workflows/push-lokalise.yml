@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app: [PFL, PF, PA, PG]
+        app: [PFL, PF, PA, PG, PT]
     env:
       # I codici app sono anche il suffisso delle variabili LOKALISE_PROJECT_ID_<CODICE>.
       PACKAGES: >-
@@ -32,7 +32,8 @@ jobs:
           "PFL": "pn-personafisica-login",
           "PF": "pn-personafisica-webapp",
           "PA": "pn-pa-webapp",
-          "PG": "pn-personagiuridica-webapp"
+          "PG": "pn-personagiuridica-webapp",
+          "PT": "pn-pt-webapp"
         }
     steps:
       - name: Checkout Repo
@@ -51,7 +52,7 @@ jobs:
           # singola app, perche' translations_path punta solo al suo package.
           # Nota: cosi' evitiamo anche il tag 'lokalise-upload-complete', che l'action
           # usa per riconoscere il primo run ma tiene unico per repository e non per
-          # progetto (con 4 progetti sarebbe inaffidabile).
+          # progetto (con 5 progetti sarebbe inaffidabile).
           rambo_mode: true
           additional_params: |
             cleanup_mode: true

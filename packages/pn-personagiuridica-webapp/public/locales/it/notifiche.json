@@ -22,9 +22,14 @@
       "message": "Questa notifica è stata annullata dall’ente mittente per cui i documenti non sono più disponibili."
     },
     "contact_sender": {
+      "copied_email": "Indirizzo email copiato",
+      "copied_pec": "Indirizzo PEC copiato",
       "copied_phone": "Numero di telefono copiato",
+      "copy_email": "Copia indirizzo email",
+      "copy_pec": "Copia indirizzo PEC",
       "copy_phone": "Copia numero di telefono",
-      "email": "Email dell'ente",
+      "email": "Indirizzo email dell'ente",
+      "pec": "Indirizzo PEC dell'ente",
       "phone": "Numero di telefono dell'ente",
       "title": "Contatta il mittente",
       "website": "Sito web dell'ente"
@@ -32,7 +37,7 @@
     "creditor-tax-id": "Codice Fiscale Ente",
     "date": "Data di invio",
     "disclaimer-link": "Scopri di più",
-    "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
+    "document-not-available": "Documento in fase di recupero. Riprova a effettuare il download più tardi",
     "downtimes": {
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica.",
       "datePrefix": "il ",
@@ -141,6 +146,7 @@
     "timeline-title": "Stato della notifica",
     "timeline": {
       "aar-document": "Avviso di avvenuta ricezione",
+      "analog-failure-second-attempt-group-label": "Secondo invio via raccomandata - Tentativo fallito",
       "analog-failure-workflow": "Aggiornamento sull'invio cartaceo",
       "analog-failure-workflow-description": "Il destinatario è risultato irreperibile assoluto. Si deposita e mette a disposizione l'avviso di avvenuta ricezione.",
       "analog-failure-workflow-description-multirecipient": "Il destinatario {{name}} {{taxId}} è risultato irreperibile assoluto. Si deposita e mette a disposizione l'avviso di avvenuta ricezione.",
@@ -170,8 +176,10 @@
         "M09": "per altre motivazioni",
         "M10": "perché l'indirizzo non è leggibile"
       },
+      "collapse-all-groups": "Comprimi",
       "courtesy-group-label": "Messaggi di cortesia",
       "digital-send-fallback": "Invio digitale",
+      "expand-all-groups": "Espandi",
       "legalfact": {
         "analog-failure-delivery": "Deposito avviso di avvenuta ricezione",
         "digital-delivery-failure": "mancato recapito digitale",
@@ -186,6 +194,9 @@
         "sender-ack": "notifica presa in carico"
       },
       "notification-cancelled-document": "Dichiarazione annullamento notifica",
+      "pec-address-source-general": "L’indirizzo PEC figura nei registri pubblici",
+      "pec-address-source-platform": "L’indirizzo PEC è stato inserito come recapito su SEND",
+      "pec-address-source-special": "L’indirizzo PEC è stato registrato come canale di contatto dall’ente mittente",
       "prepare-analog-domicile-failure": "Aggiornamento sull'invio cartaceo",
       "prepare-analog-domicile-failure-D00-description": "Non è stato trovato nessun nuovo indirizzo per predisporre un altro tentativo di invio.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Non è stato trovato nessun nuovo indirizzo per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio.",
@@ -215,15 +226,13 @@
       "send-analog-domicile-890": "Invio via raccomandata 890",
       "send-analog-domicile-890-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata 890.",
       "send-analog-domicile-890-description-multirecipient": "È iniziato l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata 890.",
-      "send-analog-domicile-890-first-attempt-group-label": "Prima raccomandata 890",
-      "send-analog-domicile-890-group-label": "Raccomandata 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Seconda raccomandata 890",
+      "send-analog-domicile-890-group-label": "Invio via raccomandata 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Secondo invio via raccomandata 890",
       "send-analog-domicile-ar": "Invio via raccomandata A/R",
       "send-analog-domicile-ar-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata A/R.",
       "send-analog-domicile-ar-description-multirecipient": "È iniziato l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata A/R.",
-      "send-analog-domicile-ar-first-attempt-group-label": "Prima raccomandata A/R",
-      "send-analog-domicile-ar-group-label": "Raccomandata A/R",
-      "send-analog-domicile-ar-second-attempt-group-label": "Seconda raccomandata A/R",
+      "send-analog-domicile-ar-group-label": "Invio via raccomandata A/R",
+      "send-analog-domicile-ar-second-attempt-group-label": "Secondo invio via raccomandata A/R",
       "send-analog-error": "L'invio per via cartacea non ha determinato la consegna",
       "send-analog-flow-CON020-description": "Originale dell’AAR (documento nativo digitale) reso disponibile dal Consolidatore e firmato digitalmente da PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "Originale dell’AAR (documento nativo digitale) reso disponibile dal Consolidatore e firmato digitalmente da PagoPA.",
@@ -352,7 +361,9 @@
       "send-digital-domicile-PEC": "Invio via PEC",
       "send-digital-domicile-PEC-description": "È in corso l'invio della notifica all'indirizzo PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "È in corso l'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-group-label": "Invio via PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Secondo invio via PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Invio via Domicilio Digitale SEND",
       "send-digital-domicile-SERCQ-SEND-description": "L'invio della notifica al Domicilio Digitale SEND è in corso.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} al Domicilio Digitale SEND è in corso",
@@ -385,7 +396,7 @@
     "clean-filters-cta": "Rimuovi filtri",
     "delegate": "Qui vedrai le notifiche a valore legale che sono state delegate alla tua impresa.",
     "description": "Aggiorna ora i recapiti digitali per sapere subito quando la tua impresa ne riceverà una.",
-    "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
+    "filtered": "Nessuna notifica a valore legale o comunicazione per i filtri selezionati",
     "filtered-description": "Rimuovili o prova con un’altra combinazione.",
     "go-to-contacts-cta": "Vai ai recapiti",
     "title": "Qui vedrai le notifiche a valore legale e le altre comunicazioni"
@@ -549,7 +560,8 @@
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "open": "Apri",
-    "status": "Stato"
+    "status": "Stato",
+    "to-read": "Da leggere"
   },
   "title": "In arrivo per {{organization}}",
   "title-delegated-notifications": "In arrivo dalle deleghe"

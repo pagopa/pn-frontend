@@ -21,9 +21,14 @@
       "message": "Diese Zustellung wurde von der Absenderbehörde annulliert, daher sind die Dokumente nicht mehr verfügbar."
     },
     "contact_sender": {
+      "copied_email": "E-Mail-Adresse kopiert",
+      "copied_pec": "PEC-Adresse kopiert",
       "copied_phone": "Telefonnummer kopiert",
+      "copy_email": "E-Mail-Adresse kopieren",
+      "copy_pec": "PEC-Adresse kopieren",
       "copy_phone": "Telefonnummer kopieren",
-      "email": "E-Mail der Körperschaft",
+      "email": "E-Mail-Adresse der Körperschaft",
+      "pec": "PEC-Adresse der Körperschaft",
       "phone": "Telefonnummer der Körperschaft",
       "title": "Kontaktiere die sendende Körperschaft",
       "website": "Website der Körperschaft"
@@ -31,7 +36,7 @@
     "creditor-tax-id": "Steuernummer der Körperschaft",
     "date": "Sendedatum",
     "disclaimer-link": "Mehr hierzu",
-    "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
+    "document-not-available": "Dokument wird abgerufen. Versuche den Download später erneut",
     "downtimes": {
       "apiErrorMessage": "Wir konnten noch keinen Bericht über Fehlfunktionen hochladen, die diese Zustellung betrafen.",
       "datePrefix": "am ",
@@ -145,6 +150,7 @@
     "timeline-title": "Status der Zustellung",
     "timeline": {
       "aar-document": "Empfangsbestätigung",
+      "analog-failure-second-attempt-group-label": "Zweiter Versand per Einschreiben - Fehlgeschlagener Versuch",
       "analog-failure-workflow": "Aktualisierung zum Versand in Papierform",
       "analog-failure-workflow-description": "Der Empfänger war unauffindbar. Die Empfangsbestätigung wird hinterlegt und zur Verfügung gestellt.",
       "analog-failure-workflow-description-multirecipient": "Der Empfänger {{name}} {{taxId}} war unauffindbar. Die Empfangsbestätigung wird hinterlegt und zur Verfügung gestellt.",
@@ -174,8 +180,10 @@
         "M09": "aus anderen Gründen",
         "M10": "weil die Adresse nicht lesbar ist"
       },
+      "collapse-all-groups": "Zuklappen",
       "courtesy-group-label": "Höflichkeitsmitteilungen",
       "digital-send-fallback": "Digitaler Versand",
+      "expand-all-groups": "Erweitern",
       "legalfact": {
         "analog-failure-delivery": "Hinterlegung der Empfangsbestätigung",
         "digital-delivery-failure": "fehlende digitale Zustellung",
@@ -190,6 +198,9 @@
         "sender-ack": "Zustellung übernommen"
       },
       "notification-cancelled-document": "Erklärung über die Annullierung der Benachrichtigung",
+      "pec-address-source-general": "Die PEC-Adresse ist in den öffentlichen Registern eingetragen",
+      "pec-address-source-platform": "Die PEC-Adresse wurde als Adresse auf SEND hinzugefügt",
+      "pec-address-source-special": "Die PEC-Adresse wurde von der sendenden Einrichtung als Kontaktkanal registriert",
       "prepare-analog-domicile-failure": "Aktualisierung zum Versand in Papierform",
       "prepare-analog-domicile-failure-D00-description": "Es wurde keine neue Adresse für einen nochmaligen Versand gefunden.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Es wurde keine neue Adresse des Empfängers {{name}} {{taxId}} für einen nochmaligen Versand gefunden.",
@@ -219,15 +230,13 @@
       "send-analog-domicile-890": "Versand per Einschreiben 890",
       "send-analog-domicile-890-description": "Der Versand der Zustellung an die Anschrift {{address}} per Einschreiben 890 hat begonnen.",
       "send-analog-domicile-890-description-multirecipient": "Der Versand der Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per Einschreiben 890 hat begonnen.",
-      "send-analog-domicile-890-first-attempt-group-label": "Erstes Einschreiben 890",
-      "send-analog-domicile-890-group-label": "Einschreiben 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Zweites Einschreiben 890",
+      "send-analog-domicile-890-group-label": "Versand per Einschreiben 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Zweiter Versand per Einschreiben 890",
       "send-analog-domicile-ar": "Einschreiben mit Rückschein",
       "send-analog-domicile-ar-description": "Der Versand der Zustellung an die Anschrift {{address}} per Einschreiben mit Rückschein hat begonnen.",
       "send-analog-domicile-ar-description-multirecipient": "Der Versand der Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per Einschreiben mit Rückschein hat begonnen.",
-      "send-analog-domicile-ar-first-attempt-group-label": "Erstes Einschreiben mit Rückschein",
-      "send-analog-domicile-ar-group-label": "Einschreiben mit Rückschein",
-      "send-analog-domicile-ar-second-attempt-group-label": "Zweites Einschreiben mit Rückschein",
+      "send-analog-domicile-ar-group-label": "Versand per Einschreiben mit Rückschein",
+      "send-analog-domicile-ar-second-attempt-group-label": "Zweiter Versand per Einschreiben mit Rückschein",
       "send-analog-error": "Der Versand auf dem Postweg hat zu keiner Zustellung geführt",
       "send-analog-flow-CON020-description": "Original des AAR (digitales natives Dokument), das vom Konsolidierer bereitgestellt und von PagoPA digital signiert wird.",
       "send-analog-flow-CON020-description-multirecipient": "Original des AAR (digitales natives Dokument), das vom Konsolidierer bereitgestellt und von PagoPA digital signiert wird.",
@@ -356,7 +365,9 @@
       "send-digital-domicile-PEC": "Versand per PEC",
       "send-digital-domicile-PEC-description": "Versand der Zustellung an die PEC-Adresse {{address}} läuft.",
       "send-digital-domicile-PEC-description-multirecipient": "Versand der Zustellung an die PEC-Adresse {{address}} von {{name}} {{taxId}} läuft.",
-      "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-group-label": "Versand per PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Zweiter Versand über PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Versand über das digitale Domizil SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Die Zustellung wird an das digitale Domizil SEND gesendet.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Die Zustellung an {{name}} {{taxId}} wird an das digitale Domizil SEND gesendet",
@@ -391,12 +402,12 @@
     "clean-filters-cta": "Filter entfernen",
     "delegate": "Hier siehst du die rechtsgültigen Zustellungen von {{name}}",
     "description": "Aktualisiere jetzt deine Kontaktdaten, damit du sofort erfährst, wenn du eine erhältst.",
-    "description-onboarding": "Wusstest du, dass du Geld sparen kannst, wenn du dich dafür entscheidest, rechtliche Mitteilungen nur digital zu erhalten?",
-    "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
+    "description-onboarding": "Wusstest du, dass du Geld sparen kannst, wenn du dich dafür entscheidest, rechtsgültige Zustellungen nur digital zu erhalten?",
+    "filtered": "Keine rechtsgültigen Zustellungen oder Mitteilungen für die ausgewählten Filter",
     "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
     "go-to-contacts-cta": "Zu deinen Kontaktdaten",
     "go-to-onboarding-cta": "SEND konfigurieren",
-    "title": "Hier siehst du deine rechtlichen Benachrichtigungen und andere Mitteilungen"
+    "title": "Hier siehst du deine SEND-Zustellungen"
   },
   "filters": {
     "communication-type": "Typ",
@@ -560,22 +571,23 @@
     "mittente": "Absender",
     "oggetto": "Betreff",
     "open": "Öffnen",
-    "status": "Status"
+    "status": "Status",
+    "to-read": "Zu lesen"
   },
   "tppLanding": {
     "access-button": "Zugriff auf Dokumente",
-    "description": "Um sie zu lesen, <strong>melden Sie sich bei SEND - Servizio Notifiche Digitali an.</strong> Dort finden Sie wichtige Dokumente, die Sie betreffen.\n\nAuch wenn Sie sie nicht öffnen oder lesen, <strong>entfaltet die Mitteilung Rechtswirkung.</strong>",
+    "description": "Um sie zu lesen, <strong>melde dich bei SEND - Servizio Notifiche Digitali an.</strong> Dort findest du wichtige Dokumente, die dich betreffen.\n\nAuch wenn du sie nicht öffnest oder liest, <strong>entfaltet die Zustellung Rechtswirkungen.</strong>",
     "faq": {
       "title": "Häufig gestellte Fragen",
       "what-are-notifications": {
-        "answer": "Das bedeutet, dass das Senden und Empfangen dieser Mitteilungen sowohl für den Absender als auch für den Empfänger rechtliche Folgen hat. Wenn Sie beispielsweise einen Bußgeldbescheid wegen einer Verkehrsordnungswidrigkeit erhalten, wirkt sich das Datum des Empfangs auf den zu zahlenden Betrag oder Ihr Recht auf Anfechtung aus.",
-        "question": "Was sind Mitteilungen mit Rechtswirkung?"
+        "answer": "Das bedeutet, dass der Versand und der Empfang dieser Zustellungen Rechtswirkungen sowohl gegenüber dem Absender als auch gegenüber dem Empfänger entfalten. Wenn du beispielsweise ein Bußgeld wegen eines Verkehrsverstoßes erhältst, wirkt sich das Empfangsdatum auf den zu zahlenden Betrag oder auf dein Recht aus, dagegen Einspruch einzulegen.",
+        "question": "Was sind rechtsgültige Zustellungen"
       },
       "what-is-send": {
-        "answer": "SEND - Servizio Notifiche Digitali ist eine Plattform, die die Verwaltung von Bescheiden digitalisiert und vereinfacht: Sie ermöglicht den Empfang, das Herunterladen der zugestellten Dokumente und die direkte Online-Zahlung eventueller Beträge.\nSEND kann Bescheide im Auftrag von Behörden sowohl an Bürger, Freiberufler und Einzelunternehmen (d. h. „natürliche Personen“) als auch an Unternehmen (d. h. „juristische Personen“) senden.",
+        "answer": "SEND - Servizio Notifiche Digitali ist eine Plattform, die die Verwaltung von Zustellungen digitalisiert und vereinfacht: Sie ermöglicht es, diese zu empfangen, zugestellte Dokumente herunterzuladen und etwaige Beträge direkt online zu bezahlen.\nSEND kann im Auftrag von Einrichtungen Zustellungen sowohl an Bürgerinnen und Bürger, Freiberufler und Einzelunternehmen, d. h. \"natürliche Personen\", als auch an Unternehmen, d. h. \"juristische Personen\", senden.",
         "question": "Was ist SEND und wie funktioniert es"
       }
     },
-    "title": "Hallo,\nSie haben eine Mitteilung mit Rechtswirkung erhalten"
+    "title": "Hallo,\ndu hast eine rechtsgültige Zustellung erhalten"
   }
 }

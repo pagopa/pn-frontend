@@ -29,11 +29,11 @@ jobs:
     environment: lokalise
     strategy:
       fail-fast: false
-      # I quattro job committano sullo stesso branch: in parallelo i push si
+      # I cinque job committano sullo stesso branch: in parallelo i push si
       # sovrascriverebbero a vicenda, quindi vanno eseguiti in sequenza.
       max-parallel: 1
       matrix:
-        app: [PFL, PF, PA, PG]
+        app: [PFL, PF, PA, PG, PT]
     env:
       # I codici app sono anche il suffisso delle variabili LOKALISE_PROJECT_ID_<CODICE>.
       PACKAGES: >-
@@ -41,7 +41,8 @@ jobs:
           "PFL": "pn-personafisica-login",
           "PF": "pn-personafisica-webapp",
           "PA": "pn-pa-webapp",
-          "PG": "pn-personagiuridica-webapp"
+          "PG": "pn-personagiuridica-webapp",
+          "PT": "pn-pt-webapp"
         }
     steps:
       - name: Checkout Repo
@@ -63,7 +64,7 @@ jobs:
           # L'italiano lo scriviamo noi nel repo, ma i traduttori possono correggerlo
           # su Lokalise: senza questo flag quelle correzioni non tornerebbero mai indietro.
           always_pull_base: true
-          # Branch unico e stabile per tutte le app: i quattro job ci committano sopra
+          # Branch unico e stabile per tutte le app: i cinque job ci committano sopra
           # uno dopo l'altro, cosi' il run produce una sola PR che le contiene tutte.
           # L'action, se il branch remoto esiste, committa e aggiorna la PR esistente.
           # Richiede che il branch venga cancellato al merge, altrimenti il run
@@ -76,7 +77,7 @@ jobs:
           git_commit_message: 'chore(lokalise): update ${{ matrix.app }} translations'
           pr_title: 'chore(lokalise): update translations'
           pr_body: |
-            Aggiornamento automatico delle traduzioni delle quattro app da Lokalise.
+            Aggiornamento automatico delle traduzioni delle cinque app da Lokalise.
 
             Generata da [Pull locales from Lokalise](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
           pr_labels: lokalise

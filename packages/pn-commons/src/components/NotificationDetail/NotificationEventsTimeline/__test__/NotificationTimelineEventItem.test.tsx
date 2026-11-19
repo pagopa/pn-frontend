@@ -5,13 +5,15 @@ import { SERCQ_SEND_VALUE } from '../../../../models/Contacts';
 import { DigitalDomicileType, TimelineCategory } from '../../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
 import { fireEvent, initLocalizationForTest, render, within } from '../../../../test-utils';
-import { getNotificationTimelineStatusInfos } from '../../../../utility/notification.utility';
+import {
+  PERFECTION_ANCHORS,
+  getNotificationTimelineStatusInfos,
+} from '../../../../utility/notification.utility';
 import {
   flattenTimelineSteps,
   formatTimelineDate,
 } from '../../../../utility/notificationTimeline.utility';
 import NotificationTimelineEventItem from '../NotificationTimelineEventItem';
-import { PERFECTION_ANCHORS } from '../timelineItem.config';
 
 const [viewedStatus, deliveringStatus] = notificationTimelineDTO.notificationStatusHistory;
 

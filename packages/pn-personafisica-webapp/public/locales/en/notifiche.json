@@ -21,9 +21,14 @@
       "message": "This notification was cancelled by the sending authority, so the documents are no longer available."
     },
     "contact_sender": {
+      "copied_email": "Email address copied",
+      "copied_pec": "PEC address copied",
       "copied_phone": "Phone number copied",
+      "copy_email": "Copy email address",
+      "copy_pec": "Copy PEC address",
       "copy_phone": "Copy phone number",
       "email": "Institution's email address",
+      "pec": "Institution's PEC address",
       "phone": "Institution's phone number",
       "title": "Contact the issuing institution",
       "website": "Institution's website"
@@ -31,7 +36,7 @@
     "creditor-tax-id": "Institution Tax Code",
     "date": "Date sent",
     "disclaimer-link": "Discover more",
-    "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
+    "document-not-available": "Document is being retrieved. Try downloading again later",
     "downtimes": {
       "apiErrorMessage": "We were unable to load any disruptions that affected this notification.",
       "datePrefix": "the ",
@@ -145,6 +150,7 @@
     "timeline-title": "Notification status",
     "timeline": {
       "aar-document": "Notification of receipt",
+      "analog-failure-second-attempt-group-label": "Second sending via registered mail - Failed attempt",
       "analog-failure-workflow": "Update on sending by mail",
       "analog-failure-workflow-description": "The recipient was absolutely untraceable. The notification of receipt is filed and made available.",
       "analog-failure-workflow-description-multirecipient": "The recipient {{name}} {{taxId}} was absolutely untraceable. The notification of receipt is filed and made available.",
@@ -174,8 +180,10 @@
         "M09": "for other reasons",
         "M10": "because the address is not legible"
       },
+      "collapse-all-groups": "Collapse",
       "courtesy-group-label": "Courtesy messages",
       "digital-send-fallback": "Digital delivery",
+      "expand-all-groups": "Expand",
       "legalfact": {
         "analog-failure-delivery": "Deposit of the notification of receipt",
         "digital-delivery-failure": "no digital address",
@@ -190,6 +198,9 @@
         "sender-ack": "notification taken over"
       },
       "notification-cancelled-document": "Declaration of notification cancellation",
+      "pec-address-source-general": "The PEC address is listed in public registers",
+      "pec-address-source-platform": "The PEC address has been added as a contact detail on SEND",
+      "pec-address-source-special": "The PEC address has been registered as a contact channel by the issuing institution",
       "prepare-analog-domicile-failure": "Update on sending by mail",
       "prepare-analog-domicile-failure-D00-description": "No new address was found to arrange another attempt at sending.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "No new address was found for the recipient {{name}} {{taxId}} to arrange another attempt at sending.",
@@ -219,15 +230,13 @@
       "send-analog-domicile-890": "Sending by 890 registered letter",
       "send-analog-domicile-890-description": "The sending of the notification to the address {{address}} by 890 registered letter has started.",
       "send-analog-domicile-890-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via 890 registered letter has started.",
-      "send-analog-domicile-890-first-attempt-group-label": "First registered mail 890",
-      "send-analog-domicile-890-group-label": "Registered mail 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Second registered mail 890",
+      "send-analog-domicile-890-group-label": "Sending via registered mail 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Second sending via registered mail 890",
       "send-analog-domicile-ar": "Sending by registered letter with acknowledgment of receipt",
       "send-analog-domicile-ar-description": "The sending of the notification to the address {{address}} by registered letter with acknowledgment of receipt has started.",
       "send-analog-domicile-ar-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via registered letter with acknowledgment of receipt has started.",
-      "send-analog-domicile-ar-first-attempt-group-label": "First registered mail with advice of receipt",
-      "send-analog-domicile-ar-group-label": "Registered mail with advice of receipt",
-      "send-analog-domicile-ar-second-attempt-group-label": "Second registered mail with advice of receipt",
+      "send-analog-domicile-ar-group-label": "Sending via registered mail with return receipt",
+      "send-analog-domicile-ar-second-attempt-group-label": "Second sending via registered mail with return receipt",
       "send-analog-error": "Sending by mail did not result in delivery",
       "send-analog-flow-CON020-description": "The original of the AAR (native digital document) made available by the consolidator and signed digitally by PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "The original of the AAR (native digital document) made available by the consolidator and signed digitally by PagoPA.",
@@ -356,7 +365,9 @@
       "send-digital-domicile-PEC": "Sent via PEC",
       "send-digital-domicile-PEC-description": "The notification is being sent to the PEC address {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the PEC address {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
+      "send-digital-domicile-PEC-group-label": "Sending via PEC",
+      "send-digital-domicile-PEC-second-attempt-group-label": "Second sending via PEC",
+      "send-digital-domicile-PEC-subgroup-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Send via SEND digital domicile",
       "send-digital-domicile-SERCQ-SEND-description": "The sending of the notification to the SEND digital domicile is in progress.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the SEND digital domicile is in progress",
@@ -391,12 +402,12 @@
     "clean-filters-cta": "Remove filters",
     "delegate": "Here you will see the legally binding notifications of {{name}}",
     "description": "Update your contact details now and you will immediately know when you receive one.",
-    "description-onboarding": "Did you know you can save money by choosing to receive legally binding communications only digitally?",
-    "filtered": "No notifications or communications for the selected filters",
+    "description-onboarding": "Did you know you can save money by choosing to receive legally binding notifications only digitally?",
+    "filtered": "No legally binding notifications or communications for the selected filters",
     "filtered-description": "Remove them or try another combination.",
     "go-to-contacts-cta": "Go to your contact details",
     "go-to-onboarding-cta": "Set up SEND",
-    "title": "Here you will see your legally binding notifications and other communications"
+    "title": "Here you will see your SEND notifications"
   },
   "filters": {
     "communication-type": "Type",
@@ -560,22 +571,23 @@
     "mittente": "Sender",
     "oggetto": "Subject",
     "open": "Open",
-    "status": "Status"
+    "status": "Status",
+    "to-read": "To read"
   },
   "tppLanding": {
     "access-button": "Access documents",
-    "description": "To read it, <strong>log in to SEND - Servizio Notifiche Digitali.</strong> You will find important documents concerning you.\n\nEven if you do not open or read it, <strong>the communication produces legal effects.</strong>",
+    "description": "To read it, <strong>log in to SEND - Servizio Notifiche Digitali.</strong> You will find the important documents concerning you.\n\nEven if you do not open or read it, <strong>the notification produces legal effects.</strong>",
     "faq": {
       "title": "Frequently Asked Questions",
       "what-are-notifications": {
-        "answer": "It means that the sending and receiving of these communications produce legal effects for both the sender and the recipient. For example, if you receive a traffic fine, the date you receive it affects the amount you must pay or your right to contest it.",
-        "question": "What are legally binding communications?"
+        "answer": "This means that sending and receiving these notifications produces legal effects both for those who send them and for those who receive them. For example, if you receive a fine for a traffic violation, the date you receive it affects the amount you will have to pay or your right to contest it.",
+        "question": "What are legally binding notifications"
       },
       "what-is-send": {
-        "answer": "SEND - Servizio Notifiche Digitali is a platform that digitizes and simplifies the management of notifications: it allows you to receive them, download notified documents, and pay any amounts directly online.\nSEND can send notifications on behalf of institutions to citizens, freelancers, and sole traders (i.e., \"natural persons\") as well as to companies (i.e., \"legal persons\").",
+        "answer": "SEND - Servizio Notifiche Digitali is a platform that digitizes and simplifies notification management: it allows you to receive them, download notified documents, and pay any amounts due directly online.\nSEND can send notifications on behalf of institutions both to citizens, freelancers, and sole proprietors—i.e., \"natural persons\"—and to companies, i.e., \"legal persons\".",
         "question": "What is SEND and how it works"
       }
     },
-    "title": "Hi,\nYou have received a legally binding communication"
+    "title": "Hello,\nyou have received a legally binding notification"
   }
 }
