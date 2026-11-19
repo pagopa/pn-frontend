@@ -24,9 +24,9 @@ export function goToSelfcareLogout(isSupportUser: boolean): void {
   window.open(`${SELFCARE_BASE_URL}${logoutPath}`, '_self');
 }
 
-export function goToPartnerPortal(selfCareToken: string): void {
+export function goToPartnerPortal(selfCareToken: string, lang: string): void {
   const { PARTNER_PORTAL_URL } = getConfiguration();
-  window.location.replace(`${PARTNER_PORTAL_URL}#selfCareToken=${selfCareToken}`);
+  window.location.replace(`${PARTNER_PORTAL_URL}#selfCareToken=${selfCareToken}&lang=${lang}`);
 }
 
 /**

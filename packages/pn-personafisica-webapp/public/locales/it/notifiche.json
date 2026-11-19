@@ -136,7 +136,7 @@
       "summary-in-progress": "Pagamento in corso",
       "title": "Pagamenti",
       "tpp-expired-error-description": "Per ripristinarla, accedi di nuovo a questa notifica tramite il messaggio che hai ricevuto sull'app della banca.",
-      "tpp-expired-error-title": "La connesione con la banca è scaduta.",
+      "tpp-expired-error-title": "La connessione con la banca è scaduta.",
       "tpp-helper-text": "Premi \"Paga con la tua banca\" per completare il pagamento su {{pspDenomination}}"
     },
     "pec-unreachable": "Mantieni la PEC libera e attiva per ricevere tutto in digitale!",

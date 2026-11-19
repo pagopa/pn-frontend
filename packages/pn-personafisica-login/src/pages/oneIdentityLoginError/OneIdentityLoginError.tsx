@@ -5,15 +5,17 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Dialog, Typography } from '@mui/material';
 import { IllusMIError, MIButton } from '@pagopa/mui-italia';
 
+import { OneIdentityErrorCode } from '../../models/OneIdentity';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_LOGIN } from '../../navigation/routes.const';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
-const KNOWN_ERROR_CODES = [
-  'invalid_scope',
-  'unsupported_response_type',
-  'server_error',
-  'invalid_request',
+const KNOWN_ERROR_CODES: Array<string> = [
+  OneIdentityErrorCode.INVALID_SCOPE,
+  OneIdentityErrorCode.UNSUPPORTED_RESPONSE_TYPE,
+  OneIdentityErrorCode.SERVER_ERROR,
+  OneIdentityErrorCode.INVALID_REQUEST,
+  OneIdentityErrorCode.AUTHORIZE_ERROR,
 ];
 
 const OneIdentityLoginError: React.FC = () => {
@@ -29,9 +31,10 @@ const OneIdentityLoginError: React.FC = () => {
   useEffect(() => {
     /**
      * if error=access_denied, reason is error_description (19,20,21,22,23,25,30) already mapped in Mixpanel
-     * otherwise reason is error (invalid_scope, unsupported_response_type, server_error, invalid_request)
+     * otherwise reason is error
      */
-    const reason = error === 'access_denied' && errorDescription ? errorDescription : error;
+    const reason =
+      error === OneIdentityErrorCode.ACCESS_DENIED && errorDescription ? errorDescription : error;
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
       reason,
     });

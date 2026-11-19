@@ -222,6 +222,8 @@
       "send-digital-domicile-SERCQ-SEND-description-delegate": "L'invio della notifica SEND a {{recipient}} {{taxId}} è in corso.",
       "send-digital-error-description": "La tua casella PEC {{address}} risulta satura, non valida o inattiva, come attestato dalla <0>ricevuta di mancata consegna</0>.",
       "send-digital-error-description-delegate": "La casella PEC {{address}} di {{recipient}} risulta satura, non valida o inattiva, come attestato dalla <0>ricevuta di mancata consegna</0>.",
+      "send-digital-error-description-no-receipt": "La tua casella PEC {{address}} risulta satura, non valida o inattiva.",
+      "send-digital-error-description-no-receipt-delegate": "La casella PEC {{address}} di {{recipient}} risulta satura, non valida o inattiva.",
       "send-digital-progress-error": "PEC non accettata dal provider",
       "send-digital-progress-error-description": "Il tuo fornitore del servizio PEC non ha preso in carico l’invio della notifica SEND all’indirizzo {{address}}, come attestato dalla <0>ricevuta di mancata accettazione</0>.",
       "send-digital-progress-error-description-delegate": "Il fornitore del servizio PEC non ha preso in carico l’invio della notifica SEND all’indirizzo {{address}} di {{recipient}}, come attestato dalla <0>ricevuta di mancata accettazione</0>.",

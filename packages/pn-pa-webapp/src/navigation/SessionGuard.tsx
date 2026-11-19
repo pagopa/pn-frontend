@@ -32,7 +32,7 @@ const SessionGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => sessionCheckCallback());
-  const { t } = useTranslation(['common']);
+  const { t, i18n } = useTranslation(['common']);
   const { WORK_IN_PROGRESS, INACTIVITY_HANDLER_MINUTES } = getConfiguration();
   const { hasSpecificStatusError } = useErrors();
   const hasAnyForbiddenError = hasSpecificStatusError(403);
@@ -50,7 +50,7 @@ const SessionGuard = () => {
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
       if (user.organization.institutionType === InstitutionType.PT) {
-        goToPartnerPortal(token);
+        goToPartnerPortal(token, i18n.language);
         return;
       }
       sessionCheck(user.desired_exp);
