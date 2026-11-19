@@ -116,7 +116,7 @@
   },
   "roles": {
     "admin": "Administrateur",
-    "operator": "Référent opérationnel"
+    "operator": "Personne de contact opérationnel"
   },
   "toast": {
     "aria-label": "Icône de fermeture du toast"
