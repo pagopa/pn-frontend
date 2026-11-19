@@ -263,7 +263,7 @@
     "delivered-description-digital-delegate": "Questa notifica a valore legale è stata inviata a {{recipient}} via {{channel}}. <1>Consulta le modalità di perfezionamento</1> per sapere quando assumerà valore di legge.",
     "delivered-description-digital-multirecipient": "Questa notifica a valore legale ti è stata inviata via {{channel}}. <1>Consulta le modalità di perfezionamento</1> per sapere quando assumerà valore di legge.",
     "delivered-multirecipient": "Nuova notifica SEND ricevuta",
-    "delivering": "Invio della notifica in corso",
+    "delivering": "Invio della notifica SEND in corso",
     "effective-date": "La notifica ha assunto valore di legge",
     "effective-date-description": "Non hai effettuato un accesso entro i termini, ma la notifica SEND si è comunque perfezionata il giorno {{date}}.",
     "effective-date-description-delegate": "Né tu né {{recipient}} avete effettuato l’accesso entro i termini, ma la notifica SEND si è comunque perfezionata il giorno {{date}}.",
