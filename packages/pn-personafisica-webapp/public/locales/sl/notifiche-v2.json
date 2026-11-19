@@ -222,6 +222,8 @@
       "send-digital-domicile-SERCQ-SEND-description-delegate": "Pošiljanje obvestila SEND prejemniku {{recipient}} {{taxId}} je v teku.",
       "send-digital-error-description": "Vaš predal PEC {{address}} je poln, neveljaven ali neaktiven, kot potrjuje <0>potrdilo o nedostavljivosti</0>.",
       "send-digital-error-description-delegate": "Predal PEC {{address}} osebe {{recipient}} je poln, neveljaven ali neaktiven, kot potrjuje <0>potrdilo o nedostavljivosti</0>.",
+      "send-digital-error-description-no-receipt": "Tvoj predal PEC {{address}} je poln, neveljaven ali neaktiven.",
+      "send-digital-error-description-no-receipt-delegate": "Predal PEC {{address}} prejemnika {{recipient}} je poln, neveljaven ali neaktiven.",
       "send-digital-progress-error": "Ponudnik ni sprejel PEC",
       "send-digital-progress-error-description": "Tvoj ponudnik storitve PEC ni prevzel pošiljanja obvestila SEND na naslov {{address}}, kar potrjuje <0>potrdilo o nesprejemu</0>.",
       "send-digital-progress-error-description-delegate": "Ponudnik storitve PEC ni prevzel pošiljanja obvestila SEND na naslov {{address}} prejemnika {{recipient}}, kar potrjuje <0>potrdilo o nesprejemu</0>.",

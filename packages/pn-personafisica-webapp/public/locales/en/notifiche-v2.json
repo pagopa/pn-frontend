@@ -222,6 +222,8 @@
       "send-digital-domicile-SERCQ-SEND-description-delegate": "Sending of the SEND notification to {{recipient}} {{taxId}} is in progress.",
       "send-digital-error-description": "Your PEC mailbox {{address}} is full, invalid, or inactive, as certified by the <0>non-delivery receipt</0>.",
       "send-digital-error-description-delegate": "The PEC mailbox {{address}} of {{recipient}} is full, invalid, or inactive, as certified by the <0>non-delivery receipt</0>.",
+      "send-digital-error-description-no-receipt": "Your PEC mailbox {{address}} is full, invalid or inactive.",
+      "send-digital-error-description-no-receipt-delegate": "{{recipient}}'s PEC mailbox {{address}} is full, invalid or inactive.",
       "send-digital-progress-error": "PEC not accepted by the provider",
       "send-digital-progress-error-description": "Your PEC service provider did not accept the sending of the SEND notification to the address {{address}}, as certified by the <0>non-acceptance receipt</0>.",
       "send-digital-progress-error-description-delegate": "The PEC service provider did not accept the sending of the SEND notification to {{recipient}}'s address {{address}}, as certified by the <0>non-acceptance receipt</0>.",
