@@ -183,7 +183,7 @@
     "next": "Vai alla pagina successiva",
     "page": "pagina",
     "previous": "Vai alla pagina precedente",
-    "rows-per-page": "Righe per pagina",
+    "rows-per-page": "Righe per pagina: {{size}}",
     "selected": "elemento selezionato"
   },
   "required": "obbligatorio",
