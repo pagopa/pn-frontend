@@ -1,33 +1,34 @@
 {
-  "subtitle": "Consultez les organismes gérés pour le produit SEND.",
-  "title": "Vos organismes",
-  "work-in-progress": "Le portail est en cours de développement, pour le moment il n'est pas possible de gérer SEND pour le compte de vos organismes à partir d'ici.",
   "search": {
-    "label": "Rechercher par nom ou code fiscal",
     "button": "Rechercher",
+    "label": "Rechercher par nom ou code fiscal",
+    "max-length": "Saisissez au maximum {{maxLength}} caractères",
     "min-length": "Saisissez au moins trois caractères"
   },
+  "subtitle": "Consultez les organismes gérés pour le produit SEND.",
   "table": {
-    "error": {
-      "title": "Il n'a pas été possible de récupérer la liste des organismes gérés.",
-      "action": "Réessayer"
-    },
     "columns": {
+      "delegation": "Délégation",
       "institution-name": "Nom de l'organisme",
-      "tax-code": "Code fiscal",
-      "delegation": "Délégation"
+      "tax-code": "Code fiscal"
     },
     "delegation-status": {
       "active": "Active depuis le {{date}}",
       "revoked": "Révoquée le {{date}}"
     },
     "empty": {
-      "title": "Vous verrez ici vos organismes",
-      "description": "Pour vous permettre de gérer SEND pour le compte de l'organisme, il est nécessaire que l'organisme active une délégation à votre nom."
+      "description": "Pour vous permettre de gérer SEND pour le compte de l'organisme, il est nécessaire que l'organisme active une délégation à votre nom.",
+      "title": "Vous verrez ici vos organismes"
+    },
+    "error": {
+      "action": "Réessayer",
+      "title": "Il n'a pas été possible de récupérer la liste des organismes gérés."
     },
     "no-results": {
-      "title": "Aucune correspondance pour « {{search}} ».",
-      "description": "Essayez avec une autre recherche."
+      "description": "Essayez avec une autre recherche.",
+      "title": "Aucune correspondance pour « {{search}} »."
     }
-  }
+  },
+  "title": "Vos organismes",
+  "work-in-progress": "Le portail est en cours de développement, pour le moment il n'est pas possible de gérer SEND pour le compte de vos organismes à partir d'ici."
 }

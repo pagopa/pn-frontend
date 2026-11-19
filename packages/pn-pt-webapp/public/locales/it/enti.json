@@ -2,6 +2,7 @@
   "search": {
     "button": "Cerca",
     "label": "Cerca per Nome o Codice Fiscale",
+    "max-length": "Scrivi massimo {{maxLength}} caratteri",
     "min-length": "Inserisci almeno tre caratteri"
   },
   "subtitle": "Visualizza gli enti gestiti per il prodotto SEND.",

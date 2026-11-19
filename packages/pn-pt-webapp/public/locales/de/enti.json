@@ -1,33 +1,34 @@
 {
-  "subtitle": "Sieh dir die verwalteten Einrichtungen für das Produkt SEND an.",
-  "title": "Deine Einrichtungen",
-  "work-in-progress": "Das Portal befindet sich in der Entwicklung, derzeit ist es nicht möglich, SEND von hier aus im Namen deiner Einrichtungen zu verwalten.",
   "search": {
-    "label": "Nach Name oder Steuernummer suchen",
     "button": "Suchen",
+    "label": "Nach Name oder Steuernummer suchen",
+    "max-length": "Gib maximal {{maxLength}} Zeichen ein",
     "min-length": "Gib mindestens drei Zeichen ein"
   },
+  "subtitle": "Sieh dir die verwalteten Einrichtungen für das Produkt SEND an.",
   "table": {
-    "error": {
-      "title": "Die Liste der verwalteten Einrichtungen konnte nicht abgerufen werden.",
-      "action": "Erneut versuchen"
-    },
     "columns": {
+      "delegation": "Vollmacht",
       "institution-name": "Name der Einrichtung",
-      "tax-code": "Steuernummer",
-      "delegation": "Vollmacht"
+      "tax-code": "Steuernummer"
     },
     "delegation-status": {
       "active": "Aktiv seit {{date}}",
       "revoked": "Widerrufen am {{date}}"
     },
     "empty": {
-      "title": "Hier siehst du deine Einrichtungen",
-      "description": "Damit du SEND im Namen der Einrichtung verwalten kannst, muss die Einrichtung eine Vollmacht auf deinen Namen aktivieren."
+      "description": "Damit du SEND im Namen der Einrichtung verwalten kannst, muss die Einrichtung eine Vollmacht auf deinen Namen aktivieren.",
+      "title": "Hier siehst du deine Einrichtungen"
+    },
+    "error": {
+      "action": "Erneut versuchen",
+      "title": "Die Liste der verwalteten Einrichtungen konnte nicht abgerufen werden."
     },
     "no-results": {
-      "title": "Keine Treffer für „{{search}}“.",
-      "description": "Versuche es mit einer anderen Suche."
+      "description": "Versuche es mit einer anderen Suche.",
+      "title": "Keine Treffer für „{{search}}“."
     }
-  }
+  },
+  "title": "Deine Einrichtungen",
+  "work-in-progress": "Das Portal befindet sich in der Entwicklung, derzeit ist es nicht möglich, SEND von hier aus im Namen deiner Einrichtungen zu verwalten."
 }
