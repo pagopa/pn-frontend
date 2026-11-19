@@ -116,7 +116,7 @@
   },
   "roles": {
     "admin": "Administrator",
-    "operator": "Operativer Ansprechpartner"
+    "operator": "Sachbearbeiter"
   },
   "toast": {
     "aria-label": "Symbol zum Schließen des Toast-Hinweises"

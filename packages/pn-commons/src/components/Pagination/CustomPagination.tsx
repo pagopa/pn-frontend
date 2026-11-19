@@ -117,10 +117,15 @@ const CustomPagination: React.FC<Props> = ({
             sx={{ fontWeight: 400 }}
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
+            aria-expanded={open}
             onClick={handleClick}
             endIcon={<ArrowDropDownRoundedIcon />}
-            aria-label={getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page')}
+            aria-label={getLocalizedOrDefaultLabel(
+              'common',
+              'paginator.rows-per-page',
+              `Righe per pagina: ${size}`,
+              { size }
+            )}
             id="rows-per-page"
           >
             {size}

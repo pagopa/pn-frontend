@@ -160,7 +160,7 @@
     "next": "Pojdi na naslednjo stran",
     "page": "stran",
     "previous": "Pojdi na prejšnjo stran",
-    "rows-per-page": "Vrstice na stran",
+    "rows-per-page": "Vrstice na stran: {{size}}",
     "selected": "izbrani element"
   },
   "required": "obvezno",

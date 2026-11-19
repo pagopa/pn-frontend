@@ -245,7 +245,7 @@
     "next": "Go to next page",
     "page": "page",
     "previous": "Go to previous page",
-    "rows-per-page": "Rows per page",
+    "rows-per-page": "Rows per page: {{size}}",
     "selected": "selected item"
   },
   "required-field": "Required field",
