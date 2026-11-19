@@ -35,6 +35,10 @@
     "missing-spid-cie": "Vous n'avez pas le SPID ou la CIE ? <0>En savoir plus</0>",
     "title": "Connectez-vous à SEND pour vos communications juridiquement contraignantes"
   },
+  "one-identity-login-error": {
+    "message": "Le site n'est pas disponible pour le moment. Veuillez réessayer plus tard ou utiliser une autre méthode.",
+    "title": "Un problème est survenu"
+  },
   "one-identity-spid-select": {
     "close-button-aria-label": "Fermer",
     "error": {

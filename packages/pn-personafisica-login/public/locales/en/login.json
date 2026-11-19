@@ -35,6 +35,10 @@
     "missing-spid-cie": "Don't have SPID or CIE? <0>Find out more</0>",
     "title": "Access SEND for your legally binding communications"
   },
+  "one-identity-login-error": {
+    "message": "The site is currently unavailable. Please try again later or use a different method.",
+    "title": "Something went wrong"
+  },
   "one-identity-spid-select": {
     "close-button-aria-label": "Close",
     "error": {
