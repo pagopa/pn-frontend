@@ -16,6 +16,7 @@ import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';
 import LoginButtons from '../../components/OneIdentity/LoginButtons';
 import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
+import { OneIdentityErrorCode } from '../../models/OneIdentity';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_LOGIN_ERROR } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
@@ -91,7 +92,10 @@ const OneIdentityLogin: React.FC = () => {
         window.location.assign(location);
       })
       .catch(() => {
-        navigate(ROUTE_LOGIN_ERROR);
+        navigate({
+          pathname: ROUTE_LOGIN_ERROR,
+          search: new URLSearchParams({ error: OneIdentityErrorCode.AUTHORIZE_ERROR }).toString(),
+        });
       })
       .finally(() => {
         handleCloseIdpSelect();

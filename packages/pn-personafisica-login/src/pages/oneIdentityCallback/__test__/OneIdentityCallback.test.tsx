@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 import { waitFor } from '@testing-library/react';
 
 import { render } from '../../../__test__/test-utils';
+import { OneIdentityErrorCode } from '../../../models/OneIdentity';
 import { ROUTE_LOGIN_ERROR } from '../../../navigation/routes.const';
 import { getConfiguration } from '../../../services/configuration.service';
 import OneIdentityCallback from '../OneIdentityCallback';
@@ -65,22 +66,24 @@ describe('OneIdentityCallback component', () => {
 
   it('should navigate to error route with error param forwarded', async () => {
     const { router } = render(<OneIdentityCallback />, {
-      route: '/auth/callback?error=invalid_scope',
+      route: `/auth/callback?error=${OneIdentityErrorCode.INVALID_SCOPE}`,
     });
 
     await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_LOGIN_ERROR));
-    expect(router.state.location.search).toBe('?error=invalid_scope');
+    expect(router.state.location.search).toBe(`?error=${OneIdentityErrorCode.INVALID_SCOPE}`);
     expect(router.state.historyAction).toBe('REPLACE');
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
   it('should navigate to error route when error param is present alongside code and state', async () => {
     const { router } = render(<OneIdentityCallback />, {
-      route: `/auth/callback?error=invalid_scope&code=${mockCode}&state=${mockState}`,
+      route: `/auth/callback?error=${OneIdentityErrorCode.INVALID_SCOPE}&code=${mockCode}&state=${mockState}`,
     });
 
     await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_LOGIN_ERROR));
-    expect(router.state.location.search).toBe(`?state=${mockState}&error=invalid_scope`);
+    expect(router.state.location.search).toBe(
+      `?state=${mockState}&error=${OneIdentityErrorCode.INVALID_SCOPE}`
+    );
     expect(router.state.historyAction).toBe('REPLACE');
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
