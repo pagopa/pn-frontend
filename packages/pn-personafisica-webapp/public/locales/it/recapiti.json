@@ -79,7 +79,7 @@
     "no-io-description": "Quando c’è una notifica SEND per te puoi riceverla sull’app IO, leggerla e pagare eventuali spese direttamente in app!",
     "no-io-title": "Le tue notifiche a portata di app",
     "no-sercq-cta": "Attiva domicilio digitale",
-    "no-sercq-send-description": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale e risparmiare.",
+    "no-sercq-send-description": "Attiva un domicilio digitale per ricevere le prossime notifiche a valore legale solo in digitale e risparmiare.",
     "no-sercq-send-title": "Niente più documenti cartacei"
   },
   "errors": {
@@ -131,7 +131,7 @@
       "sercq_send-active": "La piattaforma SEND è il tuo domicilio digitale",
       "special_contacts": {
         "action": "Personalizza per ente",
-        "content": "Scegli dove ricevere le notifiche SEND che ti invia un ente specifico.",
+        "content": "Scegli dove ricevere le notifiche SEND a valore legale che ti invia un ente specifico.",
         "title": "Personalizza il tuo domicilio digitale per ente mittente"
       },
       "title": "Gestisci il tuo domicilio digitale",
@@ -170,7 +170,7 @@
     "pec-verify": "Verifica PEC {{value}}",
     "pec-verify-descr": "Abbiamo inviato un codice all’indirizzo PEC indicato. Il codice è <strong>valido per 15 minuti</strong>.",
     "remove-pec-confirm": "Disattiva PEC",
-    "remove-pec-message": "<0>Non avrai più un recapito per le notifiche a valore legale della Pubblica Amministrazione e potresti riceverle su carta, con eventuali costi a tuo carico.</0><1>Continuerai però a ricevere avvisi sui canali che hai attivato.</1>",
+    "remove-pec-message": "<0>Non avrai più un recapito digitale a valore legale per le notifiche SEND inviate dalla Pubblica Amministrazione e potresti riceverle su carta, con eventuali costi a tuo carico.</0><1>Continuerai però a ricevere avvisi sui canali che hai attivato.</1>",
     "remove-pec-title": "Confermi di voler disattivare la PEC?",
     "remove-sercq_send-confirm": "Disattiva domicilio digitale",
     "remove-sercq_send-message": "<0>Se scegli di disattivare il tuo domicilio digitale SEND potresti ricevere le notifiche a valore legale via raccomandata e <strong>pagare i relativi costi.</strong></0><1>Continuerai a ricevere gli avvisi via email, puoi disattivarli nella sezione I tuoi recapiti.</1>",
