@@ -37,24 +37,24 @@ describe('App', () => {
       const { container } = render(<App />);
       const loginPage = getById(container, 'loginPage');
       expect(loginPage).toBeInTheDocument();
-      const errorDialog = queryById(document.body, 'oneIdentityErrorDialog');
-      expect(errorDialog).not.toBeInTheDocument();
+      const errorPage = queryById(document.body, 'oneIdentityLoginError');
+      expect(errorPage).not.toBeInTheDocument();
     });
 
     it('logout page', () => {
       const { container } = render(<App />, { route: ROUTE_LOGOUT });
       const loginPage = queryById(container, 'loginPage');
       expect(loginPage).not.toBeInTheDocument();
-      const errorDialog = queryById(document.body, 'oneIdentityErrorDialog');
-      expect(errorDialog).not.toBeInTheDocument();
+      const errorPage = queryById(document.body, 'oneIdentityLoginError');
+      expect(errorPage).not.toBeInTheDocument();
     });
 
     it('login error', () => {
       const { container } = render(<App />, { route: ROUTE_LOGIN_ERROR });
       const loginPage = queryById(container, 'loginPage');
       expect(loginPage).not.toBeInTheDocument();
-      const errorDialog = getById(document.body, 'oneIdentityErrorDialog');
-      expect(errorDialog).toBeInTheDocument();
+      const errorPage = getById(document.body, 'oneIdentityLoginError');
+      expect(errorPage).toBeInTheDocument();
     });
   });
 

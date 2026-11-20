@@ -3,18 +3,14 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Divider, Grid, Link, Typography } from '@mui/material';
-import {
-  AppRouteParams,
-  Layout,
-  PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { AppRouteParams, useIsMobile } from '@pagopa-pn/pn-commons';
 import { type IDP, MISpidSelectOIDialog } from '@pagopa/mui-italia';
 
 import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
 import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';
 import LoginButtons from '../../components/OneIdentity/LoginButtons';
+import OneIdentityLayout from '../../components/OneIdentity/OneIdentityLayout';
 import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
 import { OneIdentityErrorCode } from '../../models/OneIdentity';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
@@ -26,20 +22,14 @@ const HEADER_HEIGHT_PX = 44;
 const SMART_BANNER_HEIGHT_PX = 66;
 const LOGO_HEADER_HEIGHT_PX = 81;
 
-const unloggedUser = { id: '', name: undefined, surname: undefined, email: undefined };
-
 const OneIdentityLogin: React.FC = () => {
-  const { t, i18n } = useTranslation(['login']);
+  const { t } = useTranslation(['login']);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
   const rapidAccess = useRapidAccessParam();
   const {
-    PAGOPA_HELP_EMAIL,
-    PF_URL,
     IS_SMART_APP_BANNER_ENABLED,
-    ACCESSIBILITY_LINK,
-    SERCQ_SERVICE_STATEMENT_LINK,
     DIGITAL_IDENTITY_LINK,
     ONE_IDENTITY_CIE_ENTITY_ID,
     ONE_IDENTITY_CDN_URL,
@@ -59,14 +49,8 @@ const OneIdentityLogin: React.FC = () => {
 
   const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? SMART_BANNER_HEIGHT_PX : 0;
   const contentMinHeight = `calc(100dvh - ${HEADER_HEIGHT_PX}px - ${smartBannerHeight}px - ${LOGO_HEADER_HEIGHT_PX}px)`;
-  const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
-
-  const handleLanguageChange = (langCode: string) => i18n.changeLanguage(langCode);
 
   const handleCloseIdpSelect = () => setShowIdpSelect(false);
-
-  // eslint-disable-next-line functional/immutable-data
-  const handleAssistanceClick = () => (window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`);
 
   const handleCieClick = () => handleIdpLogin('CIE', ONE_IDENTITY_CIE_ENTITY_ID);
 
@@ -133,16 +117,7 @@ const OneIdentityLogin: React.FC = () => {
   return (
     <>
       {IS_SMART_APP_BANNER_ENABLED && <IOSmartAppBanner />}
-      <Layout
-        productsList={[]}
-        onAssistanceClick={handleAssistanceClick}
-        currentLanguage={i18n.language}
-        onLanguageChanged={handleLanguageChange}
-        showSideMenu={false}
-        privacyPolicyHref={privacyPolicyUrl}
-        accessibilityLink={ACCESSIBILITY_LINK}
-        sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
-        loggedUser={unloggedUser}
+      <OneIdentityLayout
         slotsProps={{
           content: {
             bgcolor: 'white',
@@ -220,7 +195,7 @@ const OneIdentityLogin: React.FC = () => {
             </Typography>
           </Grid>
         </Box>
-      </Layout>
+      </OneIdentityLayout>
 
       <MISpidSelectOIDialog
         show={showIdpSelect}
