@@ -120,7 +120,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
       <Typography {...slotProps?.typography}>
         {title && (
           <>
-            <Typography component="span" variant="body2" fontWeight={600}>
+            <Typography component="span" variant="inherit" fontWeight={600}>
               {title}
             </Typography>
             {description && ' - '}

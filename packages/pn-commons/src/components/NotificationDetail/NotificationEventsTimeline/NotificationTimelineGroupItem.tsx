@@ -108,8 +108,7 @@ const NotificationTimelineGroupItem = ({
         >
           <Typography
             component="span"
-            variant="body2"
-            fontWeight={600}
+            variant="caption-semibold"
             sx={{ overflowWrap: 'anywhere' }}
           >
             {getLocalizedOrDefaultLabel(
@@ -123,6 +122,8 @@ const NotificationTimelineGroupItem = ({
             <Typography
               component="p"
               variant="body2"
+              fontSize="12px"
+              lineHeight="18px"
               color="text.secondary"
               data-testid="timeline-pec-source-description"
             >
@@ -183,8 +184,7 @@ const NotificationTimelineGroupItem = ({
           />
           <Typography
             component="span"
-            variant="body2"
-            fontWeight={600}
+            variant="caption-semibold"
             sx={{ overflowWrap: 'anywhere' }}
           >
             {headerLabel}
