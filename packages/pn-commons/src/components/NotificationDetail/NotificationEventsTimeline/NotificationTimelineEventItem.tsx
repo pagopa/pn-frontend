@@ -130,7 +130,10 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         event={event}
         legalFacts={eventLegalFacts}
         clickHandler={clickHandler}
-        slotProps={{ typography: { variant: 'body2', sx: { fontWeight: 400 } } }}
+        slotProps={{
+          typography: { variant: 'caption', component: 'p' },
+          button: { sx: { fontSize: 'inherit' } },
+        }}
         isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         disableDownloads={disableDownloads}
         perfectionLink={eventPerfectionLink}
