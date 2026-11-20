@@ -72,7 +72,7 @@
     "no-courtesy-sercq-send-title": "Vuoi ricevere le prossime notifiche solo in digitale?",
     "no-courtesy-title": "Completa i recapiti",
     "no-sercq-cta": "Attiva domicilio digitale",
-    "no-sercq-send-description": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale e risparmiare.",
+    "no-sercq-send-description": "Attiva un domicilio digitale per ricevere le prossime notifiche a valore legale solo in digitale e risparmiare.",
     "no-sercq-send-title": "Niente più documenti cartacei"
   },
   "errors": {
@@ -99,7 +99,7 @@
       "sercq_send-active": "La piattaforma SEND è il domicilio digitale della tua impresa",
       "special_contacts": {
         "action": "Personalizza per ente",
-        "content": "Scegli dove ricevere le notifiche SEND inviate alla tua impresa da un ente specifico.",
+        "content": "Scegli dove ricevere le notifiche a valore legale inviate alla tua impresa da un ente specifico.",
         "title": "Personalizza il domicilio digitale per ente mittente"
       },
       "title": "Gestisci domicilio digitale",
@@ -125,7 +125,7 @@
     },
     "pec-description": "Quando un ente invia alla tua impresa una notifica SEND, viene recapitata in modo sicuro e con valore legale sulla PEC che hai scelto.",
     "pec-disclaimer": "Questo è l'indirizzo principale che verrà utilizzato per inviare le notifiche a valore legale dell'impresa in digitale. Inserendolo, l'impresa non riceverà più raccomandate cartacee.",
-    "pec-new-code": "Non l’hai ricevuto? Controlla di aver inserito la PEC corretta o <0>generane uno nuovo</0>.",
+    "pec-new-code": "Non l’hai ricevuto? Controlla di aver inserito la PEC corretta oppure <0>genera un nuovo codice</0>.",
     "pec-removed-successfully": "PEC rimossa correttamente",
     "pec-to-add": "Indirizzo PEC",
     "pec-validating": "Validazione PEC in corso",
@@ -193,7 +193,7 @@
             "title": "Ricevi un messaggio"
           },
           {
-            "description": "Apri il dettaglio della notifica a valore legale su SEND",
+            "description": "Apri il dettaglio della notifica a valore legale sulla piattaforma SEND",
             "title": "Accedi alla notifica SEND"
           }
         ],
@@ -273,6 +273,6 @@
     "inactive": "Da attivare",
     "pec-validation": "Validazione PEC in corso"
   },
-  "subtitle": "Gestisci i recapiti digitali su cui ricevere le notifiche a valore legale di SEND e/o i relativi messaggi di cortesia per la <0>tua impresa</0>.",
+  "subtitle": "Gestisci i recapiti digitali su cui ricevere le notifiche a valore legale e/o i relativi messaggi di cortesia per la <0>tua impresa</0>.",
   "title": "Recapiti"
 }
