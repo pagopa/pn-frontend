@@ -175,16 +175,13 @@ describe('DigitalDomicileWizard', () => {
   });
 
   it('does not show the PEC verification modal when the user tries to continue with an invalid PEC', async () => {
-    const { getByRole, getByLabelText, findByText, queryByText } = render(
-      <DigitalDomicileWizard />,
-      {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: [],
-          },
+    const { getByRole, getByLabelText, queryByText } = render(<DigitalDomicileWizard />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [],
         },
-      }
-    );
+      },
+    });
 
     fireEvent.click(getByRole('button', { name: `${labelPrefix}.choice.pec.cta` }));
 
@@ -194,7 +191,13 @@ describe('DigitalDomicileWizard', () => {
 
     fireEvent.click(getByRole('button', { name: 'button.continue' }));
 
-    expect(await findByText('legal-contacts.valid-pec')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByRole('alert')).toHaveTextContent('legal-contacts.valid-pec');
+    });
+
+    expect(
+      getByLabelText('onboarding.digital-domicile.pec.input-label')
+    ).toHaveAccessibleDescription('legal-contacts.valid-pec');
     expect(queryByText(`${labelPrefix}.pec.verify-before-continue-title`)).not.toBeInTheDocument();
   });
 

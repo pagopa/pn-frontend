@@ -419,6 +419,51 @@ describe('DigitalContact Component', () => {
     expect(newButtons[0]).toBeEnabled();
   });
 
+  it('clears the validation alert when an invalid edit is cancelled', async () => {
+    const { getByRole, queryByRole } = render(
+      <DigitalContact
+        label="Mocked label"
+        value="mocked@pec.it"
+        channelType={ChannelType.PEC}
+        inputProps={{ label: 'Mocked input label' }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+      />
+    );
+
+    // Open edit mode.
+    fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+
+    const alert = getByRole('alert');
+    const input = getByRole('textbox', { name: 'Mocked input label' });
+
+    expect(alert).toBeEmptyDOMElement();
+
+    // Trigger a validation error.
+    fireEvent.change(input, { target: { value: 'invalid value' } });
+    fireEvent.blur(input);
+
+    await waitFor(() => {
+      expect(alert).toHaveTextContent('legal-contacts.valid-pec');
+    });
+
+    expect(input).toHaveAccessibleDescription('legal-contacts.valid-pec');
+    expect(getByRole('alert')).toBe(alert);
+
+    // Cancel the edit.
+    fireEvent.click(getByRole('button', { name: 'button.annulla' }));
+
+    expect(getByRole('alert')).toBeEmptyDOMElement();
+    expect(queryByRole('textbox', { name: 'Mocked input label' })).not.toBeInTheDocument();
+
+    // Reopen edit mode: no stale validation error.
+    fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+
+    expect(getByRole('alert')).toBeEmptyDOMElement();
+    expect(getByRole('textbox', { name: 'Mocked input label' })).toHaveValue('mocked@pec.it');
+  });
+
   it('remove contact', () => {
     // render component
     const { container } = render(

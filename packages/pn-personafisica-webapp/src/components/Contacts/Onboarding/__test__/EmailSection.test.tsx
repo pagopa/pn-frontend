@@ -60,7 +60,11 @@ describe('EmailSection', () => {
     expect(
       getByRole('button', { name: `${labelPrefix}.pec.cancel-email-cta` })
     ).toBeInTheDocument();
-    expect(getByText('mock-error')).toBeInTheDocument();
+    expect(getByRole('alert')).toHaveTextContent('mock-error');
+
+    expect(getByLabelText(`${labelPrefix}.email.input-label`)).toHaveAccessibleDescription(
+      'mock-error'
+    );
 
     fireEvent.change(getByLabelText(`${labelPrefix}.email.input-label`), {
       target: { value: mockEmailChanged },

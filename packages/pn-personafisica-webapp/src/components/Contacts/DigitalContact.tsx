@@ -16,6 +16,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import {
+  Box,
   InputAdornment,
   Stack,
   SvgIconProps,
@@ -63,6 +64,17 @@ type Props = {
   onEditCancelCallback?: () => void;
   beforeValidationCallback?: (value: string, errors?: string) => void;
 };
+
+const getFieldError = (
+  touched: boolean | undefined,
+  error: string | undefined
+): string | undefined => (touched ? error : undefined);
+
+const getAnnouncedError = (
+  value: string,
+  editMode: boolean,
+  fieldError?: string
+): string | undefined => (!value || editMode ? fieldError : undefined);
 
 const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   (
@@ -131,6 +143,31 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     });
 
+    const fieldError = getFieldError(
+      formik.touched[`${senderId}_${contactType}`],
+      formik.errors[`${senderId}_${contactType}`]
+    );
+
+    const errorAnnouncer = (
+      <Box
+        role="alert"
+        aria-atomic="true"
+        sx={{
+          position: 'absolute',
+          width: '1px',
+          height: '1px',
+          padding: 0,
+          margin: '-1px',
+          overflow: 'hidden',
+          clip: 'rect(0, 0, 0, 0)',
+          whiteSpace: 'nowrap',
+          border: 0,
+        }}
+      >
+        {getAnnouncedError(value, editMode, fieldError)}
+      </Box>
+    );
+
     const semanticTextFieldProps = getSemanticTextFieldProps(channelType);
 
     const handleChangeTouched = async (e: ChangeEvent) => {
@@ -186,6 +223,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     if (!value) {
       return (
         <form onSubmit={handleFormSubmit} data-testid={`${senderId}_${contactType}Contact`}>
+          {errorAnnouncer}
           <Label
             id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
@@ -252,6 +290,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
       >
+        {errorAnnouncer}
         {showLabelOnEdit && (
           <Label
             id={`${senderId}_${contactType}-custom-label`}
