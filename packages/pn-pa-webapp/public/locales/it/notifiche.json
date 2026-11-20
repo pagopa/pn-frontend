@@ -167,7 +167,7 @@
       },
       "registered-letter": "Raccomandata",
       "registered-letter-kind": {
-        "890": "890 (legge n.890/82)",
+        "890": "890",
         "AR": "A/R",
         "RIR": "A/R internazionale",
         "RIS": "internazionale semplice",
@@ -180,7 +180,7 @@
       "send-analog-domicile-890-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata 890.",
       "send-analog-domicile-890-description-multirecipient": "È iniziato l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata 890.",
       "send-analog-domicile-890-group-label": "Invio via raccomandata (legge n.890/82)",
-      "send-analog-domicile-890-second-attempt-group-label": "Secondo invio via raccomandata 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Secondo invio via raccomandata (legge n.890/82)",
       "send-analog-domicile-ar": "Invio via raccomandata A/R",
       "send-analog-domicile-ar-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata A/R.",
       "send-analog-domicile-ar-description-multirecipient": "È iniziato l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata A/R.",
