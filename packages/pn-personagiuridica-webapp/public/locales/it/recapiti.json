@@ -125,7 +125,7 @@
     },
     "pec-description": "Quando un ente invia alla tua impresa una notifica SEND, viene recapitata in modo sicuro e con valore legale sulla PEC che hai scelto.",
     "pec-disclaimer": "Questo è l'indirizzo principale che verrà utilizzato per inviare le notifiche a valore legale dell'impresa in digitale. Inserendolo, l'impresa non riceverà più raccomandate cartacee.",
-    "pec-new-code": "Non l’hai ricevuto? Controlla di aver inserito la PEC corretta o <0>genera un nuovo codice</0>.",
+    "pec-new-code": "Non l’hai ricevuto? Controlla di aver inserito la PEC corretta oppure <0>genera un nuovo codice</0>.",
     "pec-removed-successfully": "PEC rimossa correttamente",
     "pec-to-add": "Indirizzo PEC",
     "pec-validating": "Validazione PEC in corso",
