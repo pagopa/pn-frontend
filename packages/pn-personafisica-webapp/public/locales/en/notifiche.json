@@ -4,9 +4,9 @@
     "acts": "Attached documents",
     "acts_files": {
       "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
-      "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
+      "downloadable_acts": "<0>Documents will be available online for 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
       "effected_faq": "When is a notification finalized?",
-      "informal_downloadable_acts": "Save the attachments to your device: they will be available online for up to <0>180 days from the filing date</0> shown at the top!",
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online for <0>180 days from the filing date</0> shown at the top!",
       "not_downloadable_aar": "The acknowledgment of receipt is no longer available. To request it, please contact the institution that sent it to you.",
       "not_downloadable_acts": "Documents are no longer available online. To request them, please contact the institution that sent them to you."
     },
@@ -73,8 +73,8 @@
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
     },
     "iun": "IUN code",
-    "legal-date": "Notification deposited on",
-    "legal-disclaimer": "Notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
+    "legal-date": "SEND notification deposited on",
+    "legal-disclaimer": "Legally-binding notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
     "legal-value": "Legally-binding notification",
     "legalfact": "Certificate enforceable against third parties",
     "notice-code": "Notice code",
@@ -200,7 +200,7 @@
       "notification-cancelled-document": "Declaration of notification cancellation",
       "pec-address-source-general": "The PEC address is listed in public registers",
       "pec-address-source-platform": "The PEC address has been added as a contact detail on SEND",
-      "pec-address-source-special": "The PEC address has been registered as a contact channel by the issuing institution",
+      "pec-address-source-special": "The PEC address has been provided by the issuing institution",
       "prepare-analog-domicile-failure": "Update on sending by mail",
       "prepare-analog-domicile-failure-D00-description": "No new address was found to arrange another attempt at sending.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "No new address was found for the recipient {{name}} {{taxId}} to arrange another attempt at sending.",
@@ -213,7 +213,7 @@
       "prepare-analog-domicile-failure-ZZZ-description": "A valid address could not be found to arrange another attempt at sending – reason not specified.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "A valid address was not found for the recipient {{name}} {{taxId}} to arrange another attempt at sending – reason not specified.",
       "radd": {
-        "description": "The recipient, or their delegate, collected the notified documents from an operator authorized to deliver them.",
+        "description": "The recipient, or their delegate, collected a paper copy of the notified documents from an operator authorized to deliver them.",
         "title": "The documents were collected"
       },
       "registered-letter": "Registered post",
@@ -230,8 +230,8 @@
       "send-analog-domicile-890": "Sending by 890 registered letter",
       "send-analog-domicile-890-description": "The sending of the notification to the address {{address}} by 890 registered letter has started.",
       "send-analog-domicile-890-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via 890 registered letter has started.",
-      "send-analog-domicile-890-group-label": "Sending via registered mail 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Second sending via registered mail 890",
+      "send-analog-domicile-890-group-label": "Sending via registered mail (Law no. 890/82)",
+      "send-analog-domicile-890-second-attempt-group-label": "Second sending via registered mail (Law no. 890/82)",
       "send-analog-domicile-ar": "Sending by registered letter with acknowledgment of receipt",
       "send-analog-domicile-ar-description": "The sending of the notification to the address {{address}} by registered letter with acknowledgment of receipt has started.",
       "send-analog-domicile-ar-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via registered letter with acknowledgment of receipt has started.",
