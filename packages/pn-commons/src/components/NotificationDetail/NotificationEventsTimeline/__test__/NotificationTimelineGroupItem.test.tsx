@@ -272,6 +272,29 @@ describe('NotificationTimelineGroupItem', () => {
       expect(getByTestId('timeline-pec-source-description')).toHaveTextContent(labelKey);
     });
 
+    it('renders the header, the PEC address and the source description with the design font sizes', () => {
+      const event = createPecEvent(
+        'SEND_DIGITAL_DOMICILE',
+        TimelineCategory.SEND_DIGITAL_DOMICILE,
+        'source@pec.it',
+        'SPECIAL'
+      );
+
+      const { getByTestId } = renderGroup(createPecGroup([event]));
+      const header = getByTestId('timeline-group-header');
+
+      fireEvent.click(header);
+
+      expect(within(header).getByText(/group-label/)).toHaveStyle('font-size: 0.875rem');
+      expect(
+        within(getByTestId('timeline-pec-address-group')).getByText(/PEC-subgroup-label/)
+      ).toHaveStyle('font-size: 0.875rem');
+      expect(getByTestId('timeline-pec-source-description')).toHaveStyle({
+        fontSize: '12px',
+        lineHeight: '18px',
+      });
+    });
+
     it('does not render a source description when the PEC source is unknown', () => {
       const event = createPecEvent(
         'SEND_DIGITAL_DOMICILE',
