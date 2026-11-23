@@ -57,8 +57,8 @@
       "aria-label": "Zu den Details der Mitteilung",
       "documents": {
         "document-not-available": "Dokument wird abgerufen. Versuche den Download später erneut",
-        "download-message-available": "<0>Bis zu 180 Tage online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
-        "download-message-available-plural": "<0>Bis zu 180 Tage online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
+        "download-message-available": "<0>180 Tage lang online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
+        "download-message-available-plural": "<0>180 Tage lang online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
         "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
         "title": "Angehängte Dokumente"
       },
