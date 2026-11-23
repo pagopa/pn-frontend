@@ -231,7 +231,7 @@
     "next": "Zur nächsten Seite",
     "page": "Seite ",
     "previous": "Zur vorherigen Seite",
-    "rows-per-page": "Zeilen pro Seite",
+    "rows-per-page": "Zeilen pro Seite: {{size}}",
     "selected": "ausgewähltes Element"
   },
   "required-field": "Pflichtfeld",

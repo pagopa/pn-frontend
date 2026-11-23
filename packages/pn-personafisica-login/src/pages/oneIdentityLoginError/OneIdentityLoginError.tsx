@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Box, Dialog, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { IllusMIError, MIButton } from '@pagopa/mui-italia';
 
+import OneIdentityLayout from '../../components/OneIdentity/OneIdentityLayout';
 import { OneIdentityErrorCode } from '../../models/OneIdentity';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_LOGIN } from '../../navigation/routes.const';
@@ -44,20 +45,35 @@ const OneIdentityLoginError: React.FC = () => {
   }, []);
 
   return (
-    <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
-      <Box m="auto" sx={{ textAlign: 'center', width: '100%' }} id="oneIdentityErrorDialog">
-        <IllusMIError />
-        <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }} mt={5}>
-          {t('loginError.title')}
-        </Typography>
-        <Typography variant="body2" id="message" mb={8}>
-          {t('loginError.message')}
-        </Typography>
-        <MIButton id="login-button" variant="contained" onClick={goToLogin}>
-          {t('button.go-to-login', { ns: 'common' })}
+    <OneIdentityLayout>
+      <Stack
+        id="oneIdentityLoginError"
+        alignItems="center"
+        justifyContent="center"
+        spacing={3}
+        sx={{
+          height: '100%',
+          maxWidth: '368px',
+          mx: 'auto',
+          px: { xs: 3, sm: 0 },
+          py: 8,
+          textAlign: 'center',
+        }}
+      >
+        <IllusMIError size={56} />
+        <Stack spacing={1}>
+          <Typography id="title" variant="h4" component="h1">
+            {t('one-identity-login-error.title')}
+          </Typography>
+          <Typography id="message" variant="body1" color="text.secondary">
+            {t('one-identity-login-error.message')}
+          </Typography>
+        </Stack>
+        <MIButton id="close-button" variant="contained" onClick={goToLogin}>
+          {t('button.close', { ns: 'common' })}
         </MIButton>
-      </Box>
-    </Dialog>
+      </Stack>
+    </OneIdentityLayout>
   );
 };
 

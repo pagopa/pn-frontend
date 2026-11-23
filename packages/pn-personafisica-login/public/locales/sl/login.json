@@ -35,6 +35,10 @@
     "missing-spid-cie": "Nimate SPID ali CIE? <0>Izvedite več</0>",
     "title": "Dostop do SEND za vaša pravno zavezujoča sporočila"
   },
+  "one-identity-login-error": {
+    "message": "Spletno mesto trenutno ni na voljo. Poskusite znova pozneje ali uporabite drug način.",
+    "title": "Nekaj je šlo narobe"
+  },
   "one-identity-spid-select": {
     "close-button-aria-label": "Zapri",
     "error": {

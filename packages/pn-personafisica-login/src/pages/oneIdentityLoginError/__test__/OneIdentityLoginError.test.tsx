@@ -7,31 +7,30 @@ import { ROUTE_LOGIN } from '../../../navigation/routes.const';
 import OneIdentityLoginError from '../OneIdentityLoginError';
 
 describe('OneIdentityLoginError component', () => {
-  it('renders the error dialog with title and default message', () => {
+  it('renders the error page with title, message and close button', () => {
     render(<OneIdentityLoginError />, { route: `/?error=${OneIdentityErrorCode.SERVER_ERROR}` });
-    const errorDialog = getById(document.body, 'oneIdentityErrorDialog');
-    expect(errorDialog).toHaveTextContent('loginError.title');
-    expect(getById(errorDialog, 'message')).toHaveTextContent('loginError.message');
+    const errorPage = getById(document.body, 'oneIdentityLoginError');
+    expect(getById(errorPage, 'title')).toHaveTextContent('one-identity-login-error.title');
+    expect(getById(errorPage, 'message')).toHaveTextContent('one-identity-login-error.message');
+    expect(getById(errorPage, 'close-button')).toHaveTextContent('button.close');
   });
 
-  it('shows the error dialog without redirecting when authorize fails', async () => {
+  it('shows the error page without redirecting when authorize fails', async () => {
     // act async flushes any pending navigation triggered by the mount effect
     const { router } = await act(async () =>
       render(<OneIdentityLoginError />, {
         route: `/?error=${OneIdentityErrorCode.AUTHORIZE_ERROR}`,
       })
     );
-    const errorDialog = getById(document.body, 'oneIdentityErrorDialog');
-    expect(errorDialog).toHaveTextContent('loginError.title');
-    expect(getById(errorDialog, 'message')).toHaveTextContent('loginError.message');
+    expect(getById(document.body, 'oneIdentityLoginError')).toBeInTheDocument();
     expect(router.state.location.pathname).toBe('/');
   });
 
-  it('navigates to login on button click', async () => {
+  it('navigates to login on close button click', async () => {
     const { router } = render(<OneIdentityLoginError />, {
       route: `/?error=${OneIdentityErrorCode.SERVER_ERROR}`,
     });
-    fireEvent.click(getById(document.body, 'login-button'));
+    fireEvent.click(getById(document.body, 'close-button'));
     await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_LOGIN));
     expect(router.state.location.search).toBe('');
   });

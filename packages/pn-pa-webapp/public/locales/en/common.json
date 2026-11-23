@@ -160,7 +160,7 @@
     "next": "Go to next page",
     "page": "Page",
     "previous": "Go to previous page",
-    "rows-per-page": "Lines per page",
+    "rows-per-page": "Rows per page: {{size}}",
     "selected": "selected item"
   },
   "required": "required",
