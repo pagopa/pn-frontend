@@ -66,6 +66,19 @@ describe('NotificationTimelineEventItem', () => {
     expect(item).toHaveTextContent('status.reworked-status-not-valid');
   });
 
+  it('renders the description with the design font size', () => {
+    const { getByText } = renderEvent(visibleEvent);
+
+    const statusInfo = getNotificationTimelineStatusInfos(
+      visibleEvent,
+      recipients,
+      deliveringAllEvents
+    );
+
+    // the title inherits the typography of the description paragraph
+    expect(getByText(statusInfo!.label).parentElement).toHaveStyle('font-size: 0.875rem');
+  });
+
   it('renders the legal fact inline and downloads it when the new copy is enabled', () => {
     const legalFact = visibleEvent.legalFactsIds![0];
     const statusInfo = getNotificationTimelineStatusInfos(
@@ -127,6 +140,7 @@ describe('NotificationTimelineEventItem', () => {
     expect(buttons).toHaveLength(2);
     expect(buttons[0]).toHaveTextContent('detail.timeline.legalfact');
     expect(buttons[1]).toHaveTextContent('detail.timeline.legalfact');
+    buttons.forEach((button) => expect(button).toHaveStyle('font-size: 14px'));
 
     fireEvent.click(buttons[0]);
     fireEvent.click(buttons[1]);

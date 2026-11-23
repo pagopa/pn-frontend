@@ -5,9 +5,9 @@
     "acts": "Beigefügte Anlagen",
     "acts_files": {
       "downloadable_aar": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
-      "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",
+      "downloadable_acts": "<0>Die Dokumente sind 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
       "effected_faq": "Wann ist die Bearbeitung eines Bescheids abgeschlossen?",
-      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online bis zu <0>180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!",
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!",
       "not_downloadable_aar": "Die Empfangsbestätigung ist nicht mehr verfügbar. Um sie anzufordern, wende dich an die Einrichtung, die sie dir gesendet hat.",
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wende dich an die Einrichtung, die sie dir gesendet hat."
     },
@@ -74,8 +74,8 @@
       "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
     },
     "iun": "IUN-Code",
-    "legal-date": "Zustellung hinterlegt am",
-    "legal-disclaimer": "Zustellung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
+    "legal-date": "SEND-Zustellung hinterlegt am",
+    "legal-disclaimer": "Zustellung mit rechtlicher Wirkung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
     "legal-value": "Zustellung mit rechtlicher Wirkung",
     "legalfact": "Bescheinigung kann Dritten gegenüber angefochten werden",
     "notice-code": "Benachrichtigungscode",
@@ -196,7 +196,7 @@
       "notification-cancelled-document": "Erklärung zur Annullierung der Benachrichtigung",
       "pec-address-source-general": "Die PEC-Adresse ist in den öffentlichen Registern eingetragen",
       "pec-address-source-platform": "Die PEC-Adresse wurde als Adresse auf SEND hinzugefügt",
-      "pec-address-source-special": "Die PEC-Adresse wurde von der sendenden Einrichtung als Kontaktkanal registriert",
+      "pec-address-source-special": "Die PEC-Adresse wurde von der sendenden Einrichtung angegeben",
       "prepare-analog-domicile-failure": "Aktualisierung zum Versand in Papierform",
       "prepare-analog-domicile-failure-D00-description": "Es wurde keine neue Adresse für einen nochmaligen Versand gefunden.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Es wurde keine neue Adresse des Empfängers {{name}} {{taxId}} für einen nochmaligen Versand gefunden.",
@@ -209,7 +209,7 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Es wurde keine gültige Adresse für einen weiteren Sendeversuch gefunden - Grund nicht angegeben.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Es wurde keine gültige Adresse für den Empfänger {{name}} {{taxId}} gefunden, um einen weiteren Sendeversuch vorzubereiten - Grund nicht angegeben.",
       "radd": {
-        "description": "Der Empfänger oder die bevollmächtigte Person hat die zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt.",
+        "description": "Der Empfänger oder die bevollmächtigte Person hat eine Papierkopie der zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt.",
         "title": "Die Dokumente wurden abgeholt"
       },
       "registered-letter": "Einschreiben",
@@ -226,8 +226,8 @@
       "send-analog-domicile-890": "Versand per Einschreiben 890",
       "send-analog-domicile-890-description": "Der Versand des Bescheids an die Adresse {{address}} per Einschreiben 890 hat begonnen.",
       "send-analog-domicile-890-description-multirecipient": "Der Versand des Bescheids an {{name}} {{taxId}} an die Adresse {{address}} per Einschreiben 890 hat begonnen.",
-      "send-analog-domicile-890-group-label": "Versand per Einschreiben 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Zweiter Versand per Einschreiben 890",
+      "send-analog-domicile-890-group-label": "Versand per Einschreiben (Gesetz Nr. 890/82)",
+      "send-analog-domicile-890-second-attempt-group-label": "Zweiter Versand per Einschreiben (Gesetz Nr. 890/82)",
       "send-analog-domicile-ar": "Einschreiben mit Rückschein",
       "send-analog-domicile-ar-description": "Der Versand des Bescheids an die Adresse {{address}} per Einschreiben mit Rückschein hat begonnen.",
       "send-analog-domicile-ar-description-multirecipient": "Der Versand des Bescheids an {{name}} {{taxId}} an die Adresse {{address}} per Einschreiben mit Rückschein hat begonnen.",
