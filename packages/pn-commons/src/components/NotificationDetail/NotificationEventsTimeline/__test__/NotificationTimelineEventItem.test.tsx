@@ -140,6 +140,7 @@ describe('NotificationTimelineEventItem', () => {
     expect(buttons).toHaveLength(2);
     expect(buttons[0]).toHaveTextContent('detail.timeline.legalfact');
     expect(buttons[1]).toHaveTextContent('detail.timeline.legalfact');
+    buttons.forEach((button) => expect(button).toHaveStyle('font-size: 14px'));
 
     fireEvent.click(buttons[0]);
     fireEvent.click(buttons[1]);

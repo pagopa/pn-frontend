@@ -106,11 +106,7 @@ const NotificationTimelineGroupItem = ({
           sx={{ listStyleType: 'disc' }}
           data-testid="timeline-pec-address-group"
         >
-          <Typography
-            component="span"
-            variant="caption-semibold"
-            sx={{ overflowWrap: 'anywhere' }}
-          >
+          <Typography component="span" variant="caption-semibold" sx={{ overflowWrap: 'anywhere' }}>
             {getLocalizedOrDefaultLabel(
               'notifications',
               'detail.timeline.send-digital-domicile-PEC-subgroup-label'
@@ -182,11 +178,7 @@ const NotificationTimelineGroupItem = ({
             sx={{ fontSize: '24px', flexShrink: 0 }}
             data-testid="timeline-group-icon"
           />
-          <Typography
-            component="span"
-            variant="caption-semibold"
-            sx={{ overflowWrap: 'anywhere' }}
-          >
+          <Typography component="span" variant="caption-semibold" sx={{ overflowWrap: 'anywhere' }}>
             {headerLabel}
           </Typography>
           {group.hasReworkedEvents && (
