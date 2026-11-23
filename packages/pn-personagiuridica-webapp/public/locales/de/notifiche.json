@@ -88,7 +88,7 @@
     },
     "notification-timeline-section": {
       "aria-label": "Zur Chronik der Benachrichtigung",
-      "title": "Status der Benachrichtigung"
+      "title": "Status der SEND-Zustellung"
     },
     "payment-table-aria-label": "Einzelheiten zu Zahlungen",
     "payment-terms": "Zahlbar innerhalb",
