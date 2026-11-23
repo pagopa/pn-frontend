@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
+
+### Bug Fixes
+
+* feedback legal after demo ([#2227](https://github.com/pagopa/pn-frontend/issues/2227)) ([c7e298b](https://github.com/pagopa/pn-frontend/commit/c7e298b1a7d6c5e59e49018448151b59035fe772))
+* **PN-22378:** align timeline accordion font sizes with Figma ([#2231](https://github.com/pagopa/pn-frontend/issues/2231)) ([ebd8f81](https://github.com/pagopa/pn-frontend/commit/ebd8f81df9b9bd72a20cfd2d0b811ac72708f769))
+* **PN-22412/PN-22383:** fix content as in figma ([#2232](https://github.com/pagopa/pn-frontend/issues/2232)) ([42e7087](https://github.com/pagopa/pn-frontend/commit/42e7087b29540428b42b7bbe3c12eabbe96e5dfe))
+* **PN-22439:** align PT institutions table skeleton with Figma ([#2234](https://github.com/pagopa/pn-frontend/issues/2234)) ([81e182f](https://github.com/pagopa/pn-frontend/commit/81e182f86e331f77a32474f99be26ef46180aa08))
+* **PN-22452:** correct analog delivery status and content for multiple recipients ([#2233](https://github.com/pagopa/pn-frontend/issues/2233)) ([e0c48f1](https://github.com/pagopa/pn-frontend/commit/e0c48f1f01f5b1b9deb5dbd455e4dc8372a374d8))
+* **PN-22464:** correct VIEWED copy for delegates after effective date (PF) ([#2235](https://github.com/pagopa/pn-frontend/issues/2235)) ([791c380](https://github.com/pagopa/pn-frontend/commit/791c380603e267757e9d64903d672197f459c5c7))
+
+
 # [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
 
 ### Bug Fixes

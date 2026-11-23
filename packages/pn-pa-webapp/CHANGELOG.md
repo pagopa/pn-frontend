@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
+
+### Bug Fixes
+
+* feedback legal after demo ([#2227](https://github.com/pagopa/pn-frontend/issues/2227)) ([c7e298b](https://github.com/pagopa/pn-frontend/commit/c7e298b1a7d6c5e59e49018448151b59035fe772))
+
+
 # [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
 
 ### Bug Fixes

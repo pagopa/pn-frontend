@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
+
+### Bug Fixes
+
+* **PN-22439:** align PT institutions table skeleton with Figma ([#2234](https://github.com/pagopa/pn-frontend/issues/2234)) ([81e182f](https://github.com/pagopa/pn-frontend/commit/81e182f86e331f77a32474f99be26ef46180aa08))
+
+
 # [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pt-webapp

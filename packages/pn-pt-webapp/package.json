@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-pt-webapp",
   "description": "Portale di SEND per i Partner Tecnologici",
-  "version": "2.28.0-RC.2",
+  "version": "2.28.0-RC.3",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",

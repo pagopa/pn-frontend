@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
+
+### Bug Fixes
+
+* **PN-22378:** align timeline accordion font sizes with Figma ([#2231](https://github.com/pagopa/pn-frontend/issues/2231)) ([ebd8f81](https://github.com/pagopa/pn-frontend/commit/ebd8f81df9b9bd72a20cfd2d0b811ac72708f769))
+* **PN-22452:** correct analog delivery status and content for multiple recipients ([#2233](https://github.com/pagopa/pn-frontend/issues/2233)) ([e0c48f1](https://github.com/pagopa/pn-frontend/commit/e0c48f1f01f5b1b9deb5dbd455e4dc8372a374d8))
+
+
 # [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
 
 ### Bug Fixes
