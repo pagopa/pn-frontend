@@ -262,7 +262,9 @@ function deliveredStatusVariant(
   );
   const analogSuccessEvent = plainStatusHistory?.find(
     (step) =>
-      step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW &&
+      ((step.category === TimelineCategory.SEND_ANALOG_FEEDBACK &&
+        (step.details as SendPaperDetails).responseStatus === ResponseStatus.OK) ||
+        step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW) &&
       step.details.recIndex === recIndex
   );
 
