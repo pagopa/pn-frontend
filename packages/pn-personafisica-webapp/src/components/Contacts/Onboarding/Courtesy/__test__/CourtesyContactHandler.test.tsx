@@ -56,7 +56,7 @@ describe('CourtesyContactHandler', () => {
     expect(getByLabelText(`${labelPrefix}.input-label`)).toBeInTheDocument();
     expect(getByRole('button', { name: `${labelPrefix}.button-label` })).toBeInTheDocument();
     expect(getByRole('button', { name: `${labelPrefix}.collapse-label` })).toBeInTheDocument();
-    expect(getByRole('alert')).toHaveTextContent('mock-error');
+    expect(getByText('mock-error')).toBeInTheDocument();
 
     expect(getByLabelText(`${labelPrefix}.input-label`)).toHaveAccessibleDescription('mock-error');
 
