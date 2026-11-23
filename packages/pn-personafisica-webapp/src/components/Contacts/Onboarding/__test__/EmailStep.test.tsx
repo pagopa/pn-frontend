@@ -1,6 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { A11yMessageAnnouncer } from '@pagopa-pn/pn-commons';
+
 import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
 import EmailStep from '../EmailStep';
@@ -47,30 +49,49 @@ describe('EmailStep', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('shows a validation error when the email is invalid', async () => {
+  it('announces the email validation error on each invalid verification attempt, but not while typing', async () => {
     const props = createProps();
 
-    const { getByLabelText, getByRole } = render(<EmailStep {...props} />);
+    const { getByLabelText, getByRole, queryByRole } = render(
+      <>
+        <A11yMessageAnnouncer />
+        <EmailStep {...props} />
+      </>
+    );
+
+    const input = getByLabelText(`${labelPrefix}.input-label`);
+    const verifyButton = getByRole('button', { name: `${labelPrefix}.verify-cta` });
 
     await act(async () => {
-      fireEvent.change(getByLabelText(`${labelPrefix}.input-label`), {
-        target: { value: 'abc' },
-      });
+      fireEvent.change(input, { target: { value: 'abc' } });
     });
 
+    expect(queryByRole('status')).not.toBeInTheDocument();
+
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: `${labelPrefix}.verify-cta` }));
+      fireEvent.click(verifyButton);
     });
 
     await waitFor(() => {
-      expect(getByRole('alert')).toHaveTextContent('courtesy-contacts.valid-email');
+      expect(getByRole('status')).toHaveTextContent('courtesy-contacts.valid-email');
     });
 
-    expect(
-      getByLabelText('onboarding.digital-domicile.email.input-label')
-    ).toHaveAccessibleDescription('courtesy-contacts.valid-email');
+    expect(input).toHaveAccessibleDescription('courtesy-contacts.valid-email');
+
+    const firstAnnouncement = getByRole('status').textContent;
+
+    await act(async () => {
+      fireEvent.click(verifyButton);
+    });
+
+    await waitFor(() => {
+      expect(getByRole('status').textContent).not.toBe(firstAnnouncement);
+    });
+
+    expect(getByRole('status')).toHaveTextContent('courtesy-contacts.valid-email');
     expect(props.onChange).not.toHaveBeenCalled();
     expect(props.onVerified).not.toHaveBeenCalled();
+    expect(mock.history.post).toHaveLength(0);
   });
 
   it('verifies a new email and calls onChange and onVerified on success', async () => {
@@ -80,7 +101,12 @@ describe('EmailStep', () => {
       result: 'OK',
     });
 
-    const { getByLabelText, getByRole } = render(<EmailStep {...props} />);
+    const { getByLabelText, getByRole, queryByRole } = render(
+      <>
+        <A11yMessageAnnouncer />
+        <EmailStep {...props} />
+      </>
+    );
 
     await act(async () => {
       fireEvent.change(getByLabelText(`${labelPrefix}.input-label`), {
@@ -103,6 +129,8 @@ describe('EmailStep', () => {
       expect(props.onChange).toHaveBeenCalledWith(mockEmail);
       expect(props.onVerified).toHaveBeenCalledTimes(1);
     });
+
+    expect(queryByRole('status')).not.toBeInTheDocument();
   });
 
   it('renders the readonly summary when a new email has already been added during the wizard', () => {

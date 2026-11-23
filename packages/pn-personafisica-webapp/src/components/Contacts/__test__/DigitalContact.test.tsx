@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { vi } from 'vitest';
 
 import { Button } from '@mui/material';
+import { A11yMessageAnnouncer } from '@pagopa-pn/pn-commons';
 import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
@@ -419,7 +420,7 @@ describe('DigitalContact Component', () => {
     expect(newButtons[0]).toBeEnabled();
   });
 
-  it('clears the validation alert when an invalid edit is cancelled', async () => {
+  it('keeps the field error accessible and clears it when an invalid edit is cancelled', async () => {
     const { getByRole, queryByRole } = render(
       <DigitalContact
         label="Mocked label"
@@ -432,35 +433,24 @@ describe('DigitalContact Component', () => {
       />
     );
 
-    // Open edit mode.
+    expect(queryByRole('alert')).not.toBeInTheDocument();
+
     fireEvent.click(getByRole('button', { name: 'button.modifica' }));
 
-    const alert = getByRole('alert');
     const input = getByRole('textbox', { name: 'Mocked input label' });
-
-    expect(alert).toBeEmptyDOMElement();
-
-    // Trigger a validation error.
     fireEvent.change(input, { target: { value: 'invalid value' } });
     fireEvent.blur(input);
 
     await waitFor(() => {
-      expect(alert).toHaveTextContent('legal-contacts.valid-pec');
+      expect(input).toHaveAccessibleDescription('legal-contacts.valid-pec');
     });
 
-    expect(input).toHaveAccessibleDescription('legal-contacts.valid-pec');
-    expect(getByRole('alert')).toBe(alert);
+    expect(queryByRole('alert')).not.toBeInTheDocument();
 
-    // Cancel the edit.
     fireEvent.click(getByRole('button', { name: 'button.annulla' }));
-
-    expect(getByRole('alert')).toBeEmptyDOMElement();
     expect(queryByRole('textbox', { name: 'Mocked input label' })).not.toBeInTheDocument();
 
-    // Reopen edit mode: no stale validation error.
     fireEvent.click(getByRole('button', { name: 'button.modifica' }));
-
-    expect(getByRole('alert')).toBeEmptyDOMElement();
     expect(getByRole('textbox', { name: 'Mocked input label' })).toHaveValue('mocked@pec.it');
   });
 
@@ -505,4 +495,62 @@ describe('DigitalContact Component', () => {
     const buttons = container.querySelectorAll('button');
     expect(buttons[0]).toHaveTextContent('Custom edit button');
   });
+
+  it.each([
+    {
+      channelType: ChannelType.EMAIL,
+      errorMessage: 'courtesy-contacts.valid-email',
+    },
+    {
+      channelType: ChannelType.PEC,
+      errorMessage: 'legal-contacts.valid-pec',
+    },
+    {
+      channelType: ChannelType.SMS,
+      errorMessage: 'courtesy-contacts.valid-sms',
+    },
+  ])(
+    'announces the $channelType validation error on each invalid submit, but not while typing',
+    async ({ channelType, errorMessage }) => {
+      const fieldName = `default_${channelType.toLowerCase()}`;
+
+      const { container, getByRole, queryByRole } = render(
+        <>
+          <A11yMessageAnnouncer />
+          <DigitalContact
+            label="Mocked label"
+            value=""
+            channelType={channelType}
+            inputProps={{ label: 'Mocked input label' }}
+            insertButtonLabel="Button"
+            onSubmit={vi.fn()}
+          />
+        </>
+      );
+
+      const input = container.querySelector(`[name="${fieldName}"]`);
+      const button = getById(container, `${fieldName}-button`);
+
+      fireEvent.change(input!, { target: { value: 'not valid' } });
+
+      expect(queryByRole('status')).not.toBeInTheDocument();
+      expect(queryByRole('alert')).not.toBeInTheDocument();
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(getByRole('status')).toHaveTextContent(errorMessage);
+      });
+
+      const firstAnnouncement = getByRole('status').textContent;
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(getByRole('status').textContent).not.toBe(firstAnnouncement);
+      });
+
+      expect(getByRole('status')).toHaveTextContent(errorMessage);
+    }
+  );
 });

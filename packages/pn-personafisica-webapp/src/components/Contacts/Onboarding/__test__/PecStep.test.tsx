@@ -1,5 +1,7 @@
 import { vi } from 'vitest';
 
+import { A11yMessageAnnouncer } from '@pagopa-pn/pn-commons';
+
 import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import PecStep from '../PecStep';
 
@@ -177,28 +179,46 @@ describe('PecStep', () => {
     await expect(continueHandler()).resolves.toBe(true);
   });
 
-  it('shows the field error when the PEC format is invalid', async () => {
+  it('announces the PEC validation error on each invalid verification attempt, but not while typing', async () => {
     const props = createProps();
 
-    const { getByLabelText, getByRole } = render(<PecStep {...props} />);
+    const { getByLabelText, getByRole, queryByRole } = render(
+      <>
+        <A11yMessageAnnouncer />
+        <PecStep {...props} />
+      </>
+    );
+
+    const input = getByLabelText(`${labelPrefix}.input-label`);
+    const verifyButton = getByRole('button', { name: `${labelPrefix}.verify-cta` });
 
     await act(async () => {
-      fireEvent.change(getByLabelText(`${labelPrefix}.input-label`), {
-        target: { value: 'abc' },
-      });
+      fireEvent.change(input, { target: { value: 'abc' } });
     });
 
+    expect(queryByRole('status')).not.toBeInTheDocument();
+
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: `${labelPrefix}.verify-cta` }));
+      fireEvent.click(verifyButton);
     });
 
     await waitFor(() => {
-      expect(getByRole('alert')).toHaveTextContent('legal-contacts.valid-pec');
+      expect(getByRole('status')).toHaveTextContent('legal-contacts.valid-pec');
     });
 
-    expect(
-      getByLabelText('onboarding.digital-domicile.pec.input-label')
-    ).toHaveAccessibleDescription('legal-contacts.valid-pec');
+    expect(input).toHaveAccessibleDescription('legal-contacts.valid-pec');
+
+    const firstAnnouncement = getByRole('status').textContent;
+
+    await act(async () => {
+      fireEvent.click(verifyButton);
+    });
+
+    await waitFor(() => {
+      expect(getByRole('status').textContent).not.toBe(firstAnnouncement);
+    });
+
+    expect(getByRole('status')).toHaveTextContent('legal-contacts.valid-pec');
     expect(props.onPecChange).not.toHaveBeenCalled();
   });
 
@@ -212,7 +232,9 @@ describe('PecStep', () => {
     });
 
     await waitFor(() => {
-      expect(getByRole('alert')).toHaveTextContent('legal-contacts.valid-pec');
+      expect(getByLabelText(`${labelPrefix}.input-label`)).toHaveAccessibleDescription(
+        'legal-contacts.valid-pec'
+      );
     });
 
     expect(
@@ -256,8 +278,11 @@ describe('PecStep', () => {
   it('returns false and does not show the verification modal when continue is triggered with an invalid PEC', async () => {
     const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
-    const { getByLabelText, getByRole, queryByText } = render(
-      <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
+    const { getByLabelText, getByRole, queryByRole, queryByText } = render(
+      <>
+        <A11yMessageAnnouncer />
+        <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
+      </>
     );
 
     await act(async () => {
@@ -266,32 +291,57 @@ describe('PecStep', () => {
       });
     });
 
+    // Nessun annuncio durante la digitazione
+    expect(queryByRole('status')).not.toBeInTheDocument();
+
     const continueHandler = registerContinueHandler.mock.calls.at(-1)?.[0];
     if (continueHandler === undefined) {
       throw new Error('Continue handler was not registered');
     }
 
     let canContinue: boolean | undefined;
+
     await act(async () => {
       canContinue = await continueHandler();
     });
 
     expect(canContinue).toBe(false);
+
     await waitFor(() => {
-      expect(getByRole('alert')).toHaveTextContent('legal-contacts.valid-pec');
+      expect(getByRole('status')).toHaveTextContent('legal-contacts.valid-pec');
     });
 
-    expect(
-      getByLabelText('onboarding.digital-domicile.pec.input-label')
-    ).toHaveAccessibleDescription('legal-contacts.valid-pec');
+    expect(getByLabelText(`${labelPrefix}.input-label`)).toHaveAccessibleDescription(
+      'legal-contacts.valid-pec'
+    );
+
+    expect(queryByText(`${labelPrefix}.verify-before-continue-title`)).not.toBeInTheDocument();
+
+    // Un secondo tentativo invalido deve aggiornare l'annuncio
+    const firstAnnouncement = getByRole('status').textContent;
+
+    await act(async () => {
+      canContinue = await continueHandler();
+    });
+
+    expect(canContinue).toBe(false);
+
+    await waitFor(() => {
+      expect(getByRole('status').textContent).not.toBe(firstAnnouncement);
+    });
+
+    expect(getByRole('status')).toHaveTextContent('legal-contacts.valid-pec');
     expect(queryByText(`${labelPrefix}.verify-before-continue-title`)).not.toBeInTheDocument();
   });
 
   it('returns false and does not show the verification modal when continue is triggered without accepting the disclaimer', async () => {
     const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
-    const { getByLabelText, findByText, queryByText } = render(
-      <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
+    const { getByLabelText, getByRole, queryByRole, findByText, queryByText } = render(
+      <>
+        <A11yMessageAnnouncer />
+        <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
+      </>
     );
 
     await act(async () => {
@@ -299,6 +349,8 @@ describe('PecStep', () => {
         target: { value: mockPec },
       });
     });
+
+    expect(queryByRole('status')).not.toBeInTheDocument();
 
     const continueHandler = registerContinueHandler.mock.calls.at(-1)?.[0];
     if (continueHandler === undefined) {
@@ -312,6 +364,11 @@ describe('PecStep', () => {
 
     expect(canContinue).toBe(false);
     expect(await findByText('required-field')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(getByRole('status')).toHaveTextContent('required-field');
+    });
+
     expect(queryByText(`${labelPrefix}.verify-before-continue-title`)).not.toBeInTheDocument();
   });
 });

@@ -40,7 +40,7 @@ describe('OnboardingContactItem', () => {
       expect(getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
       expect(getByText('mock-footer')).toBeInTheDocument();
       expect(getByRole('button', { name: 'mock-collapse' })).toBeInTheDocument();
-      expect(getByRole('alert')).toHaveTextContent('mock-error');
+      expect(getByLabelText('mock-input-label')).toHaveAccessibleDescription('mock-error');
 
       fireEvent.change(getByLabelText('mock-input-label'), {
         target: { value: 'a' },
@@ -123,7 +123,7 @@ describe('OnboardingContactItem', () => {
     });
   });
 
-  it('keeps the alert mounted when the validation error changes', () => {
+  it('keeps the validation error visible and accessible when it changes', () => {
     const props = {
       mode: 'entry' as const,
       inputLabel: 'mock-input-label',
@@ -133,33 +133,30 @@ describe('OnboardingContactItem', () => {
       onSubmit: vi.fn(),
     };
 
-    const { getByRole, getByLabelText, rerender } = render(<OnboardingContactItem {...props} />);
+    const { getByLabelText, getByText, queryByRole, queryByText, rerender } = render(
+      <OnboardingContactItem {...props} />
+    );
 
-    const alert = getByRole('alert');
     const input = getByLabelText('mock-input-label');
 
-    // The live region exists before any validation error.
-    expect(alert).toBeEmptyDOMElement();
+    expect(queryByRole('alert')).not.toBeInTheDocument();
 
-    // An error appears after the field is touched.
     rerender(<OnboardingContactItem {...props} touched error="mock-error" />);
 
-    expect(getByRole('alert')).toBe(alert);
-    expect(alert).toHaveTextContent('mock-error');
+    expect(getByText('mock-error')).toBeInTheDocument();
     expect(input).toHaveAccessibleDescription('mock-error');
+    expect(queryByRole('alert')).not.toBeInTheDocument();
 
-    // The error is cleared after validation succeeds.
     rerender(<OnboardingContactItem {...props} touched />);
 
-    expect(getByRole('alert')).toBe(alert);
-    expect(alert).toBeEmptyDOMElement();
+    expect(queryByText('mock-error')).not.toBeInTheDocument();
+    expect(queryByRole('alert')).not.toBeInTheDocument();
 
-    // The same error appears again.
     rerender(<OnboardingContactItem {...props} touched error="mock-error" />);
 
-    expect(getByRole('alert')).toBe(alert);
-    expect(alert).toHaveTextContent('mock-error');
+    expect(getByText('mock-error')).toBeInTheDocument();
     expect(input).toHaveAccessibleDescription('mock-error');
+    expect(queryByRole('alert')).not.toBeInTheDocument();
   });
 
   describe('view mode', () => {

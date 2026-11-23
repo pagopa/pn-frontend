@@ -1,5 +1,7 @@
 import { vi } from 'vitest';
 
+import { A11yMessageAnnouncer } from '@pagopa-pn/pn-commons';
+
 import { act, fireEvent, render, waitFor } from '../../../../../__test__/test-utils';
 import EmailSmsStep from '../EmailSmsStep';
 
@@ -70,6 +72,59 @@ describe('EmailSmsStep', () => {
       expect(getByText(`${labelPrefix}.email.edit.title`)).toBeInTheDocument();
       expect(getByText(mockEmail)).toBeInTheDocument();
     });
+
+    it('announces invalid email on each verify attempt, but not while typing', async () => {
+      const { getByLabelText, getByRole, queryByRole } = render(
+        <>
+          <A11yMessageAnnouncer />
+          <EmailSmsStep {...createProps()} />
+        </>
+      );
+
+      const emailInput = getByLabelText(`${labelPrefix}.email.insert.input-label`);
+
+      await act(async () => {
+        fireEvent.change(emailInput, {
+          target: { value: 'invalid-email' },
+        });
+      });
+
+      // Nessun annuncio durante la digitazione
+      expect(queryByRole('status')).not.toBeInTheDocument();
+
+      const verifyButton = getByRole('button', {
+        name: `${labelPrefix}.email.insert.button-label`,
+      });
+
+      await act(async () => {
+        fireEvent.click(verifyButton);
+      });
+
+      // Verifica il messaggio annunciato
+      await waitFor(() => {
+        expect(getByRole('status')).toHaveTextContent('courtesy-contacts.valid-email');
+      });
+
+      // Verifica gli attributi di accessibilità del campo
+      expect(emailInput).toHaveAttribute('aria-invalid', 'true');
+
+      const describedBy = emailInput.getAttribute('aria-describedby');
+      expect(describedBy).toBeTruthy();
+
+      const helperText = document.getElementById(describedBy!);
+      expect(helperText).toHaveTextContent('courtesy-contacts.valid-email');
+
+      const firstAnnouncement = getByRole('status').textContent;
+
+      // Un secondo tentativo deve produrre un nuovo annuncio
+      await act(async () => {
+        fireEvent.click(verifyButton);
+      });
+
+      await waitFor(() => {
+        expect(getByRole('status').textContent).not.toBe(firstAnnouncement);
+      });
+    });
   });
 
   describe('sms section', () => {
@@ -135,6 +190,59 @@ describe('EmailSmsStep', () => {
       expect(getByText(`${labelPrefix}.sms.edit.title`)).toBeInTheDocument();
       expect(getByText(`${labelPrefix}.sms.edit.description`)).toBeInTheDocument();
     });
+
+    it('announces invalid SMS on each verify attempt, but not while typing', async () => {
+      const { getByLabelText, getByRole, queryByRole } = render(
+        <>
+          <A11yMessageAnnouncer />
+          <EmailSmsStep {...createProps()} />
+        </>
+      );
+
+      const smsInput = getByLabelText(`${labelPrefix}.sms.insert.input-label`);
+
+      await act(async () => {
+        fireEvent.change(smsInput, {
+          target: { value: 'abc' },
+        });
+      });
+
+      // Nessun annuncio durante la digitazione
+      expect(queryByRole('status')).not.toBeInTheDocument();
+
+      const verifyButton = getByRole('button', {
+        name: `${labelPrefix}.sms.insert.button-label`,
+      });
+
+      await act(async () => {
+        fireEvent.click(verifyButton);
+      });
+
+      // Verifica il contenuto dell'annuncio
+      await waitFor(() => {
+        expect(getByRole('status')).toHaveTextContent('courtesy-contacts.valid-sms');
+      });
+
+      // Verifica gli attributi ARIA del campo
+      expect(smsInput).toHaveAttribute('aria-invalid', 'true');
+
+      const describedBy = smsInput.getAttribute('aria-describedby');
+      expect(describedBy).toBeTruthy();
+
+      const helperText = document.getElementById(describedBy!);
+      expect(helperText).toHaveTextContent('courtesy-contacts.valid-sms');
+
+      const firstAnnouncement = getByRole('status').textContent;
+
+      // Un secondo tentativo deve aggiornare l'annuncio
+      await act(async () => {
+        fireEvent.click(verifyButton);
+      });
+
+      await waitFor(() => {
+        expect(getByRole('status').textContent).not.toBe(firstAnnouncement);
+      });
+    });
   });
 
   describe('verify modal', () => {
@@ -151,14 +259,34 @@ describe('EmailSmsStep', () => {
 
     it('opens with the email title when an unverified email is detected on continue', async () => {
       const { props, getHandler } = createPropsWithHandler();
-      const { getByLabelText, getByText } = render(<EmailSmsStep {...props} />);
 
-      fireEvent.change(getByLabelText(`${labelPrefix}.email.insert.input-label`), {
-        target: { value: 'test@mock.pagopa.it' },
+      const { getByLabelText, getByText, queryByRole } = render(
+        <>
+          <A11yMessageAnnouncer />
+          <EmailSmsStep {...props} ioEnabled />
+        </>
+      );
+
+      await act(async () => {
+        fireEvent.change(getByLabelText(`${labelPrefix}.email.insert.input-label`), {
+          target: { value: 'test@mock.pagopa.it' },
+        });
       });
 
-      await act(async () => void getHandler()?.());
+      // Nessun annuncio durante la digitazione
+      expect(queryByRole('status')).not.toBeInTheDocument();
 
+      const continueHandler = getHandler();
+
+      if (continueHandler === undefined) {
+        throw new Error('Continue handler was not registered');
+      }
+
+      await act(async () => {
+        await continueHandler();
+      });
+
+      // La modale email si apre perché l'email è valida ma non verificata
       await waitFor(() => {
         expect(getByText(`${labelPrefix}.email.verify-before-continue-title`)).toBeInTheDocument();
       });
@@ -166,19 +294,28 @@ describe('EmailSmsStep', () => {
 
     it('closes when the confirm button is clicked', async () => {
       const { props, getHandler } = createPropsWithHandler();
-      const { getByLabelText, getByRole, queryByText } = render(<EmailSmsStep {...props} />);
 
-      fireEvent.change(getByLabelText(`${labelPrefix}.email.insert.input-label`), {
-        target: { value: 'test@mock.pagopa.it' },
-      });
-
-      await act(async () => void getHandler()?.());
-
-      await waitFor(() =>
-        expect(getByRole('button', { name: 'button.understand' })).toBeInTheDocument()
+      const { getByLabelText, getByRole, queryByText } = render(
+        <EmailSmsStep {...props} ioEnabled />
       );
 
-      fireEvent.click(getByRole('button', { name: 'button.understand' }));
+      await act(async () => {
+        fireEvent.change(getByLabelText(`${labelPrefix}.email.insert.input-label`), {
+          target: { value: 'test@mock.pagopa.it' },
+        });
+      });
+
+      await act(async () => {
+        await getHandler()?.();
+      });
+
+      await waitFor(() => {
+        expect(getByRole('button', { name: 'button.understand' })).toBeInTheDocument();
+      });
+
+      await act(async () => {
+        fireEvent.click(getByRole('button', { name: 'button.understand' }));
+      });
 
       await waitFor(() => {
         expect(
@@ -190,19 +327,81 @@ describe('EmailSmsStep', () => {
     it('opens with the SMS title when an unverified SMS is detected on continue', async () => {
       const { props, getHandler } = createPropsWithHandler();
 
-      const { getByLabelText, getByText } = render(
-        <EmailSmsStep {...props} email={{ value: 'test@mock.pagopa.it', alreadySet: true }} />
+      const { getByLabelText, getByText, queryByRole } = render(
+        <>
+          <A11yMessageAnnouncer />
+          <EmailSmsStep {...props} email={{ value: 'test@mock.pagopa.it', alreadySet: true }} />
+        </>
       );
 
-      fireEvent.change(getByLabelText(`${labelPrefix}.sms.insert.input-label`), {
-        target: { value: '3331234567' },
+      await act(async () => {
+        fireEvent.change(getByLabelText(`${labelPrefix}.sms.insert.input-label`), {
+          target: { value: '3331234567' },
+        });
       });
 
-      await act(async () => void getHandler()?.());
+      // Nessun annuncio durante la digitazione
+      expect(queryByRole('status')).not.toBeInTheDocument();
+
+      const continueHandler = getHandler();
+
+      if (continueHandler === undefined) {
+        throw new Error('Continue handler was not registered');
+      }
+
+      await act(async () => {
+        await continueHandler();
+      });
 
       await waitFor(() => {
         expect(getByText(`${labelPrefix}.sms.verify-before-continue-title`)).toBeInTheDocument();
       });
+
+      // Nessun errore da annunciare: il numero è formalmente valido
+      expect(queryByRole('status')).not.toBeInTheDocument();
+    });
+
+    it('announces SMS error without opening email modal when email is valid but unverified', async () => {
+      const { props, getHandler } = createPropsWithHandler();
+
+      const { getByLabelText, getByRole, queryByText } = render(
+        <>
+          <A11yMessageAnnouncer />
+          <EmailSmsStep {...props} />
+        </>
+      );
+
+      await act(async () => {
+        fireEvent.change(getByLabelText(`${labelPrefix}.email.insert.input-label`), {
+          target: { value: 'test@mock.pagopa.it' },
+        });
+
+        fireEvent.change(getByLabelText(`${labelPrefix}.sms.insert.input-label`), {
+          target: { value: 'abc' },
+        });
+      });
+
+      const continueHandler = getHandler();
+
+      if (!continueHandler) {
+        throw new Error('Continue handler was not registered');
+      }
+
+      let canContinue: boolean | undefined;
+
+      await act(async () => {
+        canContinue = await continueHandler();
+      });
+
+      expect(canContinue).toBe(false);
+
+      await waitFor(() => {
+        expect(getByRole('status')).toHaveTextContent('courtesy-contacts.valid-sms');
+      });
+
+      expect(
+        queryByText(`${labelPrefix}.email.verify-before-continue-title`)
+      ).not.toBeInTheDocument();
     });
   });
 });

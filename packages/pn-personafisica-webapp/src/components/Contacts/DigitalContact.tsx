@@ -16,7 +16,6 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import {
-  Box,
   InputAdornment,
   Stack,
   SvgIconProps,
@@ -25,7 +24,7 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { A11yMessage, useEventEmitter, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import { ChannelType } from '../../models/contacts';
@@ -65,17 +64,6 @@ type Props = {
   beforeValidationCallback?: (value: string, errors?: string) => void;
 };
 
-const getFieldError = (
-  touched: boolean | undefined,
-  error: string | undefined
-): string | undefined => (touched ? error : undefined);
-
-const getAnnouncedError = (
-  value: string,
-  editMode: boolean,
-  fieldError?: string
-): string | undefined => (!value || editMode ? fieldError : undefined);
-
 const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   (
     {
@@ -102,6 +90,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   ) => {
     const { t } = useTranslation(['common', 'recapiti']);
     const isMobile = useIsMobile();
+    const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
     const [editMode, setEditMode] = useState(false);
     const contactType = channelType.toLowerCase();
 
@@ -143,31 +132,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     });
 
-    const fieldError = getFieldError(
-      formik.touched[`${senderId}_${contactType}`],
-      formik.errors[`${senderId}_${contactType}`]
-    );
-
-    const errorAnnouncer = (
-      <Box
-        role="alert"
-        aria-atomic="true"
-        sx={{
-          position: 'absolute',
-          width: '1px',
-          height: '1px',
-          padding: 0,
-          margin: '-1px',
-          overflow: 'hidden',
-          clip: 'rect(0, 0, 0, 0)',
-          whiteSpace: 'nowrap',
-          border: 0,
-        }}
-      >
-        {getAnnouncedError(value, editMode, fieldError)}
-      </Box>
-    );
-
     const semanticTextFieldProps = getSemanticTextFieldProps(channelType);
 
     const handleChangeTouched = async (e: ChangeEvent) => {
@@ -204,26 +168,39 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     }));
 
-    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const fieldName = `${senderId}_${contactType}`;
+
       if (beforeValidationCallback) {
-        beforeValidationCallback(
-          formik.values[`${senderId}_${contactType}`],
-          formik.errors[`${senderId}_${contactType}`]
-        );
+        beforeValidationCallback(formik.values[fieldName], formik.errors[fieldName]);
       }
 
       if (value && onEditConfirmCallback) {
         onEditConfirmCallback();
       }
 
-      formik.handleSubmit(e);
+      await formik.setFieldTouched(fieldName, true, false);
+      const errors = await formik.validateForm(formik.values);
+      const validationError = errors[fieldName];
+
+      if (typeof validationError === 'string' && validationError) {
+        publishEvent({ message: validationError });
+      }
+
+      await formik.submitForm();
     };
 
     // INSERT MODE
     if (!value) {
       return (
-        <form onSubmit={handleFormSubmit} data-testid={`${senderId}_${contactType}Contact`}>
-          {errorAnnouncer}
+        <form
+          noValidate
+          onSubmit={handleFormSubmit}
+          data-testid={`${senderId}_${contactType}Contact`}
+        >
           <Label
             id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
@@ -286,11 +263,11 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     // EDIT MODE
     return (
       <form
+        noValidate
         onSubmit={handleFormSubmit}
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
       >
-        {errorAnnouncer}
         {showLabelOnEdit && (
           <Label
             id={`${senderId}_${contactType}-custom-label`}
