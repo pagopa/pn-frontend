@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Box, Skeleton, Typography } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import {
   ApiErrorWrapper,
   CustomPagination,
@@ -37,17 +38,11 @@ const delegationStatusChip: Record<
   REVOKED: { label: 'table.delegation-status.revoked', color: 'default' },
 };
 
-const visuallyHidden = {
-  border: 0,
-  clip: 'rect(0 0 0 0)',
-  height: '1px',
-  margin: '-1px',
-  overflow: 'hidden',
-  padding: 0,
-  position: 'absolute',
-  whiteSpace: 'nowrap',
-  width: '1px',
-} as const;
+const skeletonWidths: Partial<Record<keyof InstitutionRow, number>> = {
+  institutionName: 140,
+  institutionTaxCode: 160,
+  status: 100,
+};
 
 const PAGE_SIZES = [10, 20, 50];
 const SEARCH_MAX_LENGTH = 250;
@@ -181,10 +176,13 @@ const InstitutionsPage: React.FC = () => {
 
   const renderCellContent = (row: Row<InstitutionRow>, columnId: keyof InstitutionRow) => {
     if (loading) {
-      return columnId === 'status' ? (
-        <Skeleton variant="rounded" width={160} height={24} sx={{ borderRadius: 4 }} />
-      ) : (
-        <Skeleton variant="text" width="60%" />
+      return (
+        <Skeleton
+          variant="rounded"
+          width={skeletonWidths[columnId]}
+          height={16}
+          sx={{ borderRadius: '8px' }}
+        />
       );
     }
     if (columnId === 'institutionName') {
@@ -298,7 +296,12 @@ const InstitutionsPage: React.FC = () => {
         }
       >
         <Box data-testid="institutionsList" aria-busy={loading || undefined}>
-          <Typography role="status" aria-live="polite" aria-atomic="true" sx={visuallyHidden}>
+          <Typography
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            sx={{ ...visuallyHidden }}
+          >
             {loading ? t('loading', { ns: 'common' }) : ''}
           </Typography>
           <SmartTable
