@@ -87,7 +87,7 @@
     },
     "notification-timeline-section": {
       "aria-label": "Accède à la timeline de la notification",
-      "title": "Statut de la notification"
+      "title": "Statut de la notification SEND"
     },
     "payment-table-aria-label": "Détail des paiements",
     "payment-terms": "À payer avant le",
