@@ -276,7 +276,7 @@ describe('NotificationTimelineGroupItem', () => {
       const event = createPecEvent(
         'SEND_DIGITAL_DOMICILE',
         TimelineCategory.SEND_DIGITAL_DOMICILE,
-        'source@pec.it',
+        'source@example.test',
         'SPECIAL'
       );
 
