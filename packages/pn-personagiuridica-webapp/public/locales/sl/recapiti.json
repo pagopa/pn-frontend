@@ -72,7 +72,7 @@
     "no-courtesy-sercq-send-title": "Ali želite prejemati naslednja obvestila samo digitalno?",
     "no-courtesy-title": "Dopolni kontaktne podatke",
     "no-sercq-cta": "Aktiviraj digitalni naslov",
-    "no-sercq-send-description": "Aktivirajte digitalni naslov, da boste prihodnja obvestila prejemali le v digitalni obliki in prihranili.",
+    "no-sercq-send-description": "Aktivirajte digitalni naslov, da boste prihodnja obvestila s pravno veljavo prejemali le v digitalni obliki in prihranili.",
     "no-sercq-send-title": "Nič več papirnatih dokumentov"
   },
   "errors": {
@@ -99,7 +99,7 @@
       "sercq_send-active": "Platforma SEND je digitalni naslov vašega podjetja",
       "special_contacts": {
         "action": "Personaliziraj za pošiljatelja",
-        "content": "Izberi, kje želiš prejemati obvestila SEND, ki jih tvojemu podjetju pošlje določen organ.",
+        "content": "Izberi, kje želiš prejemati obvestila s pravno veljavo, ki jih tvojemu podjetju pošlje določen organ.",
         "title": "Personaliziraj digitalni naslov za posameznega pošiljatelja"
       },
       "title": "Upravljanje digitalnega naslova",
@@ -193,7 +193,7 @@
             "title": "Prejmi sporočilo"
           },
           {
-            "description": "Odpri podrobnosti obvestila s pravno veljavo na SEND",
+            "description": "Odpri podrobnosti obvestila s pravno veljavo na platformi SEND",
             "title": "Dostopaj do obvestila SEND"
           }
         ],
@@ -273,6 +273,6 @@
     "inactive": "Za aktiviranje",
     "pec-validation": "Potrjevanje PEC v teku"
   },
-  "subtitle": "Upravljaj digitalne kontaktne podatke, na katere želiš prejemati obvestila s pravno veljavo SEND in/ali povezana informativna sporočila za <0>tvoje podjetje</0>.",
+  "subtitle": "Upravljaj digitalne kontaktne podatke, na katere želiš prejemati obvestila s pravno veljavo in/ali povezana informativna sporočila za <0>tvoje podjetje</0>.",
   "title": "Naslovi"
 }

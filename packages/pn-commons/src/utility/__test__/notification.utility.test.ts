@@ -497,6 +497,71 @@ describe('notification status texts', () => {
     }
   );
 
+  it.each([
+    {
+      description: 'successful analog feedback for the current recipient',
+      responseStatus: 'OK',
+      eventRecIndex: 0,
+      expectedVariant: 'multirecipient',
+    },
+    {
+      description: 'successful analog feedback for another recipient',
+      responseStatus: 'OK',
+      eventRecIndex: 1,
+      expectedVariant: 'by-recipient',
+    },
+    {
+      description: 'unsuccessful analog feedback for the current recipient',
+      responseStatus: 'KO',
+      eventRecIndex: 0,
+      expectedVariant: 'by-recipient',
+    },
+  ])(
+    'uses the $expectedVariant DELIVERED description with $description',
+    ({ responseStatus, eventRecIndex, expectedVariant }) => {
+      const recipientKey = `status.delivered-description-analog-${expectedVariant}`;
+
+      initStatusLocalizationExists((_namespace, path) => path === recipientKey);
+
+      const status: NotificationStatusHistory = {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.ANALOG,
+      };
+
+      const deliveringStatus: NotificationStatusHistory = {
+        status: NotificationStatus.DELIVERING,
+        activeFrom: '2023-01-26T13:50:00.000Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: `SEND_ANALOG_FEEDBACK.RECINDEX_${eventRecIndex}`,
+            timestamp: '2023-01-26T13:57:16.42843144Z',
+            category: TimelineCategory.SEND_ANALOG_FEEDBACK,
+            details: {
+              recIndex: eventRecIndex,
+              responseStatus,
+            },
+          } as INotificationDetailTimeline,
+        ],
+      };
+
+      testNotificationStatusInfos(
+        'default',
+        'notifiche - status.delivered-multirecipient',
+        'notifiche - status.delivered-tooltip-multirecipient',
+        `notifiche - ${recipientKey}`,
+        status,
+        {
+          recipients: notificationDTOMultiRecipient.recipients,
+          userTaxId: notificationDTOMultiRecipient.recipients[0].taxId,
+          statusHistory: [status, deliveringStatus],
+        }
+      );
+    }
+  );
+
   it('keeps the DELIVERED description of the recipient view when the delegate one is unavailable', () => {
     const localizationKey = `status.delivered-description-${NotificationDeliveryMode.DIGITAL}`;
     initStatusLocalizationExists((_namespace, path) => path === localizationKey);

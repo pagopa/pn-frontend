@@ -79,7 +79,7 @@
     "no-io-description": "Ko je zate prispelo obvestilo SEND, ga lahko prejmeš v aplikaciji IO, ga prebereš in morebitne stroške plačaš neposredno v aplikaciji!",
     "no-io-title": "Vaša obvestila so oddaljena le eno aplikacijo",
     "no-sercq-cta": "Aktiviraj digitalni naslov",
-    "no-sercq-send-description": "Aktivirajte digitalni naslov, da boste prihodnja obvestila prejemali le v digitalni obliki in prihranili.",
+    "no-sercq-send-description": "Aktivirajte digitalni naslov, da boste prihodnja obvestila s pravno veljavo prejemali le v digitalni obliki in prihranili.",
     "no-sercq-send-title": "Nič več papirnatih dokumentov"
   },
   "errors": {
@@ -131,7 +131,7 @@
       "sercq_send-active": "Platforma SEND je tvoje digitalno prebivališče",
       "special_contacts": {
         "action": "Prilagodi za organizacijo",
-        "content": "Izberi, kje želiš prejemati obvestila SEND, ki ti jih pošlje določen organ.",
+        "content": "Izberi, kje želiš prejemati obvestila s pravno veljavo, ki ti jih pošlje določen organ.",
         "title": "Prilagodite svoje digitalno prebivališče za organizacijo pošiljateljico"
       },
       "title": "Upravljajte svoje digitalno prebivališče",
@@ -170,7 +170,7 @@
     "pec-verify": "Preverite PEC {{value}}",
     "pec-verify-descr": "Kodo smo poslali na navedeni PEC. Koda je <strong>veljavna 15 minut</strong>.",
     "remove-pec-confirm": "Onemogoči PEC",
-    "remove-pec-message": "<0>Ne boš več imel kontaktnega naslova za obvestila s pravno veljavo javne uprave in jih boš morda prejemal v papirni obliki, pri čemer boš kril morebitne stroške.</0><1>Vendar boš še naprej prejemal obvestila prek kanalov, ki si jih aktiviral.</1>",
+    "remove-pec-message": "<0>Ne boš več imel digitalnega kontaktnega naslova s pravno veljavo za obvestila SEND javne uprave in jih boš morda prejemal v papirni obliki, pri čemer boš kril morebitne stroške.</0><1>Vendar boš še naprej prejemal obvestila prek kanalov, ki si jih aktiviral.</1>",
     "remove-pec-title": "Ali ste prepričani, da želite onemogočiti PEC?",
     "remove-sercq_send-confirm": "Onemogoči digitalno prebivališče",
     "remove-sercq_send-message": "<0>Če se odločiš za deaktivacijo svojega digitalnega prebivališča SEND, boš morda prejemal obvestila s pravno veljavo s priporočeno pošiljko in <strong>plačal s tem povezane stroške.</strong></0><1>Še naprej boš prejemal obvestila po e-pošti; deaktiviraš jih lahko v razdelku Tvoji kontaktni podatki.</1>",

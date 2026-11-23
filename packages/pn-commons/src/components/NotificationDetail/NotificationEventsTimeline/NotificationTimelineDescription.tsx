@@ -120,7 +120,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
       <Typography {...slotProps?.typography}>
         {title && (
           <>
-            <Typography component="span" variant="body2" fontWeight={600}>
+            <Typography component="span" variant="inherit" fontWeight={600}>
               {title}
             </Typography>
             {description && ' - '}
@@ -145,7 +145,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           key={legalFact.lf.key}
           legalFact={legalFact.lf}
           clickHandler={clickHandler}
-          slotProps={{ ...slotProps, button: { sx: { display: 'block' } } }}
+          slotProps={{ ...slotProps, button: { sx: { display: 'block', fontSize: '14px' } } }}
           disableDownloads={downloadIsDisabled(legalFact.event.category)}
           dataTestId="download-legalfact-micro"
           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}

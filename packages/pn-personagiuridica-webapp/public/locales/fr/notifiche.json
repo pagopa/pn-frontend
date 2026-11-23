@@ -5,9 +5,9 @@
     "acts": "Pièces jointes",
     "acts_files": {
       "downloadable_aar": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
-      "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
+      "downloadable_acts": "<0>Les documents seront disponibles en ligne pendant 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur de loi. Enregistrez-les sur votre appareil !",
       "effected_faq": "Quand une notification est-elle finalisée ?",
-      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne jusqu'à <0>180 jours à compter de la date de dépôt</0> indiquée en haut !",
+      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne pendant <0>180 jours à compter de la date de dépôt</0> indiquée en haut !",
       "not_downloadable_aar": "L’avis de réception n'est plus disponible. Pour le demander, adresse-toi à l’organisme qui te l’a envoyé.",
       "not_downloadable_acts": "Les documents ne sont plus disponibles en ligne. Pour les demander, adresse-toi à l’organisme qui te les a envoyés."
     },
@@ -74,8 +74,8 @@
       "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
     },
     "iun": "Code IUN",
-    "legal-date": "Notification déposée le",
-    "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l’art. 26 du D.L. 76/2020",
+    "legal-date": "Notification SEND déposée le",
+    "legal-disclaimer": "Notification à valeur légale envoyée via SEND, la plateforme régie par l’art. 26 du D.L. 76/2020",
     "legal-value": "Notification à valeur légale",
     "legalfact": "Attestation opposable aux tiers",
     "notice-code": "Code de l’alerte",
@@ -88,7 +88,7 @@
     },
     "notification-timeline-section": {
       "aria-label": "Accéder à l'historique de la notification",
-      "title": "Statut de la notification"
+      "title": "Statut de la notification SEND"
     },
     "payment-table-aria-label": "Détail des paiements",
     "payment-terms": "À payer avant le",
@@ -196,7 +196,7 @@
       "notification-cancelled-document": "Déclaration d'annulation de la notification",
       "pec-address-source-general": "L'adresse PEC figure dans les registres publics",
       "pec-address-source-platform": "L'adresse PEC a été ajoutée comme adresse de contact sur SEND",
-      "pec-address-source-special": "L'adresse PEC a été enregistrée comme canal de contact par l'organisme émetteur",
+      "pec-address-source-special": "L'adresse PEC a été fournie par l'organisme émetteur",
       "prepare-analog-domicile-failure": "Mise à jour sur l’envoi papier",
       "prepare-analog-domicile-failure-D00-description": "Aucune nouvelle adresse n’a été trouvée pour préparer une autre tentative d’envoi.",
       "prepare-analog-domicile-failure-D00-description-multirecipient": "Aucune nouvelle adresse n’a été trouvée pour le destinataire {{name}} {{taxId}} afin de préparer une autre tentative d’envoi.",
@@ -209,7 +209,7 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Aucune adresse valide n’a été trouvée pour préparer une autre tentative d’envoi - raison non précisée.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Aucune adresse valide n’a été trouvée pour le destinataire {{name}} {{taxId}} afin de préparer une autre tentative d’envoi - raison non précisée.",
       "radd": {
-        "description": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise.",
+        "description": "Le destinataire, ou la personne déléguée, a retiré une copie papier des documents notifiés auprès d'un opérateur habilité à leur remise.",
         "title": "Les documents ont été retirés"
       },
       "registered-letter": "Lettre recommandée",
@@ -226,8 +226,8 @@
       "send-analog-domicile-890": "Envoi par recommandé 890",
       "send-analog-domicile-890-description": "L’envoi de la notification à l’adresse {{address}} par lettre recommandée 890 a commencé.",
       "send-analog-domicile-890-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse {{address}} par lettre recommandée 890 a commencé.",
-      "send-analog-domicile-890-group-label": "Envoi par lettre recommandée 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Deuxième envoi par lettre recommandée 890",
+      "send-analog-domicile-890-group-label": "Envoi par lettre recommandée (loi n° 890/82)",
+      "send-analog-domicile-890-second-attempt-group-label": "Deuxième envoi par lettre recommandée (loi n° 890/82)",
       "send-analog-domicile-ar": "Envoi par lettre recommandée A/R",
       "send-analog-domicile-ar-description": "L’envoi de la notification à l’adresse {{address}} par lettre recommandée A/R a commencé.",
       "send-analog-domicile-ar-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse {{address}} par lettre recommandée A/R a commencé.",
