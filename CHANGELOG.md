@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.4](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.3...v2.28.0-RC.4) (2026-11-24)
+
+### Bug Fixes
+
+* **PN-22391/PN-22399:** hide PT institutions search until first load succeeds ([#2240](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2240)) ([00e2759](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/00e2759ebfc31115149963264abb1b8fa4867a55))
+
+
 # [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
 
 ### Bug Fixes
