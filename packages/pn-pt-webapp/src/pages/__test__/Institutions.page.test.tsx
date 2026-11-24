@@ -72,9 +72,11 @@ describe('Institutions page', () => {
     expect(screen.queryByText('table.empty.title')).not.toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('loading');
     expect(screen.getByTestId('institutionsList')).toHaveAttribute('aria-busy', 'true');
+    expect(screen.queryByTestId('institutionsSearch')).not.toBeInTheDocument();
 
     await act(async () => resolveRequest());
 
+    expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
     expect(screen.queryByTestId('institutionsSkeletonRowDesktop')).not.toBeInTheDocument();
     expect(screen.getAllByTestId('institutionsBodyRowDesktop')).toHaveLength(10);
     expect(screen.getByTestId('pageSelector')).toBeInTheDocument();
@@ -82,7 +84,15 @@ describe('Institutions page', () => {
   });
 
   it('shows the error state and retries when the api fails', async () => {
-    getInstitutionsSpy.mockRejectedValueOnce({ response: { status: 500, data: {} } });
+    let resolveRetry: () => void = () => {};
+    getInstitutionsSpy
+      .mockRejectedValueOnce({ response: { status: 500, data: {} } })
+      .mockImplementationOnce(
+        (params) =>
+          new Promise((resolve) => {
+            resolveRetry = () => resolve(getInstitutionsResponse(params));
+          })
+      );
     await act(async () =>
       render(
         <>
@@ -95,11 +105,38 @@ describe('Institutions page', () => {
     const apiError = await screen.findByTestId('institutionsApiError');
     expect(apiError).toHaveTextContent('table.error.title');
     expect(screen.queryByTestId('institutionsList')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('institutionsSearch')).not.toBeInTheDocument();
 
     fireEvent.click(within(apiError).getByRole('button', { name: 'table.error.action' }));
+    expect(await screen.findAllByTestId('institutionsSkeletonRowDesktop')).toHaveLength(10);
+    expect(screen.queryByTestId('institutionsApiError')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('institutionsSearch')).not.toBeInTheDocument();
+
+    await act(async () => resolveRetry());
     expect(await screen.findAllByTestId('institutionsBodyRowDesktop')).toHaveLength(10);
     expect(screen.queryByTestId('institutionsApiError')).not.toBeInTheDocument();
+    expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
     expect(getInstitutionsSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps the search visible when a search fails after the first load', async () => {
+    await act(async () =>
+      render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Home />
+        </>
+      )
+    );
+    getInstitutionsSpy.mockRejectedValueOnce({ response: { status: 500, data: {} } });
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: 'Fittizio 02' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    expect(await screen.findByTestId('institutionsApiError')).toBeInTheDocument();
+    expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
   });
 
   it('removes the filter when searching with an empty value', async () => {
