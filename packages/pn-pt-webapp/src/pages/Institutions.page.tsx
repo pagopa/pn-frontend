@@ -19,6 +19,7 @@ import {
   SmartTable,
   SmartTableData,
   TitleBox,
+  appStateActions,
   calculatePages,
   formatDate,
 } from '@pagopa-pn/pn-commons';
@@ -55,6 +56,7 @@ const InstitutionsPage: React.FC = () => {
 
   const { t } = useTranslation(['enti', 'common']);
   const [loading, setLoading] = useState(true);
+  const [isFirstLoadDone, setIsFirstLoadDone] = useState(false);
   const lastRequestId = useRef(0);
 
   const institutionsColumns: Array<SmartTableData<InstitutionRow>> = [
@@ -126,15 +128,20 @@ const InstitutionsPage: React.FC = () => {
     // eslint-disable-next-line functional/immutable-data
     const requestId = ++lastRequestId.current;
     setLoading(true);
+    dispatch(appStateActions.removeErrorsByAction(INSTITUTIONS_ACTIONS.GET_INSTITUTIONS));
     void dispatch(
       getInstitutions({
         search: search || undefined,
         limit: pagination.size,
         lastKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
       })
-    ).finally(() => {
-      if (requestId === lastRequestId.current) {
-        setLoading(false);
+    ).then((action) => {
+      if (requestId !== lastRequestId.current) {
+        return;
+      }
+      setLoading(false);
+      if (getInstitutions.fulfilled.match(action)) {
+        setIsFirstLoadDone(true);
       }
     });
   }, [search, pagination.page, pagination.size]);
@@ -237,50 +244,54 @@ const InstitutionsPage: React.FC = () => {
         {t('work-in-progress')}
       </MIAlert>
 
-      <Box
-        component="form"
-        onSubmit={formik.handleSubmit}
-        noValidate
-        role="search"
-        data-testid="institutionsSearch"
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          alignItems: { xs: 'stretch', sm: 'flex-start' },
-          gap: 2,
-          mt: 4,
-          mb: 3,
-        }}
-      >
+      {isFirstLoadDone ? (
         <Box
-          sx={{ flexBasis: { sm: '55%' } }}
-          onFocus={() => setIsSearchFocused(true)}
-          onBlur={handleSearchBlur}
-          // prevents the input blur when clicking the clear button
-          onMouseDown={(e) => {
-            if ((e.target as HTMLElement).closest('button')) {
-              e.preventDefault();
-            }
+          component="form"
+          onSubmit={formik.handleSubmit}
+          noValidate
+          role="search"
+          data-testid="institutionsSearch"
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'stretch', sm: 'flex-start' },
+            gap: 2,
+            mt: 4,
+            mb: 3,
           }}
         >
-          <MITextField
-            id="search"
-            name="search"
-            label={t('search.label')}
-            inputRef={searchInputRef}
-            value={formik.values.search}
-            onChange={formik.handleChange}
-            error={Boolean(formik.errors.search)}
-            helperText={
-              formik.errors.search && t(formik.errors.search, { maxLength: SEARCH_MAX_LENGTH })
-            }
-            onDelete={isSearchFocused && formik.values.search ? handleClearSearch : undefined}
-          />
+          <Box
+            sx={{ flexBasis: { sm: '55%' } }}
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={handleSearchBlur}
+            // prevents the input blur when clicking the clear button
+            onMouseDown={(e) => {
+              if ((e.target as HTMLElement).closest('button')) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <MITextField
+              id="search"
+              name="search"
+              label={t('search.label')}
+              inputRef={searchInputRef}
+              value={formik.values.search}
+              onChange={formik.handleChange}
+              error={Boolean(formik.errors.search)}
+              helperText={
+                formik.errors.search && t(formik.errors.search, { maxLength: SEARCH_MAX_LENGTH })
+              }
+              onDelete={isSearchFocused && formik.values.search ? handleClearSearch : undefined}
+            />
+          </Box>
+          <MIButton type="submit" variant="outlined" data-testid="searchButton">
+            {t('search.button')}
+          </MIButton>
         </Box>
-        <MIButton type="submit" variant="outlined" data-testid="searchButton">
-          {t('search.button')}
-        </MIButton>
-      </Box>
+      ) : (
+        <Box sx={{ mt: 3 }} />
+      )}
 
       <ApiErrorWrapper
         apiId={INSTITUTIONS_ACTIONS.GET_INSTITUTIONS}
