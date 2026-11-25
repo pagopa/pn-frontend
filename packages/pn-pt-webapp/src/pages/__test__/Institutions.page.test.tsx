@@ -56,6 +56,23 @@ describe('Institutions page', () => {
     expect(rows[1]).toHaveTextContent('table.delegation-status.revoked');
   });
 
+  it('preserves consecutive spaces in institution names', async () => {
+    const institutionName = 'Ente Fittizio   01';
+    getInstitutionsSpy.mockImplementationOnce((params) => {
+      const response = getInstitutionsResponse(params);
+      return Promise.resolve({
+        ...response,
+        items: [{ ...response.items[0], institutionName }],
+      });
+    });
+
+    await renderPage();
+
+    const name = screen.getByText('Ente Fittizio 01');
+    expect(name.textContent).toBe(institutionName);
+    expect(name).toHaveStyle({ whiteSpace: 'pre-wrap' });
+  });
+
   it('shows the skeleton rows while the institutions are loading', async () => {
     let resolveRequest: () => void = () => {};
     getInstitutionsSpy.mockImplementationOnce(
