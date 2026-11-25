@@ -72,7 +72,7 @@
     "no-courtesy-sercq-send-title": "Voulez-vous recevoir les prochaines notifications uniquement numériquement ?",
     "no-courtesy-title": "Complète les coordonnées",
     "no-sercq-cta": "Activer le domicile numérique",
-    "no-sercq-send-description": "Activez une adresse numérique pour recevoir les prochaines notifications uniquement par voie numérique et faire des économies.",
+    "no-sercq-send-description": "Activez une adresse numérique pour recevoir les prochaines notifications à valeur juridique uniquement par voie numérique et faire des économies.",
     "no-sercq-send-title": "Plus de documents papier"
   },
   "errors": {
@@ -99,7 +99,7 @@
       "sercq_send-active": "La plateforme SEND est le Domicile numérique de votre entreprise",
       "special_contacts": {
         "action": "Personnaliser par entité",
-        "content": "Choisis où recevoir les notifications SEND envoyées à ton entreprise par un organisme spécifique.",
+        "content": "Choisis où recevoir les notifications à valeur juridique envoyées à ton entreprise par un organisme spécifique.",
         "title": "Personnaliser le Domicile numérique par entité expéditrice"
       },
       "title": "Gérer le Domicile numérique",
@@ -125,7 +125,7 @@
     },
     "pec-description": "Lorsqu'une entité envoie une notification SEND à votre entreprise, elle est délivrée de manière sécurisée et avec valeur légale sur la PEC que vous avez choisie.",
     "pec-disclaimer": "C’est l’adresse principale qui sera utilisée pour envoyer les notifications à valeur juridique de l’entreprise au format numérique. En la renseignant, l’entreprise ne recevra plus de lettres recommandées papier.",
-    "pec-new-code": "Vous ne l'avez pas reçu ? Vérifiez que vous avez saisi la bonne PEC ou <0>générez-en un nouveau</0>.",
+    "pec-new-code": "Vous ne l'avez pas reçu ? Vérifiez que vous avez saisi la bonne PEC ou <0>générez un nouveau code</0>.",
     "pec-removed-successfully": "PEC retirée avec succès",
     "pec-to-add": "Adresse PEC",
     "pec-validating": "Validation PEC en cours",
@@ -193,7 +193,7 @@
             "title": "Reçois un message"
           },
           {
-            "description": "Ouvre le détail de la notification à valeur juridique sur SEND",
+            "description": "Ouvre le détail de la notification à valeur juridique sur la plateforme SEND",
             "title": "Accède à la notification SEND"
           }
         ],
@@ -273,6 +273,6 @@
     "inactive": "À activer",
     "pec-validation": "Validation PEC en cours"
   },
-  "subtitle": "Gère les adresses numériques sur lesquelles recevoir les notifications à valeur juridique de SEND et/ou les messages de courtoisie associés pour <0>ton entreprise</0>.",
+  "subtitle": "Gère les adresses numériques sur lesquelles recevoir les notifications à valeur juridique et/ou les messages de courtoisie associés pour <0>ton entreprise</0>.",
   "title": "Coordonnées"
 }

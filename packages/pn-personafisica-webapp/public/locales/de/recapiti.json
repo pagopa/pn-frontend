@@ -79,7 +79,7 @@
     "no-io-description": "Wenn eine SEND-Zustellung für dich vorliegt, kannst du sie in der IO-App empfangen, lesen und etwaige Kosten direkt in der App bezahlen!",
     "no-io-title": "Deine Zustellungen per App",
     "no-sercq-cta": "Digitale Adresse aktivieren",
-    "no-sercq-send-description": "Aktiviere eine digitale Adresse, um die nächsten Zustellungen nur noch digital zu erhalten und Kosten zu sparen.",
+    "no-sercq-send-description": "Aktiviere eine digitale Adresse, um die nächsten rechtsgültigen Zustellungen nur noch digital zu erhalten und Kosten zu sparen.",
     "no-sercq-send-title": "Keine Papierdokumente mehr"
   },
   "errors": {
@@ -131,7 +131,7 @@
       "sercq_send-active": "Die SEND-Plattform ist dein digitales Domizil",
       "special_contacts": {
         "action": "Pro Körperschaft personalisieren",
-        "content": "Wähle aus, wo du SEND-Zustellungen empfangen möchtest, die dir eine bestimmte Einrichtung sendet.",
+        "content": "Wähle aus, wo du rechtsgültige Zustellungen empfangen möchtest, die dir eine bestimmte Einrichtung sendet.",
         "title": "Dein digitales Domizil pro sendender Körperschaft personalisieren"
       },
       "title": "Dein digitales Domizil verwalten",
@@ -170,7 +170,7 @@
     "pec-verify": "Überprüfung der PEC {{value}}",
     "pec-verify-descr": "Wir haben einen Code an die angegebene PEC-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> lang gültig.",
     "remove-pec-confirm": "PEC deaktivieren",
-    "remove-pec-message": "<0>Du hast dann keine Adresse mehr für rechtsgültige Zustellungen der öffentlichen Verwaltung und erhältst diese möglicherweise in Papierform, wobei etwaige Kosten zu deinen Lasten gehen.</0><1>Du erhältst jedoch weiterhin Mitteilungen über die von dir aktivierten Kanäle.</1>",
+    "remove-pec-message": "<0>Du hast dann keine rechtsgültige digitale Adresse mehr für SEND-Zustellungen der öffentlichen Verwaltung und erhältst diese möglicherweise in Papierform, wobei etwaige Kosten zu deinen Lasten gehen.</0><1>Du erhältst jedoch weiterhin Mitteilungen über die von dir aktivierten Kanäle.</1>",
     "remove-pec-title": "Möchtest du die PEC wirklich deaktivieren?",
     "remove-sercq_send-confirm": "Digitales Domizil deaktivieren",
     "remove-sercq_send-message": "<0>Wenn du dein digitales Domizil SEND deaktivierst, erhältst du rechtsgültige Zustellungen möglicherweise per Einschreiben und musst <strong>die entsprechenden Kosten tragen.</strong></0><1>Du erhältst weiterhin Mitteilungen per E-Mail; du kannst sie im Bereich Deine Kontaktdaten deaktivieren.</1>",

@@ -79,7 +79,7 @@
     "no-io-description": "Lorsqu’il y a une notification SEND pour toi, tu peux la recevoir sur l’application IO, la lire et payer d’éventuels frais directement dans l’application !",
     "no-io-title": "Vos notifications à portée d'application",
     "no-sercq-cta": "Activer le domicile numérique",
-    "no-sercq-send-description": "Activez une adresse numérique pour recevoir les prochaines notifications uniquement par voie numérique et faire des économies.",
+    "no-sercq-send-description": "Activez une adresse numérique pour recevoir les prochaines notifications à valeur juridique uniquement par voie numérique et faire des économies.",
     "no-sercq-send-title": "Plus de documents papier"
   },
   "errors": {
@@ -131,7 +131,7 @@
       "sercq_send-active": "La plateforme SEND est votre Domicile Numérique",
       "special_contacts": {
         "action": "Personnaliser par organisme",
-        "content": "Choisis où recevoir les notifications SEND que t’envoie un organisme spécifique.",
+        "content": "Choisis où recevoir les notifications à valeur juridique que t’envoie un organisme spécifique.",
         "title": "Personnaliser votre Domicile Numérique par organisme expéditeur"
       },
       "title": "Gérer votre Domicile Numérique",
@@ -170,7 +170,7 @@
     "pec-verify": "Vérification PEC {{value}}",
     "pec-verify-descr": "Nous avons envoyé un code à l’adresse PEC indiquée. Le code est <strong>valable 15 minutes<strong>.",
     "remove-pec-confirm": "Désactiver la PEC",
-    "remove-pec-message": "<0>Tu n’auras plus de coordonnée pour les notifications à valeur juridique de l’administration publique et tu pourrais les recevoir sur papier, avec d’éventuels frais à ta charge.</0><1>Tu continueras toutefois à recevoir des avis sur les canaux que tu as activés.</1>",
+    "remove-pec-message": "<0>Tu n’auras plus de coordonnée numérique à valeur juridique pour les notifications SEND envoyées par l’administration publique et tu pourrais les recevoir sur papier, avec d’éventuels frais à ta charge.</0><1>Tu continueras toutefois à recevoir des avis sur les canaux que tu as activés.</1>",
     "remove-pec-title": "Confirmez-vous vouloir désactiver la PEC ?",
     "remove-sercq_send-confirm": "Désactiver le Domicile Numérique",
     "remove-sercq_send-message": "<0>Si tu choisis de désactiver ton domicile numérique SEND, tu risques de recevoir les notifications à valeur juridique par lettre recommandée et de <strong>payer les frais correspondants.</strong></0><1>Tu continueras à recevoir les avis par e-mail ; tu peux les désactiver dans la section Tes coordonnées.</1>",

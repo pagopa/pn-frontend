@@ -72,7 +72,7 @@
     "no-courtesy-sercq-send-title": "Do you want to receive the next notifications only digitally?",
     "no-courtesy-title": "Complete your contact details",
     "no-sercq-cta": "Activate digital address",
-    "no-sercq-send-description": "Activate a digital address to receive future notifications digitally only and save on costs.",
+    "no-sercq-send-description": "Activate a digital address to receive future legally binding notifications digitally only and save on costs.",
     "no-sercq-send-title": "No more paper documents"
   },
   "errors": {
@@ -99,7 +99,7 @@
       "sercq_send-active": "The SEND platform is your business's Digital Domicile",
       "special_contacts": {
         "action": "Customize per entity",
-        "content": "Choose where to receive SEND notifications sent to your company by a specific institution.",
+        "content": "Choose where to receive legally binding notifications sent to your company by a specific institution.",
         "title": "Customize the Digital Domicile per sending entity"
       },
       "title": "Manage Digital Domicile",
@@ -125,7 +125,7 @@
     },
     "pec-description": "When an entity sends a SEND notification to your business, it is delivered securely and with legal value to the PEC you have chosen.",
     "pec-disclaimer": "This is the primary address that will be used to send the company's legally binding notifications digitally. By entering it, the company will no longer receive paper registered mail.",
-    "pec-new-code": "Didn't receive it? Check that you have entered the correct PEC or <0>generate a new one</0>.",
+    "pec-new-code": "Didn't receive it? Check that you have entered the correct PEC or <0>generate a new code</0>.",
     "pec-removed-successfully": "PEC successfully removed",
     "pec-to-add": "PEC address",
     "pec-validating": "PEC validation in progress",
@@ -193,7 +193,7 @@
             "title": "Receive a message"
           },
           {
-            "description": "Open the details of the legally binding notification on SEND",
+            "description": "Open the details of the legally binding notification on the SEND platform",
             "title": "Access the SEND notification"
           }
         ],
@@ -273,6 +273,6 @@
     "inactive": "To be activated",
     "pec-validation": "PEC validation in progress"
   },
-  "subtitle": "Manage the digital addresses on which to receive legally binding notifications from SEND and/or related courtesy messages for <0>your company</0>.",
+  "subtitle": "Manage the digital addresses on which to receive legally binding notifications and/or related courtesy messages for <0>your company</0>.",
   "title": "Contacts"
 }

@@ -72,7 +72,7 @@
     "no-courtesy-sercq-send-title": "Möchten Sie die nächsten Mitteilungen nur digital erhalten?",
     "no-courtesy-title": "Vervollständige die Kontaktdaten",
     "no-sercq-cta": "Digitale Adresse aktivieren",
-    "no-sercq-send-description": "Aktiviere eine digitale Adresse, um die nächsten Zustellungen nur noch digital zu erhalten und Kosten zu sparen.",
+    "no-sercq-send-description": "Aktiviere eine digitale Adresse, um die nächsten rechtsgültigen Zustellungen nur noch digital zu erhalten und Kosten zu sparen.",
     "no-sercq-send-title": "Keine Papierdokumente mehr"
   },
   "errors": {
@@ -99,7 +99,7 @@
       "sercq_send-active": "Die SEND-Plattform ist der Digitale Wohnsitz Ihres Unternehmens",
       "special_contacts": {
         "action": "Pro Behörde personalisieren",
-        "content": "Wähle aus, wo du SEND-Zustellungen empfangen möchtest, die deinem Unternehmen von einer bestimmten Einrichtung gesendet werden.",
+        "content": "Wähle aus, wo du rechtsgültige Zustellungen empfangen möchtest, die deinem Unternehmen von einer bestimmten Einrichtung gesendet werden.",
         "title": "Digitalen Wohnsitz pro sendender Behörde personalisieren"
       },
       "title": "Digitalen Wohnsitz verwalten",
@@ -125,7 +125,7 @@
     },
     "pec-description": "Wenn eine Behörde eine SEND-Mitteilung an Ihr Unternehmen sendet, wird diese sicher und mit Rechtswert an die von Ihnen gewählte PEC zugestellt.",
     "pec-disclaimer": "Dies ist die Hauptadresse, die verwendet wird, um rechtsgültige Zustellungen des Unternehmens digital zu senden. Durch die Angabe erhält das Unternehmen keine Papier-Einschreiben mehr.",
-    "pec-new-code": "Sie haben ihn nicht erhalten? Prüfen Sie, ob Sie die korrekte PEC eingegeben haben oder <0>generieren Sie einen neuen</0>.",
+    "pec-new-code": "Sie haben ihn nicht erhalten? Prüfen Sie, ob Sie die korrekte PEC eingegeben haben oder <0>generieren Sie einen neuen Code</0>.",
     "pec-removed-successfully": "PEC erfolgreich entfernt",
     "pec-to-add": "PEC-Adresse",
     "pec-validating": "PEC-Validierung läuft",
@@ -193,7 +193,7 @@
             "title": "Erhalte eine Nachricht"
           },
           {
-            "description": "Öffne die Details der rechtsgültigen Zustellung auf SEND",
+            "description": "Öffne die Details der rechtsgültigen Zustellung auf der SEND-Plattform",
             "title": "Greife auf die SEND-Zustellung zu"
           }
         ],
@@ -273,6 +273,6 @@
     "inactive": "Zu aktivieren",
     "pec-validation": "PEC-Validierung läuft"
   },
-  "subtitle": "Verwalte die digitalen Kontaktdaten, über die du rechtsgültige Zustellungen von SEND und/oder entsprechende Höflichkeitsnachrichten für <0>dein Unternehmen</0> empfangen möchtest.",
+  "subtitle": "Verwalte die digitalen Kontaktdaten, über die du rechtsgültige Zustellungen und/oder entsprechende Höflichkeitsnachrichten für <0>dein Unternehmen</0> empfangen möchtest.",
   "title": "Kontakte"
 }

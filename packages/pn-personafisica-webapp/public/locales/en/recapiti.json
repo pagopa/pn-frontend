@@ -79,7 +79,7 @@
     "no-io-description": "When there is a SEND notification for you, you can receive it on the IO app, read it, and pay any fees directly in the app!",
     "no-io-title": "Your notifications directly in app",
     "no-sercq-cta": "Activate digital address",
-    "no-sercq-send-description": "Activate a digital address to receive future notifications digitally only and save on costs.",
+    "no-sercq-send-description": "Activate a digital address to receive future legally binding notifications digitally only and save on costs.",
     "no-sercq-send-title": "No more paper documents"
   },
   "errors": {
@@ -131,7 +131,7 @@
       "sercq_send-active": "The SEND platform is your digital domicile",
       "special_contacts": {
         "action": "Personalize per institution",
-        "content": "Choose where to receive SEND notifications sent to you by a specific institution.",
+        "content": "Choose where to receive legally binding notifications sent to you by a specific institution.",
         "title": "Personalize your digital domicile per sending institution"
       },
       "title": "Manage your digital domicile",
@@ -170,7 +170,7 @@
     "pec-verify": "Verify PEC {{value}}",
     "pec-verify-descr": "We have sent a code to the indicated PEC address. The code is <strong>valid for 15 minutes</strong>.",
     "remove-pec-confirm": "Deactivate PEC",
-    "remove-pec-message": "<0>You will no longer have a contact address for legally binding notifications from the Public Administration and you may receive them on paper, with any costs charged to you.</0><1>However, you will continue to receive notifications on the channels you have activated.</1>",
+    "remove-pec-message": "<0>You will no longer have a legally valid digital contact address for SEND notifications sent by the Public Administration and you may receive them on paper, with any costs charged to you.</0><1>However, you will continue to receive notifications on the channels you have activated.</1>",
     "remove-pec-title": "Do you confirm to want to deactivate the PEC?",
     "remove-sercq_send-confirm": "Deactivate Digital Domicile",
     "remove-sercq_send-message": "<0>If you choose to deactivate your SEND digital domicile, you may receive legally binding notifications by registered mail and <strong>pay the related costs.</strong></0><1>You will continue to receive notifications by email; you can deactivate them in the Your contact details section.</1>",
