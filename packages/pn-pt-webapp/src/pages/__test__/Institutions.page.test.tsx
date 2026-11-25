@@ -139,6 +139,70 @@ describe('Institutions page', () => {
     expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
   });
 
+  it('hides the search while loading and on error when changing page without a search', async () => {
+    let rejectRequest: () => void = () => {};
+    await act(async () =>
+      render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Home />
+        </>
+      )
+    );
+    getInstitutionsSpy.mockImplementationOnce(
+      () =>
+        new Promise((_, reject) => {
+          rejectRequest = () => reject({ response: { status: 500, data: {} } });
+        })
+    );
+    fireEvent.click(
+      within(await screen.findByTestId('pageSelector')).getByRole('button', { name: /2/ })
+    );
+
+    expect(await screen.findAllByTestId('institutionsSkeletonRowDesktop')).toHaveLength(10);
+    expect(screen.queryByTestId('institutionsSearch')).not.toBeInTheDocument();
+
+    await act(async () => rejectRequest());
+    expect(await screen.findByTestId('institutionsApiError')).toBeInTheDocument();
+    expect(screen.queryByTestId('institutionsSearch')).not.toBeInTheDocument();
+  });
+
+  it('keeps the search visible while loading and on error when changing page after a search', async () => {
+    let rejectRequest: () => void = () => {};
+    await act(async () =>
+      render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Home />
+        </>
+      )
+    );
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: 'Ente' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    await waitFor(() => expect(getInstitutionsSpy).toHaveBeenCalledTimes(2));
+
+    getInstitutionsSpy.mockImplementationOnce(
+      () =>
+        new Promise((_, reject) => {
+          rejectRequest = () => reject({ response: { status: 500, data: {} } });
+        })
+    );
+    fireEvent.click(
+      within(await screen.findByTestId('pageSelector')).getByRole('button', { name: /2/ })
+    );
+
+    expect(await screen.findAllByTestId('institutionsSkeletonRowDesktop')).toHaveLength(10);
+    expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
+
+    await act(async () => rejectRequest());
+    expect(await screen.findByTestId('institutionsApiError')).toBeInTheDocument();
+    expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
+  });
+
   it('removes the filter when searching with an empty value', async () => {
     await renderPage();
     const input = screen.getByRole('textbox', { name: /search.label/ });
