@@ -99,28 +99,48 @@ describe('InformalNotificationMessage Component', () => {
     }
   );
 
-  it('uses the custom attachments translation key', () => {
+  it.each([
+    { prop: 'greetingKey', defaultKey: 'detail.informal_notification_markdown.greeting' },
+    { prop: 'attachmentsInfoKey', defaultKey: attachmentsKey },
+    { prop: 'paymentInstructionsKey', defaultKey: paymentKey },
+    { prop: 'assistanceKey', defaultKey: assistanceKey },
+  ] as const)('uses the custom translation key for $prop', ({ prop, defaultKey }) => {
+    const customKey = `custom.${prop}`;
+
     const { container } = render(
       <InformalNotificationMessage
         message="Testo"
+        recipientDenomination="Destinatario di Test"
+        senderDenomination="Ente di Test"
         hasAttachments
         hasPayment
-        attachmentsInfoKey={attachmentsPfKey}
         variant="body2"
+        {...{ [prop]: customKey }}
       />
     );
 
-    const attachmentsParagraph = getParagraphByKey(container, attachmentsPfKey);
-    const paymentParagraph = getParagraphByKey(container, paymentKey);
+    const greetingKey = 'detail.informal_notification_markdown.greeting';
+    const expectedAttachmentsKey = prop === 'attachmentsInfoKey' ? customKey : attachmentsKey;
+    const expectedPaymentKey = prop === 'paymentInstructionsKey' ? customKey : paymentKey;
+    const expectedAssistanceKey = prop === 'assistanceKey' ? customKey : assistanceKey;
 
-    expect(attachmentsParagraph).toBeDefined();
+    expect(container).toHaveTextContent(prop === 'greetingKey' ? customKey : greetingKey);
+    expect(container).not.toHaveTextContent(defaultKey);
+
+    const attachmentsParagraph = getParagraphByKey(container, expectedAttachmentsKey);
+    const paymentParagraph = getParagraphByKey(container, expectedPaymentKey);
+    const assistanceParagraph = getParagraphByKey(container, expectedAssistanceKey);
+
     expect(attachmentsParagraph?.tagName).toBe('P');
-    expect(attachmentsParagraph).toHaveTextContent(
-      /^notifiche detail\.informal_notification_markdown\.attachments_info_pf$/
-    );
+    expect(paymentParagraph?.tagName).toBe('P');
+    expect(assistanceParagraph?.tagName).toBe('P');
 
-    expect(paymentParagraph).toBeDefined();
+    expect(attachmentsParagraph?.textContent?.trim()).toBe(`notifiche ${expectedAttachmentsKey}`);
+    expect(paymentParagraph?.textContent?.trim()).toBe(`notifiche ${expectedPaymentKey}`);
+    expect(assistanceParagraph?.textContent?.trim()).toBe(`notifiche ${expectedAssistanceKey}`);
+
     expect(attachmentsParagraph?.nextElementSibling).toBe(paymentParagraph);
+    expect(paymentParagraph?.nextElementSibling).toBe(assistanceParagraph);
   });
 
   it('hides the custom attachments sentence when there are no attachments', () => {
