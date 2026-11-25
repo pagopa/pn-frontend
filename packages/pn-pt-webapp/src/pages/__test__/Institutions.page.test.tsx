@@ -56,6 +56,27 @@ describe('Institutions page', () => {
     expect(rows[1]).toHaveTextContent('table.delegation-status.revoked');
   });
 
+  it('wraps long institution names within their table cell', async () => {
+    const longName = 'syntheticinstitutionname'.repeat(10);
+    getInstitutionsSpy.mockImplementationOnce((params) => {
+      const response = getInstitutionsResponse(params);
+      return Promise.resolve({
+        ...response,
+        items: response.items.map((institution, index) =>
+          index === 0 ? { ...institution, institutionName: longName } : institution
+        ),
+      });
+    });
+
+    await renderPage();
+
+    const name = await screen.findByText(longName);
+    expect(name.parentElement).toHaveStyle({
+      whiteSpace: 'normal',
+      wordBreak: 'break-word',
+    });
+  });
+
   it('shows the skeleton rows while the institutions are loading', async () => {
     let resolveRequest: () => void = () => {};
     getInstitutionsSpy.mockImplementationOnce(

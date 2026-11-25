@@ -30,6 +30,16 @@ describe('EmptyErrorState', () => {
     expect(getByText('Empty state description')).toBeInTheDocument();
   });
 
+  it('allows long unbroken text to wrap within its container', () => {
+    const { getByTestId } = render(<EmptyErrorState title={'a'.repeat(200)} />);
+
+    const wrapper = getByTestId('emptyState').parentElement;
+    expect(wrapper).not.toBeNull();
+    expect(getComputedStyle(wrapper!).overflowWrap).toBe('anywhere');
+    expect(getComputedStyle(wrapper!).wordBreak).toBe('break-word');
+    expect(getComputedStyle(wrapper!).minWidth).toBe('0px');
+  });
+
   it('renders the default action and handles the click', () => {
     const onClick = vi.fn();
 
