@@ -22,6 +22,7 @@ import {
   appStateActions,
   calculatePages,
   formatDate,
+  useErrors,
 } from '@pagopa-pn/pn-commons';
 import { IllusMIDataSecurity, MIAlert, MIButton, MIChip, MITextField } from '@pagopa/mui-italia';
 
@@ -56,8 +57,11 @@ const InstitutionsPage: React.FC = () => {
 
   const { t } = useTranslation(['enti', 'common']);
   const [loading, setLoading] = useState(true);
-  const [isFirstLoadDone, setIsFirstLoadDone] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
   const lastRequestId = useRef(0);
+  const { hasApiErrors } = useErrors();
+  const showSearch =
+    hasSearched || (!loading && !hasApiErrors(INSTITUTIONS_ACTIONS.GET_INSTITUTIONS));
 
   const institutionsColumns: Array<SmartTableData<InstitutionRow>> = [
     {
@@ -106,6 +110,7 @@ const InstitutionsPage: React.FC = () => {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: (values) => {
+      setHasSearched(true);
       dispatch(setSearch(values.search.trim()));
     },
   });
@@ -135,14 +140,11 @@ const InstitutionsPage: React.FC = () => {
         limit: pagination.size,
         lastKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
       })
-    ).then((action) => {
+    ).then(() => {
       if (requestId !== lastRequestId.current) {
         return;
       }
       setLoading(false);
-      if (getInstitutions.fulfilled.match(action)) {
-        setIsFirstLoadDone(true);
-      }
     });
   }, [search, pagination.page, pagination.size]);
 
@@ -244,7 +246,7 @@ const InstitutionsPage: React.FC = () => {
         {t('work-in-progress')}
       </MIAlert>
 
-      {isFirstLoadDone ? (
+      {showSearch ? (
         <Box
           component="form"
           onSubmit={formik.handleSubmit}
