@@ -95,7 +95,6 @@ const InstitutionsPage: React.FC = () => {
   const validationSchema = yup.object({
     search: yup
       .string()
-      .trim()
       .test('min-length', 'search.min-length', (value) => !value || value.length >= 3)
       .max(SEARCH_MAX_LENGTH, 'search.max-length'),
   });
@@ -106,7 +105,7 @@ const InstitutionsPage: React.FC = () => {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: (values) => {
-      dispatch(setSearch(values.search.trim()));
+      dispatch(setSearch(values.search));
     },
   });
 

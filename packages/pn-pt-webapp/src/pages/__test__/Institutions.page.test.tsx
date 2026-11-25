@@ -185,6 +185,50 @@ describe('Institutions page', () => {
     expect(screen.getAllByTestId('institutionsBodyRowDesktop')).toHaveLength(10);
   });
 
+  it('shows a validation error when searching with less than 3 spaces', async () => {
+    await renderPage();
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: '  ' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    expect(await screen.findByText('search.min-length')).toBeInTheDocument();
+    expect(getInstitutionsSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('searches with only spaces when they are at least 3', async () => {
+    await renderPage();
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: '   ' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    await waitFor(() => {
+      expect(getInstitutionsSpy).toHaveBeenCalledTimes(2);
+      expect(getInstitutionsSpy).toHaveBeenLastCalledWith({
+        search: '   ',
+        limit: 10,
+        lastKey: undefined,
+      });
+    });
+    expect(screen.queryByText('search.min-length')).not.toBeInTheDocument();
+  });
+
+  it('counts leading and trailing spaces as search characters', async () => {
+    await renderPage();
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: ' En' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    await waitFor(() => {
+      expect(getInstitutionsSpy).toHaveBeenCalledTimes(2);
+      expect(getInstitutionsSpy).toHaveBeenLastCalledWith({
+        search: ' En',
+        limit: 10,
+        lastKey: undefined,
+      });
+    });
+    expect(screen.queryByText('search.min-length')).not.toBeInTheDocument();
+  });
+
   it('shows a validation error when searching with more than 250 characters', async () => {
     await renderPage();
     fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
