@@ -78,9 +78,12 @@ body {
 body #onetrust-banner-sdk {
   --pn-ot-btn-width: 125px;
   --pn-ot-btn-gap: 1rem;
+  --pn-ot-column-gap: 4rem;
   --pn-ot-text-min-width: 400px;
   --pn-ot-buttons-width: calc(3 * var(--pn-ot-btn-width) + 2 * var(--pn-ot-btn-gap));
-  --pn-ot-side-by-side-width: calc(var(--pn-ot-text-min-width) + 2rem + var(--pn-ot-buttons-width));
+  --pn-ot-side-by-side-width: calc(
+    var(--pn-ot-text-min-width) + var(--pn-ot-column-gap) + var(--pn-ot-buttons-width)
+  );
 }
 
 body #onetrust-banner-sdk .ot-sdk-container:not(#banner-options) {
@@ -93,7 +96,7 @@ body #onetrust-banner-sdk .ot-sdk-container .ot-sdk-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: 4rem;
+  column-gap: var(--pn-ot-column-gap);
 }
 
 body #onetrust-banner-sdk .ot-sdk-container .ot-sdk-row::after {
