@@ -261,34 +261,31 @@ const EmailSmsStep = ({
     const smsEnabled = smsMode === 'insert';
 
     await formik.setFieldTouched('email', true, false);
-
     if (smsEnabled) {
       await formik.setFieldTouched('sms', true, false);
     }
 
     const errors = await formik.validateForm();
 
-    const validationError = errors.email ?? (smsEnabled ? errors.sms : undefined);
-
-    if (validationError) {
-      publishEvent({ message: validationError });
-      return false;
-    }
-
-    const emailNeedsVerify = formik.values.email && !email.value;
-    const smsNeedsVerify = smsEnabled && formik.values.sms && !sms.value;
+    const emailNeedsVerify = formik.values.email && !errors.email && !email.value;
+    const smsNeedsVerify = smsEnabled && formik.values.sms && !errors.sms && !sms.value;
 
     if (emailNeedsVerify) {
       toggleVerifyModal(ChannelType.EMAIL);
       return false;
     }
-
     if (smsNeedsVerify) {
       toggleVerifyModal(ChannelType.SMS);
       return false;
     }
 
-    return true;
+    const validationError = errors.email ?? (smsEnabled ? errors.sms : undefined);
+
+    if (validationError) {
+      publishEvent({ message: validationError });
+    }
+
+    return !errors.email && (!smsEnabled || !errors.sms);
   }, [formik, publishEvent, smsMode, email.value, sms.value]);
 
   useEffect(() => {
