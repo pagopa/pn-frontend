@@ -196,7 +196,7 @@ const InstitutionsPage: React.FC = () => {
     }
     if (columnId === 'institutionName') {
       return (
-        <Typography component="span" fontWeight={600}>
+        <Typography component="span" fontWeight={600} sx={{ whiteSpace: 'pre-wrap' }}>
           {row.institutionName}
         </Typography>
       );
