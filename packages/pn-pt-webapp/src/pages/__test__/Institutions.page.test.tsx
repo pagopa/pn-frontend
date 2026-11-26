@@ -56,6 +56,44 @@ describe('Institutions page', () => {
     expect(rows[1]).toHaveTextContent('table.delegation-status.revoked');
   });
 
+  it('wraps long institution names within their table cell', async () => {
+    const longName = 'syntheticinstitutionname'.repeat(10);
+    getInstitutionsSpy.mockImplementationOnce((params) => {
+      const response = getInstitutionsResponse(params);
+      return Promise.resolve({
+        ...response,
+        items: response.items.map((institution, index) =>
+          index === 0 ? { ...institution, institutionName: longName } : institution
+        ),
+      });
+    });
+
+    await renderPage();
+
+    const name = await screen.findByText(longName);
+    expect(name.parentElement).toHaveStyle({
+      whiteSpace: 'normal',
+      wordBreak: 'break-word',
+    });
+  });
+
+  it('preserves consecutive spaces in institution names', async () => {
+    const institutionName = 'Ente Fittizio   01';
+    getInstitutionsSpy.mockImplementationOnce((params) => {
+      const response = getInstitutionsResponse(params);
+      return Promise.resolve({
+        ...response,
+        items: [{ ...response.items[0], institutionName }],
+      });
+    });
+
+    await renderPage();
+
+    const name = screen.getByText('Ente Fittizio 01');
+    expect(name.textContent).toBe(institutionName);
+    expect(name).toHaveStyle({ whiteSpace: 'pre-wrap' });
+  });
+
   it('shows the skeleton rows while the institutions are loading', async () => {
     let resolveRequest: () => void = () => {};
     getInstitutionsSpy.mockImplementationOnce(
@@ -135,6 +173,70 @@ describe('Institutions page', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
+    expect(await screen.findByTestId('institutionsApiError')).toBeInTheDocument();
+    expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
+  });
+
+  it('hides the search while loading and on error when changing page without a search', async () => {
+    let rejectRequest: () => void = () => {};
+    await act(async () =>
+      render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Home />
+        </>
+      )
+    );
+    getInstitutionsSpy.mockImplementationOnce(
+      () =>
+        new Promise((_, reject) => {
+          rejectRequest = () => reject({ response: { status: 500, data: {} } });
+        })
+    );
+    fireEvent.click(
+      within(await screen.findByTestId('pageSelector')).getByRole('button', { name: /2/ })
+    );
+
+    expect(await screen.findAllByTestId('institutionsSkeletonRowDesktop')).toHaveLength(10);
+    expect(screen.queryByTestId('institutionsSearch')).not.toBeInTheDocument();
+
+    await act(async () => rejectRequest());
+    expect(await screen.findByTestId('institutionsApiError')).toBeInTheDocument();
+    expect(screen.queryByTestId('institutionsSearch')).not.toBeInTheDocument();
+  });
+
+  it('keeps the search visible while loading and on error when changing page after a search', async () => {
+    let rejectRequest: () => void = () => {};
+    await act(async () =>
+      render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Home />
+        </>
+      )
+    );
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: 'Ente' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    await waitFor(() => expect(getInstitutionsSpy).toHaveBeenCalledTimes(2));
+
+    getInstitutionsSpy.mockImplementationOnce(
+      () =>
+        new Promise((_, reject) => {
+          rejectRequest = () => reject({ response: { status: 500, data: {} } });
+        })
+    );
+    fireEvent.click(
+      within(await screen.findByTestId('pageSelector')).getByRole('button', { name: /2/ })
+    );
+
+    expect(await screen.findAllByTestId('institutionsSkeletonRowDesktop')).toHaveLength(10);
+    expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
+
+    await act(async () => rejectRequest());
     expect(await screen.findByTestId('institutionsApiError')).toBeInTheDocument();
     expect(screen.getByTestId('institutionsSearch')).toBeInTheDocument();
   });

@@ -23,6 +23,7 @@ const CONTAINER_PROPS = {
   textAlign: 'center',
   flexDirection: 'column',
   alignItems: 'center',
+  sx: { overflowWrap: 'anywhere' },
 } as const;
 
 const isDefaultAction = (action: DefaultAction | ReactNode): action is DefaultAction =>
