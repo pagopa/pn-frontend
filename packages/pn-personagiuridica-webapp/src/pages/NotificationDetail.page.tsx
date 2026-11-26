@@ -134,13 +134,13 @@ const NotificationDetail = () => {
         NOTIFICATION_PERFECTION_LINK,
         notification.notificationStatusHistory,
         notification.recipients,
-        organization?.fiscal_code
+        currentRecipient?.taxId
       ),
     [
       NOTIFICATION_PERFECTION_LINK,
       notification.notificationStatusHistory,
       notification.recipients,
-      organization?.fiscal_code,
+      currentRecipient?.taxId,
     ]
   );
 
