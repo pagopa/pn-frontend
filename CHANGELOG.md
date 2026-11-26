@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.7](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.6...v2.28.0-RC.7) (2026-11-26)
+
+### Bug Fixes
+
+* **PN-22494:** add link to perfection page in radd Alert ([#2244](https://github.com/pagopa/pn-frontend/issues/2244)) ([3d2f6d9](https://github.com/pagopa/pn-frontend/commit/3d2f6d94efb9f70125f9fe4aecd62ec9a6c330a7))
+
+
 # [2.28.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.5...v2.28.0-RC.6) (2026-11-26)
 
 ### Bug Fixes
