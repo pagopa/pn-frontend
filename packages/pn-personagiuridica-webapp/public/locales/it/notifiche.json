@@ -209,7 +209,7 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Non è stato trovato un indirizzo valido per predisporre un altro tentativo di invio - motivo non specificato.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Non è stato trovato un indirizzo valido per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio - motivo non specificato.",
       "radd": {
-        "description": "La persona destinataria, o chi è stato delegato, ha ritirato una copia cartacea dei documenti notificati presso un operatore abilitato alla consegna degli stessi.",
+        "description": "La persona destinataria, o chi è stato delegato, ha ritirato una copia cartacea dei documenti notificati presso un operatore abilitato alla consegna degli stessi. Per maggiori informazioni, <0>consulta le modalità di perfezionamento</0>.",
         "title": "I documenti sono stati ritirati"
       },
       "registered-letter": "Raccomandata",
