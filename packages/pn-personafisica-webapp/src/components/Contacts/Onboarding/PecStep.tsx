@@ -13,7 +13,13 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { ConfirmationModal, EventAction, appStateActions } from '@pagopa-pn/pn-commons';
+import {
+  A11yMessage,
+  ConfirmationModal,
+  EventAction,
+  appStateActions,
+  useEventEmitter,
+} from '@pagopa-pn/pn-commons';
 import { IllusMIMessage, MIChip } from '@pagopa/mui-italia';
 
 import {
@@ -70,6 +76,7 @@ const PecStep: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
+  const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
 
   const [showVerifyPecModal, setShowVerifyPecModal] = useState(false);
   const [codeDialogFlow, setCodeDialogFlow] = useState<FlowKey | null>(null);
@@ -257,6 +264,12 @@ const PecStep: React.FC<Props> = ({
     const normalizedValue = normalizeContactValue(formik.values.pec);
 
     if (!normalizedValue || errors.pec || errors.pecDisclaimer) {
+      const validationError = errors.pec ?? errors.pecDisclaimer;
+
+      if (validationError) {
+        publishEvent({ message: validationError });
+      }
+
       return;
     }
 
@@ -265,7 +278,7 @@ const PecStep: React.FC<Props> = ({
     // eslint-disable-next-line functional/immutable-data
     currentValuesRef.current.pec = normalizedValue;
     await submitContactFlow('pec', normalizedValue);
-  }, [formik, showPecDisclaimer, submitContactFlow, trackDigitalDomicile]);
+  }, [formik, publishEvent, showPecDisclaimer, submitContactFlow, trackDigitalDomicile]);
 
   const handleVerifyEmail = useCallback(async () => {
     await formik.setFieldTouched('email', true, false);
@@ -273,6 +286,10 @@ const PecStep: React.FC<Props> = ({
     const normalizedValue = normalizeContactValue(formik.values.email);
 
     if (!normalizedValue || errors.email) {
+      if (errors.email) {
+        publishEvent({ message: errors.email });
+      }
+
       return;
     }
 
@@ -281,7 +298,7 @@ const PecStep: React.FC<Props> = ({
     // eslint-disable-next-line functional/immutable-data
     currentValuesRef.current.email = normalizedValue;
     await submitContactFlow('email', normalizedValue);
-  }, [formik, submitContactFlow, trackDigitalDomicile]);
+  }, [formik, publishEvent, submitContactFlow, trackDigitalDomicile]);
 
   const handleSubmitEmailEdit = useCallback(
     (newValue: string) => {
@@ -356,15 +373,22 @@ const PecStep: React.FC<Props> = ({
     if (showPecDisclaimer) {
       await formik.setFieldTouched('pecDisclaimer', true, false);
     }
+
     const errors = await formik.validateForm();
 
     if (errors.pec || errors.pecDisclaimer) {
+      const validationError = errors.pec ?? errors.pecDisclaimer;
+
+      if (validationError) {
+        publishEvent({ message: validationError });
+      }
+
       return false;
     }
 
     setShowVerifyPecModal(true);
     return false;
-  }, [formik, hasPecFlowState, showPecDisclaimer]);
+  }, [formik, hasPecFlowState, publishEvent, showPecDisclaimer]);
 
   useEffect(() => {
     registerContinueHandler?.(handleContinueAttempt);

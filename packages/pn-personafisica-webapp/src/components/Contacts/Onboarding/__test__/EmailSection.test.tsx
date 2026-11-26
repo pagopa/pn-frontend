@@ -62,6 +62,10 @@ describe('EmailSection', () => {
     ).toBeInTheDocument();
     expect(getByText('mock-error')).toBeInTheDocument();
 
+    expect(getByLabelText(`${labelPrefix}.email.input-label`)).toHaveAccessibleDescription(
+      'mock-error'
+    );
+
     fireEvent.change(getByLabelText(`${labelPrefix}.email.input-label`), {
       target: { value: mockEmailChanged },
     });

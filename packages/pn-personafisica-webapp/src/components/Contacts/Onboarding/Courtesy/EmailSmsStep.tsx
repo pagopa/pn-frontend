@@ -4,7 +4,13 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Divider, Stack, Typography } from '@mui/material';
-import { ConfirmationModal, EventAction, appStateActions } from '@pagopa-pn/pn-commons';
+import {
+  A11yMessage,
+  ConfirmationModal,
+  EventAction,
+  appStateActions,
+  useEventEmitter,
+} from '@pagopa-pn/pn-commons';
 import { IllusMIMessage, MIAlert } from '@pagopa/mui-italia';
 
 import {
@@ -83,6 +89,7 @@ const EmailSmsStep = ({
 }: Props) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
+  const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
 
   const [smsMode, setSmsMode] = React.useState<CourtesyInputMode>(
     ioEnabled ? 'collapsed' : 'insert'
@@ -213,9 +220,20 @@ const EmailSmsStep = ({
 
   const handleVerify = async (channelType: ChannelType, value: string) => {
     const fieldName = channelType === ChannelType.EMAIL ? 'email' : 'sms';
+
     await formik.setFieldTouched(fieldName, true, false);
-    const error = await formik.validateField(fieldName);
-    if (error || !value) {
+
+    const errors = await formik.validateForm({
+      ...formik.values,
+      [fieldName]: value,
+    });
+    const validationError = errors[fieldName];
+
+    if (validationError || !value) {
+      if (validationError) {
+        publishEvent({ message: validationError });
+      }
+
       return;
     }
 
@@ -261,8 +279,14 @@ const EmailSmsStep = ({
       return false;
     }
 
+    const validationError = errors.email ?? (smsEnabled ? errors.sms : undefined);
+
+    if (validationError) {
+      publishEvent({ message: validationError });
+    }
+
     return !errors.email && (!smsEnabled || !errors.sms);
-  }, [formik, smsMode, email.value, sms.value]);
+  }, [formik, publishEvent, smsMode, email.value, sms.value]);
 
   useEffect(() => {
     registerContinueHandler?.(handleContinueAttempt);

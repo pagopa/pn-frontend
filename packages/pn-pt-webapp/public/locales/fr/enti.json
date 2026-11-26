@@ -3,7 +3,8 @@
     "button": "Rechercher",
     "label": "Rechercher par nom ou code fiscal",
     "max-length": "Saisissez au maximum {{maxLength}} caractères",
-    "min-length": "Saisissez au moins trois caractères"
+    "min-length": "Saisissez au moins trois caractères",
+    "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin"
   },
   "subtitle": "Consultez les organismes gérés pour le produit SEND.",
   "table": {

@@ -287,6 +287,38 @@ describe('Institutions page', () => {
     expect(screen.getAllByTestId('institutionsBodyRowDesktop')).toHaveLength(10);
   });
 
+  it.each([
+    ['only spaces', '   '],
+    ['leading spaces', '  Ente'],
+    ['trailing spaces', 'Ente  '],
+  ])('shows a validation error when searching with %s', async (_, value) => {
+    await renderPage();
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    expect(await screen.findByText('search.no-spaces-at-edges')).toBeInTheDocument();
+    expect(screen.queryByText('search.min-length')).not.toBeInTheDocument();
+    expect(getInstitutionsSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('searches with spaces inside the value', async () => {
+    await renderPage();
+    fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
+      target: { value: 'Ente  Fittizio' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    await waitFor(() => {
+      expect(getInstitutionsSpy).toHaveBeenCalledTimes(2);
+      expect(getInstitutionsSpy).toHaveBeenLastCalledWith({
+        search: 'Ente  Fittizio',
+        limit: 10,
+        lastKey: undefined,
+      });
+    });
+    expect(screen.queryByText('search.no-spaces-at-edges')).not.toBeInTheDocument();
+  });
+
   it('shows a validation error when searching with more than 250 characters', async () => {
     await renderPage();
     fireEvent.change(screen.getByRole('textbox', { name: /search.label/ }), {
