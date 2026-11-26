@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.4...v2.28.0-RC.5) (2026-11-26)
+
+### Bug Fixes
+
+* **PN-22446:** wrap text when too long in empty state page ([#2248](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2248)) ([88416e9](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/88416e9d1dac560771776656dcab7fad1e8a2ccd))
+
+
 # [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
 
 ### Bug Fixes

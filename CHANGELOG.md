@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.4...v2.28.0-RC.5) (2026-11-26)
+
+### Bug Fixes
+
+* **PN-22391:** hide PT institutions search on loading and error unless triggered by a search ([#2243](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2243)) ([6232575](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/62325758c243ef02b977ce59771d89142dffe595))
+* **PN-22416:** make PT cookie banner layout responsive ([#2241](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2241)) ([0c75298](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/0c7529855f67203655065c8757c9d74cb78da170))
+* **PN-22446:** wrap text when too long in empty state page ([#2248](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2248)) ([88416e9](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/88416e9d1dac560771776656dcab7fad1e8a2ccd))
+* **PN-22447:** show all spaces when present ([#2245](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2245)) ([836faf0](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/836faf0c399c7bde0cbbcccc638ee3d111bd304d))
+
+
 # [2.28.0-RC.4](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.3...v2.28.0-RC.4) (2026-11-24)
 
 ### Bug Fixes
