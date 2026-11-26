@@ -3,7 +3,8 @@
     "button": "Search",
     "label": "Search by Name or Fiscal Code",
     "max-length": "Enter a maximum of {{maxLength}} characters",
-    "min-length": "Enter at least three characters"
+    "min-length": "Enter at least three characters",
+    "no-spaces-at-edges": "Delete spaces at the beginning or end"
   },
   "subtitle": "View managed institutions for the SEND product.",
   "table": {
