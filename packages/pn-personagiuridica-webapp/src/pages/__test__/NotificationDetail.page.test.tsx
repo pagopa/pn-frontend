@@ -1267,7 +1267,15 @@ describe('NotificationDetail Page', () => {
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
-          userState: { user: adminUser },
+          userState: {
+            user: {
+              ...adminUser,
+              organization: {
+                ...adminUser.organization,
+                fiscal_code: raddNotificationDTO.recipients[1].taxId,
+              },
+            },
+          },
         },
         route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
       });

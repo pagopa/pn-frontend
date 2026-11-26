@@ -33,6 +33,7 @@ import {
   appStateActions,
   downloadDocument,
   getPaymentCache,
+  getPerfectionLink,
   useErrors,
   useHasPermissions,
   useIsCancelled,
@@ -126,6 +127,22 @@ const NotificationDetail = () => {
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
   const canManageContacts = userHasAdminPermissions && !currentUser.hasGroup;
+
+  const perfectionLink = useMemo(
+    () =>
+      getPerfectionLink(
+        NOTIFICATION_PERFECTION_LINK,
+        notification.notificationStatusHistory,
+        notification.recipients,
+        organization?.fiscal_code
+      ),
+    [
+      NOTIFICATION_PERFECTION_LINK,
+      notification.notificationStatusHistory,
+      notification.recipients,
+      organization?.fiscal_code,
+    ]
+  );
 
   const historyParser = useMemo(
     () => StatusHistoryParser.parse(notification.notificationStatusHistory),
@@ -614,7 +631,7 @@ const NotificationDetail = () => {
                         components={[
                           <Link
                             key="perfection-link"
-                            href={NOTIFICATION_PERFECTION_LINK}
+                            href={perfectionLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             color="inherit"
