@@ -58,6 +58,8 @@ describe('CourtesyContactHandler', () => {
     expect(getByRole('button', { name: `${labelPrefix}.collapse-label` })).toBeInTheDocument();
     expect(getByText('mock-error')).toBeInTheDocument();
 
+    expect(getByLabelText(`${labelPrefix}.input-label`)).toHaveAccessibleDescription('mock-error');
+
     fireEvent.click(getByRole('button', { name: `${labelPrefix}.button-label` }));
     expect(props.onVerifyContact).toHaveBeenCalledTimes(1);
 
