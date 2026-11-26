@@ -209,7 +209,7 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Aucune adresse valide n’a été trouvée pour préparer une autre tentative d’envoi - raison non précisée.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Aucune adresse valide n’a été trouvée pour le destinataire {{name}} {{taxId}} afin de préparer une autre tentative d’envoi - raison non précisée.",
       "radd": {
-        "description": "Le destinataire, ou la personne déléguée, a retiré une copie papier des documents notifiés auprès d'un opérateur habilité à leur remise.",
+        "description": "Le destinataire, ou la personne déléguée, a retiré une copie papier des documents notifiés auprès d'un opérateur habilité à leur remise. Pour plus d'informations, <0>consulte les modalités de finalisation</0>.",
         "title": "Les documents ont été retirés"
       },
       "registered-letter": "Lettre recommandée",

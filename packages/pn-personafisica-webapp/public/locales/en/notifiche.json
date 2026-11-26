@@ -213,7 +213,7 @@
       "prepare-analog-domicile-failure-ZZZ-description": "A valid address could not be found to arrange another attempt at sending – reason not specified.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "A valid address was not found for the recipient {{name}} {{taxId}} to arrange another attempt at sending – reason not specified.",
       "radd": {
-        "description": "The recipient, or their delegate, collected a paper copy of the notified documents from an operator authorized to deliver them.",
+        "description": "The recipient, or a delegated person, has collected a paper copy of the notified documents from an operator authorized to deliver them. For more information, <0>check the finalization methods</0>.",
         "title": "The documents were collected"
       },
       "registered-letter": "Registered post",

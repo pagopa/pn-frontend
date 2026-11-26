@@ -213,7 +213,7 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Veljavnega naslova ni bilo mogoče najti, da bi se dogovoril za drug poskus pošiljanja - razlog ni naveden.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Za prejemnika {{name}} {{taxId}} ni bil najden veljaven naslov, da bi se dogovoril za drug poskus pošiljanja – razlog ni naveden.",
       "radd": {
-        "description": "Prejemnik ali pooblaščena oseba je prevzela papirno kopijo vročenih dokumentov pri izvajalcu, pooblaščenem za njihovo dostavo.",
+        "description": "Prejemnik ali pooblaščena oseba je pri izvajalcu, pooblaščenem za dostavo, prevzel papirnato kopijo vročenih dokumentov. Za več informacij <0>preveri načine zaključka</0>.",
         "title": "Dokumenti so bili prevzeti"
       },
       "registered-letter": "Priporočeno pismo",
