@@ -31,13 +31,11 @@ describe('EmptyErrorState', () => {
   });
 
   it('allows long unbroken text to wrap within its container', () => {
-    const { getByTestId } = render(<EmptyErrorState title={'a'.repeat(200)} />);
+    const longTitle = 'a'.repeat(200);
+    const { getByText } = render(<EmptyErrorState title={longTitle} />);
 
-    const wrapper = getByTestId('emptyState').parentElement;
-    expect(wrapper).not.toBeNull();
-    expect(getComputedStyle(wrapper!).overflowWrap).toBe('anywhere');
-    expect(getComputedStyle(wrapper!).wordBreak).toBe('break-word');
-    expect(getComputedStyle(wrapper!).minWidth).toBe('0px');
+    const container = getByText(longTitle).parentElement!;
+    expect(getComputedStyle(container).overflowWrap).toBe('anywhere');
   });
 
   it('renders the default action and handles the click', () => {

@@ -23,6 +23,7 @@ const CONTAINER_PROPS = {
   textAlign: 'center',
   flexDirection: 'column',
   alignItems: 'center',
+  sx: { overflowWrap: 'anywhere' },
 } as const;
 
 const isDefaultAction = (action: DefaultAction | ReactNode): action is DefaultAction =>
@@ -35,39 +36,37 @@ const EmptyErrorState = ({
   action,
   icon,
 }: EmptyErrorStateProps) => (
-  <Box sx={{ minWidth: 0, overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-    <EmptyState
-      slots={{ contentContainer: Box }}
-      slotProps={{ contentContainer: CONTAINER_PROPS }}
-      sentimentIcon={
-        icon ? icon : variant === 'error' ? <IllusMIError size={56} /> : <IllusMIMessage size={56} />
-      }
+  <EmptyState
+    slots={{ contentContainer: Box }}
+    slotProps={{ contentContainer: CONTAINER_PROPS }}
+    sentimentIcon={
+      icon ? icon : variant === 'error' ? <IllusMIError size={56} /> : <IllusMIMessage size={56} />
+    }
+  >
+    <Typography
+      variant="subtitle2"
+      fontSize="16px"
+      color="text.secondary"
+      mb={description ? 1 : action ? 2 : 0}
     >
-      <Typography
-        variant="subtitle2"
-        fontSize="16px"
-        color="text.secondary"
-        mb={description ? 1 : action ? 2 : 0}
-      >
-        {title}
+      {title}
+    </Typography>
+
+    {description && (
+      <Typography variant="body2" fontSize="14px" color="text.secondary" mb={action ? 2 : 0}>
+        {description}
       </Typography>
+    )}
 
-      {description && (
-        <Typography variant="body2" fontSize="14px" color="text.secondary" mb={action ? 2 : 0}>
-          {description}
-        </Typography>
-      )}
-
-      {action &&
-        (isDefaultAction(action) ? (
-          <MIButton variant="text" onClick={action.onClick}>
-            {action.label}
-          </MIButton>
-        ) : (
-          action
-        ))}
-    </EmptyState>
-  </Box>
+    {action &&
+      (isDefaultAction(action) ? (
+        <MIButton variant="text" onClick={action.onClick}>
+          {action.label}
+        </MIButton>
+      ) : (
+        action
+      ))}
+  </EmptyState>
 );
 
 export default EmptyErrorState;
