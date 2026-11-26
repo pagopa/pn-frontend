@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.5...v2.28.0-RC.6) (2026-11-26)
+
+### Bug Fixes
+
+* **PN-22356:** show no-spaces-at-edges error in PT institutions search ([#2246](https://github.com/pagopa/pn-frontend/issues/2246)) ([80ca319](https://github.com/pagopa/pn-frontend/commit/80ca3192a61cea08926bb5c76eb9aedac6f49145))
+
+
 # [2.28.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.4...v2.28.0-RC.5) (2026-11-26)
 
 ### Bug Fixes

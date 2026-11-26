@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.5...v2.28.0-RC.6) (2026-11-26)
+
+### Bug Fixes
+
+* update content for 890 label ([986c3fe](https://github.com/pagopa/pn-frontend/commit/986c3fe82439290fdac692325d6fa7322b76a2b7))
+
+
 # [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
 
 ### Bug Fixes

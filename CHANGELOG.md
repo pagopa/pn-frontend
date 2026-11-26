@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.5...v2.28.0-RC.6) (2026-11-26)
+
+### Bug Fixes
+
+* **A2-3528:** announce validation errors to screen readers in PF ([45ec8fa](https://github.com/pagopa/pn-frontend/commit/45ec8fa29ae35755665940000de0fe46cddc7cb5))
+* **A2-3528:** fix validation error assertions ([68296c1](https://github.com/pagopa/pn-frontend/commit/68296c1d078a37d441aea217479d129a92d2bda3))
+* **A2-3528:** improve screen reader validation error announcements ([c6629b9](https://github.com/pagopa/pn-frontend/commit/c6629b96db4880fa5206d86da032bc2e6da41cbc))
+* **A2-3528:** keep accessibility live region mounted ([1e90e9e](https://github.com/pagopa/pn-frontend/commit/1e90e9e41b6878e585acce043bc233bb5fbd885a))
+* **A2-3528:** preserve verification modal priority ([2751c8b](https://github.com/pagopa/pn-frontend/commit/2751c8bf2c3a1a5896dd4a25c42a16ae3fef1e22))
+* **PN-22356:** show no-spaces-at-edges error in PT institutions search ([#2246](https://github.com/pagopa/pn-frontend/issues/2246)) ([80ca319](https://github.com/pagopa/pn-frontend/commit/80ca3192a61cea08926bb5c76eb9aedac6f49145))
+* **PN-22537:** always use open envelope icon for viewed notifications ([#2250](https://github.com/pagopa/pn-frontend/issues/2250)) ([1f0080c](https://github.com/pagopa/pn-frontend/commit/1f0080cb5d58d67ebded5a5aa5735d307fa6e4a8))
+* update content for 890 label ([986c3fe](https://github.com/pagopa/pn-frontend/commit/986c3fe82439290fdac692325d6fa7322b76a2b7))
+
+
 # [2.28.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.4...v2.28.0-RC.5) (2026-11-26)
 
 ### Bug Fixes

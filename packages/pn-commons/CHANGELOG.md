@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.5...v2.28.0-RC.6) (2026-11-26)
+
+### Bug Fixes
+
+* **A2-3528:** keep accessibility live region mounted ([1e90e9e](https://github.com/pagopa/pn-frontend/commit/1e90e9e41b6878e585acce043bc233bb5fbd885a))
+* **PN-22537:** always use open envelope icon for viewed notifications ([#2250](https://github.com/pagopa/pn-frontend/issues/2250)) ([1f0080c](https://github.com/pagopa/pn-frontend/commit/1f0080cb5d58d67ebded5a5aa5735d307fa6e4a8))
+
+
 # [2.28.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.4...v2.28.0-RC.5) (2026-11-26)
 
 ### Bug Fixes
