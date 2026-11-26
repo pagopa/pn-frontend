@@ -67,6 +67,7 @@ const InstitutionsPage: React.FC = () => {
     {
       id: 'institutionName',
       label: t('table.columns.institution-name'),
+      mode: 'wrap',
       tableConfiguration: {
         cellProps: { width: '33%' },
       },
