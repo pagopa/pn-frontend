@@ -1267,7 +1267,15 @@ describe('NotificationDetail Page', () => {
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
-          userState: { user: adminUser },
+          userState: {
+            user: {
+              ...adminUser,
+              organization: {
+                ...adminUser.organization,
+                fiscal_code: raddNotificationDTO.recipients[1].taxId,
+              },
+            },
+          },
         },
         route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
       });
@@ -1276,6 +1284,13 @@ describe('NotificationDetail Page', () => {
     const alertRadd = result.getAllByTestId('raddAlert')[0];
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    const raddLink = within(alertRadd).getByTestId('raddAlertLink');
+    expect(raddLink).toHaveAttribute(
+      'href',
+      'https://fake.notification-perfection.pagopa.it#raccomandata'
+    );
+    expect(raddLink).toHaveAttribute('target', '_blank');
+    expect(raddLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
