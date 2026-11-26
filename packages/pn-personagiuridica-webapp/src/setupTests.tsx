@@ -65,7 +65,7 @@ beforeAll(async () => {
     FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
     NOTIFICATION_PERFECTION_LINK: 'https://fake.notification-perfection.pagopa.it',
     IS_NEW_TIMELINE_ENABLED: true,
-    IS_NEW_TIMELINE_COPY_ENABLED: true,
+    IS_NEW_TIMELINE_COPY_ENABLED: false,
   });
   initStore(false);
   initAxiosClients();
