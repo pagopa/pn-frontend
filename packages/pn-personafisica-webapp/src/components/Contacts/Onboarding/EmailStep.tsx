@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
 import { Stack, Typography } from '@mui/material';
-import { EventAction, appStateActions } from '@pagopa-pn/pn-commons';
+import { A11yMessage, EventAction, appStateActions, useEventEmitter } from '@pagopa-pn/pn-commons';
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
 import { PFEventsType } from '../../../models/PFEventsType';
@@ -28,6 +28,7 @@ type Props = {
 const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
+  const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
 
   const [codeDialogOpen, setCodeDialogOpen] = useState(false);
 
@@ -156,6 +157,9 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
     const normalizedValue = normalizeContactValue(formik.values.email);
 
     if (!normalizedValue || errors.email) {
+      if (errors.email) {
+        publishEvent({ message: errors.email });
+      }
       return;
     }
 
@@ -164,7 +168,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
     // eslint-disable-next-line functional/immutable-data
     currentValueRef.current = normalizedValue;
     await handleCodeVerification();
-  }, [formik, handleCodeVerification, trackDigitalDomicile]);
+  }, [formik, handleCodeVerification, publishEvent, trackDigitalDomicile]);
 
   const handleSubmitEmailEdit = useCallback(
     (newValue: string) => {

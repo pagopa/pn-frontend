@@ -24,7 +24,7 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { A11yMessage, useEventEmitter, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import { ChannelType } from '../../models/contacts';
@@ -90,6 +90,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
   ) => {
     const { t } = useTranslation(['common', 'recapiti']);
     const isMobile = useIsMobile();
+    const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
     const [editMode, setEditMode] = useState(false);
     const contactType = channelType.toLowerCase();
 
@@ -167,25 +168,39 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     }));
 
-    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const fieldName = `${senderId}_${contactType}`;
+
       if (beforeValidationCallback) {
-        beforeValidationCallback(
-          formik.values[`${senderId}_${contactType}`],
-          formik.errors[`${senderId}_${contactType}`]
-        );
+        beforeValidationCallback(formik.values[fieldName], formik.errors[fieldName]);
       }
 
       if (value && onEditConfirmCallback) {
         onEditConfirmCallback();
       }
 
-      formik.handleSubmit(e);
+      await formik.setFieldTouched(fieldName, true, false);
+      const errors = await formik.validateForm(formik.values);
+      const validationError = errors[fieldName];
+
+      if (typeof validationError === 'string' && validationError) {
+        publishEvent({ message: validationError });
+      }
+
+      await formik.submitForm();
     };
 
     // INSERT MODE
     if (!value) {
       return (
-        <form onSubmit={handleFormSubmit} data-testid={`${senderId}_${contactType}Contact`}>
+        <form
+          noValidate
+          onSubmit={handleFormSubmit}
+          data-testid={`${senderId}_${contactType}Contact`}
+        >
           <Label
             id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
@@ -248,6 +263,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     // EDIT MODE
     return (
       <form
+        noValidate
         onSubmit={handleFormSubmit}
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
