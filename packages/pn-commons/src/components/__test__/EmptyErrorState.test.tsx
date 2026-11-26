@@ -30,6 +30,14 @@ describe('EmptyErrorState', () => {
     expect(getByText('Empty state description')).toBeInTheDocument();
   });
 
+  it('allows long unbroken text to wrap within its container', () => {
+    const longTitle = 'a'.repeat(200);
+    const { getByText } = render(<EmptyErrorState title={longTitle} />);
+
+    const container = getByText(longTitle).parentElement!;
+    expect(getComputedStyle(container).overflowWrap).toBe('anywhere');
+  });
+
   it('renders the default action and handles the click', () => {
     const onClick = vi.fn();
 
