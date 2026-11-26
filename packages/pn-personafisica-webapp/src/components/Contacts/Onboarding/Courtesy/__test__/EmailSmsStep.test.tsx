@@ -74,7 +74,7 @@ describe('EmailSmsStep', () => {
     });
 
     it('announces invalid email on each verify attempt, but not while typing', async () => {
-      const { getByLabelText, getByRole, queryByRole } = render(
+      const { getByLabelText, getByRole } = render(
         <>
           <A11yMessageAnnouncer />
           <EmailSmsStep {...createProps()} />
@@ -89,8 +89,7 @@ describe('EmailSmsStep', () => {
         });
       });
 
-      // Nessun annuncio durante la digitazione
-      expect(queryByRole('status')).not.toBeInTheDocument();
+      expect(getByRole('status')).toBeEmptyDOMElement();
 
       const verifyButton = getByRole('button', {
         name: `${labelPrefix}.email.insert.button-label`,
@@ -192,7 +191,7 @@ describe('EmailSmsStep', () => {
     });
 
     it('announces invalid SMS on each verify attempt, but not while typing', async () => {
-      const { getByLabelText, getByRole, queryByRole } = render(
+      const { getByLabelText, getByRole } = render(
         <>
           <A11yMessageAnnouncer />
           <EmailSmsStep {...createProps()} />
@@ -207,8 +206,7 @@ describe('EmailSmsStep', () => {
         });
       });
 
-      // Nessun annuncio durante la digitazione
-      expect(queryByRole('status')).not.toBeInTheDocument();
+      expect(getByRole('status')).toBeEmptyDOMElement();
 
       const verifyButton = getByRole('button', {
         name: `${labelPrefix}.sms.insert.button-label`,
@@ -260,7 +258,7 @@ describe('EmailSmsStep', () => {
     it('opens with the email title when an unverified email is detected on continue', async () => {
       const { props, getHandler } = createPropsWithHandler();
 
-      const { getByLabelText, getByText, queryByRole } = render(
+      const { getByLabelText, getByText, getByRole } = render(
         <>
           <A11yMessageAnnouncer />
           <EmailSmsStep {...props} />
@@ -273,8 +271,7 @@ describe('EmailSmsStep', () => {
         });
       });
 
-      // Nessun annuncio durante la digitazione
-      expect(queryByRole('status')).not.toBeInTheDocument();
+      expect(getByRole('status')).toBeEmptyDOMElement();
 
       const continueHandler = getHandler();
 
@@ -325,7 +322,7 @@ describe('EmailSmsStep', () => {
     it('opens with the SMS title when an unverified SMS is detected on continue', async () => {
       const { props, getHandler } = createPropsWithHandler();
 
-      const { getByLabelText, getByText, queryByRole } = render(
+      const { getByLabelText, getByText, getByRole } = render(
         <>
           <A11yMessageAnnouncer />
           <EmailSmsStep {...props} email={{ value: 'test@mock.pagopa.it', alreadySet: true }} />
@@ -338,8 +335,7 @@ describe('EmailSmsStep', () => {
         });
       });
 
-      // Nessun annuncio durante la digitazione
-      expect(queryByRole('status')).not.toBeInTheDocument();
+      expect(getByRole('status')).toBeEmptyDOMElement();
 
       const continueHandler = getHandler();
 
@@ -355,14 +351,13 @@ describe('EmailSmsStep', () => {
         expect(getByText(`${labelPrefix}.sms.verify-before-continue-title`)).toBeInTheDocument();
       });
 
-      // Nessun errore da annunciare: il numero è formalmente valido
-      expect(queryByRole('status')).not.toBeInTheDocument();
+      expect(getByRole('status', { hidden: true })).toBeEmptyDOMElement();
     });
 
     it('prioritizes email verification over SMS validation errors on continue', async () => {
       const { props, getHandler } = createPropsWithHandler();
 
-      const { getByLabelText, getByText, queryByRole } = render(
+      const { getByLabelText, getByText, getByRole } = render(
         <>
           <A11yMessageAnnouncer />
           <EmailSmsStep {...props} />
@@ -397,7 +392,7 @@ describe('EmailSmsStep', () => {
         expect(getByText(`${labelPrefix}.email.verify-before-continue-title`)).toBeInTheDocument();
       });
 
-      expect(queryByRole('status')).not.toBeInTheDocument();
+      expect(getByRole('status', { hidden: true })).toBeEmptyDOMElement();
     });
 
     it('announces SMS validation error on continue when no verification modal is needed', async () => {

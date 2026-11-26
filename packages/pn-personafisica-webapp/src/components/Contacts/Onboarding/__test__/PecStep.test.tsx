@@ -182,7 +182,7 @@ describe('PecStep', () => {
   it('announces the PEC validation error on each invalid verification attempt, but not while typing', async () => {
     const props = createProps();
 
-    const { getByLabelText, getByRole, queryByRole } = render(
+    const { getByLabelText, getByRole } = render(
       <>
         <A11yMessageAnnouncer />
         <PecStep {...props} />
@@ -196,7 +196,7 @@ describe('PecStep', () => {
       fireEvent.change(input, { target: { value: 'abc' } });
     });
 
-    expect(queryByRole('status')).not.toBeInTheDocument();
+    expect(getByRole('status')).toBeEmptyDOMElement();
 
     await act(async () => {
       fireEvent.click(verifyButton);
@@ -278,7 +278,7 @@ describe('PecStep', () => {
   it('returns false and does not show the verification modal when continue is triggered with an invalid PEC', async () => {
     const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
-    const { getByLabelText, getByRole, queryByRole, queryByText } = render(
+    const { getByLabelText, getByRole, queryByText } = render(
       <>
         <A11yMessageAnnouncer />
         <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
@@ -291,8 +291,7 @@ describe('PecStep', () => {
       });
     });
 
-    // Nessun annuncio durante la digitazione
-    expect(queryByRole('status')).not.toBeInTheDocument();
+    expect(getByRole('status')).toBeEmptyDOMElement();
 
     const continueHandler = registerContinueHandler.mock.calls.at(-1)?.[0];
     if (continueHandler === undefined) {
@@ -337,7 +336,7 @@ describe('PecStep', () => {
   it('returns false and does not show the verification modal when continue is triggered without accepting the disclaimer', async () => {
     const registerContinueHandler = vi.fn<(handler: () => Promise<boolean>) => void>();
 
-    const { getByLabelText, getByRole, queryByRole, findByText, queryByText } = render(
+    const { getByLabelText, getByRole, findByText, queryByText } = render(
       <>
         <A11yMessageAnnouncer />
         <PecStep {...createProps()} registerContinueHandler={registerContinueHandler} />
@@ -350,7 +349,7 @@ describe('PecStep', () => {
       });
     });
 
-    expect(queryByRole('status')).not.toBeInTheDocument();
+    expect(getByRole('status')).toBeEmptyDOMElement();
 
     const continueHandler = registerContinueHandler.mock.calls.at(-1)?.[0];
     if (continueHandler === undefined) {

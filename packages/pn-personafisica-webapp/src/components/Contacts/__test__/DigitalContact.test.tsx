@@ -533,7 +533,7 @@ describe('DigitalContact Component', () => {
 
       fireEvent.change(input!, { target: { value: 'not valid' } });
 
-      expect(queryByRole('status')).not.toBeInTheDocument();
+      expect(getByRole('status')).toBeEmptyDOMElement();
       expect(queryByRole('alert')).not.toBeInTheDocument();
 
       fireEvent.click(button);

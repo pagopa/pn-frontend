@@ -52,7 +52,7 @@ describe('EmailStep', () => {
   it('announces the email validation error on each invalid verification attempt, but not while typing', async () => {
     const props = createProps();
 
-    const { getByLabelText, getByRole, queryByRole } = render(
+    const { getByLabelText, getByRole } = render(
       <>
         <A11yMessageAnnouncer />
         <EmailStep {...props} />
@@ -66,7 +66,7 @@ describe('EmailStep', () => {
       fireEvent.change(input, { target: { value: 'abc' } });
     });
 
-    expect(queryByRole('status')).not.toBeInTheDocument();
+    expect(getByRole('status')).toBeEmptyDOMElement();
 
     await act(async () => {
       fireEvent.click(verifyButton);
@@ -101,7 +101,7 @@ describe('EmailStep', () => {
       result: 'OK',
     });
 
-    const { getByLabelText, getByRole, queryByRole } = render(
+    const { getByLabelText, getByRole } = render(
       <>
         <A11yMessageAnnouncer />
         <EmailStep {...props} />
@@ -130,7 +130,7 @@ describe('EmailStep', () => {
       expect(props.onVerified).toHaveBeenCalledTimes(1);
     });
 
-    expect(queryByRole('status')).not.toBeInTheDocument();
+    expect(getByRole('status')).toBeEmptyDOMElement();
   });
 
   it('renders the readonly summary when a new email has already been added during the wizard', () => {
