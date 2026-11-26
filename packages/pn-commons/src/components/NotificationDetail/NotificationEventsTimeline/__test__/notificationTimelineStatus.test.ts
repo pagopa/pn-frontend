@@ -1,3 +1,5 @@
+import { DraftsOutlined, GavelRounded } from '@mui/icons-material';
+
 import { NotificationStatus } from '../../../../models/NotificationStatus';
 import { getTimelineItemPresentation } from '../notificationTimelineStatus.config';
 
@@ -17,14 +19,15 @@ describe('notificationTimelineStatus config', () => {
     ).toBe('warning');
   });
 
-  it('uses the gavel icon for the viewed status, and the drafts one when the effective date is reached', () => {
-    const withoutEffectiveDate = getTimelineItemPresentation(NotificationStatus.VIEWED, false);
-    const withEffectiveDate = getTimelineItemPresentation(NotificationStatus.VIEWED, false, true);
+  it('uses the drafts icon for the viewed status', () => {
+    expect(getTimelineItemPresentation(NotificationStatus.VIEWED, true).icon).toBe(DraftsOutlined);
+    expect(getTimelineItemPresentation(NotificationStatus.VIEWED, false).icon).toBe(DraftsOutlined);
+  });
 
-    expect(withoutEffectiveDate.icon).toBe(
-      getTimelineItemPresentation(NotificationStatus.EFFECTIVE_DATE, false).icon
+  it('uses the gavel icon for the effective date status', () => {
+    expect(getTimelineItemPresentation(NotificationStatus.EFFECTIVE_DATE, false).icon).toBe(
+      GavelRounded
     );
-    expect(withEffectiveDate.icon).not.toBe(withoutEffectiveDate.icon);
   });
 
   it('falls back to the default presentation for a status without configuration', () => {
