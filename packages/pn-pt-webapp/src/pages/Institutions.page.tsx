@@ -21,6 +21,7 @@ import {
   TitleBox,
   appStateActions,
   calculatePages,
+  dataRegex,
   formatDate,
   useErrors,
 } from '@pagopa-pn/pn-commons';
@@ -100,7 +101,8 @@ const InstitutionsPage: React.FC = () => {
   const validationSchema = yup.object({
     search: yup
       .string()
-      .trim()
+      // the be ignores the leading and trailing spaces: the user must remove them
+      .matches(dataRegex.noSpaceAtEdges, 'search.no-spaces-at-edges')
       .test('min-length', 'search.min-length', (value) => !value || value.length >= 3)
       .max(SEARCH_MAX_LENGTH, 'search.max-length'),
   });
@@ -112,7 +114,7 @@ const InstitutionsPage: React.FC = () => {
     validateOnBlur: false,
     onSubmit: (values) => {
       setHasSearched(true);
-      dispatch(setSearch(values.search.trim()));
+      dispatch(setSearch(values.search));
     },
   });
 
