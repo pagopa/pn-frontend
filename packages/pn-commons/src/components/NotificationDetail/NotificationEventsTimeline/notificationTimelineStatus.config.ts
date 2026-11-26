@@ -33,7 +33,7 @@ const TIMELINE_STATUS_PRESENTATION: Partial<
     icon: WarningRounded,
   },
   [NotificationStatus.EFFECTIVE_DATE]: { variant: 'info', icon: GavelRounded },
-  [NotificationStatus.VIEWED]: { variant: 'info', icon: GavelRounded },
+  [NotificationStatus.VIEWED]: { variant: 'info', icon: DraftsOutlined },
   [NotificationStatus.DELIVERED]: { variant: 'normal', icon: MarkEmailReadOutlined },
   [NotificationStatus.DELIVERING]: { variant: 'normal', icon: OutgoingEmailRounded },
   [NotificationStatus.ACCEPTED]: { variant: 'normal', icon: TaskAltRounded },
@@ -48,14 +48,10 @@ const DEFAULT_TIMELINE_STATUS_PRESENTATION: TimelineStatusPresentation = {
 
 export const getTimelineItemPresentation = (
   status: NotificationStatus,
-  isFirst: boolean,
-  hasEffectiveDate = false
+  isFirst: boolean
 ): TimelineStatusPresentation => {
-  const { icon: statusIcon, variant } =
+  const { icon, variant } =
     TIMELINE_STATUS_PRESENTATION[status] ?? DEFAULT_TIMELINE_STATUS_PRESENTATION;
-  // the viewed status shows the DraftsOutlined icon when the timeline also contains the effective date status
-  const icon =
-    status === NotificationStatus.VIEWED && hasEffectiveDate ? DraftsOutlined : statusIcon;
 
   return {
     icon,
