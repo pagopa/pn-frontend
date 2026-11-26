@@ -25,7 +25,7 @@ const A11yMessageAnnouncer: React.FC = () => {
     prevMessage.current === message
       ? SUFFIXES.find((suff) => suff !== prevSuffix.current)
       : SUFFIXES[0];
-  const messageToAnnounce = `${message}${suffix}`;
+  const messageToAnnounce = message ? `${message}${suffix}` : '';
 
   useEffect(() => {
     if (!eventData?.message) {
@@ -36,10 +36,6 @@ const A11yMessageAnnouncer: React.FC = () => {
     // eslint-disable-next-line functional/immutable-data
     prevSuffix.current = suffix;
   }, [eventData]);
-
-  if (!message) {
-    return;
-  }
 
   return (
     <>

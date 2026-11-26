@@ -40,7 +40,7 @@ describe('OnboardingContactItem', () => {
       expect(getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
       expect(getByText('mock-footer')).toBeInTheDocument();
       expect(getByRole('button', { name: 'mock-collapse' })).toBeInTheDocument();
-      expect(getByText('mock-error')).toBeInTheDocument();
+      expect(getByLabelText('mock-input-label')).toHaveAccessibleDescription('mock-error');
 
       fireEvent.change(getByLabelText('mock-input-label'), {
         target: { value: 'a' },
@@ -121,6 +121,42 @@ describe('OnboardingContactItem', () => {
         footer.compareDocumentPosition(submitButton) & Node.DOCUMENT_POSITION_FOLLOWING
       ).toBeTruthy();
     });
+  });
+
+  it('keeps the validation error visible and accessible when it changes', () => {
+    const props = {
+      mode: 'entry' as const,
+      inputLabel: 'mock-input-label',
+      value: '',
+      buttonLabel: 'mock-submit',
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    };
+
+    const { getByLabelText, getByText, queryByRole, queryByText, rerender } = render(
+      <OnboardingContactItem {...props} />
+    );
+
+    const input = getByLabelText('mock-input-label');
+
+    expect(queryByRole('alert')).not.toBeInTheDocument();
+
+    rerender(<OnboardingContactItem {...props} touched error="mock-error" />);
+
+    expect(getByText('mock-error')).toBeInTheDocument();
+    expect(input).toHaveAccessibleDescription('mock-error');
+    expect(queryByRole('alert')).not.toBeInTheDocument();
+
+    rerender(<OnboardingContactItem {...props} touched />);
+
+    expect(queryByText('mock-error')).not.toBeInTheDocument();
+    expect(queryByRole('alert')).not.toBeInTheDocument();
+
+    rerender(<OnboardingContactItem {...props} touched error="mock-error" />);
+
+    expect(getByText('mock-error')).toBeInTheDocument();
+    expect(input).toHaveAccessibleDescription('mock-error');
+    expect(queryByRole('alert')).not.toBeInTheDocument();
   });
 
   describe('view mode', () => {

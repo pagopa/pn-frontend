@@ -3,7 +3,8 @@
     "button": "Suchen",
     "label": "Nach Name oder Steuernummer suchen",
     "max-length": "Gib maximal {{maxLength}} Zeichen ein",
-    "min-length": "Gib mindestens drei Zeichen ein"
+    "min-length": "Gib mindestens drei Zeichen ein",
+    "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende"
   },
   "subtitle": "Sieh dir die verwalteten Einrichtungen für das Produkt SEND an.",
   "table": {

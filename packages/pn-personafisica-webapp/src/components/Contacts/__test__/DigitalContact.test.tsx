@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { vi } from 'vitest';
 
 import { Button } from '@mui/material';
+import { A11yMessageAnnouncer } from '@pagopa-pn/pn-commons';
 import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
@@ -419,6 +420,40 @@ describe('DigitalContact Component', () => {
     expect(newButtons[0]).toBeEnabled();
   });
 
+  it('keeps the field error accessible and clears it when an invalid edit is cancelled', async () => {
+    const { getByRole, queryByRole } = render(
+      <DigitalContact
+        label="Mocked label"
+        value="mocked@pec.it"
+        channelType={ChannelType.PEC}
+        inputProps={{ label: 'Mocked input label' }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+      />
+    );
+
+    expect(queryByRole('alert')).not.toBeInTheDocument();
+
+    fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+
+    const input = getByRole('textbox', { name: 'Mocked input label' });
+    fireEvent.change(input, { target: { value: 'invalid value' } });
+    fireEvent.blur(input);
+
+    await waitFor(() => {
+      expect(input).toHaveAccessibleDescription('legal-contacts.valid-pec');
+    });
+
+    expect(queryByRole('alert')).not.toBeInTheDocument();
+
+    fireEvent.click(getByRole('button', { name: 'button.annulla' }));
+    expect(queryByRole('textbox', { name: 'Mocked input label' })).not.toBeInTheDocument();
+
+    fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+    expect(getByRole('textbox', { name: 'Mocked input label' })).toHaveValue('mocked@pec.it');
+  });
+
   it('remove contact', () => {
     // render component
     const { container } = render(
@@ -460,4 +495,62 @@ describe('DigitalContact Component', () => {
     const buttons = container.querySelectorAll('button');
     expect(buttons[0]).toHaveTextContent('Custom edit button');
   });
+
+  it.each([
+    {
+      channelType: ChannelType.EMAIL,
+      errorMessage: 'courtesy-contacts.valid-email',
+    },
+    {
+      channelType: ChannelType.PEC,
+      errorMessage: 'legal-contacts.valid-pec',
+    },
+    {
+      channelType: ChannelType.SMS,
+      errorMessage: 'courtesy-contacts.valid-sms',
+    },
+  ])(
+    'announces the $channelType validation error on each invalid submit, but not while typing',
+    async ({ channelType, errorMessage }) => {
+      const fieldName = `default_${channelType.toLowerCase()}`;
+
+      const { container, getByRole, queryByRole } = render(
+        <>
+          <A11yMessageAnnouncer />
+          <DigitalContact
+            label="Mocked label"
+            value=""
+            channelType={channelType}
+            inputProps={{ label: 'Mocked input label' }}
+            insertButtonLabel="Button"
+            onSubmit={vi.fn()}
+          />
+        </>
+      );
+
+      const input = container.querySelector(`[name="${fieldName}"]`);
+      const button = getById(container, `${fieldName}-button`);
+
+      fireEvent.change(input!, { target: { value: 'not valid' } });
+
+      expect(getByRole('status')).toBeEmptyDOMElement();
+      expect(queryByRole('alert')).not.toBeInTheDocument();
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(getByRole('status')).toHaveTextContent(errorMessage);
+      });
+
+      const firstAnnouncement = getByRole('status').textContent;
+
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(getByRole('status').textContent).not.toBe(firstAnnouncement);
+      });
+
+      expect(getByRole('status')).toHaveTextContent(errorMessage);
+    }
+  );
 });
