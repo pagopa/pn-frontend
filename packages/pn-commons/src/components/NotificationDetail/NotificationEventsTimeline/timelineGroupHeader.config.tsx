@@ -12,6 +12,7 @@ import {
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import { isTimelineGroupStep } from '../../../utility/notificationTimeline.utility';
 import LetterIcon from '../../Icons/LetterIcon';
+import MailErrorRounded from '../../Icons/MailErrorRounded';
 import MobileRounded from '../../Icons/MobileRounded';
 import SendIcon from '../../Icons/SendIcon';
 
@@ -52,7 +53,7 @@ const CHANNEL_ATTEMPT_PRESENTATION: Partial<
 > = {
   AR_REGISTERED_LETTER: {
     1: {
-      labelKey: 'detail.timeline.send-analog-domicile-ar-first-attempt-group-label',
+      labelKey: 'detail.timeline.send-analog-domicile-ar-group-label',
       icon: () => <LetterIcon number={1} />,
     },
     2: {
@@ -62,7 +63,7 @@ const CHANNEL_ATTEMPT_PRESENTATION: Partial<
   },
   REGISTERED_LETTER_890: {
     1: {
-      labelKey: 'detail.timeline.send-analog-domicile-890-first-attempt-group-label',
+      labelKey: 'detail.timeline.send-analog-domicile-890-group-label',
       icon: () => <LetterIcon number={1} />,
     },
     2: {
@@ -76,7 +77,7 @@ const CHANNEL_ATTEMPT_PRESENTATION: Partial<
       icon: () => <LetterIcon number={1} />,
     },
     2: {
-      labelKey: 'detail.timeline.send-digital-domicile-PEC-group-label',
+      labelKey: 'detail.timeline.send-digital-domicile-PEC-second-attempt-group-label',
       icon: () => <LetterIcon number={2} />,
     },
   },
@@ -87,12 +88,17 @@ const CATEGORY_FALLBACK_PRESENTATION: Partial<
 > = {
   ANALOG_FAILURE: {
     labelKey: 'detail.timeline.registered-letter',
-    icon: MailOutlineRounded,
+    icon: MailErrorRounded,
   },
   DIGITAL: {
     labelKey: 'detail.timeline.digital-send-fallback',
     icon: MailOutlineRounded,
   },
+};
+
+const SECOND_ATTEMPT_ANALOG_FAILURE_PRESENTATION: ChannelPresentation = {
+  labelKey: 'detail.timeline.analog-failure-second-attempt-group-label',
+  icon: MailErrorRounded,
 };
 
 const DEFAULT_PRESENTATION: ChannelPresentation = {
@@ -110,6 +116,10 @@ const getChannelPresentation = (
   { channel, category, attempt }: NotificationTimelineGroup,
   hasMultipleAttempts: boolean
 ): ChannelPresentation => {
+  if (category === NotificationTimelineGroupCategory.ANALOG_FAILURE && attempt === 2) {
+    return SECOND_ATTEMPT_ANALOG_FAILURE_PRESENTATION;
+  }
+
   if (!channel) {
     return CATEGORY_FALLBACK_PRESENTATION[category] ?? DEFAULT_PRESENTATION;
   }

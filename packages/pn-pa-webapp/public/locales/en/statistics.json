@@ -10,11 +10,19 @@
     "delivery_description": "The notification was not delivered due to technical reception problems",
     "delivery_title": "Delivery error",
     "description": "Percentage of technical errors by type of error out of total technical errors during the sending phase",
+    "malformed_pec_address_description": "The notification was not delivered because the PEC address is malformed",
+    "malformed_pec_address_title": "PEC address error",
     "pec_description": "The notification was not delivered due to an invalid PEC domain",
     "pec_title": "PEC domain error",
     "rejected_description": "The notification was not accepted due to technical sending problems",
     "rejected_title": "Sending error",
-    "title": "Technical errors by type"
+    "sending_pec_description": "The notification was not delivered due to a technical error",
+    "sending_pec_title": "Error sending the PEC",
+    "server_pec_comunication_description": "The notification was not delivered due to a communication error with the sending PEC server",
+    "server_pec_comunication_title": "Communication error with the PEC server",
+    "title": "Technical errors by type",
+    "virus_detected_description": "The notification was not delivered due to the detection of a virus in the communication or its attachments",
+    "virus_detected_title": "Virus detected"
   },
   "digital_mean_time": {
     "delivered": "Delivered",
@@ -74,6 +82,7 @@
     "delivering": "Sending in progress",
     "description": "Number of notifications accepted by the last status reached during the sending process via SEND",
     "effective_date": "Finalized due to\nexpiration of terms",
+    "returned_to_sender": "Returned to sender",
     "title": "Notifications sent by status",
     "unreachable": "Recipient\nuntraceable",
     "viewed": "Logged in"

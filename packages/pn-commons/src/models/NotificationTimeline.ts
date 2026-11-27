@@ -108,3 +108,5 @@ export type NotificationPaymentTimelineElement =
     };
 
 export type NotificationPaymentTimeline = Array<NotificationPaymentTimelineElement>;
+
+export type Delegator = { displayName: string; fiscalCode: string };

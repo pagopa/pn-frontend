@@ -258,6 +258,7 @@ export const getReceivedNotificationPaymentUrl = createAsyncThunk<
     try {
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
       const notificationIun = iun ?? getState().notificationState.notification.iun;
+
       setPaymentCache(
         {
           currentPayment: {

@@ -725,8 +725,20 @@ describe('NotificationDetail Page', () => {
       );
     });
 
-    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('snackBarContainer'));
+    const docNotAvailableAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
     expect(docNotAvailableAlert).toBeInTheDocument();
+    expect(within(docNotAvailableAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
+
     mock
       .onGet(
         `/bff/v1/notifications/received/${notificationToFe.iun}/documents/AAR?documentId=${otherDocument.documentId}`
@@ -1255,7 +1267,15 @@ describe('NotificationDetail Page', () => {
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
-          userState: { user: adminUser },
+          userState: {
+            user: {
+              ...adminUser,
+              organization: {
+                ...adminUser.organization,
+                fiscal_code: raddNotificationDTO.recipients[1].taxId,
+              },
+            },
+          },
         },
         route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
       });
@@ -1264,6 +1284,13 @@ describe('NotificationDetail Page', () => {
     const alertRadd = result.getAllByTestId('raddAlert')[0];
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    const raddLink = within(alertRadd).getByTestId('raddAlertLink');
+    expect(raddLink).toHaveAttribute(
+      'href',
+      'https://fake.notification-perfection.pagopa.it#raccomandata'
+    );
+    expect(raddLink).toHaveAttribute('target', '_blank');
+    expect(raddLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {

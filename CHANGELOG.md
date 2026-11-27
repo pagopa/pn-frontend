@@ -3,6 +3,141 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.9](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.8...v2.28.0-RC.9) (2026-11-27)
+
+### Bug Fixes
+
+* **PN-21947:** show loading overlay on PT logout ([#2253](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2253)) ([02628d9](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/02628d9aea2356a610111a116f15cdb1e567de7c))
+
+
+# [2.28.0-RC.8](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.7...v2.28.0-RC.8) (2026-11-26)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.28.0-RC.7](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.6...v2.28.0-RC.7) (2026-11-26)
+
+### Bug Fixes
+
+* **PN-22494:** add link to perfection page in radd Alert ([#2244](https://github.com/pagopa/pn-frontend/issues/2244)) ([3d2f6d9](https://github.com/pagopa/pn-frontend/commit/3d2f6d94efb9f70125f9fe4aecd62ec9a6c330a7))
+
+
+# [2.28.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.5...v2.28.0-RC.6) (2026-11-26)
+
+### Bug Fixes
+
+* **A2-3528:** announce validation errors to screen readers in PF ([45ec8fa](https://github.com/pagopa/pn-frontend/commit/45ec8fa29ae35755665940000de0fe46cddc7cb5))
+* **A2-3528:** fix validation error assertions ([68296c1](https://github.com/pagopa/pn-frontend/commit/68296c1d078a37d441aea217479d129a92d2bda3))
+* **A2-3528:** improve screen reader validation error announcements ([c6629b9](https://github.com/pagopa/pn-frontend/commit/c6629b96db4880fa5206d86da032bc2e6da41cbc))
+* **A2-3528:** keep accessibility live region mounted ([1e90e9e](https://github.com/pagopa/pn-frontend/commit/1e90e9e41b6878e585acce043bc233bb5fbd885a))
+* **A2-3528:** preserve verification modal priority ([2751c8b](https://github.com/pagopa/pn-frontend/commit/2751c8bf2c3a1a5896dd4a25c42a16ae3fef1e22))
+* **PN-22356:** show no-spaces-at-edges error in PT institutions search ([#2246](https://github.com/pagopa/pn-frontend/issues/2246)) ([80ca319](https://github.com/pagopa/pn-frontend/commit/80ca3192a61cea08926bb5c76eb9aedac6f49145))
+* **PN-22537:** always use open envelope icon for viewed notifications ([#2250](https://github.com/pagopa/pn-frontend/issues/2250)) ([1f0080c](https://github.com/pagopa/pn-frontend/commit/1f0080cb5d58d67ebded5a5aa5735d307fa6e4a8))
+* update content for 890 label ([986c3fe](https://github.com/pagopa/pn-frontend/commit/986c3fe82439290fdac692325d6fa7322b76a2b7))
+
+
+# [2.28.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.4...v2.28.0-RC.5) (2026-11-26)
+
+### Bug Fixes
+
+* **PN-22391:** hide PT institutions search on loading and error unless triggered by a search ([#2243](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2243)) ([6232575](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/62325758c243ef02b977ce59771d89142dffe595))
+* **PN-22416:** make PT cookie banner layout responsive ([#2241](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2241)) ([0c75298](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/0c7529855f67203655065c8757c9d74cb78da170))
+* **PN-22446:** wrap text when too long in empty state page ([#2248](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2248)) ([88416e9](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/88416e9d1dac560771776656dcab7fad1e8a2ccd))
+* **PN-22447:** show all spaces when present ([#2245](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2245)) ([836faf0](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/836faf0c399c7bde0cbbcccc638ee3d111bd304d))
+
+
+# [2.28.0-RC.4](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.28.0-RC.3...v2.28.0-RC.4) (2026-11-24)
+
+### Bug Fixes
+
+* **PN-22391/PN-22399:** hide PT institutions search until first load succeeds ([#2240](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2240)) ([00e2759](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/00e2759ebfc31115149963264abb1b8fa4867a55))
+
+
+# [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
+
+### Bug Fixes
+
+* feedback legal after demo ([#2227](https://github.com/pagopa/pn-frontend/issues/2227)) ([c7e298b](https://github.com/pagopa/pn-frontend/commit/c7e298b1a7d6c5e59e49018448151b59035fe772))
+* **PN-22378:** align timeline accordion font sizes with Figma ([#2231](https://github.com/pagopa/pn-frontend/issues/2231)) ([ebd8f81](https://github.com/pagopa/pn-frontend/commit/ebd8f81df9b9bd72a20cfd2d0b811ac72708f769))
+* **PN-22412/PN-22383:** fix content as in figma ([#2232](https://github.com/pagopa/pn-frontend/issues/2232)) ([42e7087](https://github.com/pagopa/pn-frontend/commit/42e7087b29540428b42b7bbe3c12eabbe96e5dfe))
+* **PN-22439:** align PT institutions table skeleton with Figma ([#2234](https://github.com/pagopa/pn-frontend/issues/2234)) ([81e182f](https://github.com/pagopa/pn-frontend/commit/81e182f86e331f77a32474f99be26ef46180aa08))
+* **PN-22452:** correct analog delivery status and content for multiple recipients ([#2233](https://github.com/pagopa/pn-frontend/issues/2233)) ([e0c48f1](https://github.com/pagopa/pn-frontend/commit/e0c48f1f01f5b1b9deb5dbd455e4dc8372a374d8))
+* **PN-22464:** correct VIEWED copy for delegates after effective date (PF) ([#2235](https://github.com/pagopa/pn-frontend/issues/2235)) ([791c380](https://github.com/pagopa/pn-frontend/commit/791c380603e267757e9d64903d672197f459c5c7))
+
+
+# [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
+
+### Bug Fixes
+
+* **A2-6010:** improve rows per page accessibility ([#2212](https://github.com/pagopa/pn-frontend/issues/2212)) ([12afd4e](https://github.com/pagopa/pn-frontend/commit/12afd4e244a54fed8b70629ead2c57ed8eaf6515))
+* **A2-6025:** localize notification costs drawer close button ([#2213](https://github.com/pagopa/pn-frontend/issues/2213)) ([2bdb88f](https://github.com/pagopa/pn-frontend/commit/2bdb88f9e647cfdf47b0c396f1bae0134beb9b9e))
+* **PN-21872:** handle missing PEC receipt in SendDigitalFeedbackStep (PF) ([#2218](https://github.com/pagopa/pn-frontend/issues/2218)) ([71a2f2e](https://github.com/pagopa/pn-frontend/commit/71a2f2e1601793f3b557409c737113ffafc3d53c))
+* **PN-22028:** fix payment error alerts not updating on language change ([#2223](https://github.com/pagopa/pn-frontend/issues/2223)) ([9215fcd](https://github.com/pagopa/pn-frontend/commit/9215fcd58cc325f446599fea244f48c71986056c))
+* **PN-22398:** align One Identity login error page layout with design ([#2226](https://github.com/pagopa/pn-frontend/issues/2226)) ([baf445a](https://github.com/pagopa/pn-frontend/commit/baf445a891555b4dfc7711fa15a3476f1e76d191))
+* **PN-22398:** show One Identity error page when authorize call fails ([#2217](https://github.com/pagopa/pn-frontend/issues/2217)) ([7a6c754](https://github.com/pagopa/pn-frontend/commit/7a6c75419311fad3fb69325f97f0828386b054a9))
+* **PN-22420, PN-22434:** align timeline content with Figma (PF) ([#2229](https://github.com/pagopa/pn-frontend/issues/2229)) ([90bf0dc](https://github.com/pagopa/pn-frontend/commit/90bf0dc811659d831596500335e3294ed42acc97))
+
+
+# [2.28.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.0...v2.28.0-RC.1) (2026-11-18)
+
+### Bug Fixes
+
+* **PN-22355:** limit PT institutions search to 250 characters ([#2220](https://github.com/pagopa/pn-frontend/issues/2220)) ([91b1de0](https://github.com/pagopa/pn-frontend/commit/91b1de08d5b13df9d98f91cef64378c765c3fc4f))
+* **PN-22389:** hide page size selector in PT institutions list when results fit the smallest page size ([#2215](https://github.com/pagopa/pn-frontend/issues/2215)) ([24ce034](https://github.com/pagopa/pn-frontend/commit/24ce0348024a58721e5a531dad508a62b808ad71))
+* **PN-22393:** translate PT institutions search error on language change ([#2216](https://github.com/pagopa/pn-frontend/issues/2216)) ([ffac08f](https://github.com/pagopa/pn-frontend/commit/ffac08f8152643bb780a904c2e2c9142606a138c))
+* **PN-22394:** inherit selfcare language in PT back office ([#2219](https://github.com/pagopa/pn-frontend/issues/2219)) ([08ab339](https://github.com/pagopa/pn-frontend/commit/08ab339a0fdfcaf3ad339b967d7439e5553d22c7))
+* **PN-22413:** align PT header and footer translations with PA ([#2221](https://github.com/pagopa/pn-frontend/issues/2221)) ([bab2f49](https://github.com/pagopa/pn-frontend/commit/bab2f49ba94d30de6af1d49a3dced542438545d0))
+
+
+# [2.28.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.27.0...v2.28.0-RC.0) (2026-11-13)
+
+### Bug Fixes
+
+* **A2-2303:** improve accessibility of contact status icons and edit buttons ([#2156](https://github.com/pagopa/pn-frontend/issues/2156)) ([b44ed45](https://github.com/pagopa/pn-frontend/commit/b44ed45b3defbe6a77b3a863e49305c271e69448))
+* **A2-6004:** replace new notification dot with an accessible icon and aria-label ([#2161](https://github.com/pagopa/pn-frontend/issues/2161)) ([e079718](https://github.com/pagopa/pn-frontend/commit/e079718b0ac894676c8738404ee51ff1c947d4f3))
+* **A2-6028:** add focus-visible outline to notification timeline accordion header ([#2152](https://github.com/pagopa/pn-frontend/issues/2152)) ([ca48baa](https://github.com/pagopa/pn-frontend/commit/ca48baa01abcb991829430aa0c025190e0778987))
+* **PN-21624:** handle informal notification payment cache (PF and PG) ([#2101](https://github.com/pagopa/pn-frontend/issues/2101)) ([a55b730](https://github.com/pagopa/pn-frontend/commit/a55b730a364cf580d337785b75d0fcd3d6ccc31c))
+* **PN-21695:** correct download link text in notification statuses ([#2138](https://github.com/pagopa/pn-frontend/issues/2138)) ([b51b61a](https://github.com/pagopa/pn-frontend/commit/b51b61af2178e0e84eb5e9f98b4fa86a7da788c4))
+* **PN-21746:** remediate Dependabot security vulnerabilities ([#2168](https://github.com/pagopa/pn-frontend/issues/2168)) ([409444d](https://github.com/pagopa/pn-frontend/commit/409444d071cbb4af3e9f82d00385c4d3fa17e266))
+* **PN-21746:** remediate vulnerable dependencies ([#2173](https://github.com/pagopa/pn-frontend/issues/2173)) ([74aa8a5](https://github.com/pagopa/pn-frontend/commit/74aa8a53a660e41225d7bc5f231d0076a19fa17b))
+* **PN-21746:** resolve undici and node-forge security vulnerabilities ([#2180](https://github.com/pagopa/pn-frontend/issues/2180)) ([1696af2](https://github.com/pagopa/pn-frontend/commit/1696af201b8f09a567e3ee0eaaf7ef4a3cef3367))
+* **PN-21746:** update vulnerable dependencies ([#2163](https://github.com/pagopa/pn-frontend/issues/2163)) ([044ba40](https://github.com/pagopa/pn-frontend/commit/044ba40cf60be5e0c058eca3e8e5b509860656c2))
+* **PN-21746:** upgrade Vitest to v3.2.6 to address security vulnerabilities ([#2157](https://github.com/pagopa/pn-frontend/issues/2157)) ([3e3f8c5](https://github.com/pagopa/pn-frontend/commit/3e3f8c56352c4f0b06ab5f9d9e3c946c44da7f93))
+* **PN-21773:** align RECRS010 timeline content ([#2200](https://github.com/pagopa/pn-frontend/issues/2200)) ([8703226](https://github.com/pagopa/pn-frontend/commit/870322663972580b38613cc4630ff31896cdb60e))
+* **PN-21873:** solved button alignment in notification timeline ([#2195](https://github.com/pagopa/pn-frontend/issues/2195)) ([c093b71](https://github.com/pagopa/pn-frontend/commit/c093b711a76ce3851609fde10865e355c6454285))
+* **PN-21913:** show sender email and PEC in informal notification detail ([#2205](https://github.com/pagopa/pn-frontend/issues/2205)) ([249527d](https://github.com/pagopa/pn-frontend/commit/249527ddfd99733cb34e212cbede683eb9db3bc8))
+* **PN-21915:** create processing step with SEND event when doesn't exists on informal timeline PA ([#2148](https://github.com/pagopa/pn-frontend/issues/2148)) ([fac746f](https://github.com/pagopa/pn-frontend/commit/fac746f0f1585dfeb69270b76785a25df38d19b4))
+* **PN-21940:** change toast severity to warning for document downloads with retryAfter ([#2198](https://github.com/pagopa/pn-frontend/issues/2198)) ([04186e3](https://github.com/pagopa/pn-frontend/commit/04186e342d717dfb2a6581ee2070805930d34f52))
+* **PN-21950:** update content for combo ([#2174](https://github.com/pagopa/pn-frontend/issues/2174)) ([bcbacbb](https://github.com/pagopa/pn-frontend/commit/bcbacbbcf4e89e369365991b272a74c71e926a78))
+* **PN-21951:** align PF onboarding copy with new Figma ([#2189](https://github.com/pagopa/pn-frontend/issues/2189)) ([9523679](https://github.com/pagopa/pn-frontend/commit/9523679cec3b803b3eba00c52b68e7d31427b946))
+* **PN-21978:** setup Sonar for pn-pt-webapp ([#2177](https://github.com/pagopa/pn-frontend/issues/2177)) ([28a869b](https://github.com/pagopa/pn-frontend/commit/28a869be1ffddf6d6b3b4741b23c50cb5ca28531))
+* **PN-21984:** implement basic layout of PT webapp ([#2167](https://github.com/pagopa/pn-frontend/issues/2167)) ([919e508](https://github.com/pagopa/pn-frontend/commit/919e50869ae343ead26d369daa74694074232f0a))
+* **PN-21991:** show SEND filed event as the oldest in the timeline ([#2159](https://github.com/pagopa/pn-frontend/issues/2159)) ([6786282](https://github.com/pagopa/pn-frontend/commit/6786282d0b63ae565c3ae6ae6a407393efb60b26))
+* **PN-22004:** fix content PF ([#2162](https://github.com/pagopa/pn-frontend/issues/2162)) ([2bd6c00](https://github.com/pagopa/pn-frontend/commit/2bd6c00feed36c877a58d3a8673f160d851d887c))
+* **PN-22004:** show recipient copy for cancelled status and update unreachable legal fact copy in PF ([#2209](https://github.com/pagopa/pn-frontend/issues/2209)) ([ce82277](https://github.com/pagopa/pn-frontend/commit/ce82277e98b3be293511b8401b3ae8ab68b152ea))
+* **PN-22005:** update content timeline ([#2169](https://github.com/pagopa/pn-frontend/issues/2169)) ([1806f22](https://github.com/pagopa/pn-frontend/commit/1806f224d13a97730c666cfeb37c8d13f66e3aba))
+* **PN-22009:** add expand/collapse all groups button on delivering status ([#2172](https://github.com/pagopa/pn-frontend/issues/2172)) ([dd65202](https://github.com/pagopa/pn-frontend/commit/dd6520246d2c5a8f3ab74bf3a9cbc3bf26a4a0cf))
+* **PN-22152:** align analog delivery timeline content ([#2197](https://github.com/pagopa/pn-frontend/issues/2197)) ([9928120](https://github.com/pagopa/pn-frontend/commit/9928120aed19b9eb706f33c375ca34d4ad1227f0))
+
+### Features
+
+* **PN-21947:** project pt for lokalise ([#2190](https://github.com/pagopa/pn-frontend/issues/2190)) ([785b20c](https://github.com/pagopa/pn-frontend/commit/785b20cdb904a88d164423a9d2e08bd71898b7b0))
+* **PN-21974:** adjusted delivered localization ([#2186](https://github.com/pagopa/pn-frontend/issues/2186)) ([155ea2d](https://github.com/pagopa/pn-frontend/commit/155ea2da28ce71394b8e6a8b19de2d45fdeb14fb))
+* **PN-21978:** create new PT webapp ([#2158](https://github.com/pagopa/pn-frontend/issues/2158)) ([a08acea](https://github.com/pagopa/pn-frontend/commit/a08aceaa639a50ac818cde7cb96c22571e9fcc88))
+* **PN-21980:** adjusted viewed localization ([#2193](https://github.com/pagopa/pn-frontend/issues/2193)) ([f72f37f](https://github.com/pagopa/pn-frontend/commit/f72f37f70ef768fa940296b7c538600f34a60427))
+* **PN-21982:** implement PT token exchange ([#2171](https://github.com/pagopa/pn-frontend/issues/2171)) ([68c9fd1](https://github.com/pagopa/pn-frontend/commit/68c9fd1fdc2bc347301fa674d6cf6c55fcb421ad))
+* **PN-22007:** adjusted notification detail page ([#2182](https://github.com/pagopa/pn-frontend/issues/2182)) ([0406fc1](https://github.com/pagopa/pn-frontend/commit/0406fc13fd2a8880c112b3c0a0b119084b75e157))
+* **PN-22008:** group PEC timeline events by address ([#2166](https://github.com/pagopa/pn-frontend/issues/2166)) ([51fa991](https://github.com/pagopa/pn-frontend/commit/51fa991c622f6597e364bfcbb393b604f8e7befd))
+* **PN-22037:** redirect PT users to the partner portal after token exchange ([#2164](https://github.com/pagopa/pn-frontend/issues/2164)) ([63bc39e](https://github.com/pagopa/pn-frontend/commit/63bc39e083ba96befa8fd3d8bd6ea056edcf9376))
+* **PN-22037:** redirect PT users to the partner portal after token exchange ([#2176](https://github.com/pagopa/pn-frontend/issues/2176)) ([e7105b2](https://github.com/pagopa/pn-frontend/commit/e7105b2845b7128fe0293bf03a2e927a345f4f61))
+* **PN-22150:** align timeline perfection links with delivery history and refine copy ([#2191](https://github.com/pagopa/pn-frontend/issues/2191)) ([d18be56](https://github.com/pagopa/pn-frontend/commit/d18be5677b7e0b50434e8125156b57e43687da72))
+* **PN-22235:** implement tos and pp pages ([#2192](https://github.com/pagopa/pn-frontend/issues/2192)) ([477b5da](https://github.com/pagopa/pn-frontend/commit/477b5dafa07ddb046480543ec5eaaa5ad4822358))
+* **PN-22300:** read products from /products API in PT webapp ([#2196](https://github.com/pagopa/pn-frontend/issues/2196)) ([ccb4d11](https://github.com/pagopa/pn-frontend/commit/ccb4d11b3af7da60387759829962f99267bc77e3))
+
+
 # [2.27.0](https://github.com/pagopa/pn-frontend/compare/v2.26.2...v2.27.0) (2026-10-14)
 
 ### Bug Fixes

@@ -184,6 +184,7 @@
     "fallback-notification": "Podrobnosti obvestila",
     "groups": "Skupine",
     "integrazione-api": "Integracija API",
+    "new-notifications": "Nova obvestila za branje",
     "notifiche": "Prejeto",
     "notifiche-delegato": "Prejeto iz pooblastil",
     "notifiche-impresa": "Prejeto za {{organization}}",
@@ -230,7 +231,7 @@
     "next": "Pojdi na naslednjo stran",
     "page": "stran",
     "previous": "Pojdi na prejšnjo stran",
-    "rows-per-page": "Vrstice na stran",
+    "rows-per-page": "Vrstice na stran: {{size}}",
     "selected": "izbrani artikel"
   },
   "required-field": "Obvezno polje",

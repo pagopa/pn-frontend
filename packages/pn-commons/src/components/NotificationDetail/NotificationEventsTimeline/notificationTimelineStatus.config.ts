@@ -1,6 +1,7 @@
 import { ComponentType } from 'react';
 
 import {
+  DraftsOutlined,
   EuroRounded,
   GavelRounded,
   InfoOutlined,
@@ -32,7 +33,7 @@ const TIMELINE_STATUS_PRESENTATION: Partial<
     icon: WarningRounded,
   },
   [NotificationStatus.EFFECTIVE_DATE]: { variant: 'info', icon: GavelRounded },
-  [NotificationStatus.VIEWED]: { variant: 'info', icon: GavelRounded },
+  [NotificationStatus.VIEWED]: { variant: 'info', icon: DraftsOutlined },
   [NotificationStatus.DELIVERED]: { variant: 'normal', icon: MarkEmailReadOutlined },
   [NotificationStatus.DELIVERING]: { variant: 'normal', icon: OutgoingEmailRounded },
   [NotificationStatus.ACCEPTED]: { variant: 'normal', icon: TaskAltRounded },

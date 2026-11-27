@@ -13,11 +13,11 @@ describe('MobileNotifications Component', () => {
 
   beforeAll(() => {
     globalThis.matchMedia = createMatchMedia(800);
-    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-      observe: vi.fn(),
-      unobserve: vi.fn(),
-      disconnect: vi.fn(),
-    }));
+    globalThis.ResizeObserver = class {
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+    };
   });
 
   afterAll(() => {

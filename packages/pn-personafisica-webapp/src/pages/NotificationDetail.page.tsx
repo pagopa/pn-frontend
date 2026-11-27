@@ -3,10 +3,10 @@
 /* eslint-disable complexity */
 import { isObject } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Stack } from '@mui/material';
+import { Box, Link, Stack } from '@mui/material';
 import {
   AbstractPaper,
   AccessDenied,
@@ -37,6 +37,7 @@ import {
   appStateActions,
   downloadDocument,
   getPaymentCache,
+  getPerfectionLink,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
@@ -128,8 +129,9 @@ const NotificationDetail: React.FC = () => {
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
-  const delegatorName = delegatorsFromStore.find((delegation) => delegation.mandateId === mandateId)
-    ?.delegator?.displayName;
+  const delegator = delegatorsFromStore.find(
+    (delegation) => delegation.mandateId === mandateId
+  )?.delegator;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
@@ -172,13 +174,13 @@ const NotificationDetail: React.FC = () => {
     notification.notificationCostDetails,
   ]);
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
+  const showWarningIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
   }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',
@@ -208,7 +210,7 @@ const NotificationDetail: React.FC = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE);
     } else {
@@ -222,7 +224,7 @@ const NotificationDetail: React.FC = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
         notification_type: EventNotificationTypes.NOTIFICATION,
@@ -424,7 +426,7 @@ const NotificationDetail: React.FC = () => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch((e) => console.log(e));
     }
   }, []);
@@ -437,8 +439,8 @@ const NotificationDetail: React.FC = () => {
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
 
-    const breadcrumbLabel = delegatorName
-      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+    const breadcrumbLabel = delegator?.displayName
+      ? t('menu.notifiche-delegato', { delegator: delegator.displayName })
       : t('menu.notifiche-utente', { ns: 'common' });
 
     return (
@@ -520,6 +522,20 @@ const NotificationDetail: React.FC = () => {
     }
     return 'not_set';
   };
+
+  const perfectionLink = useMemo(
+    () =>
+      getPerfectionLink(
+        NOTIFICATION_PERFECTION_LINK,
+        notification.notificationStatusHistory,
+        notification.recipients,
+        currentUser.fiscal_number,
+        delegator
+          ? { displayName: delegator?.displayName, fiscalCode: delegator.fiscalCode }
+          : undefined
+      ),
+    [notification.notificationStatusHistory]
+  );
 
   useEffect(() => {
     if (downtimesReady && pageReady && !isUserForbidden) {
@@ -613,7 +629,7 @@ const NotificationDetail: React.FC = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
 
     if (!isAAR) {
@@ -674,6 +690,8 @@ const NotificationDetail: React.FC = () => {
                     iun={notification.iun}
                     abstract={notification.abstract}
                     selfcareCdnUrl={SELFCARE_CDN_URL}
+                    isDelegate={!!mandateId}
+                    recipient={currentRecipient}
                   />
                   {banner}
                   {pecUnreachableAlert}
@@ -705,7 +723,20 @@ const NotificationDetail: React.FC = () => {
                         sx={{ mb: 3, mt: 2 }}
                         title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
                       >
-                        {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                        <Trans
+                          ns="notifiche"
+                          i18nKey="detail.timeline.radd.description"
+                          components={[
+                            <Link
+                              key="perfection-link"
+                              href={perfectionLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              color="inherit"
+                              data-testid="raddAlertLink"
+                            />,
+                          ]}
+                        />
                       </MIAlert>
                     )}
                   </MIPaper>
@@ -760,15 +791,17 @@ const NotificationDetail: React.FC = () => {
                     onTimelineClick={handleGoToTimeline}
                     clickHandler={legalFactDownloadHandler}
                     isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
-                    perfectionLink={NOTIFICATION_PERFECTION_LINK}
+                    perfectionLink={perfectionLink}
                     mandateId={mandateId}
-                    delegatorName={delegatorName}
+                    delegator={
+                      delegator
+                        ? { displayName: delegator?.displayName, fiscalCode: delegator.fiscalCode }
+                        : undefined
+                    }
                     userTaxId={currentUser.fiscal_number}
                   />
                 )}
                 <NotificationDetailSection
-                  isDelegate={!!mandateId}
-                  recipient={currentRecipient}
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
                   isCancelled={isCancelled.cancellationInTimeline}

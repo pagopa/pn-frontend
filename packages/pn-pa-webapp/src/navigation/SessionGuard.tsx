@@ -5,6 +5,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   AppResponsePublisher,
   InactivityHandler,
+  InstitutionType,
   LoadingPage,
   SessionModal,
   adaptedTokenExchangeError,
@@ -18,7 +19,7 @@ import { authSelectors, resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { goToSelfcareLogin, goToSelfcareLogout } from './navigation.utility';
+import { goToPartnerPortal, goToSelfcareLogin, goToSelfcareLogout } from './navigation.utility';
 import * as routes from './routes.const';
 
 const SessionGuard = () => {
@@ -31,7 +32,7 @@ const SessionGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => sessionCheckCallback());
-  const { t } = useTranslation(['common']);
+  const { t, i18n } = useTranslation(['common']);
   const { WORK_IN_PROGRESS, INACTIVITY_HANDLER_MINUTES } = getConfiguration();
   const { hasSpecificStatusError } = useErrors();
   const hasAnyForbiddenError = hasSpecificStatusError(403);
@@ -48,6 +49,10 @@ const SessionGuard = () => {
     AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
+      if (user.organization.institutionType === InstitutionType.PT) {
+        goToPartnerPortal(token, i18n.language);
+        return;
+      }
       sessionCheck(user.desired_exp);
     } catch (error) {
       const adaptedError = adaptedTokenExchangeError(error);

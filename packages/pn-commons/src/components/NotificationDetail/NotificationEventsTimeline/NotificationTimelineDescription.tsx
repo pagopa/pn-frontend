@@ -46,7 +46,6 @@ const NotificationTimelineEventLegalFact: React.FC<
         fontSize: '14px',
         justifyContent: 'flex-start',
         display: 'flex',
-        textAlign: 'left',
       }
     : {
         textDecoration: 'underline',
@@ -61,7 +60,7 @@ const NotificationTimelineEventLegalFact: React.FC<
       variant="text"
       onClick={() => clickHandler(legalFact)}
       disabled={disableDownloads}
-      sx={buttonLayout}
+      sx={{ textAlign: 'left', ...buttonLayout }}
       data-testid={dataTestId}
     >
       {children}
@@ -121,7 +120,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
       <Typography {...slotProps?.typography}>
         {title && (
           <>
-            <Typography component="span" variant="body2" fontWeight={600}>
+            <Typography component="span" variant="inherit" fontWeight={600}>
               {title}
             </Typography>
             {description && ' - '}
@@ -131,7 +130,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           <Trans
             i18nKey="description" // this is fake and is needed to run trans functionality
             t={() => description}
-            components={[legalFactSlot, perfectionLinkSlot]}
+            components={[legalFactSlot, perfectionLinkSlot, <strong key="bold" />]}
           />
         )}
         {date && language && (
@@ -146,7 +145,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           key={legalFact.lf.key}
           legalFact={legalFact.lf}
           clickHandler={clickHandler}
-          slotProps={{ ...slotProps, button: { sx: { display: 'block' } } }}
+          slotProps={{ ...slotProps, button: { sx: { display: 'block', fontSize: '14px' } } }}
           disableDownloads={downloadIsDisabled(legalFact.event.category)}
           dataTestId="download-legalfact-micro"
           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}

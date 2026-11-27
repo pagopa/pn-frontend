@@ -1,0 +1,35 @@
+{
+  "search": {
+    "button": "Rechercher",
+    "label": "Rechercher par nom ou code fiscal",
+    "max-length": "Saisissez au maximum {{maxLength}} caractères",
+    "min-length": "Saisissez au moins trois caractères",
+    "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin"
+  },
+  "subtitle": "Consultez les organismes gérés pour le produit SEND.",
+  "table": {
+    "columns": {
+      "delegation": "Délégation",
+      "institution-name": "Nom de l'organisme",
+      "tax-code": "Code fiscal"
+    },
+    "delegation-status": {
+      "active": "Active depuis le {{date}}",
+      "revoked": "Révoquée le {{date}}"
+    },
+    "empty": {
+      "description": "Pour vous permettre de gérer SEND pour le compte de l'organisme, il est nécessaire que l'organisme active une délégation à votre nom.",
+      "title": "Vous verrez ici vos organismes"
+    },
+    "error": {
+      "action": "Réessayer",
+      "title": "Il n'a pas été possible de récupérer la liste des organismes gérés."
+    },
+    "no-results": {
+      "description": "Essayez avec une autre recherche.",
+      "title": "Aucune correspondance pour « {{search}} »."
+    }
+  },
+  "title": "Vos organismes",
+  "work-in-progress": "Le portail est en cours de développement, pour le moment il n'est pas possible de gérer SEND pour le compte de vos organismes à partir d'ici."
+}

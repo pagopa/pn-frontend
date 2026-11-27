@@ -14,6 +14,7 @@ type EmptyErrorStateProps = {
   title: ReactNode;
   description?: ReactNode;
   variant?: 'empty' | 'error';
+  icon?: ReactNode;
   action?: DefaultAction | ReactNode;
 };
 
@@ -22,6 +23,7 @@ const CONTAINER_PROPS = {
   textAlign: 'center',
   flexDirection: 'column',
   alignItems: 'center',
+  sx: { overflowWrap: 'anywhere' },
 } as const;
 
 const isDefaultAction = (action: DefaultAction | ReactNode): action is DefaultAction =>
@@ -32,11 +34,14 @@ const EmptyErrorState = ({
   description,
   variant = 'empty',
   action,
+  icon,
 }: EmptyErrorStateProps) => (
   <EmptyState
     slots={{ contentContainer: Box }}
     slotProps={{ contentContainer: CONTAINER_PROPS }}
-    sentimentIcon={variant === 'error' ? <IllusMIError size={56} /> : <IllusMIMessage size={56} />}
+    sentimentIcon={
+      icon ? icon : variant === 'error' ? <IllusMIError size={56} /> : <IllusMIMessage size={56} />
+    }
   >
     <Typography
       variant="subtitle2"

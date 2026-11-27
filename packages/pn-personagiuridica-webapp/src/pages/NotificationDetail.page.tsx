@@ -1,9 +1,9 @@
 import { isObject } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Stack } from '@mui/material';
+import { Box, Link, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
@@ -33,6 +33,7 @@ import {
   appStateActions,
   downloadDocument,
   getPaymentCache,
+  getPerfectionLink,
   useErrors,
   useHasPermissions,
   useIsCancelled,
@@ -97,6 +98,7 @@ const NotificationDetail = () => {
     FACSIMILE_SL,
     SELFCARE_CDN_URL,
     IS_NEW_TIMELINE_COPY_ENABLED,
+    NOTIFICATION_PERFECTION_LINK,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -125,6 +127,22 @@ const NotificationDetail = () => {
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
   const canManageContacts = userHasAdminPermissions && !currentUser.hasGroup;
+
+  const perfectionLink = useMemo(
+    () =>
+      getPerfectionLink(
+        NOTIFICATION_PERFECTION_LINK,
+        notification.notificationStatusHistory,
+        notification.recipients,
+        currentRecipient?.taxId
+      ),
+    [
+      NOTIFICATION_PERFECTION_LINK,
+      notification.notificationStatusHistory,
+      notification.recipients,
+      currentRecipient?.taxId,
+    ]
+  );
 
   const historyParser = useMemo(
     () => StatusHistoryParser.parse(notification.notificationStatusHistory),
@@ -186,13 +204,13 @@ const NotificationDetail = () => {
     return 'not_set';
   };
 
-  const showInfoMessageIfRetryAfterOrDownload = (response: {
+  const showWarningIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
   }) => {
     if (response.retryAfter) {
       dispatch(
-        appStateActions.addInfo({
+        appStateActions.addWarning({
           title: '',
           message: t(`detail.document-not-available`, {
             ns: 'notifiche',
@@ -214,7 +232,7 @@ const NotificationDetail = () => {
     PGEventStrategyFactory.triggerEvent(
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
       {
-        notificationType: 'LEGAL',
+        notificationType: NotificationCommunicationType.LEGAL,
         documentType: isObject(document)
           ? NotificationDocumentType.AAR
           : NotificationDocumentType.ATTACHMENT,
@@ -233,7 +251,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
     } else {
       // Attachment case
@@ -246,7 +264,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch(() => {});
     }
   };
@@ -254,7 +272,7 @@ const NotificationDetail = () => {
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
     PGEventStrategyFactory.triggerEvent(
       PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
-      { notificationType: 'LEGAL', documentType: name },
+      { notificationType: NotificationCommunicationType.LEGAL, documentType: name },
       { sendImmediately: true }
     );
 
@@ -399,7 +417,7 @@ const NotificationDetail = () => {
   useEffect(() => {
     if (downtimesReady && pageReady && !hasNotificationReceivedApiError && paymentsReady) {
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
-        notificationType: 'LEGAL',
+        notificationType: NotificationCommunicationType.LEGAL,
         downtimeEvents,
         mandateId,
         notificationStatus: notification.notificationStatus,
@@ -428,7 +446,7 @@ const NotificationDetail = () => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
       dispatch(getDowntimeLegalFact(legalFactId))
         .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
+        .then(showWarningIfRetryAfterOrDownload)
         .catch((e) => console.log(e));
     }
   }, []);
@@ -527,7 +545,7 @@ const NotificationDetail = () => {
       })
     )
       .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
+      .then(showWarningIfRetryAfterOrDownload)
       .catch(() => {});
   };
 
@@ -574,6 +592,8 @@ const NotificationDetail = () => {
                   iun={notification.iun}
                   abstract={notification.abstract}
                   selfcareCdnUrl={SELFCARE_CDN_URL}
+                  isDelegate={!!mandateId}
+                  recipient={currentRecipient}
                 />
                 {banner}
                 {pecUnreachableAlert}
@@ -605,7 +625,20 @@ const NotificationDetail = () => {
                       sx={{ mb: 3, mt: 2 }}
                       title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
                     >
-                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                      <Trans
+                        ns="notifiche"
+                        i18nKey="detail.timeline.radd.description"
+                        components={[
+                          <Link
+                            key="perfection-link"
+                            href={perfectionLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            color="inherit"
+                            data-testid="raddAlertLink"
+                          />,
+                        ]}
+                      />
                     </MIAlert>
                   )}
                 </MIPaper>
@@ -657,8 +690,6 @@ const NotificationDetail = () => {
                 />
               )}
               <NotificationDetailSection
-                isDelegate={!!mandateId}
-                recipient={currentRecipient}
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDowloadHandler}
                 isCancelled={isCancelled.cancellationInTimeline}

@@ -1,8 +1,9 @@
-import { ExitToApp } from '@mui/icons-material';
-import { Box, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Circle, ExitToApp } from '@mui/icons-material';
+import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Badge from '@mui/material/Badge';
 
 import { SideMenuItem } from '../../models/SideMenuItem';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationBadge from './NotificationBadge';
 
 type Props = {
@@ -75,13 +76,15 @@ const SideMenuListItem = ({
       data-testid={`menu-item(${item.label.toLowerCase()})`}
     />
     {item.dotNotification && (
-      <Box
+      <Circle
         data-testid="new-notification-badge"
+        role="img"
+        aria-hidden={false}
+        aria-label={getLocalizedOrDefaultLabel('common', 'menu.new-notifications')}
         sx={{
           width: 8,
           height: 8,
-          borderRadius: '50%',
-          bgcolor: 'primary.main',
+          color: 'primary.main',
           flexShrink: 0,
           mr: 1,
         }}

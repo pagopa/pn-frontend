@@ -47,6 +47,7 @@ beforeAll(async () => {
     API_BASE_URL: 'https://mock-api-base-url/',
     ONE_IDENTITY_CIE_ENTITY_ID: 'https://mock-cie-entityID.it',
   });
+
   // mock translations
   vi.mock('react-i18next', () => ({
     // this mock makes sure any components using the translate hook can use it without a warning being shown

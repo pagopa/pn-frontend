@@ -34,11 +34,11 @@ describe('TruncatedValue Component', () => {
   const original = globalThis.ResizeObserver;
 
   beforeAll(() => {
-    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-      observe: vi.fn(),
-      unobserve: vi.fn(),
-      disconnect: vi.fn(),
-    }));
+    globalThis.ResizeObserver = class {
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+    };
   });
 
   afterAll(() => {

@@ -1,0 +1,35 @@
+{
+  "search": {
+    "button": "Suchen",
+    "label": "Nach Name oder Steuernummer suchen",
+    "max-length": "Gib maximal {{maxLength}} Zeichen ein",
+    "min-length": "Gib mindestens drei Zeichen ein",
+    "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende"
+  },
+  "subtitle": "Sieh dir die verwalteten Einrichtungen für das Produkt SEND an.",
+  "table": {
+    "columns": {
+      "delegation": "Vollmacht",
+      "institution-name": "Name der Einrichtung",
+      "tax-code": "Steuernummer"
+    },
+    "delegation-status": {
+      "active": "Aktiv seit {{date}}",
+      "revoked": "Widerrufen am {{date}}"
+    },
+    "empty": {
+      "description": "Damit du SEND im Namen der Einrichtung verwalten kannst, muss die Einrichtung eine Vollmacht auf deinen Namen aktivieren.",
+      "title": "Hier siehst du deine Einrichtungen"
+    },
+    "error": {
+      "action": "Erneut versuchen",
+      "title": "Die Liste der verwalteten Einrichtungen konnte nicht abgerufen werden."
+    },
+    "no-results": {
+      "description": "Versuche es mit einer anderen Suche.",
+      "title": "Keine Treffer für „{{search}}“."
+    }
+  },
+  "title": "Deine Einrichtungen",
+  "work-in-progress": "Das Portal befindet sich in der Entwicklung, derzeit ist es nicht möglich, SEND von hier aus im Namen deiner Einrichtungen zu verwalten."
+}

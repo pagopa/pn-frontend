@@ -3,7 +3,10 @@ import {
   NotificationDocumentResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
+  checkIfPaymentsIsAlreadyInCache,
+  getPaymentCache,
   parseError,
+  setInformalPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -13,6 +16,7 @@ import {
   RecipientInformalNotificationsApiFactory,
 } from '../../generated-client/informal-notifications';
 import { PaymentsApiFactory } from '../../generated-client/payments';
+import { RootState } from '../store';
 
 export enum INFORMAL_NOTIFICATION_ACTIONS {
   GET_RECEIVED_INFORMAL_NOTIFICATION = 'getReceivedInformalNotification',
@@ -111,16 +115,48 @@ export const getReceivedInformalNotificationPayment = createAsyncThunk<
 
 export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
   Array<ExtRegistriesPaymentDetails>,
-  { paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> }
+  { paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
+  { state: RootState }
 >(
   INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION_PAYMENT_INFO,
-  async ({ paymentInfoRequest }, { rejectWithValue, signal }) => {
+  async ({ paymentInfoRequest }, { rejectWithValue, getState, signal }) => {
     try {
+      const { notificationState } = getState();
+      const informalNotification = notificationState.informalNotification;
+      const iun = informalNotification?.iun;
+
+      if (!iun) {
+        throw new Error('IUN is not defined');
+      }
+
+      const originalPayments = informalNotification.recipients?.[0]?.payments ?? [];
+
+      const paymentCache = getPaymentCache(iun);
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
+      if (paymentCache?.currentPayment) {
+        const updatedPaymentResponse = await paymentsApiFactory.getPaymentsInfoV1(
+          [paymentCache.currentPayment],
+          { signal }
+        );
+
+        const updatedPayment = updatedPaymentResponse.data as Array<ExtRegistriesPaymentDetails>;
+
+        const updatedCache = setInformalPaymentsInCache(updatedPayment, iun, originalPayments);
+
+        return updatedCache.payments.flatMap((payment) => (payment.pagoPa ? [payment.pagoPa] : []));
+      }
+
+      if (paymentCache?.payments && checkIfPaymentsIsAlreadyInCache(paymentInfoRequest, iun)) {
+        return paymentCache.payments.flatMap((payment) => (payment.pagoPa ? [payment.pagoPa] : []));
+      }
 
       const response = await paymentsApiFactory.getPaymentsInfoV1(paymentInfoRequest, { signal });
 
-      return response.data as Array<ExtRegistriesPaymentDetails>;
+      const paymentInfo = response.data as Array<ExtRegistriesPaymentDetails>;
+
+      const updatedCache = setInformalPaymentsInCache(paymentInfo, iun, originalPayments);
+
+      return updatedCache.payments.flatMap((payment) => (payment.pagoPa ? [payment.pagoPa] : []));
     } catch (e) {
       return rejectWithValue(parseError(e));
     }

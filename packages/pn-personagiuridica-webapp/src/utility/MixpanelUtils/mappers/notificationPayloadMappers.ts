@@ -2,6 +2,7 @@ import type { Downtime } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
   InformalNotificationStatus,
+  NotificationCommunicationType,
   NotificationStatus,
   getElapsedTime,
 } from '@pagopa-pn/pn-commons';
@@ -35,7 +36,7 @@ const getDisserviceStatus = (downtimeEvents: Array<Downtime>): EventDowntimeType
 export const mapNotificationDetailToEventPayload = (
   data: PGNotificationDetailEventData
 ): PGNotificationDetailPayload => {
-  if (data.notificationType === 'INFORMAL') {
+  if (data.notificationType === NotificationCommunicationType.INFORMAL) {
     const viewedEvent = data.timeline?.find(
       (item) => item.category === InformalTimelineElementCategoryV1.InformalNotificationViewed
     );
@@ -108,11 +109,11 @@ export const mapNotificationListToEventPayload = ({
   domicileBannerType,
 }: PGNotificationsListEventData): PGNotificationsListPayload => {
   const legalNotifications = notifications.filter(
-    (notification) => notification.communicationType === 'LEGAL'
+    (notification) => notification.communicationType === NotificationCommunicationType.LEGAL
   );
 
   const informalNotifications = notifications.filter(
-    (notification) => notification.communicationType === 'INFORMAL'
+    (notification) => notification.communicationType === NotificationCommunicationType.INFORMAL
   );
 
   return {

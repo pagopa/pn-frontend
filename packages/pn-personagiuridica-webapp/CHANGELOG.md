@@ -3,6 +3,66 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0-RC.8](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.7...v2.28.0-RC.8) (2026-11-26)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.28.0-RC.7](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.6...v2.28.0-RC.7) (2026-11-26)
+
+### Bug Fixes
+
+* **PN-22494:** add link to perfection page in radd Alert ([#2244](https://github.com/pagopa/pn-frontend/issues/2244)) ([3d2f6d9](https://github.com/pagopa/pn-frontend/commit/3d2f6d94efb9f70125f9fe4aecd62ec9a6c330a7))
+
+
+# [2.28.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.5...v2.28.0-RC.6) (2026-11-26)
+
+### Bug Fixes
+
+* update content for 890 label ([986c3fe](https://github.com/pagopa/pn-frontend/commit/986c3fe82439290fdac692325d6fa7322b76a2b7))
+
+
+# [2.28.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.2...v2.28.0-RC.3) (2026-11-23)
+
+### Bug Fixes
+
+* feedback legal after demo ([#2227](https://github.com/pagopa/pn-frontend/issues/2227)) ([c7e298b](https://github.com/pagopa/pn-frontend/commit/c7e298b1a7d6c5e59e49018448151b59035fe772))
+* **PN-22412/PN-22383:** fix content as in figma ([#2232](https://github.com/pagopa/pn-frontend/issues/2232)) ([42e7087](https://github.com/pagopa/pn-frontend/commit/42e7087b29540428b42b7bbe3c12eabbe96e5dfe))
+
+
+# [2.28.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.28.0-RC.1...v2.28.0-RC.2) (2026-11-19)
+
+### Bug Fixes
+
+* **A2-6010:** improve rows per page accessibility ([#2212](https://github.com/pagopa/pn-frontend/issues/2212)) ([12afd4e](https://github.com/pagopa/pn-frontend/commit/12afd4e244a54fed8b70629ead2c57ed8eaf6515))
+* **A2-6025:** localize notification costs drawer close button ([#2213](https://github.com/pagopa/pn-frontend/issues/2213)) ([2bdb88f](https://github.com/pagopa/pn-frontend/commit/2bdb88f9e647cfdf47b0c396f1bae0134beb9b9e))
+
+
+# [2.28.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.27.0...v2.28.0-RC.0) (2026-11-13)
+
+### Bug Fixes
+
+* **A2-2303:** improve accessibility of contact status icons and edit buttons ([#2156](https://github.com/pagopa/pn-frontend/issues/2156)) ([b44ed45](https://github.com/pagopa/pn-frontend/commit/b44ed45b3defbe6a77b3a863e49305c271e69448))
+* **A2-6004:** replace new notification dot with an accessible icon and aria-label ([#2161](https://github.com/pagopa/pn-frontend/issues/2161)) ([e079718](https://github.com/pagopa/pn-frontend/commit/e079718b0ac894676c8738404ee51ff1c947d4f3))
+* **PN-21624:** handle informal notification payment cache (PF and PG) ([#2101](https://github.com/pagopa/pn-frontend/issues/2101)) ([a55b730](https://github.com/pagopa/pn-frontend/commit/a55b730a364cf580d337785b75d0fcd3d6ccc31c))
+* **PN-21746:** remediate Dependabot security vulnerabilities ([#2168](https://github.com/pagopa/pn-frontend/issues/2168)) ([409444d](https://github.com/pagopa/pn-frontend/commit/409444d071cbb4af3e9f82d00385c4d3fa17e266))
+* **PN-21746:** resolve undici and node-forge security vulnerabilities ([#2180](https://github.com/pagopa/pn-frontend/issues/2180)) ([1696af2](https://github.com/pagopa/pn-frontend/commit/1696af201b8f09a567e3ee0eaaf7ef4a3cef3367))
+* **PN-21746:** update vulnerable dependencies ([#2163](https://github.com/pagopa/pn-frontend/issues/2163)) ([044ba40](https://github.com/pagopa/pn-frontend/commit/044ba40cf60be5e0c058eca3e8e5b509860656c2))
+* **PN-21746:** upgrade Vitest to v3.2.6 to address security vulnerabilities ([#2157](https://github.com/pagopa/pn-frontend/issues/2157)) ([3e3f8c5](https://github.com/pagopa/pn-frontend/commit/3e3f8c56352c4f0b06ab5f9d9e3c946c44da7f93))
+* **PN-21913:** show sender email and PEC in informal notification detail ([#2205](https://github.com/pagopa/pn-frontend/issues/2205)) ([249527d](https://github.com/pagopa/pn-frontend/commit/249527ddfd99733cb34e212cbede683eb9db3bc8))
+* **PN-21940:** change toast severity to warning for document downloads with retryAfter ([#2198](https://github.com/pagopa/pn-frontend/issues/2198)) ([04186e3](https://github.com/pagopa/pn-frontend/commit/04186e342d717dfb2a6581ee2070805930d34f52))
+* **PN-21950:** update content for combo ([#2174](https://github.com/pagopa/pn-frontend/issues/2174)) ([bcbacbb](https://github.com/pagopa/pn-frontend/commit/bcbacbbcf4e89e369365991b272a74c71e926a78))
+* **PN-22009:** add expand/collapse all groups button on delivering status ([#2172](https://github.com/pagopa/pn-frontend/issues/2172)) ([dd65202](https://github.com/pagopa/pn-frontend/commit/dd6520246d2c5a8f3ab74bf3a9cbc3bf26a4a0cf))
+
+### Features
+
+* **PN-22007:** adjusted notification detail page ([#2182](https://github.com/pagopa/pn-frontend/issues/2182)) ([0406fc1](https://github.com/pagopa/pn-frontend/commit/0406fc13fd2a8880c112b3c0a0b119084b75e157))
+* **PN-22008:** group PEC timeline events by address ([#2166](https://github.com/pagopa/pn-frontend/issues/2166)) ([51fa991](https://github.com/pagopa/pn-frontend/commit/51fa991c622f6597e364bfcbb393b604f8e7befd))
+
+
 # [2.27.0](https://github.com/pagopa/pn-frontend/compare/v2.26.2...v2.27.0) (2026-10-14)
 
 ### Bug Fixes

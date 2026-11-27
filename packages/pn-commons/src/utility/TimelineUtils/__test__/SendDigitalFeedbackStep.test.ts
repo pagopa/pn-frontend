@@ -2,10 +2,12 @@ import { getTimelineElem, notificationDTO } from '../../../__mocks__/Notificatio
 import { SERCQ_SEND_VALUE } from '../../../models/Contacts';
 import {
   DigitalDomicileType,
+  LegalFactType,
   ResponseStatus,
   TimelineCategory,
 } from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
+import { initLocalizationExists } from '../../localization.utility';
 import { SendDigitalFeedbackStep } from '../SendDigitalFeedbackStep';
 
 describe('SendDigitalFeedbackStep', () => {
@@ -125,6 +127,103 @@ describe('SendDigitalFeedbackStep', () => {
     });
   });
 
+  it('test getTimelineStepInfo with responseStatus KO and optional PEC receipt', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_FEEDBACK, {
+      digitalAddress: {
+        address: 'nome.cognome@pec.it',
+        type: DigitalDomicileType.PEC,
+      },
+      responseStatus: ResponseStatus.KO,
+    });
+
+    const payload = {
+      step: timelineElem,
+      recipient: notificationDTO.recipients[0],
+      isMultiRecipient: false,
+    };
+
+    const sendDigitalFeedbackStep = new SendDigitalFeedbackStep();
+
+    const translationData = {
+      ...sendDigitalFeedbackStep.nameAndTaxId(payload),
+      address: 'nome.cognome@pec.it',
+    };
+
+    const expectedLabel = 'notifiche - detail.timeline.send-digital-error';
+
+    try {
+      initLocalizationExists(
+        (_, path) =>
+          path === 'detail.timeline.send-digital-error-description-no-receipt' ||
+          path === 'detail.timeline.send-digital-error-description-no-receipt-delegate' ||
+          path === 'detail.timeline.send-digital-error-description-delegate'
+      );
+
+      // KO without PEC receipt
+      expect(sendDigitalFeedbackStep.getTimelineStepInfo(payload)).toStrictEqual({
+        label: expectedLabel,
+        description: `notifiche - detail.timeline.send-digital-error-description-no-receipt - ${JSON.stringify(
+          translationData
+        )}`,
+      });
+
+      // KO with PEC receipt
+      const payloadWithReceipt = {
+        ...payload,
+        step: {
+          ...timelineElem,
+          legalFactsIds: [
+            {
+              category: LegalFactType.PEC_RECEIPT,
+              key: 'safestorage://test-receipt.xml',
+            },
+          ],
+        },
+      };
+
+      expect(sendDigitalFeedbackStep.getTimelineStepInfo(payloadWithReceipt)).toStrictEqual({
+        label: expectedLabel,
+        description: `notifiche - detail.timeline.send-digital-error-description - ${JSON.stringify(
+          translationData
+        )}`,
+      });
+
+      // Delegate without PEC receipt
+      const payloadDelegate = {
+        ...payload,
+        delegatorName: 'Test Delegator',
+      };
+
+      expect(sendDigitalFeedbackStep.getTimelineStepInfo(payloadDelegate)).toStrictEqual({
+        label: expectedLabel,
+        description: `notifiche - detail.timeline.send-digital-error-description-no-receipt-delegate - ${JSON.stringify(
+          {
+            ...translationData,
+            recipient: 'Test Delegator',
+          }
+        )}`,
+      });
+
+      // Delegate with PEC receipt
+      expect(
+        sendDigitalFeedbackStep.getTimelineStepInfo({
+          ...payloadWithReceipt,
+          delegatorName: 'Test Delegator',
+        })
+      ).toStrictEqual({
+        label: expectedLabel,
+        description: `notifiche - detail.timeline.send-digital-error-description-delegate - ${JSON.stringify(
+          {
+            ...translationData,
+            recipient: 'Test Delegator',
+          }
+        )}`,
+      });
+    } finally {
+      initLocalizationExists(() => false);
+    }
+  });
+
   it('test getTimelineStepInfo with digitalAddress data - SERCQ SEND and new copy', () => {
     const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_FEEDBACK, {
       digitalAddress: {
@@ -144,5 +243,66 @@ describe('SendDigitalFeedbackStep', () => {
       label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
       description: '',
     });
+  });
+
+  it('test getTimelineStepInfo with digitalAddress data - SERCQ SEND, new copy and delegate', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_FEEDBACK, {
+      digitalAddress: {
+        address: SERCQ_SEND_VALUE,
+        type: DigitalDomicileType.SERCQ,
+      },
+      responseStatus: ResponseStatus.OK,
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationDTO.recipients[0],
+      isMultiRecipient: false,
+      isNewTimelineCopyEnabled: true,
+      delegatorName: 'Test Delegator',
+    };
+    const sendDigitalFeedbackStep = new SendDigitalFeedbackStep();
+
+    // delegate description not available (e.g. other apps)
+    expect(sendDigitalFeedbackStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+      description: '',
+    });
+
+    try {
+      initLocalizationExists(
+        (_ns, path) =>
+          path === 'detail.timeline.send-digital-success-SERCQ-SEND-description-delegate'
+      );
+      // delegate
+      expect(sendDigitalFeedbackStep.getTimelineStepInfo(payload)).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+        description: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND-description-delegate - ${JSON.stringify(
+          {
+            ...sendDigitalFeedbackStep.nameAndTaxId(payload),
+            address: SERCQ_SEND_VALUE,
+            recipient: 'Test Delegator',
+          }
+        )}`,
+      });
+      // direct access, mono and multi recipient
+      expect(
+        sendDigitalFeedbackStep.getTimelineStepInfo({ ...payload, delegatorName: undefined })
+      ).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+        description: '',
+      });
+      expect(
+        sendDigitalFeedbackStep.getTimelineStepInfo({
+          ...payload,
+          delegatorName: undefined,
+          isMultiRecipient: true,
+        })
+      ).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-success-SERCQ-SEND`,
+        description: '',
+      });
+    } finally {
+      initLocalizationExists(() => false);
+    }
   });
 });

@@ -199,6 +199,7 @@
     "deleghe": "Délégations",
     "fallback-communication": "Détail de la communication",
     "fallback-notification": "Détail de la notification",
+    "new-notifications": "Nouvelles notifications à lire",
     "notifiche": "Boîte de réception",
     "notifiche-delegato": "Boîte de réception pour {{delegator}}",
     "notifiche-utente": "Votre boîte de réception",
@@ -244,7 +245,7 @@
     "next": "Aller à la page suivante",
     "page": "page",
     "previous": "Aller à la page précédente",
-    "rows-per-page": "Lignes par page",
+    "rows-per-page": "Lignes par page: {{size}}",
     "selected": "élément sélectionné"
   },
   "required-field": "Champ obligatoire",

@@ -10,6 +10,7 @@ import {
   MobileNotificationsSort,
   Notification,
   NotificationColumnData,
+  NotificationCommunicationType,
   NotificationsRecipientDataSwitch,
   PnCard,
   PnCardActions,
@@ -118,7 +119,7 @@ const MobileNotifications = ({
       return navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, currentDelegator.mandateId));
     }
 
-    return communicationType === 'LEGAL'
+    return communicationType === NotificationCommunicationType.LEGAL
       ? navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun))
       : navigate(routes.GET_DETTAGLIO_COMUNICAZIONE_PATH(iun));
   };

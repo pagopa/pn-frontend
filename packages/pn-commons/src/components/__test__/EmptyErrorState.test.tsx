@@ -1,5 +1,7 @@
 import { vi } from 'vitest';
 
+import { IllusMIDataSecurity } from '@pagopa/mui-italia';
+
 import { fireEvent, render } from '../../test-utils';
 import EmptyErrorState from '../EmptyErrorState';
 
@@ -28,6 +30,14 @@ describe('EmptyErrorState', () => {
     expect(getByText('Empty state description')).toBeInTheDocument();
   });
 
+  it('allows long unbroken text to wrap within its container', () => {
+    const longTitle = 'a'.repeat(200);
+    const { getByText } = render(<EmptyErrorState title={longTitle} />);
+
+    const container = getByText(longTitle).parentElement!;
+    expect(getComputedStyle(container).overflowWrap).toBe('anywhere');
+  });
+
   it('renders the default action and handles the click', () => {
     const onClick = vi.fn();
 
@@ -52,5 +62,18 @@ describe('EmptyErrorState', () => {
     );
 
     expect(getByRole('button', { name: 'Custom action' })).toBeInTheDocument();
+  });
+
+  it('renders a custom icon', () => {
+    const { getByText, getByTitle } = render(
+      <EmptyErrorState
+        variant="empty"
+        title="Error state"
+        icon={<IllusMIDataSecurity size={56} />}
+      />
+    );
+
+    expect(getByText('Error state')).toBeInTheDocument();
+    expect(getByTitle('MIDataSecurity')).toBeInTheDocument();
   });
 });

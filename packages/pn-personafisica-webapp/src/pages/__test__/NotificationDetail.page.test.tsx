@@ -795,8 +795,21 @@ describe('NotificationDetail Page', () => {
         `/bff/v1/notifications/received/${notificationToFe.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       );
     });
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
+
+    const docNotAvailableAlert = await result.findByRole('alert', {
+      name: 'detail.document-not-available',
+    });
     expect(docNotAvailableAlert).toBeInTheDocument();
+    expect(within(docNotAvailableAlert).getByTestId('WarningRoundedIcon')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const { warning, info } = result.testStore.getState().appState.messages;
+
+      expect(warning).toHaveLength(1);
+      expect(warning[0].message).toBe('detail.document-not-available');
+      expect(info).toHaveLength(0);
+    });
+
     mock
       .onGet(
         `/bff/v1/notifications/received/${notificationToFe.iun}/documents/AAR?documentId=${otherDocument.documentId}`
@@ -1401,6 +1414,10 @@ describe('NotificationDetail Page', () => {
     const alertRadd = result.getByTestId('raddAlert');
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    const raddLink = within(alertRadd).getByTestId('raddAlertLink');
+    expect(raddLink).toHaveAttribute('href', 'https://fake.notification-perfection.pagopa.it#raccomandata');
+    expect(raddLink).toHaveAttribute('target', '_blank');
+    expect(raddLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('render bilingual section when lang is different from additional language in notification', async () => {

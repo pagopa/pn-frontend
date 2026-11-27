@@ -35,6 +35,10 @@
     "missing-spid-cie": "Hast du kein SPID oder CIE? <0>Mehr erfahren</0>",
     "title": "Zugriff auf SEND für Ihre rechtsverbindlichen Mitteilungen"
   },
+  "one-identity-login-error": {
+    "message": "Die Website ist derzeit nicht verfügbar. Bitte versuche es später noch einmal oder verwende eine andere Methode.",
+    "title": "Etwas ist schiefgelaufen"
+  },
   "one-identity-spid-select": {
     "close-button-aria-label": "Schließen",
     "error": {

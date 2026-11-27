@@ -176,7 +176,11 @@ describe('EmailStep - Mixpanel events', () => {
     const { getByRole } = render(<EmailStep {...props} />);
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'button.modifica',
+        })
+      );
     });
 
     expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -191,7 +195,11 @@ describe('EmailStep - Mixpanel events', () => {
 
     // Enter edit mode
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'button.modifica' }));
+      fireEvent.click(
+        getByRole('button', {
+          name: 'button.modifica',
+        })
+      );
     });
 
     // Confirm without changing value (no API call needed)

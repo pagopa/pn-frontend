@@ -10,11 +10,19 @@
     "delivery_description": "La notification n’a pas été délivrée en raison de problèmes techniques de réception",
     "delivery_title": "Erreur de remise",
     "description": "Pourcentage d’erreurs techniques par typologie d’erreur sur le total des erreurs techniques en phase d’envoi",
+    "malformed_pec_address_description": "La notification n'a pas été remise car l'adresse PEC est malformée",
+    "malformed_pec_address_title": "Erreur d'adresse PEC",
     "pec_description": "La notification n’a pas été délivrée pour domaine PEC invalide",
     "pec_title": "Erreur de domaine PEC",
     "rejected_description": "La notification n’a pas été acceptée en raison de problèmes techniques d’envoi",
     "rejected_title": "Erreur d’envoi",
-    "title": "Erreurs techniques par typologie"
+    "sending_pec_description": "La notification n'a pas été remise en raison d'une erreur technique",
+    "sending_pec_title": "Erreur lors de l'envoi de la PEC",
+    "server_pec_comunication_description": "La notification n'a pas été remise en raison d'une erreur de communication avec le serveur d'envoi PEC",
+    "server_pec_comunication_title": "Erreur de communication avec le serveur PEC",
+    "title": "Erreurs techniques par typologie",
+    "virus_detected_description": "La notification n'a pas été remise en raison de la détection d'un virus dans la communication ou dans ses pièces jointes",
+    "virus_detected_title": "Virus détecté"
   },
   "digital_mean_time": {
     "delivered": "Livrée",
@@ -74,6 +82,7 @@
     "delivering": "Envoi en cours",
     "description": "Nombre de notifications acceptées pour le dernier état atteint durant le processus d’envoi via SEND",
     "effective_date": "Finalisée pour\nexpiration des délais",
+    "returned_to_sender": "Retourné à l'expéditeur",
     "title": "Notifications envoyées par état",
     "unreachable": "Destinataire\nintrouvable",
     "viewed": "Accès réussi"

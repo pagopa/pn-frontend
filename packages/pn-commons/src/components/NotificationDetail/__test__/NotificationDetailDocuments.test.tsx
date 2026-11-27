@@ -60,6 +60,85 @@ describe('NotificationDetailDocuments Component', () => {
     expect(documentsMessage).toBeInTheDocument();
   });
 
+  it('renders component - with documents and plural download message', () => {
+    const { getAllByTestId, queryByTestId, container } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationDTO.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        downloadFilesMessage={{ ...filesMessage, components: [<strong key="0" />] }}
+        isSender
+      />
+    );
+    expect(container).toHaveTextContent(filesMessage.ns);
+    expect(container).toHaveTextContent(filesMessage.key);
+    expect(queryByTestId('documentsMessage')).not.toBeInTheDocument();
+    const documentButtons = getAllByTestId('documentButton');
+    expect(documentButtons).toHaveLength(notificationDTO.documents.length);
+    documentButtons.forEach((documentButton, index) => {
+      const currentDoc = notificationDTO.documents[index];
+      expect(documentButton).toHaveTextContent(currentDoc.title || currentDoc.ref.key);
+      expect(documentButton).not.toHaveTextContent(filesMessage.ns);
+      expect(documentButton).not.toHaveTextContent(filesMessage.key);
+    });
+  });
+
+  it('renders component - with documents and plural download message without components', () => {
+    const { getAllByTestId, container } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationDTO.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        downloadFilesMessage={filesMessage}
+        isSender
+      />
+    );
+    expect(container).toHaveTextContent(filesMessage.key);
+    getAllByTestId('documentButton').forEach((documentButton) => {
+      expect(documentButton).not.toHaveTextContent(filesMessage.key);
+    });
+  });
+
+  it('renders component - with documents and inline download message', () => {
+    const { getAllByTestId, queryByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationDTO.documents.filter((_, i) => i === 0)}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        downloadFilesMessage={{ ...filesMessage, components: [<strong key="0" />] }}
+        isSender
+      />
+    );
+    expect(queryByTestId('documentsMessage')).not.toBeInTheDocument();
+    const documentButtons = getAllByTestId('documentButton');
+    expect(documentButtons).toHaveLength(1);
+    documentButtons.forEach((documentButton, index) => {
+      const currentDoc = notificationDTO.documents[index];
+      expect(documentButton).toHaveTextContent(currentDoc.title || currentDoc.ref.key);
+      expect(documentButton).toHaveTextContent(filesMessage.ns);
+      expect(documentButton).toHaveTextContent(filesMessage.key);
+    });
+  });
+
+  it('renders component - with documents and inline download message without components', () => {
+    const { getAllByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationDTO.documents.filter((_, i) => i === 0)}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        downloadFilesMessage={filesMessage}
+        isSender
+      />
+    );
+    getAllByTestId('documentButton').forEach((documentButton) => {
+      expect(documentButton).toHaveTextContent(filesMessage.key);
+    });
+  });
+
   it('clicks on document button', async () => {
     const { getAllByTestId } = render(
       <NotificationDetailDocuments

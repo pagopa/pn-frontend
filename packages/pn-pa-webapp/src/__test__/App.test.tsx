@@ -71,6 +71,7 @@ describe('App', () => {
   afterEach(() => {
     mock.reset();
     mockAuth.reset();
+    mockOpenFn.mockClear();
     vi.restoreAllMocks();
   });
 
