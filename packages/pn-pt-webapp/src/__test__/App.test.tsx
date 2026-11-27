@@ -6,6 +6,7 @@ import { operatorUserResponse, userResponse } from '../__mocks__/Auth.mock';
 import { productsDTO } from '../__mocks__/Products.mock';
 import { apiClient, authClient } from '../api/apiClients';
 import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
+import { InstitutionsApi } from '../api/institutions/Institutions.api';
 import { DASHBOARD, ENTI, GROUPS, SELFCARE_LOGOUT_PATH, USERS } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 import { act, fireEvent, render, screen, waitFor, within } from './test-utils';
@@ -118,6 +119,25 @@ describe('App', () => {
     await act(async () => render(<App />, { preloadedState: loggedState() }));
     await waitFor(() => expect(productsCalls()).toHaveLength(1));
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  it('does not show the full page spinner while exchanging the token', async () => {
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(() => new Promise(() => {}));
+    await act(async () => render(<App />, { route: '/#selfCareToken=pending_token' }));
+    await waitFor(() => expect(mock.history.post).toHaveLength(1));
+    expect(screen.getByTestId('loading-skeleton')).toBeInTheDocument();
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  it('does not show the full page spinner while loading the institutions', async () => {
+    const getInstitutionsSpy = vi
+      .spyOn(InstitutionsApi, 'getInstitutions')
+      .mockImplementation(() => new Promise(() => {}));
+    await act(async () => render(<App />, { preloadedState: loggedState() }));
+    expect(getInstitutionsSpy).toHaveBeenCalled();
+    expect(screen.getAllByTestId('institutionsSkeletonRowDesktop').length).toBeGreaterThan(0);
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+    getInstitutionsSpy.mockRestore();
   });
 
   it('performs logout even if the logout api fails', async () => {
