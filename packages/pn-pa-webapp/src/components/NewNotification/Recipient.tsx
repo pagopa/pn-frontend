@@ -171,7 +171,12 @@ const Recipient: React.FC<Props> = ({
       .max(320, tc('too-long-field-error', { maxLength: 320 }))
       .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
       .matches(dataRegex.email, t('pec-error')),
-    address: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
+    address: conditionalPhysicalAddress(
+      requiredStringFieldValidation(tc, 1024).matches(
+        dataRegex.physicalAddress,
+        t('forbidden-characters-error')
+      )
+    ),
     addressDetails: conditionalPhysicalAddress(
       yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 }))
     ),
@@ -180,6 +185,7 @@ const Recipient: React.FC<Props> = ({
         .string()
         .required(tc('required-field'))
         .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
+        .matches(dataRegex.physicalAddress, t('forbidden-characters-error'))
     ),
     zip: conditionalPhysicalAddress(
       yup

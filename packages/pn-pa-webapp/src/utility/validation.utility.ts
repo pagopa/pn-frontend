@@ -42,7 +42,7 @@ export function denominationLengthAndCharacters(
   if (denomination.length > 88) {
     return { messageKey: 'too-long-field-error', data: { maxLength: 88 } };
   }
-  return { messageKey: `forbidden-characters-denomination-error` };
+  return { messageKey: `forbidden-characters-error` };
 }
 
 export function taxIdDependingOnRecipientType(

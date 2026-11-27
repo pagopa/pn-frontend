@@ -45,45 +45,45 @@ describe('dataRegex.name', () => {
   const valid = [
     'Nome Cognome',
     "Nome D'Apostrofo",
-    'Müller',         // tedesco: umlaut
-    'François',       // francese: cedilla
-    'Šimun',          // ceco: háček
-    'Maša',           // rumeno/slavo: Š
-    'José',           // spagnolo: accento acuto
-    'O\'Brien',       // irlandese: apostrofo
-    'Smith-Jones',    // trattino
-    'Name123',        // cifre
-    'St. John',       // punto
+    'Müller', // tedesco: umlaut
+    'François', // francese: cedilla
+    'Šimun', // ceco: háček
+    'Maša', // rumeno/slavo: Š
+    'José', // spagnolo: accento acuto
+    "O'Brien", // irlandese: apostrofo
+    'Smith-Jones', // trattino
+    'Name123', // cifre
+    'St. John', // punto
     'Nome, Cognome', // virgola
-    'name,cognome',   // virgola senza spazio
-    'Łukasz',         // polacco: Ł
-    'Ångström',       // svedese: Å
-    'Ñoño',           // spagnolo: tilde
-    'Žan',            // sloveno: Ž
-    'Αλέξης',         // greco
-    'Иван',           // cirillico
+    'name,cognome', // virgola senza spazio
+    'Łukasz', // polacco: Ł
+    'Ångström', // svedese: Å
+    'Ñoño', // spagnolo: tilde
+    'Žan', // sloveno: Ž
+    'Αλέξης', // greco
+    'Иван', // cirillico
   ];
 
   const invalid = [
-    'Nome@Cognome',    // @
-    'Name<script>',   // <
-    'Test/Name',      // /
-    'Hello\\World',   // \
-    'Name=Value',     // =
-    'Name!',          // !
-    'Name?',          // ?
-    'Name#tag',       // #
-    'Name$',          // $
-    'Name%20',        // %
-    '(Nome)',        // parentesi
-    '[test]',         // parentesi quadre
-    '{name}',         // parentesi graffe
-    'name_test',      // underscore
-    'name;cognome',   // punto e virgola
-    'name:cognome',   // due punti
-    'name|cognome',   // pipe
-    'name~cognome',   // tilde
-    'name`cognome',   // backtick
+    'Nome@Cognome', // @
+    'Name<script>', // <
+    'Test/Name', // /
+    'Hello\\World', // \
+    'Name=Value', // =
+    'Name!', // !
+    'Name?', // ?
+    'Name#tag', // #
+    'Name$', // $
+    'Name%20', // %
+    '(Nome)', // parentesi
+    '[test]', // parentesi quadre
+    '{name}', // parentesi graffe
+    'name_test', // underscore
+    'name;cognome', // punto e virgola
+    'name:cognome', // due punti
+    'name|cognome', // pipe
+    'name~cognome', // tilde
+    'name`cognome', // backtick
   ];
 
   it.each(valid)('accetta "%s"', (name) => {
@@ -92,5 +92,15 @@ describe('dataRegex.name', () => {
 
   it.each(invalid)('rifiuta "%s"', (name) => {
     expect(dataRegex.name.test(name)).toBe(false);
+  });
+});
+
+describe('dataRegex.physicalAddress', () => {
+  it('physicalAddress regex', () => {
+    expect(dataRegex.physicalAddress.test("Via dell'Università 12/B")).toBe(true);
+    expect(dataRegex.physicalAddress.test('Piazza Ò 3°')).toBe(true);
+    expect(dataRegex.physicalAddress.test('Via Sant’Angelo')).toBe(false); // U+2019
+    expect(dataRegex.physicalAddress.test('12–14')).toBe(false); // U+2013
+    expect(dataRegex.physicalAddress.test('Via Roma\t5')).toBe(false); // tab
   });
 });

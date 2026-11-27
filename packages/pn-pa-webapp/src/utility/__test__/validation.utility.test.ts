@@ -28,7 +28,7 @@ describe('test custom validation for recipients', () => {
 
   it('denominationTotalLength (errors - forbidden characters)', () => {
     const result = denominationLengthAndCharacters(randomString(56), 'D’Arco');
-    expect(result).toStrictEqual({ messageKey: 'forbidden-characters-denomination-error' });
+    expect(result).toStrictEqual({ messageKey: 'forbidden-characters-error' });
   });
 
   it('taxIdDependingOnRecipientType (PF no errors)', () => {
