@@ -1,5 +1,4 @@
 import { NotificationDetailRecipient } from '../../../models/NotificationDetail';
-import { NotificationStatus } from '../../../models/NotificationStatus';
 import {
   NotificationTimelineLegacyStatusHistory,
   NotificationTimelineStatusHistory,
@@ -32,9 +31,6 @@ export const getTimelineItems = (
   }
 ): Array<TimelineItem> => {
   const isMultiRecipient = recipients.length > 1;
-  const hasEffectiveDate = statusHistory.some(
-    ({ status }) => status === NotificationStatus.EFFECTIVE_DATE
-  );
 
   return statusHistory.map((status, index) => {
     const legacyStatus = legacyStatusHistory[index];
@@ -56,7 +52,7 @@ export const getTimelineItems = (
       legacyStatus,
       recipientPerStep:
         isMultiRecipient && isSenderTimeline ? getRecipientPerStep(status.steps, recipients) : [],
-      ...getTimelineItemPresentation(status.status, index === 0, hasEffectiveDate),
+      ...getTimelineItemPresentation(status.status, index === 0),
     };
   });
 };

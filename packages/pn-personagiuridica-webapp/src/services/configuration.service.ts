@@ -34,6 +34,7 @@ export interface PgConfiguration {
   FACSIMILE_SL: string;
   IS_NEW_TIMELINE_ENABLED: boolean;
   IS_NEW_TIMELINE_COPY_ENABLED: boolean;
+  NOTIFICATION_PERFECTION_LINK: string;
 }
 
 class PgConfigurationValidator extends Validator<PgConfiguration> {
@@ -80,6 +81,10 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
     this.ruleFor('FACSIMILE_SL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_NEW_TIMELINE_ENABLED').isBoolean();
     this.ruleFor('IS_NEW_TIMELINE_COPY_ENABLED').isBoolean();
+    this.ruleFor('NOTIFICATION_PERFECTION_LINK')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.htmlPageUrl);
   }
 }
 

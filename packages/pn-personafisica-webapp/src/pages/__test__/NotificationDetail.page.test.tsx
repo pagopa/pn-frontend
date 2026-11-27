@@ -1414,6 +1414,10 @@ describe('NotificationDetail Page', () => {
     const alertRadd = result.getByTestId('raddAlert');
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    const raddLink = within(alertRadd).getByTestId('raddAlertLink');
+    expect(raddLink).toHaveAttribute('href', 'https://fake.notification-perfection.pagopa.it#raccomandata');
+    expect(raddLink).toHaveAttribute('target', '_blank');
+    expect(raddLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('render bilingual section when lang is different from additional language in notification', async () => {
