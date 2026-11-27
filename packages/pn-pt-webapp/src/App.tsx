@@ -8,6 +8,7 @@ import {
   AppMessage,
   AppResponseMessage,
   Layout,
+  LoadingOverlay,
   PnDialog,
   PnDialogActions,
   ResponseEventDispatcher,
@@ -56,7 +57,7 @@ const ActualApp = () => {
     PAGOPA_HELP_EMAIL,
     SELFCARE_SEND_PROD_ID,
   } = getConfiguration();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const { sessionToken, organization } = loggedUser;
 
@@ -121,14 +122,14 @@ const ActualApp = () => {
   };
 
   const handleLogout = () => {
-    setIsDeleteModalOpen(true);
+    setIsLogoutModalOpen(true);
   };
 
   const performLogout = async () => {
     await dispatch(apiLogout(sessionToken));
     dispatch(resetState());
     goToSelfcareLogout();
-    setIsDeleteModalOpen(false);
+    setIsLogoutModalOpen(false);
   };
 
   const { pathname } = useLocation();
@@ -156,13 +157,13 @@ const ActualApp = () => {
         accessibilityLink={ACCESSIBILITY_LINK}
         sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
       >
-        <PnDialog open={isDeleteModalOpen}>
+        <PnDialog open={isLogoutModalOpen}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
           <PnDialogActions>
             <MIButton
               id="cancelButton"
               variant="outlined"
-              onClick={() => setIsDeleteModalOpen(false)}
+              onClick={() => setIsLogoutModalOpen(false)}
             >
               {t('button.annulla')}
             </MIButton>
@@ -173,6 +174,7 @@ const ActualApp = () => {
         </PnDialog>
         <AppMessage />
         <AppResponseMessage />
+        <LoadingOverlay />
         <Router />
       </Layout>
     </>

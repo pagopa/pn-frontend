@@ -28,6 +28,9 @@ export const exchangeToken = createAsyncThunk<User, string>(
       }
       return rejectWithValue(parseError(e));
     }
+  },
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
   }
 );
 
@@ -55,5 +58,8 @@ export const getProductsOfInstitution = createAsyncThunk(
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
+  },
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
   }
 );

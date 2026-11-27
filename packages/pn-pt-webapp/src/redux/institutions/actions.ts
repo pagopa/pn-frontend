@@ -16,5 +16,8 @@ export const getInstitutions = createAsyncThunk<InstitutionsResponse, GetInstitu
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
+  },
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
   }
 );
