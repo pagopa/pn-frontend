@@ -213,7 +213,7 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Es wurde keine gültige Adresse für einen weiteren Sendeversuch gefunden - Grund nicht angegeben.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Es wurde keine gültige Adresse für den Empfänger {{name}} {{taxId}} gefunden, um einen weiteren Sendeversuch vorzubereiten - Grund nicht angegeben.",
       "radd": {
-        "description": "Der Empfänger oder die bevollmächtigte Person hat eine Papierkopie der zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt.",
+        "description": "Die empfangende Person oder eine bevollmächtigte Person hat eine Papierkopie der zugestellten Dokumente bei einem zur Aushändigung zugelassenen Anbieter abgeholt. Für weitere Informationen <0>sieh dir die Finalisierungsmodalitäten an</0>.",
         "title": "Die Dokumente wurden abgeholt"
       },
       "registered-letter": "Einschreiben",
