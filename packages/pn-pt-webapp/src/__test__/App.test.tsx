@@ -102,6 +102,19 @@ describe('App', () => {
     });
   });
 
+  it('shows a spinner on the confirm button while logging out', async () => {
+    mock.onPost(AUTH_LOGOUT()).reply(() => new Promise(() => {}));
+    await act(async () => render(<App />, { preloadedState: loggedState() }));
+    fireEvent.click(screen.getByRole('button', { name: 'Esci' }));
+    const dialog = await screen.findByRole('dialog');
+    fireEvent.click(within(dialog).getByTestId('confirm-button'));
+    await waitFor(() => {
+      expect(within(dialog).getByTestId('confirm-button')).toHaveAttribute('aria-busy', 'true');
+    });
+    expect(within(dialog).getByRole('button', { name: 'button.annulla' })).toBeDisabled();
+    expect(mockOpenFn).not.toHaveBeenCalled();
+  });
+
   it('performs logout even if the logout api fails', async () => {
     mock.onPost(AUTH_LOGOUT()).reply(500);
     const { testStore } = await act(async () => render(<App />, { preloadedState: loggedState() }));

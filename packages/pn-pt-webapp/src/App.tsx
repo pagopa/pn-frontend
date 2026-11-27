@@ -57,6 +57,7 @@ const ActualApp = () => {
     SELFCARE_SEND_PROD_ID,
   } = getConfiguration();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const { sessionToken, organization } = loggedUser;
 
@@ -125,10 +126,10 @@ const ActualApp = () => {
   };
 
   const performLogout = async () => {
+    setIsLoggingOut(true);
     await dispatch(apiLogout(sessionToken));
     dispatch(resetState());
     goToSelfcareLogout();
-    setIsDeleteModalOpen(false);
   };
 
   const { pathname } = useLocation();
@@ -163,10 +164,17 @@ const ActualApp = () => {
               id="cancelButton"
               variant="outlined"
               onClick={() => setIsDeleteModalOpen(false)}
+              disabled={isLoggingOut}
             >
               {t('button.annulla')}
             </MIButton>
-            <MIButton data-testid="confirm-button" variant="contained" onClick={performLogout}>
+            <MIButton
+              data-testid="confirm-button"
+              variant="contained"
+              onClick={performLogout}
+              isLoading={isLoggingOut}
+              loadingAriaLabel={t('loading')}
+            >
               {t('header.logout')}
             </MIButton>
           </PnDialogActions>
