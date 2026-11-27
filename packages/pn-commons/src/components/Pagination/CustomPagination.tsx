@@ -192,7 +192,12 @@ const CustomPagination: React.FC<Props> = ({
                       : props2.type
                   }
                   {...props2}
-                  sx={{ border: 'none' }}
+                  sx={{
+                    border: 'none',
+                    '&.Mui-selected.Mui-focusVisible': {
+                      outlineColor: 'text.primary',
+                    },
+                  }}
                 />
               );
             }}
