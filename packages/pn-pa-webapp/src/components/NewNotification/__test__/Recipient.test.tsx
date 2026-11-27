@@ -287,7 +287,7 @@ describe('Recipient Component with payment enabled', () => {
     // firstName
     const firstNameError = await testStringFieldValidation(form, 1, 'firstName');
     await testInput(form, 'recipients[1].firstName', 'text-with-invalid-char’');
-    expect(firstNameError).toHaveTextContent('forbidden-characters-denomination-error');
+    expect(firstNameError).toHaveTextContent('forbidden-characters-error');
     await testInput(form, 'recipients[1].firstName', randomString(89));
     expect(firstNameError).toHaveTextContent('too-long-field-error');
     // taxId empty
@@ -401,7 +401,7 @@ describe('Recipient Component with payment enabled', () => {
     // firstName
     const firstNameError = await testStringFieldValidation(form, 0, 'firstName');
     await testInput(form, 'recipients[0].firstName', 'text-with-invalid-char’');
-    expect(firstNameError).toHaveTextContent('forbidden-characters-denomination-error');
+    expect(firstNameError).toHaveTextContent('forbidden-characters-error');
     // lastName
     const lastNameError = await testStringFieldValidation(form, 0, 'lastName');
     await testInput(form, 'recipients[0].lastName', 'text-with-invalid-char’');
@@ -427,11 +427,15 @@ describe('Recipient Component with payment enabled', () => {
     expect(digitalDomicileError).toHaveTextContent('pec-error');
 
     // address
-    await testStringFieldValidation(form, 0, 'address', 1025);
+    const addressError = await testStringFieldValidation(form, 0, 'address', 1025);
+    await testInput(form, 'recipients[0].address', 'Via Sant’Angelo');
+    expect(addressError).toHaveTextContent('forbidden-characters-error');
     // houseNumber
     await testInput(form, 'recipients[0].houseNumber', '', true);
     const houseNumberError = form.querySelector('[id="recipients[0].houseNumber-helper-text"]');
     expect(houseNumberError).toHaveTextContent('required-field');
+    await testInput(form, 'recipients[0].houseNumber', '12–14');
+    expect(houseNumberError).toHaveTextContent('forbidden-characters-error');
     // zip
     await testInput(form, 'recipients[0].zip', '20100&', true);
     const zipError = form.querySelector('[id="recipients[0].zip-helper-text"]');

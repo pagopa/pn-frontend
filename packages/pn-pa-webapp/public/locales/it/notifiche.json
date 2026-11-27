@@ -555,7 +555,7 @@
         "digital-domicile": "Domicilio digitale",
         "digital-domicile-subtitle": "Se conosci l'indirizzo PEC del destinatario inseriscilo qui. In questo modo, assicuri che la notifica venga recapitata in formato digitale, riducendo i tempi di consegna rispetto ai canali analogici tradizionali.",
         "fiscal-code-error": "Il valore inserito non è corretto",
-        "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
+        "forbidden-characters-error": "Hai inserito caratteri non validi",
         "foreign-state": "Stato",
         "house-number": "Numero civico",
         "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",

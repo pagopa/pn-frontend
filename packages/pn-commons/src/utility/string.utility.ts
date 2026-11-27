@@ -39,6 +39,7 @@ export const dataRegex = {
   taxonomyCode: /^(\d{6}[A-Z]{1})$/,
   denomination: /^([\x20-\xFF]{1,88})$/,
   denominationSearch: /([\x20-\xFF]*)/g,
+  physicalAddress: /^[\x20-\x7E\xA0-\xFF]*$/,
   noticeCode: /^\d{18}$/,
   zipCode: /^(\w|\ |\-)*$/,
   email:
