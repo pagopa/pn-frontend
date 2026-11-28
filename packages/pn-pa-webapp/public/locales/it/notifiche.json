@@ -56,11 +56,14 @@
     },
     "groups": "Gruppi",
     "informal_notification_markdown": {
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali.",
-      "attachments_info": "Per avere maggiori informazioni <0>è necessario prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "assistance_pf": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali.",
+      "assistance_pg": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}}</0> attraverso i suoi canali ufficiali.",
       "attachments_info_pf": "Per avere maggiori informazioni <0>prendi visione degli allegati</0>, che possono fornirti dettagli importanti.",
-      "greeting": "Ciao {{recipientDenomination}},",
-      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
+      "attachments_info_pg": "Per avere maggiori informazioni <0>è necessario prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "greeting_pf": "Ciao {{recipientDenomination}},",
+      "greeting_pg": "All'attenzione di {{recipientDenomination}},",
+      "payment_instructions_pf": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "payment_instructions_pg": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
     },
     "iun": "Codice IUN",
     "legal-person": "Persona giuridica",

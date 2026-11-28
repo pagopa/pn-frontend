@@ -113,6 +113,8 @@ const InformalNotificationDetail: React.FC = () => {
   const recipients = informalNotification.recipients;
   const primaryMessage = recipients[0]?.message?.primaryMessage;
 
+  const recipientTypeSuffix = recipients[0]?.recipientType === RecipientType.PF ? '_pf' : '_pg';
+
   const notificationStatusInfos = communicationStatusOptions.find((st) =>
     st.value.includes(informalNotification.notificationStatus as InformalNotificationStatus)
   ) ?? {
@@ -200,11 +202,10 @@ const InformalNotificationDetail: React.FC = () => {
           senderDenomination={informalNotification.senderDenomination}
           hasAttachments={informalNotification.documentsAvailable != null}
           hasPayment={!!recipients[0].payments?.length}
-          attachmentsInfoKey={
-            recipients[0].recipientType === RecipientType.PF
-              ? 'detail.informal_notification_markdown.attachments_info_pf'
-              : 'detail.informal_notification_markdown.attachments_info'
-          }
+          greetingKey={`detail.informal_notification_markdown.greeting${recipientTypeSuffix}`}
+          attachmentsInfoKey={`detail.informal_notification_markdown.attachments_info${recipientTypeSuffix}`}
+          paymentInstructionsKey={`detail.informal_notification_markdown.payment_instructions${recipientTypeSuffix}`}
+          assistanceKey={`detail.informal_notification_markdown.assistance${recipientTypeSuffix}`}
           variant="body2"
         />
       ),

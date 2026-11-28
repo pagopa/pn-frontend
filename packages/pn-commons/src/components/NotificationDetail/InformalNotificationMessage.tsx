@@ -14,7 +14,10 @@ type Props = {
   senderDenomination?: string;
   hasAttachments?: boolean;
   hasPayment?: boolean;
+  greetingKey?: string;
   attachmentsInfoKey?: string;
+  paymentInstructionsKey?: string;
+  assistanceKey?: string;
   variant?: 'body1' | 'body2';
   onExternalLinkClick?: (href: string) => void;
 };
@@ -26,30 +29,24 @@ const InformalNotificationMessage: React.FC<Props> = ({
   hasAttachments = false,
   hasPayment = false,
   variant = 'body1',
+  greetingKey = 'detail.informal_notification_markdown.greeting',
   attachmentsInfoKey = 'detail.informal_notification_markdown.attachments_info',
+  paymentInstructionsKey = 'detail.informal_notification_markdown.payment_instructions',
+  assistanceKey = 'detail.informal_notification_markdown.assistance',
   onExternalLinkClick,
 }) => {
+  const greetingMessage = getLocalizedOrDefaultLabel('notifications', greetingKey, undefined, {
+    recipientDenomination,
+  });
   const attachmentsInfoMessage = getTranslationMessage(attachmentsInfoKey, 'notifiche');
-
-  const paymentInstructionsMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.payment_instructions',
-    'notifiche'
-  );
-  const assistanceMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.assistance',
-    'notifiche'
-  );
+  const paymentInstructionsMessage = getTranslationMessage(paymentInstructionsKey, 'notifiche');
+  const assistanceMessage = getTranslationMessage(assistanceKey, 'notifiche');
 
   return (
     <Stack data-testid="informalNotificationMessage">
       {recipientDenomination && (
         <Typography variant={variant} color="text.primary">
-          {getLocalizedOrDefaultLabel(
-            'notifications',
-            'detail.informal_notification_markdown.greeting',
-            undefined,
-            { recipientDenomination }
-          )}
+          {greetingMessage}
         </Typography>
       )}
 

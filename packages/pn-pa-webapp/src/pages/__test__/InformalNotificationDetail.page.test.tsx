@@ -1,7 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { AppMessage, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import {
+  AppMessage,
+  AppResponseMessage,
+  RecipientType,
+  ResponseEventDispatcher,
+} from '@pagopa-pn/pn-commons';
 
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { INFORMAL_NOTIFICATION_DETAIL_MOCK } from '../../__mocks__/InformalNotificationDetail.mock';
@@ -132,6 +137,42 @@ describe('InformalNotificationDetail Page', () => {
       expect(result.queryByTestId('notificationDetailsDrawer')).not.toBeInTheDocument();
     });
   });
+
+  it.each([
+    { recipientType: RecipientType.PF, suffix: '_pf', otherSuffix: '_pg' },
+    { recipientType: RecipientType.PG, suffix: '_pg', otherSuffix: '_pf' },
+  ])(
+    'renders the correct informal notification message for $recipientType recipients',
+    async ({ recipientType, suffix, otherSuffix }) => {
+      mock.onGet(detailUrl).reply(200, {
+        ...INFORMAL_NOTIFICATION_DETAIL_MOCK,
+        recipients: [{ ...recipient, recipientType }],
+      });
+
+      await act(async () => {
+        result = renderPage();
+      });
+
+      fireEvent.click(result.getByRole('button', { name: 'informal.detail.aria-label' }));
+
+      const notificationDetailsDrawer = result.getByTestId('notificationDetailsDrawer');
+      const message = within(notificationDetailsDrawer).getByTestId('informalNotificationMessage');
+
+      const translationKeys = [
+        'greeting',
+        'attachments_info',
+        'payment_instructions',
+        'assistance',
+      ];
+
+      translationKeys.forEach((key) => {
+        expect(message).toHaveTextContent(`detail.informal_notification_markdown.${key}${suffix}`);
+        expect(message).not.toHaveTextContent(
+          `detail.informal_notification_markdown.${key}${otherSuffix}`
+        );
+      });
+    }
+  );
 
   it('renders recipients label when there are multiple recipients', async () => {
     mock.onGet(detailUrl).reply(200, {
